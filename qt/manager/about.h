@@ -1,9 +1,9 @@
 #ifndef __ABOUT_H__
 #define __ABOUT_H__
 
-#include <QtWidgets/qwidget.h>
-#include <QtWidgets/qlabel.h>
-#include <QtOpenGL/qgl.h>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QOpenGLWidget>
+#include <QtWidgets/QWidget>
 
 #include "../../gl/surface/surface.h"
 
@@ -38,7 +38,7 @@ public:
   void calculate (void) {};
 };
 
-class pictureWidget : public QGLWidget
+class pictureWidget : public QOpenGLWidget
 {
 
 Q_OBJECT

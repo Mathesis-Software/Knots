@@ -1,7 +1,7 @@
 #include "3dWindow.h"
 
 dddMainWidget::dddMainWidget (dddWindow *p)
-  : QGLWidget (p)
+  : QOpenGLWidget (p)
 {
   Parent = p;
   //setBackgroundColor (Qt::white);

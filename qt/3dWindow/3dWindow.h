@@ -1,11 +1,13 @@
 #ifndef __3DWINDOW_H__
 #define __3DWINDOW_H__
 
+#include <list>
+
+#include <QtWidgets/QOpenGLWidget>
+
 #include "../setupColor/setupColor.h"
 #include "../abstractWindow/abstractWindow.h"
 #include "../../gl/surface/surface.h"
-#include <list>
-#include <QtOpenGL/qgl.h>
 
 class dddWindow : public abstractWindow {
 
@@ -55,7 +57,7 @@ public:
   friend class setup3dMainWidgetColor;
 };
 
-class dddMainWidget : public QGLWidget {
+class dddMainWidget : public QOpenGLWidget {
 
 private:
 

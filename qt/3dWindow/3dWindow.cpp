@@ -72,5 +72,5 @@ void dddWindow::printIt (QPrinter *prn)
 void dddWindow::repaint3d (void)
 {
   if (isVisible ())
-    ((dddMainWidget*) centralWidget ()) -> updateGL ();
+    ((dddMainWidget*) centralWidget ()) -> update ();
 }

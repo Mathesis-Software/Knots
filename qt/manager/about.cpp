@@ -18,7 +18,7 @@ aboutWindow::aboutWindow (QWidget *parent) : QWidget(parent) {
 
   picture = new pictureWidget (this);
   picture -> setGeometry (10, 0, 120, 120);
-  picture -> updateGL ();
+  picture -> update ();
 
   text = new textWidget (this);
   text -> setGeometry (130, 0, 150, 120);
@@ -39,7 +39,7 @@ aboutWindow::~aboutWindow (void)
 
 void aboutWindow::timerEvent (QTimerEvent*)
 {
-  picture -> updateGL ();
+  picture -> update ();
 }
 
 aboutSurface::aboutSurface (const char *filename)
@@ -66,9 +66,7 @@ aboutSurface::aboutSurface (const char *filename)
   }
 }
 
-pictureWidget::pictureWidget (QWidget *parent)
- : QGLWidget (parent)
-{
+pictureWidget::pictureWidget (QWidget *parent) : QOpenGLWidget (parent) {
   //setBackgroundColor (white);
 
   aboutSurf = new aboutSurface((std::string(getenv ("KNOTEDITOR_PIXMAPS")) + "/about.srf").c_str());

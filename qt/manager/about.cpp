@@ -10,7 +10,10 @@ aboutWindow::aboutWindow (QWidget *parent) : QWidget(parent) {
   this->setWindowModality(Qt::ApplicationModal);
   setFixedSize (300, 120);
   setWindowTitle ("About Knot Editor");
-  //setBackgroundColor (white);
+  QPalette pal = this->palette();
+  pal.setColor(QPalette::Background, Qt::white);
+  this->setAutoFillBackground(true);
+  this->setPalette(pal);
   timer_id = startTimer (100);
 
   picture = new pictureWidget (this);

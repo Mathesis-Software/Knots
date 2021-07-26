@@ -1,0 +1,11 @@
+#DIAGRAM Minimal diagram for trefoil
+#POINTS 5
+40 460
+460 460
+40 40
+250 400
+460 40
+#CROSSINGS 3
+1 3
+2 4
+4 1

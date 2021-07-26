@@ -1,0 +1,12 @@
+#DIAGRAM Almost minimal diagram for trefoil
+#POINTS 6
+166 338
+253 76
+308 338
+71 402
+248 188
+415 409
+#CROSSINGS 3
+0 3
+2 5
+4 1

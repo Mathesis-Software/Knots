@@ -2,7 +2,7 @@ VERSION = `cat $(ROOTDIR)/VERSION`
 
 #############################################################################
 
-CC = g++
+CC = ccache g++
 MOC = moc
 AR = ar rc
 RM = rm -f

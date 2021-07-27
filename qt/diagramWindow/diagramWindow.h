@@ -82,17 +82,9 @@ private:
   void mouseMoveEvent (QMouseEvent*);
 
 public:
+  diagramMainWidget(diagramWindow *p);
 
-  diagramMainWidget (diagramWindow *p) : QWidget (p) {
-		Parent = p;
-		QPalette pal = this->palette();
-		pal.setColor(QPalette::Background, Qt::white);
-		this->setAutoFillBackground(true);
-		this->setPalette(pal);
-	}
-  ~diagramMainWidget (void) {};
-
-  void drawIt (QPainter*);
+  void drawIt(QPainter*);
 };
 
 #endif /* __DIAGRAMWINDOW_H__ */

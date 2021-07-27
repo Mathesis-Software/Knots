@@ -6,10 +6,8 @@ static vertex *localVertex = NULL;
 static int localx, localy;
 static bool doSomething = false;
 
-void diagramMainWidget::mousePressEvent (QMouseEvent *m)
-{
-  switch (Parent -> mode)
-  {
+void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
+  switch (Parent -> mode) {
     case diagramWindow::DRAW_NEW_DIAGRAM:
     {
       if (Parent -> isEmpty ())

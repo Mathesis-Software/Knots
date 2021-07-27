@@ -32,22 +32,22 @@ void diagramWindow::init (void)
 
   addToolBarSeparator ();
   actions = new QToolButton* [editorModeNumber];
-  actions [0] = addToolBarButton ("draw_diagram.xpm", "Draw diagram", 0);
-  actions [1] = addToolBarButton ("add_point.xpm", "Add point", 0);
-  actions [2] = addToolBarButton ("move_point.xpm", "Move point", 0);
-  actions [3] = addToolBarButton ("delete_point.xpm", "Delete point", 0);
-  actions [4] = addToolBarButton ("change_crossing.xpm", "Change crossing", 0);
-  actions [5] = addToolBarButton ("move_diagram.xpm", "Move diagram", 0);
+  actions[0] = addToolBarButton("draw_diagram.xpm", "Draw diagram", 0);
+  actions[1] = addToolBarButton("add_point.xpm", "Add point", 0);
+  actions[2] = addToolBarButton("move_point.xpm", "Move point", 0);
+  actions[3] = addToolBarButton("delete_point.xpm", "Delete point", 0);
+  actions[4] = addToolBarButton("change_crossing.xpm", "Change crossing", 0);
+  actions[5] = addToolBarButton("move_diagram.xpm", "Move diagram", 0);
 
   QButtonGroup *grp = new QButtonGroup;
   for (int i = 0; i < editorModeNumber; i++)
   {
-    actions [i] -> setCheckable (true);
-    grp -> addButton (actions [i]);
+    actions[i]->setCheckable(true);
+    grp->addButton(actions[i]);
+    this->connect(actions[i], &QToolButton::pressed, [=](){ this->setmode(i); });
   }
 
-  connect ( grp, SIGNAL (pressed(int)), SLOT (setmode(int)) );
-  grp -> setExclusive (false);
+  grp->setExclusive(false);
 
   isClosed = false;
   mode = DRAW_NEW_DIAGRAM;
@@ -70,38 +70,34 @@ diagramWindow::~diagramWindow(void)
   delete[] actions;
 }
 
-void diagramWindow::setmode (int newmode)
-{
-  if ( (newmode < 0) || (newmode >= editorModeNumber) )
-    return;
-
-  int oldmode = mode;
-
-  if ( newmode == oldmode )
-  {
-    actions[newmode] -> toggle ();
+void diagramWindow::setmode(int newmode) {
+  if (newmode < 0 || newmode >= editorModeNumber) {
     return;
   }
 
-  if ( (newmode == DRAW_NEW_DIAGRAM) && isClosed )
-  {
-    actions[newmode] -> toggle ();
+  int oldmode = this->mode;
+
+  if (newmode == oldmode) {
+    actions[newmode]->toggle();
     return;
   }
 
-  if ( (newmode != DRAW_NEW_DIAGRAM) && isEmpty () )
-  {
-    actions[newmode] -> toggle ();
+  if (newmode == DRAW_NEW_DIAGRAM && isClosed) {
+    actions[newmode]->toggle();
     return;
   }
 
-  mode = (editorMode) newmode;
+  if (newmode != DRAW_NEW_DIAGRAM && isEmpty()) {
+    actions[newmode]->toggle();
+    return;
+  }
 
-  actions[oldmode] -> setChecked (false);
+  this->mode = (editorMode)newmode;
+
+  actions[oldmode]->setChecked(false);
 }
 
-void diagramWindow::clear ()
-{
+void diagramWindow::clear() {
   diagram::clear ();
   isClosed = false;
   actions_convert->setEnabled(false);

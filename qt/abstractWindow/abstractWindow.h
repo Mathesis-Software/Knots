@@ -13,8 +13,7 @@ class abstractWindow : public QMainWindow {
   Q_OBJECT
 
 private:
-
-  QToolBar *ToolBar;
+  QToolBar *toolbar;
 
 protected:
 

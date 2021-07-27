@@ -5,6 +5,14 @@
 
 #include "diagramWindow.h"
 
+diagramMainWidget::diagramMainWidget(diagramWindow *p) : QWidget (p) {
+  Parent = p;
+  QPalette pal = this->palette();
+  pal.setColor(QPalette::Background, Qt::white);
+  this->setAutoFillBackground(true);
+  this->setPalette(pal);
+}
+
 void diagramMainWidget::drawPoint (QPainter *p, vertex *v)
 {
   p -> drawEllipse (v -> x () - 4, v -> y () - 4, 9, 9);
@@ -73,14 +81,13 @@ void diagramMainWidget::drawIt (QPainter *p)
   while (Parent -> isClosed ? (v != Parent -> base) : (v -> next () != Parent -> base));
 }
 
-void diagramMainWidget::paintEvent (QPaintEvent*)
-{
-  QPixmap pm (width (), height ());
-  pm.fill (this, width (), height ());
+void diagramMainWidget::paintEvent(QPaintEvent*) {
+  QPixmap pm(width(), height());
+  pm.fill(Qt::white);
   QPainter pnt;
-  pnt.begin (&pm);
-  drawIt (&pnt);
-  pnt.end ();
+  pnt.begin(&pm);
+  drawIt(&pnt);
+  pnt.end();
   QPainter main;
   main.begin(this);
   main.drawPixmap(0, 0, pm);

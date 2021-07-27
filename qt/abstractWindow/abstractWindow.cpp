@@ -29,25 +29,23 @@ abstractWindow::abstractWindow() {
   fileMenu -> addSeparator ();
   fileMenu -> addAction ( "&Close", this, SLOT (close()) );
 
-  ToolBar = new QToolBar (this);
+  this->toolbar = new QToolBar(this);
+  addToolBar(this->toolbar);
 
-  addToolBarButton ("floppy.xpm", "Save as", SLOT (save_as()));
-  addToolBarButton ("printer.xpm", "Print", SLOT (print()));
+  addToolBarButton("floppy.xpm", "Save as", SLOT (save_as()));
+  addToolBarButton("printer.xpm", "Print", SLOT (print()));
 
   AWRegister.push_back(this);
 }
 
-abstractWindow::~abstractWindow (void)
-{
-  delete ToolBar;
+abstractWindow::~abstractWindow() {
+  delete this->toolbar;
 }
 
-int abstractWindow::askForSave (void)
-{
-  show ();
-  raise ();
-  while (!isSaved)
-  {
+int abstractWindow::askForSave() {
+  show();
+  raise();
+  while (!isSaved) {
     QString q = (QString) "\nSave \"" + this->windowTitle () + "\" before closing?\n";
     int answer = QMessageBox::warning (this,
                                        "Close",
@@ -141,37 +139,35 @@ bool abstractWindow::removeAll (void)
   return true;
 }
 
-QToolButton *abstractWindow::addToolBarButton (const char *filename,
-                                               const char *label,
-			                       const char *slot,
-					       const char *whatsthis)
-{
-  QPixmap pm =
-    QPixmap ((QString) getenv ("KNOTEDITOR_PIXMAPS") + "/" + filename);
-  QToolButton *qtb = new QToolButton (ToolBar);
+QToolButton *abstractWindow::addToolBarButton(const char *filename,
+                                              const char *label,
+			                      const char *slot,
+					      const char *whatsthis) {
+  QPixmap pm((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + filename);
+  QToolButton *qtb = new QToolButton(0);
   qtb->setIcon(pm);
   qtb->setText(label);
-  //QToolButton *qtb = new QToolButton (pm, label, 0, this, slot, ToolBar);
+  if (slot) {
+    this->connect(qtb, SIGNAL(pressed()), slot);
+  }
   //qtb -> setUsesBigPixmap (true);
   qtb -> setFixedSize (pm.width () + 6, 30);
   //if (whatsthis)
   //  QWhatsThis::add (qtb, whatsthis);
+  this->toolbar->addWidget(qtb);
   return qtb;
 }
 
-void abstractWindow::addToolBarSeparator (void)
-{
-  ToolBar -> addSeparator ();
+void abstractWindow::addToolBarSeparator() {
+  this->toolbar->addSeparator();
 }
 
-void abstractWindow::complete (bool showWhatsThis)
-{
-  if (showWhatsThis)
-  {
+void abstractWindow::complete(bool showWhatsThis) {
+  if (showWhatsThis) {
     addToolBarSeparator ();
-    //QWhatsThis::whatsThisButton (ToolBar) -> setFixedSize (30, 30);
+    //QWhatsThis::whatsThisButton (this->toolbar) -> setFixedSize (30, 30);
   }
-  ToolBar -> show ();
-  statusBar () -> isVisible ();
-  resize (508, 594);
+  this->toolbar->show ();
+  statusBar()->isVisible();
+  resize(508, 594);
 }

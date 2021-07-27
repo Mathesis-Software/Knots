@@ -4,7 +4,7 @@
 
 void knotWindow::initMenu (void)
 {
-  QMenu *mathMenu = menuBar () -> addMenu ("&Math");
+  mathMenu = menuBar () -> addMenu ("&Math");
   mathMenu -> addAction ( "&View parameters", this, SLOT (math()) );
   mathMenu -> addSeparator ();
   math_decreaseEnergy = mathMenu -> addAction ( "Decrease &energy...", this, SLOT (decreaseEnergy()) );
@@ -15,7 +15,7 @@ void knotWindow::initMenu (void)
   mathMenu -> addAction ( "Number of &points...", this, SLOT (setNum()) );
   mathMenu -> addAction ( "&Length...", this, SLOT (setLength()) );
   
-  QMenu *viewMenu = menuBar () -> addMenu ("&View");
+  viewMenu = menuBar () -> addMenu ("&View");
   view_showKnot = viewMenu -> addAction ( "Show &knot", this, SLOT (switchShowKnot()) );
   view_showKnot -> setChecked (kSurf -> isVisible ());  
   view_showSeifertSurface = viewMenu -> addAction ( "Show &Seifert surface", this, SLOT (switchShowSeifert()) );

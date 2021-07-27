@@ -9,7 +9,7 @@ RM = rm -f
 INSTALL = install
 
 CFLAGS = -O3 -pipe -fPIC
-#CFLAGS += -W -Wall
+CFLAGS += -W -Wall
 
 DEBUGOPT =
 #DEBUGOPT = -g -pg

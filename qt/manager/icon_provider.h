@@ -1,10 +1,26 @@
+#ifndef __ICON_PROVIDER_H__
+#define __ICON_PROVIDER_H__
+
 #include <QtWidgets/QFileIconProvider>
 
-class keFileIconProvider : public QFileIconProvider
-{
+class keFileIconProvider : public QFileIconProvider {
 
 public:
+  static keFileIconProvider *instance();
 
-  keFileIconProvider (void);
-  const QPixmap *pixmap (const QFileInfo&);
+private:
+	static keFileIconProvider *_instance;
+
+private:
+  keFileIconProvider();
+
+public:
+  QIcon icon(const QFileInfo&) const override;
+
+private:
+  const QIcon diagramIcon;
+  const QIcon knotIcon;
+  const QIcon emptyIcon;
 };
+
+#endif /* __ICON_PROVIDER_H__ */

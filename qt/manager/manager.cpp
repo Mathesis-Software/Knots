@@ -7,6 +7,7 @@
 
 #include "manager.h"
 #include "about.h"
+#include "icon_provider.h"
 #include "../knotWindow/knotWindow.h"
 #include "../diagramWindow/diagramWindow.h"
 
@@ -40,54 +41,63 @@ void keManager::closeEvent (QCloseEvent*)
     qApp -> quit ();
 }
 
-void keManager::open ()
-{
-  QString filename =
-    QFileDialog::getOpenFileName (nullptr, "Open", getenv ("KNOTEDITOR_DATA"));
+namespace {
 
-  if (filename.isEmpty ())
+QString getOpenFileNameEx() {
+  QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
+  dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
+  dialog.setIconProvider(keFileIconProvider::instance());
+  if (dialog.exec() == QDialog::Accepted) {
+      return dialog.selectedUrls().value(0).toLocalFile();
+  }
+  return QString();
+}
+
+}
+
+void keManager::open() {
+  QString filename = getOpenFileNameEx();
+
+  if (filename.isEmpty()) {
     return;
+  }
   
-  std::ifstream is (filename.toStdString());
-  if (!is)
-  {
-    QMessageBox::critical (0, "Error",
-        "\nCouldn't open file \"" + filename + "\"\n");
+  std::ifstream is(filename.toStdString());
+  if (!is) {
+    QMessageBox::critical(0, "Error", "\nCouldn't open file \"" + filename + "\"\n");
     return;
   }
 
-  QFileInfo finfo (filename);
+  QFileInfo finfo(filename);
 
   abstractWindow *aw = NULL;
 
-  if (finfo.suffix () == "knt")
-  {
-    aw = new knotWindow (is);
-    if (aw -> isEmpty ())
-      QMessageBox::critical (0, "Error",
-        "\nThis file is not in knot format.\n");
+  if (finfo.suffix() == "knt") {
+    aw = new knotWindow(is);
+    if (aw->isEmpty()) {
+      QMessageBox::critical(0, "Error", "\nThis file is not in knot format.\n");
+    }
   }
 
-  if (finfo.suffix () == "dgr")
-  {
-    aw = new diagramWindow (is);
-    if (aw -> isEmpty ())
-      QMessageBox::critical (0, "Error",
-        "\nThis file is not in diagram format.\n");
+  if (finfo.suffix() == "dgr") {
+    aw = new diagramWindow(is);
+    if (aw->isEmpty()) {
+      QMessageBox::critical(0, "Error", "\nThis file is not in diagram format.\n");
+    }
   }
 
-  is.close ();
+  is.close();
 
-  if (!aw)
-  {
-    QMessageBox::critical (0, "Error", "\nUnknown file type.\n");
+  if (!aw) {
+    QMessageBox::critical(0, "Error", "\nUnknown file type.\n");
     return;
   }
 
-  if (aw -> isEmpty ())
-    aw -> close ();
-  else
-    aw -> show ();
+  if (aw->isEmpty()) {
+    aw->close();
+  } else {
+    aw->show();
+  }
 }
 
 void keManager::new_diagram ()

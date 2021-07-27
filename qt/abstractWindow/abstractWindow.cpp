@@ -15,8 +15,9 @@
 
 std::list<abstractWindow*> abstractWindow::AWRegister;
 
-abstractWindow::abstractWindow (void)
-{
+abstractWindow::abstractWindow() {
+  this->setAttribute(Qt::WA_DeleteOnClose);
+
   isSaved = true;
 
   QMenu *fileMenu = this->menuBar()->addMenu("&File");
@@ -68,8 +69,6 @@ void abstractWindow::closeEvent (QCloseEvent*)
     return;
 
   AWRegister.remove(this);
-
-  delete this;
 }
 
 void abstractWindow::save_as ()

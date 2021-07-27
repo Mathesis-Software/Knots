@@ -46,7 +46,7 @@ public slots:
 public:
 
   abstractWindow (void);
-  ~abstractWindow (void);
+  virtual ~abstractWindow (void);
 
   virtual bool isEmpty (void) = 0;
 

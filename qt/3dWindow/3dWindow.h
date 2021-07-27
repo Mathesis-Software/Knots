@@ -23,7 +23,7 @@ private:
   bool isInertia;
   int timerId_rotate;
 
-  //void printIt (QPrinter*);
+  void printIt (QPrinter*);
 
   void rotate (int, int);
   void changeSpeed (int, int);

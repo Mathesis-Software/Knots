@@ -22,7 +22,7 @@ QTLIBDIR = /usr/lib
 INSTPREFIX = /usr/local
 INSTDIR = $(INSTPREFIX)/KnotEditor-$(VERSION)
 
-LIBS = -L$(QTLIBDIR) -lstdc++ -lQt5Core -lQt5Gui -lQt5Widgets -lQt5OpenGL -lGL
+LIBS = -L$(QTLIBDIR) -lstdc++ -lQt5Core -lQt5Gui -lQt5PrintSupport -lQt5Widgets -lQt5OpenGL -lGL
 
 #############################################################################
 

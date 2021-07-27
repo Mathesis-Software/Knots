@@ -38,7 +38,7 @@ private:
   const char *mask (void)
     {return "*.dgr";};
 
-  //void printIt (QPrinter*);
+  void printIt (QPrinter*);
   void readIt (std::istream&);
   void saveIt (std::ostream&);
 

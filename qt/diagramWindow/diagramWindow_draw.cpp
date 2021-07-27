@@ -1,7 +1,6 @@
 #include <math.h>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
-//#include <qprinter.h>
 
 #include "diagramWindow.h"
 
@@ -94,11 +93,9 @@ void diagramMainWidget::paintEvent(QPaintEvent*) {
   main.end();
 }
 
-/*
-void diagramWindow::printIt (QPrinter *prn)
-{
+void diagramWindow::printIt (QPrinter *prn) {
   QPainter pnt;
   pnt.begin (prn);
   ( (diagramMainWidget*) centralWidget () ) -> drawIt (&pnt);
   pnt.end ();
-}*/
+}

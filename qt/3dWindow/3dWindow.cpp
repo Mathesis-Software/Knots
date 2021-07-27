@@ -59,15 +59,13 @@ dddWindow::~dddWindow (void)
   delete surfaces;
 }
 
-/*
-void dddWindow::printIt (QPrinter *prn)
-{
+void dddWindow::printIt (QPrinter *prn) {
   QPainter pnt;
   pnt.begin (prn);
   raise ();
   pnt.drawPixmap (0, 0, QPixmap::grabWindow (centralWidget () -> winId ()));
   pnt.end ();
-}*/
+}
 
 void dddWindow::repaint3d (void)
 {

@@ -4,7 +4,6 @@
 #include <QtWidgets/qmenubar.h>
 #include <QtWidgets/qmessagebox.h>
 #include <QtWidgets/qmenu.h>
-//#include <QtWidgets/qprinter.h>
 #include <QtWidgets/qstatusbar.h>
 #include <QtWidgets/qtoolbar.h>
 #include <QtWidgets/qtoolbutton.h>
@@ -102,11 +101,11 @@ void abstractWindow::save_as ()
   isSaved = true;
 }
 
-void abstractWindow::print ()
-{
-  /*QPrinter prn;
-  if (prn.setup (this))
-    printIt (&prn);*/
+void abstractWindow::print() {
+  QPrinter prn;
+  //if (prn.setup(this)) {
+  //  printIt(&prn);
+  //}
 }
 
 void abstractWindow::rename ()

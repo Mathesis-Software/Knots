@@ -4,8 +4,8 @@
 #include <fstream>
 #include <list>
 
+#include <QtPrintSupport/QPrinter>
 #include <QtWidgets/qmainwindow.h>
-//#include <QtWidgets/qpopupmenu.h>
 #include <QtWidgets/qtoolbutton.h>
 
 class abstractWindow : public QMainWindow {
@@ -21,7 +21,7 @@ protected:
 
   void closeEvent (QCloseEvent*);
 
- // virtual void printIt (QPrinter*) = 0;
+  virtual void printIt (QPrinter*) = 0;
   virtual void readIt (std::istream&) = 0;
   virtual void saveIt (std::ostream&) = 0;
 

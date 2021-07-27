@@ -6,10 +6,6 @@
 
 diagramMainWidget::diagramMainWidget(diagramWindow *p) : QWidget (p) {
   Parent = p;
-  QPalette pal = this->palette();
-  pal.setColor(QPalette::Background, Qt::white);
-  this->setAutoFillBackground(true);
-  this->setPalette(pal);
 }
 
 void diagramMainWidget::drawPoint (QPainter *p, vertex *v)

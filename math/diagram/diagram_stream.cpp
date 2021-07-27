@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "diagram.h"
 
 std::ostream & operator << (std::ostream & os, diagram *D)

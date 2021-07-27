@@ -1,27 +1,19 @@
 #include "diagram.h"
 
-diagram::diagram (void)
-{
-  Caption = new char [256];
-  strcpy (Caption, "New Diagram");
-
-  base = NULL;
+diagram::diagram() : caption("New Diagram"), base(nullptr) {
 }
 
-diagram::~diagram (void)
-{
-  delete[] Caption;
-  clear ();
+diagram::~diagram() {
+  this->clear();
 }
 
-void diagram::clear (void)
-{
-  while (base)
-    removeVertex (base);
+void diagram::clear() {
+  while (base != nullptr) {
+    removeVertex(base);
+  }
 }
 
-int diagram::length (void)
-{
+int diagram::length() {
   vertex *v = base -> next ();
   int l;
 

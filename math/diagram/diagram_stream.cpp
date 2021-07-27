@@ -4,7 +4,7 @@ std::ostream & operator << (std::ostream & os, diagram *D)
 {
   vertex *v = D -> base;
 
-  os << "#DIAGRAM " << D -> Caption << "\n#POINTS " << D -> length () << "\n";
+  os << "#DIAGRAM " << D -> caption << "\n#POINTS " << D -> length () << "\n";
   do
   {
     os << v -> x () << " " << v -> y () << "\n";
@@ -41,16 +41,17 @@ std::ostream & operator << (std::ostream & os, diagram *D)
 
 std::istream & operator >> (std::istream & is, diagram *D)
 {
-  char tmp[32];
+  char tmp[256];
 
   D -> clear ();
 
-  is.get (tmp, 32, ' ');
+  is.get(tmp, 32, ' ');
   if (strcmp (tmp, "#DIAGRAM") != 0)
     return is;
 
   is.get (tmp [0]);
-  is.get (D -> Caption, 255);
+  is.get (tmp, 255);
+  D->caption = tmp;
 
   {
     int length = -1;

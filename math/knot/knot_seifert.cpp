@@ -13,14 +13,13 @@ double knot::minDist (const double *point)
 {
   double md2 = 10000.0, tau, r[3], x[3], xr, r2, x2;
 
-  for (int i = 0; i < length; i++)
-  {
-    x [0] = points [i] [0] - point [0];
-    x [1] = points [i] [1] - point [1];
-    x [2] = points [i] [2] - point [2];
-    r [0] = points [next (i)] [0] - points [i] [0];
-    r [1] = points [next (i)] [1] - points [i] [1];
-    r [2] = points [next (i)] [2] - points [i] [2];
+  for (std::size_t i = 0; i < length; i++) {
+    x [0] = points[i].x - point [0];
+    x [1] = points[i].y - point [1];
+    x [2] = points[i].z - point [2];
+    r [0] = points[next (i)].x - points[i].x;
+    r [1] = points[next (i)].y - points[i].y;
+    r [2] = points[next (i)].z - points[i].z;
     xr = x [0] * r [0] + x [1] * r [1] + x [2] * r [2];
     r2 = r [0] * r [0] + r [1] * r [1] + r [2] * r [2];
     x2 = x [0] * x [0] + x [1] * x [1] + x [2] * x [2];
@@ -55,14 +54,13 @@ void knot::getGradient (const double *point, double *gradient)
 
   double x [3], r [3], xr, x2, r2, a2, tau, coeff;
 
-  for (int i = 0; i < length; i++)
-  {
-    x [0] = points [i] [0] - point [0];
-    x [1] = points [i] [1] - point [1];
-    x [2] = points [i] [2] - point [2];
-    r [0] = points [next (i)] [0] - points [i] [0];
-    r [1] = points [next (i)] [1] - points [i] [1];
-    r [2] = points [next (i)] [2] - points [i] [2];
+  for (std::size_t i = 0; i < length; i++) {
+    x [0] = points[i].x - point [0];
+    x [1] = points[i].y - point [1];
+    x [2] = points[i].z - point [2];
+    r [0] = points[next (i)].x - points[i].x;
+    r [1] = points[next (i)].y - points[i].y;
+    r [2] = points[next (i)].z - points[i].z;
 
     xr = x [0] * r [0] + x [1] * r [1] + x [2] * r [2];
     r2 = r [0] * r [0] + r [1] * r [1] + r [2] * r [2];

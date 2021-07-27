@@ -15,8 +15,9 @@ void knot::prmLength::compute (void)
 
   internalValue = 0.0;
 
-  for (int i = 0; i < length; i++)
-    internalValue += len_table [i];
+  for (std::size_t i = 0; i < length; i++) {
+    internalValue += len_table[i];
+	}
 }
 
 void knot::prmAen::compute (void)
@@ -27,14 +28,14 @@ void knot::prmAen::compute (void)
 
   double scal, angle_cos;
   
-  for (int i = 0; i < length; i++)
+  for (std::size_t i = 0; i < length; i++)
   {
-    scal = (points [next (i)] [0] - points [i] [0]) *
-           (points [prev (i)] [0] - points [i] [0]) +
-           (points [next (i)] [1] - points [i] [1]) *
-           (points [prev (i)] [1] - points [i] [1]) +
-           (points [next (i)] [2] - points [i] [2]) *
-           (points [prev (i)] [2] - points [i] [2]);
+    scal = (points[next (i)].x - points[i].x) *
+           (points[prev (i)].x - points[i].x) +
+           (points[next (i)].y - points[i].y) *
+           (points[prev (i)].y - points[i].y) +
+           (points[next (i)].z - points[i].z) *
+           (points[prev (i)].z - points[i].z);
     angle_cos = scal / (len_table [prev (i)] * len_table [i]);
 
     if (angle_cos < -1) 
@@ -57,18 +58,18 @@ void knot::prmEnergy::compute (void)
 
   internalValue = 0.0;
 
-  for (int i = 0; i < length - 2; i++)
+  for (std::size_t i = 0; i < length - 2; i++)
   {
     l = len_table [i];
-    for (int j = i + 2; j < (i ? length : length - 1); j++)
+    for (auto j = i + 2; j < (i ? length : length - 1); j++)
     {
       r2 = 0.65 / (
-            (points [j] [0] - points [i] [0]) *
-              (points [j] [0] - points [i] [0]) +
-            (points [j] [1] - points [i] [1]) *
-              (points [j] [1] - points [i] [1]) +
-            (points [j] [2] - points [i] [2]) *
-              (points [j] [2] - points [i] [2]) );
+            (points[j].x - points[i].x) *
+              (points[j].x - points[i].x) +
+            (points[j].y - points[i].y) *
+              (points[j].y - points[i].y) +
+            (points[j].z - points[i].z) *
+              (points[j].z - points[i].z) );
 
       l += len_table [prev (j)];
       if (2 * l < len)
@@ -82,18 +83,16 @@ void knot::prmEnergy::compute (void)
   }
 
   double p[3], q[3];
-  for (int i = 0; i < length; i++)
-  {
+  for (std::size_t i = 0; i < length; i++) {
     l = 0;
-    p[0] = (points [i] [0] + points [next (i)] [0]) / 2;
-    p[1] = (points [i] [1] + points [next (i)] [1]) / 2;
-    p[2] = (points [i] [2] + points [next (i)] [2]) / 2;
+    p[0] = (points[i].x + points[next (i)].x) / 2;
+    p[1] = (points[i].y + points[next (i)].y) / 2;
+    p[2] = (points[i].z + points[next (i)].z) / 2;
   
-    for (int j = i + 1; j < length; j++)
-    {
-      q[0] = (points [j] [0] + points [next (j)] [0]) / 2;
-      q[1] = (points [j] [1] + points [next (j)] [1]) / 2;
-      q[2] = (points [j] [2] + points [next (j)] [2]) / 2;
+    for (std::size_t j = i + 1; j < length; j++) {
+      q[0] = (points[j].x + points[next (j)].x) / 2;
+      q[1] = (points[j].y + points[next (j)].y) / 2;
+      q[2] = (points[j].z + points[next (j)].z) / 2;
       r2 = 2 / (
             (p [0] - q [0]) * (p [0] - q [0]) +
             (p [1] - q [1]) * (p [1] - q [1]) +

@@ -10,22 +10,20 @@ void knot::center (void)
          deltaY = 0.0,
          deltaZ = 0.0;
 
-  for (int i = 0; i < length; i++)
-  {
-    deltaX += points [i] [0];
-    deltaY += points [i] [1];
-    deltaZ += points [i] [2];
+  for (std::size_t i = 0; i < length; i++) {
+    deltaX += points[i].x;
+    deltaY += points[i].y;
+    deltaZ += points[i].z;
   }
 
   deltaX /= length;
   deltaY /= length;
   deltaZ /= length;
 
-  for (int i = 0; i < length; i++)
-  {
-    points [i] [0] -= deltaX;
-    points [i] [1] -= deltaY;
-    points [i] [2] -= deltaZ;
+  for (std::size_t i = 0; i < length; i++) {
+    points[i].x -= deltaX;
+    points[i].y -= deltaY;
+    points[i].z -= deltaZ;
   }
 }
 
@@ -35,9 +33,11 @@ void knot::setLength (double len)
 
   len /= Length -> value ();
 
-  for (int i = 0; i < length; i++)
-    for (int k = 0; k < 3; k++)
-      points [i] [k] *= len;
+  for (std::size_t i = 0; i < length; i++) {
+    points [i].x *= len;
+    points [i].y *= len;
+    points [i].z *= len;
+	}	
 
   // Все параметры придется пересчитывать.
   clear_depend ();
@@ -54,23 +54,27 @@ void knot::decreaseEnergy (void)
   // Создаем массив расстояний между соседними точками. 
   create_len_table ();
 
-  int i, j, k;
+	std::size_t i, j, k;
   double xr, x2, r2, tau, lt, x [3], r [3], local [3];
   double **delta = new double* [length];
 
   // Вычисляем вектор градиента в каждой вершине ломаной.
-  for (i = 0; i < length; i++)
-  {
+  for (i = 0; i < length; i++) {
     // Создаем и обнуляем вектор градиента для p_i.
     delta [i] = new double [3];
     for (k = 0; k < 3; k++)
       delta [i] [k] = 0.0;
     // Вычисляем общие коэффициенты для всех слагаемых в p_i.
     lt = len_table [i] + len_table [prev (i)];
-    for (k = 0; k < 3; k++)
-      local [k] =
-        (points [i] [k] - points [next (i)] [k]) / len_table [i] +
-        (points [i] [k] - points [prev (i)] [k]) / len_table [prev (i)]; 
+		local [0] =
+			(points[i].x - points[next (i)].x) / len_table [i] +
+			(points[i].x - points[prev (i)].x) / len_table [prev (i)]; 
+		local [1] =
+			(points[i].y - points[next (i)].y) / len_table [i] +
+			(points[i].y - points[prev (i)].y) / len_table [prev (i)]; 
+		local [2] =
+			(points[i].z - points[next (i)].z) / len_table [i] +
+			(points[i].z - points[prev (i)].z) / len_table [prev (i)]; 
 
     for (j = next (i); j != prev (i); j = next (j))
     {
@@ -78,12 +82,12 @@ void knot::decreaseEnergy (void)
       //   если -xr / r2 < 0, это p_j,
       //   если -xr / r2 > 1 -- p_{j+1},
       //   иначе -- точка внутри ребра.
-      x [0] = points [j] [0] - points [i] [0];
-      x [1] = points [j] [1] - points [i] [1];
-      x [2] = points [j] [2] - points [i] [2];
-      r [0] = points [next (j)] [0] - points [j] [0];
-      r [1] = points [next (j)] [1] - points [j] [1];
-      r [2] = points [next (j)] [2] - points [j] [2];
+      x [0] = points[j].x - points[i].x;
+      x [1] = points[j].y - points[i].y;
+      x [2] = points[j].z - points[i].z;
+      r [0] = points[next (j)].x - points[j].x;
+      r [1] = points[next (j)].y - points[j].y;
+      r [2] = points[next (j)].z - points[j].z;
       xr = x [0] * r [0] + x [1] * r [1] + x [2] * r [2];
       r2 = len_table [j] * len_table [j];
       x2 = x [0] * x [0] + x [1] * x [1] + x [2] * x [2];
@@ -125,9 +129,11 @@ void knot::decreaseEnergy (void)
     coeff = oldLen / length / max_shift / 5.0;
 
   // Делаем сдвиг в направлении градиента.
-  for (i = 0; i < length; i++)
-    for (k = 0; k < 3; k++)
-      points [i] [k] += delta [i] [k] * coeff;
+  for (i = 0; i < length; i++) {
+    points [i].x += delta [i] [0] * coeff;
+    points [i].y += delta [i] [1] * coeff;
+    points [i].z += delta [i] [2] * coeff;
+	}
 
   // Удаляем векторы градиента.
   for (i = 0; i < length; i++)

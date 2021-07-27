@@ -23,7 +23,7 @@ void knotWindow::setLength ()
 
 void knotWindow::setNum ()
 {
-  int i = setInt ("Set number of points", length, 10, 30000);
+	std::size_t i = setInt ("Set number of points", length, 10, 30000);
   if (i != length)
   {
     normalize (i);

@@ -55,7 +55,7 @@ knotWindow::knotWindow (diagramWindow *d) :
   knot (d, d -> width (), d -> height ())
 {
   init ();
-  setWindowTitle(Caption);
+  setWindowTitle(caption.c_str());
   isSaved = false;
 }
 

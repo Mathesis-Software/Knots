@@ -1,59 +1,53 @@
 #include "knot.h"
 
-std::istream & operator >> (std::istream &is, knot *K)
-{
-  char tmp[32];
+std::istream & operator >> (std::istream &is, knot *K) {
+	char tmp[256];
 
-  is.get (tmp, 32, ' ');
-  if (strcmp(tmp, "#KNOT") != 0)
-    return is;
+	is.get (tmp, 32, ' ');
+	if (strcmp(tmp, "#KNOT") != 0) {
+		return is;
+	}
 
-  is.get (tmp [0]);
-  is.get (K -> Caption, 255);
+	is.get (tmp [0]);
+	is.get (tmp, 255);
+	K->caption = tmp;
 
-  is.get (tmp, 32, ' ');
-  is >> K -> length;
-  if (strcmp(tmp, "\n#LENGTH") != 0)
-    return is;
+	is.get (tmp, 32, ' ');
+	int length;
+	is >> length;
+	if (strcmp(tmp, "\n#LENGTH") != 0 || length <= 0) {
+		return is;
+	}
 
-  if (K -> length <= 0)
-  {
-    K -> length = 0;
-    return is;
-  }
+	K->length = length;
+	K->points.clear();
 
-  K -> points = new double* [K -> length];
+	for (int i = 0; i < length; ++i) {
+		double x, y, z;
+		is >> x >> y >> z;
+		K->points.push_back(point(x, y, z));
+		if (is.good()) {
+			continue;
+		}
+		if (is.eof() && i == length - 1) {
+			break;
+		}
+		K->points.clear();
+		K->length = 0;
+		break;
+	}
 
-  for (int i = 0; i < K -> length; i++)
-  {
-    K -> points [i] = new double [3];
-    is >> K -> points [i] [0] >> K -> points [i] [1] >> K -> points [i] [2];
-    if (is.good ())
-      continue;
-    if (is.eof () && i == K -> length - 1)
-      break;
-    for (int j = 0; j <= i; j++)
-      delete[] K -> points [i];
-    delete[] K -> points;
-    K -> points = NULL;
-    K -> length = 0;
-    break;
-  }
+	if (!K->points.empty()) {
+		K->center();
+	}
 
-  if (K -> length)
-    K -> center ();
-
-  return is;
+	return is;
 }
 
-std::ostream & operator << (std::ostream &os, knot *K)
-{
-  os << "#KNOT " << K -> Caption << "\n#LENGTH " << K -> length << "\n";
-
-  for (int i = 0; i < K -> length; i++)
-    os << K -> points [i] [0] << ' ' <<
-          K -> points [i] [1] << ' ' <<
- 	  K -> points [i] [2] << '\n';
-
-  return os;
+std::ostream & operator << (std::ostream &os, knot *K) {
+	os << "#KNOT " << K->caption << "\n#LENGTH " << K->points.size() << "\n";
+	for (const auto &pt : K->points) {
+		os << pt.x << ' ' << pt.y << ' ' << pt.z << '\n';
+	}
+	return os;
 }

@@ -38,16 +38,16 @@ void knot::prmAcn::compute (void)
 {
   internalValue = 0.0;
 
-  int i1, i2;
+	std::size_t i1, i2;
 
   // Вычисляем заранее касательные векторы.
   double **tangs = new double* [length];
   for (i1 = 0; i1 < length; i1++)
   {
     tangs [i1] = new double [3];
-    tangs [i1] [0] = points [next (i1)] [0] - points [i1] [0];
-    tangs [i1] [1] = points [next (i1)] [1] - points [i1] [1];
-    tangs [i1] [2] = points [next (i1)] [2] - points [i1] [2];
+    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
+    tangs [i1] [1] = points[next (i1)].y - points[i1].y;
+    tangs [i1] [2] = points[next (i1)].z - points[i1].z;
   }
 
   double chord [3], chord_len;
@@ -55,12 +55,12 @@ void knot::prmAcn::compute (void)
   {
     for (i2 = 0; i2 < i1; i2++)
     {
-      chord [0] = ( points [i1] [0] + points [next (i1)] [0] -
-                    points [i2] [0] - points [next (i2)] [0] ) / 2;
-      chord [1] = ( points [i1] [1] + points [next (i1)] [1] -
-                    points [i2] [1] - points [next (i2)] [1] ) / 2;
-      chord [2] = ( points [i1] [2] + points [next (i1)] [2] -
-                    points [i2] [2] - points [next (i2)] [2] ) / 2;
+      chord [0] = ( points[i1].x + points[next (i1)].x -
+                    points[i2].x - points[next (i2)].x ) / 2;
+      chord [1] = ( points[i1].y + points[next (i1)].y -
+                    points[i2].y - points[next (i2)].y ) / 2;
+      chord [2] = ( points[i1].z + points[next (i1)].z -
+                    points[i2].z - points[next (i2)].z ) / 2;
       chord_len = sqrt (vector_square (chord));
       internalValue += fabs (det (tangs [i1], tangs [i2], chord)) /
                        (chord_len * chord_len * chord_len);
@@ -79,16 +79,16 @@ void knot::prmSAcn::compute (void)
 {
   internalValue = 0.0;
 
-  int i1, i2;
+	std::size_t i1, i2;
 
   // Вычисляем заранее касательные векторы.
   double **tangs = new double* [length];
   for (i1 = 0; i1 < length; i1++)
   {
     tangs [i1] = new double [3];
-    tangs [i1] [0] = points [next (i1)] [0] - points [i1] [0];
-    tangs [i1] [1] = points [next (i1)] [1] - points [i1] [1];
-    tangs [i1] [2] = points [next (i1)] [2] - points [i1] [2];
+    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
+    tangs [i1] [1] = points[next (i1)].y - points[i1].y;
+    tangs [i1] [2] = points[next (i1)].z - points[i1].z;
   }
 
   double chord [3], chord_len;
@@ -96,12 +96,12 @@ void knot::prmSAcn::compute (void)
   {
     for (i2 = 0; i2 < i1; i2++)
     {
-      chord [0] = ( points [i1] [0] + points [next (i1)] [0] -
-                    points [i2] [0] - points [next (i2)] [0] ) / 2;
-      chord [1] = ( points [i1] [1] + points [next (i1)] [1] -
-                    points [i2] [1] - points [next (i2)] [1] ) / 2;
-      chord [2] = ( points [i1] [2] + points [next (i1)] [2] -
-                    points [i2] [2] - points [next (i2)] [2] ) / 2;
+      chord [0] = ( points[i1].x + points[next (i1)].x -
+                    points[i2].x - points[next (i2)].x ) / 2;
+      chord [1] = ( points[i1].y + points[next (i1)].y -
+                    points[i2].y - points[next (i2)].y ) / 2;
+      chord [2] = ( points[i1].z + points[next (i1)].z -
+                    points[i2].z - points[next (i2)].z ) / 2;
       chord_len = sqrt (vector_square (chord));
       internalValue += det (tangs [i1], tangs [i2], chord) /
                        (chord_len * chord_len * chord_len);
@@ -120,16 +120,17 @@ void knot::prmKI::compute (void)
 {
   internalValue = 0.0;
 
-  int i1, i2, o;
+	std::size_t i1, i2;
+	int o;
 
   // Вычисляем заранее касательные векторы.
   double **tangs = new double* [length];
   for (i1 = 0; i1 < length; i1++)
   {
     tangs [i1] = new double [3];
-    tangs [i1] [0] = points [next (i1)] [0] - points [i1] [0];
-    tangs [i1] [1] = points [next (i1)] [1] - points [i1] [1];
-    tangs [i1] [2] = points [next (i1)] [2] - points [i1] [2];
+    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
+    tangs [i1] [1] = points[next (i1)].y - points[i1].y;
+    tangs [i1] [2] = points[next (i1)].z - points[i1].z;
   }
 
   // Вычисляем ``гауссовы произведения''.
@@ -142,12 +143,12 @@ void knot::prmKI::compute (void)
     gauss [i1] [i1] = 0.0;
     for (i2 = 0; i2 < i1; i2++)
     {
-      chord [0] = ( points [i1] [0] + points [next (i1)] [0] -
-                    points [i2] [0] - points [next (i2)] [0] ) / 2;
-      chord [1] = ( points [i1] [1] + points [next (i1)] [1] -
-                    points [i2] [1] - points [next (i2)] [1] ) / 2;
-      chord [2] = ( points [i1] [2] + points [next (i1)] [2] -
-                    points [i2] [2] - points [next (i2)] [2] ) / 2;
+      chord [0] = ( points[i1].x + points[next (i1)].x -
+                    points[i2].x - points[next (i2)].x ) / 2;
+      chord [1] = ( points[i1].y + points[next (i1)].y -
+                    points[i2].y - points[next (i2)].y ) / 2;
+      chord [2] = ( points[i1].z + points[next (i1)].z -
+                    points[i2].z - points[next (i2)].z ) / 2;
       chord_len = sqrt (vector_square (chord));
       gauss [i1] [i2] = det (tangs [i1], tangs [i2], chord) /
                         (chord_len * chord_len * chord_len);
@@ -202,16 +203,16 @@ void knot::prmKI::compute (void)
 //{
 //  internalValue = 0.0;
 //
-//  int i1, i2, i3, i4;
+//  std::size_t i1, i2, i3, i4;
 //
 //  // Вычисляем заранее касательные векторы.
 //  double **tangs = new double* [length];
 //  for (i1 = 0; i1 < length; i1++)
 //  {
 //    tangs [i1] = new double [3];
-//    tangs [i1] [0] = points [next (i1)] [0] - points [i1] [0];
-//    tangs [i1] [1] = points [next (i1)] [1] - points [i1] [1];
-//    tangs [i1] [2] = points [next (i1)] [2] - points [i1] [2];
+//    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
+//    tangs [i1] [1] = points[next (i1)].y - points[i1].y;
+//    tangs [i1] [2] = points[next (i1)].z - points[i1].z;
 //  }
 //
 //  // Вычисляем ``гауссовы произведения''.
@@ -232,12 +233,12 @@ void knot::prmKI::compute (void)
 //
 //    for (i2 = 0; i2 < i1; i2++)
 //    {
-//      chord [i1] [i2] [0] = ( points [i1] [0] + points [next (i1)] [0] -
-//                    points [i2] [0] - points [next (i2)] [0] ) / 2;
-//      chord [i1] [i2] [1] = ( points [i1] [1] + points [next (i1)] [1] -
-//                    points [i2] [1] - points [next (i2)] [1] ) / 2;
-//      chord [i1] [i2] [2] = ( points [i1] [2] + points [next (i1)] [2] -
-//                    points [i2] [2] - points [next (i2)] [2] ) / 2;
+//      chord [i1] [i2] [0] = ( points[i1].x + points[next (i1)].x -
+//                    points[i2].x - points[next (i2)].x ) / 2;
+//      chord [i1] [i2] [1] = ( points[i1].y + points[next (i1)].y -
+//                    points[i2].y - points[next (i2)].y ) / 2;
+//      chord [i1] [i2] [2] = ( points[i1].z + points[next (i1)].z -
+//                    points[i2].z - points[next (i2)].z ) / 2;
 //      chord [i2] [i1] [0] = - chord [i1] [i2] [0];
 //      chord [i2] [i1] [1] = - chord [i1] [i2] [1];
 //      chord [i2] [i1] [2] = - chord [i1] [i2] [2];
@@ -294,16 +295,16 @@ void knot::prmExperimental::compute (void)
 {
   internalValue = 0.0;
 
-  int i1, i2;
+	std::size_t i1, i2;
 
   // Вычисляем заранее касательные векторы.
   double **tangs = new double* [length];
   for (i1 = 0; i1 < length; i1++)
   {
     tangs [i1] = new double [3];
-    tangs [i1] [0] = points [next (i1)] [0] - points [i1] [0];
-    tangs [i1] [1] = points [next (i1)] [1] - points [i1] [1];
-    tangs [i1] [2] = points [next (i1)] [2] - points [i1] [2];
+    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
+    tangs [i1] [1] = points[next (i1)].y - points[i1].y;
+    tangs [i1] [2] = points[next (i1)].z - points[i1].z;
   }
 
   // Вычисляем ``гауссовы произведения''.
@@ -325,12 +326,12 @@ void knot::prmExperimental::compute (void)
 
     for (i2 = 0; i2 < i1; i2++)
     {
-      chord [i1] [i2] [0] = ( points [i1] [0] + points [next (i1)] [0] -
-                    points [i2] [0] - points [next (i2)] [0] ) / 2;
-      chord [i1] [i2] [1] = ( points [i1] [1] + points [next (i1)] [1] -
-                    points [i2] [1] - points [next (i2)] [1] ) / 2;
-      chord [i1] [i2] [2] = ( points [i1] [2] + points [next (i1)] [2] -
-                    points [i2] [2] - points [next (i2)] [2] ) / 2;
+      chord [i1] [i2] [0] = ( points[i1].x + points[next (i1)].x -
+                    points[i2].x - points[next (i2)].x ) / 2;
+      chord [i1] [i2] [1] = ( points[i1].y + points[next (i1)].y -
+                    points[i2].y - points[next (i2)].y ) / 2;
+      chord [i1] [i2] [2] = ( points[i1].z + points[next (i1)].z -
+                    points[i2].z - points[next (i2)].z ) / 2;
       chord_len = sqrt (vector_square (chord [i1] [i2]));
       chord [i1] [i2] [0] /= chord_len;
       chord [i1] [i2] [1] /= chord_len;
@@ -434,7 +435,7 @@ void knot::prmSingular::compute (void)
 {
   internalValue = 0.0;
 
-  int i1, i2, i3, i4;
+	std::size_t i1, i2, i3, i4;
 
   // Вычисляем заранее хорды.
   double chord_len;
@@ -448,9 +449,9 @@ void knot::prmSingular::compute (void)
 
     for (i2 = 0; i2 < i1; i2++)
     {
-      chord [i1] [i2] [0] = points [i1] [0] - points [i2] [0];
-      chord [i1] [i2] [1] = points [i1] [1] - points [i2] [1];
-      chord [i1] [i2] [2] = points [i1] [2] - points [i2] [2];
+      chord [i1] [i2] [0] = points[i1].x - points[i2].x;
+      chord [i1] [i2] [1] = points[i1].y - points[i2].y;
+      chord [i1] [i2] [2] = points[i1].z - points[i2].z;
       chord_len = sqrt (vector_square (chord [i1] [i2]));
       chord [i1] [i2] [0] /= chord_len;
       chord [i1] [i2] [1] /= chord_len;
@@ -549,16 +550,17 @@ void knot::prmExperimental2::compute (void)
 {
   internalValue = 0.0;
 
-  int i1, i2, o;
+	std::size_t i1, i2;
+	int o;
 
   // Вычисляем заранее касательные векторы.
   double **tangs = new double* [length];
   for (i1 = 0; i1 < length; i1++)
   {
     tangs [i1] = new double [3];
-    tangs [i1] [0] = points [next (i1)] [0] - points [i1] [0];
-    tangs [i1] [1] = points [next (i1)] [1] - points [i1] [1];
-    tangs [i1] [2] = points [next (i1)] [2] - points [i1] [2];
+    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
+    tangs [i1] [1] = points[next (i1)].y - points[i1].y;
+    tangs [i1] [2] = points[next (i1)].z - points[i1].z;
   }
 
   // Вычисляем ``гауссовы произведения''.
@@ -571,12 +573,12 @@ void knot::prmExperimental2::compute (void)
     gauss [i1] [i1] = 0.0;
     for (i2 = 0; i2 < i1; i2++)
     {
-      chord [0] = ( points [i1] [0] + points [next (i1)] [0] -
-                    points [i2] [0] - points [next (i2)] [0] ) / 2;
-      chord [1] = ( points [i1] [1] + points [next (i1)] [1] -
-                    points [i2] [1] - points [next (i2)] [1] ) / 2;
-      chord [2] = ( points [i1] [2] + points [next (i1)] [2] -
-                    points [i2] [2] - points [next (i2)] [2] ) / 2;
+      chord [0] = ( points[i1].x + points[next (i1)].x -
+                    points[i2].x - points[next (i2)].x ) / 2;
+      chord [1] = ( points[i1].y + points[next (i1)].y -
+                    points[i2].y - points[next (i2)].y ) / 2;
+      chord [2] = ( points[i1].z + points[next (i1)].z -
+                    points[i2].z - points[next (i2)].z ) / 2;
       chord_len = sqrt (vector_square (chord));
       gauss [i1] [i2] = det (tangs [i1], tangs [i2], chord) /
                         (chord_len * chord_len * chord_len);

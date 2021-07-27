@@ -1,11 +1,10 @@
 #include "../../math/headers/parameter.h"
 #include "knotWindow_math.h"
 
-void knotWindow::math ()
-{
+void knotWindow::math() {
   if (mth) {
-    mth -> show ();
-    mth -> raise ();
+    mth -> show();
+    mth -> raise();
     return;
   }
 
@@ -14,23 +13,23 @@ void knotWindow::math ()
   mth -> show ();
 }
 
-paramWindow::paramWindow (knotWindow *p)
-{
+paramWindow::paramWindow (knotWindow *p) {
   Parent = p;
-  nLabels = Parent -> parameterList -> size ();
+  nLabels = Parent -> parameterList.size();
   pLabels = new parameterLabel* [nLabels];
   
-	std::list<parameter*>::iterator it = Parent -> parameterList -> begin ();
-  for (int i = 0; i < nLabels; i++)
-    pLabels [i] = new parameterLabel (this, (*(it++)), 20, 15 + 30 * i);
+  int index = 0;
+  for (auto param : Parent->parameterList) {
+    pLabels[index] = new parameterLabel (this, param, 20, 15 + 30 * index);
+  }
 
   setFixedSize (380, 25 + 30 * nLabels);
 }
 
-void paramWindow::recompute (void)
-{
-  for (int i = 0; i < nLabels; i++)
+void paramWindow::recompute (void) {
+  for (int i = 0; i < nLabels; i++) {
     pLabels [i] -> renew ();
+  }
 }
 
 paramWindow::~paramWindow (void)
@@ -47,13 +46,7 @@ void paramWindow::closeEvent (QCloseEvent*)
   delete this;
 }
 
-parameterLabel::parameterLabel (QDialog* parent,
-                                parameter* param,
-				int x, int y)
-  : QWidget (parent)
-{
-  prm = param;
-  
+parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<parameter> param, int x, int y) : QWidget(parent), prm(param) {
   lbl = new QLabel (this);
   lbl -> setGeometry (240, 0, 100, 25);
   lbl -> setFrameStyle (QFrame::Panel | QFrame::Sunken);

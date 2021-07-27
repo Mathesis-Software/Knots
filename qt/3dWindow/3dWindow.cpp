@@ -37,9 +37,10 @@ dddWindow::dddWindow (void)
   rotateButton [4] = addToolBarButton ("rotate4.xpm", "Rotate", 0);
   rotateButton [5] = addToolBarButton ("rotate5.xpm", "Rotate", 0);
   QButtonGroup *grp = new QButtonGroup;
-  for (int i = 0; i < 6; i++)
-    grp -> addButton (rotateButton [i]);
-  connect (grp, SIGNAL (pressed(int)), SLOT (rotate(int)) );
+  for (int i = 0; i < 6; i++) {
+    grp->addButton(rotateButton[i]);
+    this->connect(rotateButton[i], &QToolButton::pressed, [=](){ this->rotate(i); });
+  }
   delete[] rotateButton;
 
   addToolBarSeparator ();

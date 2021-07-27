@@ -30,13 +30,13 @@ void dddWindow::rotate (int num)
   int axis1, axis2;
 
   switch (num) {
+    default:
     case 0: axis1 = 1; axis2 = 0; break;
     case 1: axis1 = 0; axis2 = 1; break;
     case 2: axis1 = 2; axis2 = 0; break;
     case 3: axis1 = 0; axis2 = 2; break;
     case 4: axis1 = 2; axis2 = 1; break;
     case 5: axis1 = 1; axis2 = 2; break;
-    default: break;
   }
 
   if (isInertia)

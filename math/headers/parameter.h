@@ -37,7 +37,7 @@ public:
     return internalValue;
   };
 
-  const bool isReady (void)
+  bool isReady (void)
     {return ready;};
   const char *getName (void)
     {return name;};

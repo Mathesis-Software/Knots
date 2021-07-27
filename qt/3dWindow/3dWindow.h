@@ -43,7 +43,7 @@ protected:
   void addSurface (surface *s)
     {surfaces -> push_back (s);};
 
-  const double currMatr (int i, int j)
+  double currMatr (int i, int j)
     {return currentMatrix [4 * i + j];}
 
   void repaint3d (void);

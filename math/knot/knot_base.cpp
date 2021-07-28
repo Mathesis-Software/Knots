@@ -5,8 +5,6 @@ knot::knot() : caption("New Knot") {
 }
 
 void knot::create_depend() {
-  len_table = NULL;
-
   Length = std::make_shared<prmLength> (this, "Length");
   parameterList.push_back(std::make_shared<prmEnergy>(this, "Moebius energy"));
   parameterList.push_back(std::make_shared<prmAcn>(this, "Average crossing number"));
@@ -31,14 +29,10 @@ void knot::create_depend() {
 }
 
 void knot::clear_depend() {
-  delete_len_table ();
+  this->len_table.clear();
 
   Length->destroy ();
   for (auto param : this->parameterList) {
     param->destroy();
   }
-}
-
-knot::~knot() {
-  delete_len_table ();
 }

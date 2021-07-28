@@ -2,15 +2,14 @@
 
 #include "knot.h"
 
-#define			create_len_table	Parent -> create_len_table
+#define			fill_len_table	Parent -> fill_len_table
 #define			len_table		Parent -> len_table
 #define			points			Parent -> points
 #define			next			Parent -> next
 #define			prev			Parent -> prev
 
-void knot::prmLength::compute (void)
-{
-  create_len_table ();
+void knot::prmLength::compute() {
+  fill_len_table ();
 
   internalValue = 0.0;
 
@@ -19,9 +18,8 @@ void knot::prmLength::compute (void)
 	}
 }
 
-void knot::prmAen::compute (void)
-{
-  create_len_table ();
+void knot::prmAen::compute() {
+  fill_len_table ();
 
   internalValue = 0;
 
@@ -48,9 +46,8 @@ void knot::prmAen::compute (void)
   internalValue += points.size();
 }
 
-void knot::prmEnergy::compute (void)
-{
-  create_len_table ();
+void knot::prmEnergy::compute() {
+  fill_len_table ();
 
   double r2, l;
   double len = Parent -> Length -> value ();

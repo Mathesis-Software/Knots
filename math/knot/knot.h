@@ -52,23 +52,19 @@ protected:
 	std::shared_ptr<parameter> Length;
 
 private:
-
-	double *len_table;
+	std::vector<double> len_table;
 
 	void create_depend();
 	void clear_depend();
 
-	void create_len_table();
-	void delete_len_table();
+	void fill_len_table();
 
 	bool noMorePoints (const double*);
 	double minDist (const double*);
 
 protected:
-
 	knot();
-	knot (diagram*, int, int);
-	~knot();
+	knot(diagram*, int, int);
 
 	std::size_t next(std::size_t);
 	std::size_t prev(std::size_t);

@@ -1,7 +1,7 @@
 #include <math.h>
 #include "knot.h"
 
-void knot::center (void)
+void knot::center()
 {
   // Узел перемещается так, чтобы его центр масс оказался
   // в начале координат.
@@ -43,8 +43,7 @@ void knot::setLength (double len)
   clear_depend ();
 }
 
-void knot::decreaseEnergy (void)
-{
+void knot::decreaseEnergy() {
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
   double oldLen = Length -> value ();
 
@@ -52,7 +51,7 @@ void knot::decreaseEnergy (void)
   normalize(this->points.size());
 
   // Создаем массив расстояний между соседними точками. 
-  create_len_table ();
+  fill_len_table ();
 
 	std::size_t i, j, k;
   double xr, x2, r2, tau, lt, x [3], r [3], local [3];

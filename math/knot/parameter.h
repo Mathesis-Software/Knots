@@ -10,16 +10,16 @@ public:
 
 private:
 	bool ready;
-	float internalValue;
+	double internalValue;
 
 protected:
-	virtual float compute() = 0;
+	virtual double compute() = 0;
 
 public:
 	parameter(const std::string &name) : name(name), ready(false) {}
 	virtual ~parameter() {}
 
-	float value() {
+	double value() {
 		if (!this->ready) {
 			this->internalValue = this->compute();
 			this->ready = true;

@@ -7,8 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "../point.h"
-#include "../headers/parameter.h"
+#include "point.h"
+#include "parameter.h"
 #include "../seifert/seifert.h"
 
 class diagram;
@@ -21,7 +21,7 @@ class knot_surface;
 class PARAM : public parameter {	\
 private:				\
 	knot *Parent;				\
-	float compute() override;			\
+	double compute() override;			\
 public:					\
 	PARAM (knot *p, const char *n)	\
 		: parameter (n)			\
@@ -33,7 +33,7 @@ class PARAM : public parameter {	\
 private:				\
 	knot *Parent;				\
 	int order;				\
-	float compute() override;			\
+	double compute() override;			\
 public:					\
 	PARAM (knot *p, int o, const char *n)	\
 		: parameter (n)			\

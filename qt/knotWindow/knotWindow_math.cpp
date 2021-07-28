@@ -1,4 +1,4 @@
-#include "../../math/headers/parameter.h"
+#include "../../math/knot/parameter.h"
 #include "knotWindow_math.h"
 
 void knotWindow::math() {

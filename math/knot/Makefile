@@ -20,13 +20,13 @@ knot.a: $(OBJECTS)
 	$(RM) $@
 	$(AR) $@ $^
 
-knot_base.o: knot_base.cpp knot.h ../headers/parameter.h
+knot_base.o: knot_base.cpp knot.h parameter.h
 
 knot_diagram.o: knot_diagram.cpp knot.h
 
 knot_dist.o: knot_dist.cpp knot.h
 
-knot_math.o: knot_math.cpp knot.h ../headers/parameter.h
+knot_math.o: knot_math.cpp knot.h parameter.h
 
 knot_normalize.o: knot_normalize.cpp knot.h
 

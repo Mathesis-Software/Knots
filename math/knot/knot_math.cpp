@@ -7,20 +7,20 @@
 #define			next			Parent->next
 #define			prev			Parent->prev
 
-float knot::prmLength::compute() {
+double knot::prmLength::compute() {
 	this->Parent->fill_len_table();
 
-	float value = 0.0;
+	double value = 0.0;
 	for (const auto len : len_table) {
 		value += len;
 	}
 	return value;
 }
 
-float knot::prmAen::compute() {
+double knot::prmAen::compute() {
 	this->Parent->fill_len_table();
 
-	float value = 0;
+	double value = 0;
 
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		double scal =
@@ -42,12 +42,12 @@ float knot::prmAen::compute() {
 	return value / M_PI + points.size();
 }
 
-float knot::prmEnergy::compute() {
+double knot::prmEnergy::compute() {
 	this->Parent->fill_len_table();
 
 	double len = Parent->Length->value ();
 
-	float value = 0.0;
+	double value = 0.0;
 
 	for (std::size_t i = 0; i < points.size() - 2; ++i) {
 		double l = len_table[i];

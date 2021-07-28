@@ -6,9 +6,15 @@
 
 #include "vertex.h"
 
+namespace KE { namespace ThreeD {
+
+class Knot;
+
+}}
+
 class diagram {
 
-friend class Knot;
+friend class KE::ThreeD::Knot;
 
 protected:
 	std::string caption;

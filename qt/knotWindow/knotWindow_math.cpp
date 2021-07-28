@@ -45,7 +45,7 @@ void paramWindow::closeEvent(QCloseEvent*) {
   delete this;
 }
 
-parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<Knot::Computable> computable, int x, int y) : QWidget(parent), computable(computable) {
+parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<KE::ThreeD::Knot::Computable> computable, int x, int y) : QWidget(parent), computable(computable) {
   lbl = new QLabel (this);
   lbl->setGeometry (240, 0, 100, 25);
   lbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);

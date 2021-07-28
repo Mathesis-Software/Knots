@@ -10,8 +10,6 @@
 #include "../seifert/seifert.h"
 
 class diagram;
-class Knot;
-class knot_surface;
 
 /***********************************************************************/
 
@@ -33,6 +31,10 @@ public:					\
 }
 
 /***********************************************************************/
+
+namespace KE { namespace ThreeD {
+
+class knot_surface;
 
 class Knot : public seifert_base {
 
@@ -102,7 +104,7 @@ protected:
 
 protected:
 	std::string caption;
-	std::vector<point> points;
+	std::vector<Point> points;
 
 	std::vector<std::shared_ptr<Computable>> computables;
 	std::shared_ptr<Computable> length;
@@ -155,5 +157,7 @@ inline std::size_t Knot::prev(std::size_t index) const {
 inline bool Knot::isEmpty() {
 	return this->points.empty();
 }
+
+}}
 
 #endif /* __KNOT_H__ */

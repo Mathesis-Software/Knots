@@ -2,6 +2,8 @@
 
 #include "knot.h"
 
+namespace KE { namespace ThreeD {
+
 std::istream & operator >> (std::istream &is, Knot *K) {
 	char tmp[256];
 
@@ -26,7 +28,7 @@ std::istream & operator >> (std::istream &is, Knot *K) {
 	for (int i = 0; i < length; ++i) {
 		double x, y, z;
 		is >> x >> y >> z;
-		K->points.push_back(point(x, y, z));
+		K->points.push_back(Point(x, y, z));
 		if (is.good()) {
 			continue;
 		}
@@ -51,3 +53,5 @@ std::ostream & operator << (std::ostream &os, Knot *K) {
 	}
 	return os;
 }
+
+}}

@@ -1,6 +1,8 @@
 #include <math.h>
 #include "knot.h"
 
+namespace KE { namespace ThreeD {
+
 void Knot::center() {
   // Узел перемещается так, чтобы его центр масс оказался
   // в начале координат.
@@ -144,3 +146,5 @@ void Knot::decreaseEnergy() {
   // Восстанавливаем старую длину.
   setLength(oldLen);
 }
+
+}}

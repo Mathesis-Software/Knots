@@ -11,7 +11,7 @@
 
 class paramWindow;
 
-class knotWindow : public dddWindow, public Knot {
+class knotWindow : public dddWindow, public KE::ThreeD::Knot {
 
   Q_OBJECT
 

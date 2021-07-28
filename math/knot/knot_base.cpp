@@ -1,5 +1,7 @@
 #include "knot.h"
 
+namespace KE { namespace ThreeD {
+
 Knot::Knot() : caption("New Knot") {
   create_depend();
 }
@@ -28,3 +30,5 @@ void Knot::clear_depend() {
     computable->invalidate();
   }
 }
+
+}}

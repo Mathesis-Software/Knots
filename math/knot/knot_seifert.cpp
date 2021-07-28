@@ -2,6 +2,8 @@
 
 #include "knot.h"
 
+namespace KE { namespace ThreeD {
+
 bool Knot::noMorePoints(const double *point) {
   return (point [0] * point [0] +
           point [1] * point [1] +
@@ -80,3 +82,5 @@ void Knot::getGradient(const double *point, double *gradient) {
   gradient [1] /= len;
   gradient [2] /= len;
 }
+
+}}

@@ -6,6 +6,8 @@
 #define			next			knot.next
 #define			prev			knot.prev
 
+namespace KE { namespace ThreeD {
+
 double Knot::prmLength::compute() {
 	double value = 0.0;
 	for (const auto len : this->knot.len_table()) {
@@ -101,3 +103,5 @@ double Knot::prmEnergy::compute() {
 	value -= 4;
 	return value;
 }
+
+}}

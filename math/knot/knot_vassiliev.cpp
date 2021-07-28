@@ -46,6 +46,8 @@ void vector_product(const double *v1, const double *v2, double *m) {
 #define			next			knot.next
 #define			prev			knot.prev
 
+namespace KE { namespace ThreeD {
+
 Knot::AverageCrossingNumber::AverageCrossingNumber(const Knot &knot, bool withSign) :
 	Computable(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
 	withSign(withSign) {
@@ -562,3 +564,5 @@ double Knot::prmExperimental2::compute() {
 
 	return value / (4 * M_PI * M_PI);
 }
+
+}}

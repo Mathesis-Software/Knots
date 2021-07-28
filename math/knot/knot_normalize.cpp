@@ -2,6 +2,8 @@
 
 #include "knot.h"
 
+namespace KE { namespace ThreeD {
+
 void Knot::normalize(int num) {
 	const auto &len_table = this->len_table();
 
@@ -24,7 +26,7 @@ void Knot::normalize(int num) {
 			const auto next_v = v == old_points.size() - 1 ? 0 : v + 1;
 
 			part = (1 - rest / llen);
-			points.push_back(point(
+			points.push_back(Point(
 				old_points[v].x + part * (old_points[next_v].x - old_points[v].x),
 				old_points[v].y + part * (old_points[next_v].y - old_points[v].y),
 				old_points[v].z + part * (old_points[next_v].z - old_points[v].z)
@@ -41,3 +43,5 @@ void Knot::normalize(int num) {
 
 	clear_depend();
 }
+
+}}

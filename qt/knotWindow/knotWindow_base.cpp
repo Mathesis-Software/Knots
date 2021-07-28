@@ -12,7 +12,7 @@ void knotWindow::init() {
   bp [1] = 0.0;
   bp [2] = 0.4;
   
-  kSurf = new knot_surface (this, 0.05);
+  kSurf = new KE::ThreeD::knot_surface (this, 0.05);
   addSurface (kSurf);
   sSurf = new seifert_surface (this, bp);
   addSurface (sSurf);
@@ -43,12 +43,12 @@ void knotWindow::init() {
   setWindowIcon (QPixmap ((QString) getenv ("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
 }
 
-knotWindow::knotWindow (std::istream &is) : Knot() {
+knotWindow::knotWindow (std::istream &is) : KE::ThreeD::Knot() {
   init ();
   readIt (is);
 }
 
-knotWindow::knotWindow (diagramWindow *d) : Knot (d, d -> width (), d -> height ()) {
+knotWindow::knotWindow (diagramWindow *d) : KE::ThreeD::Knot (d, d -> width (), d -> height ()) {
   init ();
   setWindowTitle(caption.c_str());
   isSaved = false;

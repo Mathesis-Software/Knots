@@ -24,6 +24,8 @@ void norm(double *vector) {
 
 }
 
+namespace KE { namespace ThreeD {
+
 knot_surface::knot_surface(Knot *p, double t) {
 	Parent = p;
 	thickness = t;
@@ -195,3 +197,5 @@ void knot_surface::calculate() {
 		delete[] shift;
 	}
 }
+
+}}

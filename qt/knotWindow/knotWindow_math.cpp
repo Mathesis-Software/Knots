@@ -14,11 +14,11 @@ void knotWindow::math() {
 
 paramWindow::paramWindow (knotWindow *p) {
   Parent = p;
-  nLabels = Parent->computables.size();
+  nLabels = Parent->knot->computables.size();
   pLabels = new parameterLabel* [nLabels];
  
   int index = 0;
-  for (auto computable : Parent->computables) {
+  for (auto computable : Parent->knot->computables) {
     pLabels[index] = new parameterLabel(this, computable, 20, 15 + 30 * index);
 		index += 1;
   }

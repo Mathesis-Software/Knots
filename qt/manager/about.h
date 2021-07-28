@@ -29,8 +29,7 @@ private:
 	int timer_id;
 };
 
-class aboutSurface : public surface
-{
+class aboutSurface : public KE::GL::Surface {
 
 public:
 
@@ -50,7 +49,7 @@ public:
 
 private:
 
-  surface *aboutSurf;
+  aboutSurface *aboutSurf;
   float x, y, z;
   
   void resizeGL (int, int);

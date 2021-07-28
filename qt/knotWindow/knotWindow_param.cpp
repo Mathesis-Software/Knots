@@ -4,14 +4,16 @@
 #include "knotWindow_math.h"
 #include "knotWindow_param.h"
 #include "../setValue/setValue.h"
+#include "../../math/knot/knot_surface.h"
+#include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::setLength() {
-  double d = setDouble ("Knot length", this->length->value(), 1.0, 1000.0);
-  if (d != this->length->value()) {
-    Knot::setLength (d);
-    Knot::center();
-    kSurf->destroy();
-    sSurf->destroy();
+  double d = setDouble ("Knot length", this->knot->length->value(), 1.0, 1000.0);
+  if (d != this->knot->length->value()) {
+    this->knot->setLength (d);
+    this->knot->center();
+    this->knotSurface->destroy();
+    this->seifertSurface->destroy();
     repaint3d();
     isSaved = false;
     if (mth) {
@@ -21,11 +23,11 @@ void knotWindow::setLength() {
 }
 
 void knotWindow::setNumberOfPoints() {
-	const std::size_t numberOfPoints = setInt ("Set number of points", this->points.size(), 10, 30000);
-  if (numberOfPoints != this->points.size()) {
-    normalize(numberOfPoints);
-    Knot::center();
-    kSurf->destroy();
+	const std::size_t numberOfPoints = setInt ("Set number of points", this->knot->numberOfPoints(), 10, 30000);
+  if (numberOfPoints != this->knot->numberOfPoints()) {
+    this->knot->normalize(numberOfPoints);
+    this->knot->center();
+    this->knotSurface->destroy();
     repaint3d();
     isSaved = false;
     if (mth) {

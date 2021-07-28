@@ -4,17 +4,15 @@
 
 namespace KE { namespace ThreeD {
 
-void Knot::normalize(int num) {
+void Knot::normalize(std::size_t num) {
 	const auto &len_table = this->len_table();
 
 	double len = this->length->value();
 
-	std::size_t length = num;
-
 	const auto old_points = points;
 	points.clear();
 
-	len /= length;
+	len /= num;
 
 	{
 		std::size_t v = 0;
@@ -22,7 +20,7 @@ void Knot::normalize(int num) {
 		double llen = len_table[0];
 		double rest = llen;
 
-		for (std::size_t i = 0; i < length; i++) {
+		for (std::size_t i = 0; i < num; i++) {
 			const auto next_v = v == old_points.size() - 1 ? 0 : v + 1;
 
 			part = (1 - rest / llen);

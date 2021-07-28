@@ -9,16 +9,26 @@
 #include "../../math/knot/knot.h"
 #include "../../math/seifert/seifert.h"
 
+namespace KE { namespace GL {
+
+class KnotSurface;
+class SeifertSurface;
+
+}}
+
 class paramWindow;
 
-class knotWindow : public dddWindow, public KE::ThreeD::Knot {
+class knotWindow : public dddWindow {
 
   Q_OBJECT
 
 private:
-  surface *kSurf, *sSurf;
+	std::shared_ptr<KE::ThreeD::Knot> knot;
+
+	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
+	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
   double thickness;
-  double bp [3];
+  double bp[3];
 
   QMenu *mathMenu;
   QMenu *viewMenu;
@@ -43,10 +53,9 @@ private:
   void doSmooth();
   void timerEvent (QTimerEvent*);
 
-  bool isEmpty() {return Knot::isEmpty();};
+  bool isEmpty() {return this->knot->isEmpty();};
 
-  void readIt (std::istream&);
-  void saveIt (std::ostream&);
+  void saveIt(std::ostream&);
 
 private slots:
   void stop();

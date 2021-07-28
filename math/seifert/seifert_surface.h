@@ -6,19 +6,20 @@
 class seifert;
 class seifert_base;
 
-class seifert_surface : public surface {
+namespace KE { namespace GL {
 
+class SeifertSurface : public Surface {
   private:
-
-    seifert_base *base;
+    const seifert_base &base;
     double *start_point;
 
-    void addTriangles (seifert *s);
-    void calculate (void);
+    void addTriangles(seifert *s);
+    void calculate();
 
   public:
-
-    seifert_surface (seifert_base*, double*);
+    SeifertSurface(const seifert_base &base, double*);
 };
+
+}}
 
 #endif /* __SEIFERT_SURFACE_H__ */

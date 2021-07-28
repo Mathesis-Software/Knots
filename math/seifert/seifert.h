@@ -14,11 +14,11 @@ class seifert_base {
 
 protected:
 
-  seifert_base (void) {};
-  virtual ~seifert_base (void) {};
-  virtual void getGradient (const double*, double*) = 0;
-  virtual bool noMorePoints (const double*) = 0;
-  virtual double minDist (const double*) = 0;
+  seifert_base() {}
+  virtual ~seifert_base() {}
+  virtual void getGradient(const double*, double*) const = 0;
+  virtual bool noMorePoints(const double*) const = 0;
+  virtual double minDist(const double*) const = 0;
 
   friend class seifert;
   friend class seifert_list;
@@ -32,14 +32,14 @@ private:
   seifert_list *prev, *next;
   bool label;
 
-  void insert (seifert*);
-  void insert_after (seifert*);
+  void insert(seifert*);
+  void insert_after(seifert*);
 
-  seifert_list (seifert*, seifert*);
-  ~seifert_list (void);
+  seifert_list(seifert*, seifert*);
+  ~seifert_list();
 
   friend class seifert;
-  friend class seifert_surface;
+  friend class KE::GL::SeifertSurface;
 };
 
 class seifert_ord {
@@ -49,43 +49,43 @@ private:
   seifert *value;
   seifert_ord *prev, *next;
 
-  seifert_ord *insert (seifert*);
+  seifert_ord *insert(seifert*);
 
-  seifert_ord (seifert*);
-  ~seifert_ord (void);
+  seifert_ord(seifert*);
+  ~seifert_ord();
 
   friend class seifert;
-  friend class seifert_surface;
+  friend class KE::GL::SeifertSurface;
 };
 
 class seifert {
 
 private:
 
-  double coord [3], gradient [3];
+  double coord[3], gradient[3];
   double localEps;
   seifert_list *neighborhood;
   seifert_ord *sord;
-  seifert_base *base;
+  const seifert_base &base;
 
-  void searchForNeighbor (void);
-  void checkNeighborhood (void);
-  void addPoint (double, double, double);
-  void addPoint60 (double, double, double);
-  seifert_list *hasNeighbor (seifert*);
-  void markUsed (seifert*, seifert*);
-  void correction_local (void);
-  void correction (void);
+  void searchForNeighbor();
+  void checkNeighborhood();
+  void addPoint(double, double, double);
+  void addPoint60(double, double, double);
+  seifert_list *hasNeighbor(seifert*);
+  void markUsed(seifert*, seifert*);
+  void correction_local();
+  void correction();
 
 public:
 
-  seifert (const double, const double, const double,
-           seifert_base* = NULL, seifert* = NULL);
-  ~seifert (void);
+  seifert(const double, const double, const double,
+          const seifert_base &base, seifert* = nullptr);
+  ~seifert();
 
   friend class seifert_ord;
   friend class seifert_list;
-  friend class seifert_surface;
+  friend class KE::GL::SeifertSurface;
 };
 
 #endif /* __SEIFERT_H__ */

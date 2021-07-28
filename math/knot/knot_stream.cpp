@@ -4,54 +4,59 @@
 
 namespace KE { namespace ThreeD {
 
-std::istream & operator >> (std::istream &is, Knot *K) {
+Knot::Knot(std::istream &is) {
 	char tmp[256];
 
-	is.get (tmp, 32, ' ');
+	is.get(tmp, 32, ' ');
 	if (strcmp(tmp, "#KNOT") != 0) {
-		return is;
+		return;
 	}
 
-	is.get (tmp [0]);
-	is.get (tmp, 255);
-	K->caption = tmp;
+	is.get(tmp [0]);
+	is.get(tmp, 255);
+	this->caption = tmp;
 
-	is.get (tmp, 32, ' ');
+	is.get(tmp, 32, ' ');
 	int length;
 	is >> length;
 	if (strcmp(tmp, "\n#LENGTH") != 0 || length <= 0) {
-		return is;
+		return;
 	}
 
-	K->points.clear();
+	this->points.clear();
 
 	for (int i = 0; i < length; ++i) {
 		double x, y, z;
 		is >> x >> y >> z;
-		K->points.push_back(Point(x, y, z));
+		this->points.push_back(Point(x, y, z));
 		if (is.good()) {
 			continue;
 		}
 		if (is.eof() && i == length - 1) {
 			break;
 		}
-		K->points.clear();
+		this->points.clear();
 		break;
 	}
 
-	if (!K->points.empty()) {
-		K->center();
+	if (!this->points.empty()) {
+		this->center();
 	}
-
-	return is;
 }
 
-std::ostream & operator << (std::ostream &os, Knot *K) {
-	os << "#KNOT " << K->caption << "\n#LENGTH " << K->points.size() << "\n";
-	for (const auto &pt : K->points) {
-		os << pt.x << ' ' << pt.y << ' ' << pt.z << '\n';
+void Knot::save(std::ostream &os, const double matrix[3][3]) const {
+	os << "#KNOT " << this->caption << "\n#LENGTH " << this->points.size() << "\n";
+	for (const auto &pt : this->points) {
+    os << matrix[0][0] * pt.x +
+          matrix[1][0] * pt.y +
+          matrix[2][0] * pt.z << ' ' <<
+          matrix[0][1] * pt.x +
+          matrix[1][1] * pt.y +
+          matrix[2][1] * pt.z << ' ' <<
+          matrix[0][2] * pt.x +
+          matrix[1][2] * pt.y +
+          matrix[2][2] * pt.z << '\n';
 	}
-	return os;
 }
 
 }}

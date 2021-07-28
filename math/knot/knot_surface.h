@@ -3,20 +3,30 @@
 
 #include "../../gl/surface/surface.h"
 
-namespace KE { namespace ThreeD {
+namespace KE {
+
+namespace ThreeD {
 
 class Knot;
 
-class knot_surface : public surface {
+}
+
+namespace GL {
+
+class KnotSurface : public Surface {
 
 private:
-	KE::ThreeD::Knot *Parent;
+	const ThreeD::Knot &knot;
   double thickness;
 
 public:
-  knot_surface(KE::ThreeD::Knot*, double);
+  KnotSurface(const ThreeD::Knot &knot, double thickness);
   void calculate(void);
   void setThickness(double t) {thickness = t;}
+
+private:
+	KnotSurface(const KnotSurface&) = delete;
+	KnotSurface& operator = (const KnotSurface&) = delete;
 };
 
 }}

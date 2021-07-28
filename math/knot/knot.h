@@ -32,9 +32,15 @@ public:					\
 
 /***********************************************************************/
 
-namespace KE { namespace ThreeD {
+namespace KE {
+ 
+namespace GL {
 
-class knot_surface;
+class KnotSurface;
+
+}
+
+namespace ThreeD {
 
 class Knot : public seifert_base {
 
@@ -102,12 +108,13 @@ protected:
 	addParameterClass(prmSingular);
 	addParameterClassWithOrder(prmExperimental2);
 
-protected:
+public:
 	std::string caption;
-	std::vector<Point> points;
-
-	std::vector<std::shared_ptr<Computable>> computables;
 	std::shared_ptr<Computable> length;
+	std::vector<std::shared_ptr<Computable>> computables;
+
+private:
+	std::vector<Point> points;
 
 private:
 	mutable std::vector<double> _len_table;
@@ -117,31 +124,32 @@ private:
 
 	const std::vector<double> &len_table() const;
 
-	bool noMorePoints (const double*);
-	double minDist (const double*);
+	bool noMorePoints (const double*) const override;
+	double minDist (const double*) const override;
 
-protected:
-	Knot();
+public:
+	Knot(std::istream &is);
 	Knot(diagram*, int, int);
-
-	std::size_t next(std::size_t) const;
-	std::size_t prev(std::size_t) const;
 
 	bool isEmpty();
 	void decreaseEnergy();
-	void setLength (double);
+	void setLength(double);
 	void center();
-	void normalize (int);
-	void getGradient (const double*, double*);
+	std::size_t numberOfPoints() const { return this->points.size(); }
+	void normalize(std::size_t numberOfPoints);
+	void getGradient (const double*, double*) const override;
 
-	friend std::istream & operator >> (std::istream &, Knot *);
-	friend std::ostream & operator << (std::ostream &, Knot *);
+	void save(std::ostream &os, const double matrix[3][3]) const;
 
-	friend class knot_surface;
+	friend class GL::KnotSurface;
 
 private:
-	Knot (const Knot&);
-	Knot& operator = (const Knot&);
+	std::size_t next(std::size_t) const;
+	std::size_t prev(std::size_t) const;
+
+private:
+	Knot(const Knot&) = delete;
+	Knot& operator = (const Knot&) = delete;
 };
 
 /***********************************************************************/

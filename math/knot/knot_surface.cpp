@@ -24,17 +24,15 @@ void norm(double *vector) {
 
 }
 
-namespace KE { namespace ThreeD {
+namespace KE { namespace GL {
 
-knot_surface::knot_surface(Knot *p, double t) {
-	Parent = p;
-	thickness = t;
+KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness) : knot(knot), thickness(thickness) {
 	stripped = 1;
-	sides = surface::Front;
+	sides = Front;
 }
 
-void knot_surface::calculate() {
-	const auto &points = Parent->points;
+void KnotSurface::calculate() {
+	const auto &points = this->knot.points;
 
 	if (points.empty()) {
 		return;
@@ -56,9 +54,9 @@ void knot_surface::calculate() {
 		normal2 = new double*[points.size()];
 
 		for (std::size_t i = 0; i < points.size(); ++i) {
-			v[0] = points[Parent->next(i)].x - points[Parent->prev(i)].x;
-			v[1] = points[Parent->next(i)].y - points[Parent->prev(i)].y;
-			v[2] = points[Parent->next(i)].z - points[Parent->prev(i)].z;
+			v[0] = points[this->knot.next(i)].x - points[this->knot.prev(i)].x;
+			v[1] = points[this->knot.next(i)].y - points[this->knot.prev(i)].y;
+			v[2] = points[this->knot.next(i)].z - points[this->knot.prev(i)].z;
 			norm (v);
 
 			normal1[i] = new double[3];
@@ -102,12 +100,12 @@ void knot_surface::calculate() {
 		shift = new int[points.size()];
 
 		for (std::size_t i = 0; i < points.size(); ++i) {
-			a = normal1[i][0] * normal1[Parent->next(i)][0]
-				+ normal1[i][1] * normal1[Parent->next(i)][1]
-				+ normal1[i][2] * normal1[Parent->next(i)][2];
-			b = normal1[i][0] * normal2[Parent->next(i)][0]
-				+ normal1[i][1] * normal2[Parent->next(i)][1]
-				+ normal1[i][2] * normal2[Parent->next(i)][2];
+			a = normal1[i][0] * normal1[this->knot.next(i)][0]
+				+ normal1[i][1] * normal1[this->knot.next(i)][1]
+				+ normal1[i][2] * normal1[this->knot.next(i)][2];
+			b = normal1[i][0] * normal2[this->knot.next(i)][0]
+				+ normal1[i][1] * normal2[this->knot.next(i)][1]
+				+ normal1[i][2] * normal2[this->knot.next(i)][2];
 
 			if (a > 0)
 				if (b > 0)

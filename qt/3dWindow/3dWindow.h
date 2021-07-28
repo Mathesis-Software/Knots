@@ -2,6 +2,7 @@
 #define __3DWINDOW_H__
 
 #include <list>
+#include <memory>
 
 #include <QtWidgets/QOpenGLWidget>
 
@@ -10,12 +11,10 @@
 #include "../../gl/surface/surface.h"
 
 class dddWindow : public abstractWindow {
-
   Q_OBJECT
 
 private:
-
-	std::list<surface*> *surfaces;
+	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
 
   double *currentSpeedMatrix;
   double *currentMatrix;
@@ -27,7 +26,7 @@ private:
 
   void rotate (int, int);
   void changeSpeed (int, int);
-  void doRotate (void);
+  void doRotate();
 
 private slots:
 
@@ -39,19 +38,13 @@ protected:
   float backgroundRGB[3];
 
   void timerEvent (QTimerEvent*);
-
-  void addSurface (surface *s)
-    {surfaces -> push_back (s);};
-
-  double currMatr (int i, int j)
-    {return currentMatrix [4 * i + j];}
-
-  void repaint3d (void);
+  void addSurface(std::shared_ptr<KE::GL::Surface> s) {this->surfaces.push_back(s);};
+  double currMatr(int i, int j) {return currentMatrix[4 * i + j];}
+  void repaint3d();
 
 public:
-  
-  dddWindow (void);
-  ~dddWindow (void);
+  dddWindow();
+  ~dddWindow();
 
   friend class dddMainWidget;
   friend class setup3dMainWidgetColor;
@@ -60,19 +53,18 @@ public:
 class dddMainWidget : public QOpenGLWidget {
 
 private:
-
   dddWindow *Parent;
   void resizeGL (int, int);
-  void paintGL (void);
+  void paintGL();
 
 public:
-
   dddMainWidget (dddWindow*);
-  ~dddMainWidget (void);
+  ~dddMainWidget();
 
-  void multMatrix (void)
-    {makeCurrent ();
-     glMultMatrixd (Parent -> currentMatrix);}
+  void multMatrix() {
+    makeCurrent ();
+    glMultMatrixd (Parent -> currentMatrix);
+	}
 };
 
 class setup3dMainWidgetColor : public setupColor {

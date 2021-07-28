@@ -1,10 +1,8 @@
 #include "seifert.h"
 
-static double det (const double *v0,
-                   const double *v1,
-		   const double *v2,
-		   const double *orth)
-{
+namespace {
+
+double det(const double *v0, const double *v1, const double *v2, const double *orth) {
   return
       (v1 [0] - v0 [0]) * (v2 [1] - v0 [1]) * orth [2]
     - (v1 [0] - v0 [0]) * (v2 [2] - v0 [2]) * orth [1]
@@ -14,16 +12,17 @@ static double det (const double *v0,
     - (v1 [2] - v0 [2]) * (v2 [1] - v0 [1]) * orth [0];
 }
 
-seifert_surface::seifert_surface (seifert_base *bs, double *sp)
-{
-  base = bs;
-  start_point = sp;
-  stripped = 0;
-  sides = surface::Both;
 }
 
-void seifert_surface::addTriangles (seifert *s)
-{
+namespace KE { namespace GL {
+
+SeifertSurface::SeifertSurface(const seifert_base &base, double *sp) : base(base) {
+  start_point = sp;
+  stripped = 0;
+  sides = Both;
+}
+
+void SeifertSurface::addTriangles(seifert *s) {
   // Это оч. убогая версия создания поверхности из графа.
   // Просто в каждой вершине для любых двух ``соседних соседей''
   // создается новый треугольник, треугольники НИКАК не связаны.
@@ -100,8 +99,7 @@ void seifert_surface::addTriangles (seifert *s)
   }
 }
 
-void seifert_surface::calculate (void)
-{
+void SeifertSurface::calculate() {
   // Создаем граф поверхности.
   seifert *s = new seifert (start_point [0],
                             start_point [1],
@@ -128,3 +126,5 @@ void seifert_surface::calculate (void)
   // Удаляем граф.
   delete s;
 }
+
+}}

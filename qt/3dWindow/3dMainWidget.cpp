@@ -42,10 +42,9 @@ void dddMainWidget::paintGL (void)
 		1.0);
   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  for (std::list<surface*>::iterator it = Parent -> surfaces -> begin ();
-       it != Parent -> surfaces -> end ();
-       it++)
-    (*it) -> paint ();
+  for (auto surface : Parent->surfaces) {
+    surface->paint();
+	}
 
   glFlush();
 }

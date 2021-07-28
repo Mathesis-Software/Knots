@@ -22,7 +22,6 @@ protected:
   void closeEvent (QCloseEvent*);
 
   virtual void printIt (QPrinter*) = 0;
-  virtual void readIt (std::istream&) = 0;
   virtual void saveIt (std::ostream&) = 0;
 
   int askForSave (void);

@@ -1,6 +1,9 @@
-#include <QtWidgets/qmenubar.h>
+#include <QtWidgets/QMenuBar>
 
 #include "knotWindow.h"
+
+#include "../../math/knot/knot_surface.h"
+#include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("&Math");
@@ -17,10 +20,10 @@ void knotWindow::initMenu() {
   viewMenu = menuBar()->addMenu("&View");
   view_showKnot = viewMenu->addAction("Show &knot", this, SLOT(switchShowKnot()));
   view_showKnot->setCheckable(true);
-  view_showKnot->setChecked(kSurf->isVisible());  
+  view_showKnot->setChecked(this->knotSurface->isVisible());  
   view_showSeifertSurface = viewMenu->addAction("Show &Seifert surface", this, SLOT (switchShowSeifert()) );
   view_showSeifertSurface->setCheckable(true);
-  view_showSeifertSurface->setChecked(sSurf->isVisible());  
+  view_showSeifertSurface->setChecked(this->seifertSurface->isVisible());  
   
   QMenu *optionsMenu = menuBar()->addMenu ("&Options");
   optionsMenu->addAction("&Thickness...", this, SLOT(setThickness()));

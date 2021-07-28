@@ -45,7 +45,7 @@ void seifert::addPoint (double x_dir, double y_dir, double z_dir)
 
     // Считаем сумму градиентов в начальной точке и
     // в приближении новой точки.
-    base -> getGradient (appr, gradient2);
+    this->base.getGradient (appr, gradient2);
 
     gradient2 [0] += gradient [0];
     gradient2 [1] += gradient [1];
@@ -162,7 +162,7 @@ void seifert::checkNeighborhood (void)
 {
   // Проверяем, не нужно ли здесь остановиться по внешним причинам.
   // (Выход за границы области видимости, добрались до узла и т.п.)
-  if (base -> noMorePoints (coord))
+  if (this->base.noMorePoints (coord))
     return;
 
   // Если соседей вообще нет (т.е. это просто первая точка),
@@ -280,8 +280,7 @@ void seifert::correction (void)
 }
 
 seifert::seifert (const double x, const double y, const double z,
-                  seifert_base *b, seifert* neighbor)
-{
+                  const seifert_base &base, seifert* neighbor) : base(base) {
   counter ++;
 //  cerr << "Point " << counter << '\n';
 
@@ -289,33 +288,26 @@ seifert::seifert (const double x, const double y, const double z,
   coord [1] = y;
   coord [2] = z;
 
-  if (b)
-  {
-    base = b;
-    base -> getGradient (coord, gradient);
+	this->base.getGradient (coord, gradient);
 
-    localEps = base -> minDist (coord) / TIMES;
-    if (localEps > MAX_EPS)
-      localEps = MAX_EPS;
+	localEps = this->base.minDist (coord) / TIMES;
+	if (localEps > MAX_EPS)
+		localEps = MAX_EPS;
 
-    if (neighbor)
-      sord = neighbor -> sord -> insert (this);
-    else
-      sord = new seifert_ord (this);
-  }
+	if (neighbor)
+		sord = neighbor -> sord -> insert (this);
+	else
+		sord = new seifert_ord(this);
 
-  neighborhood = new seifert_list (this, neighbor);
-  if (neighbor)
-  {
+  neighborhood = new seifert_list(this, neighbor);
+  if (neighbor) {
     neighbor -> neighborhood -> insert_after (this);
     searchForNeighbor ();
   }
 
-  if (!b)
-    searchForNeighbor ();
-
-  if (b && (localEps > MIN_EPS))
-    checkNeighborhood ();
+  if (localEps > MIN_EPS) {
+    checkNeighborhood();
+	}
 }
 
 seifert::~seifert (void)

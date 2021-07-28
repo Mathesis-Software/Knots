@@ -6,52 +6,52 @@
 #include "knotWindow.h"
 #include "knotWindow_math.h"
 #include "../../math/knot/knot_surface.h"
+#include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::init() {
-  bp [0] = 0.0;
-  bp [1] = 0.0;
-  bp [2] = 0.4;
+  bp[0] = 0.0;
+  bp[1] = 0.0;
+  bp[2] = 0.4;
   
-  kSurf = new KE::ThreeD::knot_surface (this, 0.05);
-  addSurface (kSurf);
-  sSurf = new seifert_surface (this, bp);
-  addSurface (sSurf);
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(*this->knot, 0.05);
+  addSurface(this->knotSurface);
+  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(*this->knot, bp);
+  addSurface(this->seifertSurface);
 
-  float rgb [3];
-  rgb [0] = 1.0;
-  rgb [1] = 1.0;
-  rgb [2] = 1.0;
-  kSurf -> setFrontRGB (rgb);
-  rgb [0] = 1.0;
-  rgb [1] = 1.0;
-  rgb [2] = 1.0;
-  sSurf -> setFrontRGB (rgb);
-  rgb [0] = 0.5;
-  rgb [1] = 0.5;
-  rgb [2] = 0.5;
-  sSurf -> setBackRGB (rgb);
+  float rgb[3];
+  rgb[0] = 1.0;
+  rgb[1] = 1.0;
+  rgb[2] = 1.0;
+  this->knotSurface->setFrontRGB(rgb);
+  rgb[0] = 1.0;
+  rgb[1] = 1.0;
+  rgb[2] = 1.0;
+  this->seifertSurface->setFrontRGB(rgb);
+  rgb[0] = 0.5;
+  rgb[1] = 0.5;
+  rgb[2] = 0.5;
+  this->seifertSurface->setBackRGB(rgb);
 
-  kSurf -> show ();
+  this->knotSurface->show();
 
   thickness = 1.0;
   smoothing = false;
   mth = NULL;
 
-  initMenu ();
-  complete ();
+  initMenu();
+  complete();
 
-  setWindowIcon (QPixmap ((QString) getenv ("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
+  setWindowTitle(this->knot->caption.c_str());
+  setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
 }
 
-knotWindow::knotWindow (std::istream &is) : KE::ThreeD::Knot() {
-  init ();
-  readIt (is);
+knotWindow::knotWindow(std::istream &is) : knot(std::make_shared<KE::ThreeD::Knot>(is)) {
+  this->init();
 }
 
-knotWindow::knotWindow (diagramWindow *d) : KE::ThreeD::Knot (d, d -> width (), d -> height ()) {
-  init ();
-  setWindowTitle(caption.c_str());
-  isSaved = false;
+knotWindow::knotWindow(diagramWindow *d) : knot(std::make_shared<KE::ThreeD::Knot>(d, d->width(), d->height())) {
+  this->init();
+	this->isSaved = false;
 }
 
 knotWindow::~knotWindow() {
@@ -62,21 +62,21 @@ knotWindow::~knotWindow() {
   delete viewMenu;
 }
 
-void knotWindow::timerEvent (QTimerEvent *te)
-{
-  if ( smoothing && (te -> timerId () == timerId_smooth) )
-    doSmooth ();
-  else
+void knotWindow::timerEvent(QTimerEvent *te) {
+  if (smoothing && (te->timerId() == timerId_smooth)) {
+    doSmooth();
+	} else {
     dddWindow::timerEvent (te);
+	}
 }
 
 void knotWindow::switchShowKnot() {
-  if (kSurf -> isVisible ()) {
-    kSurf -> hide ();
-    view_showKnot -> setChecked (false);
+  if (this->knotSurface->isVisible()) {
+    this->knotSurface->hide();
+    view_showKnot->setChecked(false);
   } else {
-    kSurf -> show ();
-    view_showKnot -> setChecked (true);
+    this->knotSurface->show();
+    view_showKnot->setChecked(true);
   }
 
   repaint3d ();
@@ -84,11 +84,11 @@ void knotWindow::switchShowKnot() {
 
 void knotWindow::switchShowSeifert ()
 {
-  if (sSurf -> isVisible ()) {
-    sSurf -> hide ();
+  if (this->seifertSurface->isVisible()) {
+    this->seifertSurface->hide ();
     view_showSeifertSurface->setChecked(false);
   } else {
-    sSurf -> show ();
+    this->seifertSurface->show ();
     view_showSeifertSurface->setChecked(true);
   }
 

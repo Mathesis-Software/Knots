@@ -2,10 +2,6 @@
 
 namespace KE { namespace ThreeD {
 
-Knot::Knot() : caption("New Knot") {
-  create_depend();
-}
-
 void Knot::create_depend() {
   this->length = std::make_shared<prmLength>(*this, "Length");
   this->computables.push_back(std::make_shared<prmEnergy>(*this, "Moebius energy"));

@@ -88,8 +88,19 @@ protected:
 		AverageCrossingNumber(const Knot &knot, bool withSign);
 	};
 
+	class VassilievInvariant : public parameter {
+
+	public:
+		const int order;
+
+	private:
+		double compute() override;
+
+	public:
+		VassilievInvariant(const Knot &knot, int order);
+	};
+
 	addParameterClass(prmAen);
-	addParameterClassWithOrder(prmKI);
 	addParameterClass(prmExperimental);
 	addParameterClass(prmSingular);
 	addParameterClassWithOrder(prmExperimental2);

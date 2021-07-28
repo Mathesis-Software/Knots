@@ -84,42 +84,39 @@ double Knot::AverageCrossingNumber::compute() {
 	return value / (2 * M_PI);
 }
 
-double Knot::prmKI::compute() {
+Knot::VassilievInvariant::VassilievInvariant(const Knot &knot, int order) :
+	parameter(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),
+	order(order) {
+}
+
+double Knot::VassilievInvariant::compute() {
 	double value = 0.0;
 
-	std::size_t i1, i2;
-	int o;
-
-	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[points.size()];
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		tangs[i1] = new double[3];
-		tangs[i1][0] = points[next (i1)].x - points[i1].x;
-		tangs[i1][1] = points[next (i1)].y - points[i1].y;
-		tangs[i1][2] = points[next (i1)].z - points[i1].z;
+	// tangent vectors
+	std::vector<vector> tangents;
+	for (std::size_t i = 0; i < points.size(); ++i) {
+		tangents.push_back(vector(
+			points[next(i)].x - points[i].x,
+			points[next(i)].y - points[i].y,
+			points[next(i)].z - points[i].z
+		));
 	}
 
 	// Вычисляем ``гауссовы произведения''.
-	double chord[3], chord_len;
 	double **gauss = new double*[points.size()];
 
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		gauss[i1] = new double[points.size()];
-		gauss[i1][i1] = 0.0;
-		for (i2 = 0; i2 < i1; i2++)
-		{
-			chord[0] = ( points[i1].x + points[next (i1)].x -
-										points[i2].x - points[next (i2)].x ) / 2;
-			chord[1] = ( points[i1].y + points[next (i1)].y -
-										points[i2].y - points[next (i2)].y ) / 2;
-			chord[2] = ( points[i1].z + points[next (i1)].z -
-										points[i2].z - points[next (i2)].z ) / 2;
-			chord_len = sqrt (vector_square (chord));
-			gauss[i1][i2] = det (tangs[i1], tangs[i2], chord) /
-												(chord_len * chord_len * chord_len);
-			gauss[i2][i1] = gauss[i1][i2];
+	for (std::size_t i = 0; i < points.size(); ++i) {
+		gauss[i] = new double[points.size()];
+		gauss[i][i] = 0.0;
+		for (std::size_t j = 0; j < i; j++) {
+			const vector chord(
+				(points[i].x + points[next(i)].x - points[j].x - points[next(j)].x) / 2,
+				(points[i].y + points[next(i)].y - points[j].y - points[next(j)].y) / 2,
+				(points[i].z + points[next(i)].z - points[j].z - points[next(j)].z) / 2
+			);
+			double chord_len = chord.length();
+			gauss[i][j] = det(tangents[i], tangents[j], chord) / (chord_len * chord_len * chord_len);
+			gauss[j][i] = gauss[i][j];
 		}
 	}
 
@@ -129,37 +126,32 @@ double Knot::prmKI::compute() {
 	// для всех хорд с началом в i1 и концом от next (i1) до i2.
 	double **gauss_sum = new double*[points.size()];
 
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		gauss_sum[i1] = new double[points.size()];
-		gauss_sum[i1][i1] = 0.0;
-		for (i2 = next (i1); i2 != i1; i2 = next (i2))
-			gauss_sum[i1][i2] = gauss_sum[i1][prev (i2)] + gauss[i1][i2];
+	for (std::size_t i = 0; i < points.size(); i++) {
+		gauss_sum[i] = new double[points.size()];
+		gauss_sum[i][i] = 0.0;
+		for (std::size_t j = next (i); j != i; j = next (j))
+			gauss_sum[i][j] = gauss_sum[i][prev (j)] + gauss[i][j];
 	}
 
-	double tmp, tmp2;
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		tmp = 0.0;
-		for (i2 = next (next (i1)); i2 != i1; i2 = next (i2))
-		{
-			tmp += gauss_sum[prev (i2)][prev (i1)] -
-						 gauss_sum[i2][prev (prev (i2))] + gauss_sum[i2][i1];
-			tmp2 = gauss[i1][i2];
-			for (o = 1; o < order; o++)
+	for (std::size_t i = 0; i < points.size(); i++) {
+		double tmp = 0.0;
+		for (std::size_t j = next (next (i)); j != i; j = next (j)) {
+			tmp += gauss_sum[prev (j)][prev (i)] -
+						 gauss_sum[j][prev (prev (j))] + gauss_sum[j][i];
+			double tmp2 = gauss[i][j];
+			for (int o = 1; o < order; o++) {
 				tmp2 *= tmp / 16;
+			}
 			value += tmp2;
 		}
 	}
 
 	// Удаляем заранее вычисленные вспомогательные значения.
-	for (i1 = 0; i1 < points.size(); i1++)
+	for (std::size_t i = 0; i < points.size(); i++)
 	{
-		delete[] tangs[i1];
-		delete[] gauss[i1];
-		delete[] gauss_sum[i1];
+		delete[] gauss[i];
+		delete[] gauss_sum[i];
 	}
-	delete[] tangs;
 	delete[] gauss;
 	delete[] gauss_sum;
 
@@ -357,20 +349,9 @@ double Knot::prmExperimental::compute() {
 	return value / (64 * M_PI);
 }
 
-static int inside (const double *a,
-									 const double *b,
-			 const double *c,
-			 const double *d,
-			 const double *x)
-{
-	int sign = (det (a, b, x) > 0);
-	if ((det (b, c, x) > 0) != sign)
-		return 0;
-	if ((det (c, d, x) > 0) != sign)
-		return 0;
-	if ((det (d, a, x) > 0) != sign)
-		return 0;
-	return 1;
+static bool inside(const double *a, const double *b, const double *c, const double *d, const double *x) {
+	const bool sign = det(a, b, x) > 0;
+	return (det(b, c, x) > 0) == sign && (det(c, d, x) > 0) == sign && (det(d, a, x) > 0) == sign;
 }
 
 static int intersected (const double *a,
@@ -424,7 +405,6 @@ double Knot::prmSingular::compute() {
 				min_cos = curr_cos;
 		}
 	min_cos = 4 * min_cos - 3;
-	std::cerr << min_cos << "\n";
 
 	for (i1 = 0; i1 < points.size() - 3; i1++)
 		for (i2 = i1 + 1; i2 < points.size() - 2; i2++)

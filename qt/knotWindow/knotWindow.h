@@ -11,7 +11,7 @@
 
 class paramWindow;
 
-class knotWindow : public dddWindow, public knot {
+class knotWindow : public dddWindow, public Knot {
 
   Q_OBJECT
 
@@ -45,7 +45,7 @@ private:
   void timerEvent (QTimerEvent*);
 
   bool isEmpty (void)
-    {return knot::isEmpty ();};
+    {return Knot::isEmpty ();};
 
   void readIt (std::istream&);
   void saveIt (std::ostream&);

@@ -7,7 +7,7 @@
 #define			next			Parent->next
 #define			prev			Parent->prev
 
-double knot::prmLength::compute() {
+double Knot::prmLength::compute() {
 	this->Parent->fill_len_table();
 
 	double value = 0.0;
@@ -17,7 +17,7 @@ double knot::prmLength::compute() {
 	return value;
 }
 
-double knot::prmAen::compute() {
+double Knot::prmAen::compute() {
 	this->Parent->fill_len_table();
 
 	double value = 0;
@@ -42,7 +42,7 @@ double knot::prmAen::compute() {
 	return value / M_PI + points.size();
 }
 
-double knot::prmEnergy::compute() {
+double Knot::prmEnergy::compute() {
 	this->Parent->fill_len_table();
 
 	double len = Parent->Length->value ();

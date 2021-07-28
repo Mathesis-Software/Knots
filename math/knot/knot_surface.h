@@ -3,18 +3,16 @@
 
 #include "../../gl/surface/surface.h"
 
-class knot;
+class Knot;
 
 class knot_surface : public surface {
 
 private:
-
-  knot *Parent;
+  Knot *Parent;
   double thickness;
 
 public:
-
-  knot_surface (knot*, double);
+  knot_surface (Knot*, double);
   void calculate (void);
   void setThickness (double t)
     {thickness = t;};

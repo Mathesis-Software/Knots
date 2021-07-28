@@ -1,7 +1,7 @@
 #include "knotWindow.h"
 
 void knotWindow::readIt(std::istream &is) {
-  is >> (knot*)this;
+  is >> (Knot*)this;
   setWindowTitle (caption.c_str());
 }
 

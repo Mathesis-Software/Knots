@@ -3,9 +3,12 @@
 
 #include <string>
 
+class Knot;
+
 class parameter {
 
 public:
+	const Knot &knot;
 	const std::string name;
 
 private:
@@ -16,7 +19,7 @@ protected:
 	virtual double compute() = 0;
 
 public:
-	parameter(const std::string &name) : name(name), ready(false) {}
+	parameter(const Knot &knot, const std::string &name) : knot(knot), name(name), ready(false) {}
 	virtual ~parameter() {}
 
 	double value() {

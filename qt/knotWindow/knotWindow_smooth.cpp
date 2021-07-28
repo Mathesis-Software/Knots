@@ -33,7 +33,7 @@ void knotWindow::doSmooth (void)
 
   isSaved = false;
   for (int i = 0; i < redrawAfter; i++)
-    knot::decreaseEnergy ();
+    Knot::decreaseEnergy ();
   center ();
   kSurf -> destroy ();
   sSurf -> destroy ();

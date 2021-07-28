@@ -2,7 +2,7 @@
 
 #include "knot.h"
 
-std::istream & operator >> (std::istream &is, knot *K) {
+std::istream & operator >> (std::istream &is, Knot *K) {
 	char tmp[256];
 
 	is.get (tmp, 32, ' ');
@@ -44,7 +44,7 @@ std::istream & operator >> (std::istream &is, knot *K) {
 	return is;
 }
 
-std::ostream & operator << (std::ostream &os, knot *K) {
+std::ostream & operator << (std::ostream &os, Knot *K) {
 	os << "#KNOT " << K->caption << "\n#LENGTH " << K->points.size() << "\n";
 	for (const auto &pt : K->points) {
 		os << pt.x << ' ' << pt.y << ' ' << pt.z << '\n';

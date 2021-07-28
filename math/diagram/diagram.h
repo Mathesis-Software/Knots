@@ -8,7 +8,7 @@
 
 class diagram {
 
-friend class knot;
+friend class Knot;
 
 protected:
 	std::string caption;

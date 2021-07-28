@@ -12,7 +12,7 @@
 #include "../seifert/seifert.h"
 
 class diagram;
-class knot;
+class Knot;
 class knot_surface;
 
 /***********************************************************************/
@@ -20,29 +20,29 @@ class knot_surface;
 #define	addParameterClass(PARAM)	\
 class PARAM : public parameter {	\
 private:				\
-	knot *Parent;				\
+	Knot *Parent;				\
 	double compute() override;			\
 public:					\
-	PARAM (knot *p, const char *n)	\
-		: parameter (n)			\
+	PARAM (Knot *p, const char *n)	\
+		: parameter (*p, n)			\
 	{Parent = p;};			\
 }
 
 #define	addParameterClassWithOrder(PARAM)	\
 class PARAM : public parameter {	\
 private:				\
-	knot *Parent;				\
+	Knot *Parent;				\
 	int order;				\
 	double compute() override;			\
 public:					\
-	PARAM (knot *p, int o, const char *n)	\
-		: parameter (n)			\
+	PARAM (Knot *p, int o, const char *n)	\
+		: parameter (*p, n)			\
 	{Parent = p; order = o;};		\
 }
 
 /***********************************************************************/
 
-class knot : public seifert_base {
+class Knot : public seifert_base {
 
 protected:
 	std::string caption;
@@ -63,8 +63,8 @@ private:
 	double minDist (const double*);
 
 protected:
-	knot();
-	knot(diagram*, int, int);
+	Knot();
+	Knot(diagram*, int, int);
 
 	std::size_t next(std::size_t);
 	std::size_t prev(std::size_t);
@@ -76,8 +76,8 @@ protected:
 	void normalize (int);
 	void getGradient (const double*, double*);
 
-	friend std::istream & operator >> (std::istream &, knot *);
-	friend std::ostream & operator << (std::ostream &, knot *);
+	friend std::istream & operator >> (std::istream &, Knot *);
+	friend std::ostream & operator << (std::ostream &, Knot *);
 
 	addParameterClass(prmLength);
 	addParameterClass(prmEnergy);
@@ -92,22 +92,21 @@ protected:
 	friend class knot_surface;
 
 private:
-
-	knot (const knot&);
-	knot& operator = (const knot&);
+	Knot (const Knot&);
+	Knot& operator = (const Knot&);
 };
 
 /***********************************************************************/
 
-inline std::size_t knot::next(std::size_t index) {
+inline std::size_t Knot::next(std::size_t index) {
 	return index == this->points.size() - 1 ? 0 : index + 1;
 }
 
-inline std::size_t knot::prev(std::size_t index) {
+inline std::size_t Knot::prev(std::size_t index) {
 	return index ? index - 1 : this->points.size() - 1;
 }
 
-inline bool knot::isEmpty() {
+inline bool Knot::isEmpty() {
 	return this->points.empty();
 }
 

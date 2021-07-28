@@ -1,10 +1,10 @@
 #include "knot.h"
 
-knot::knot() : caption("New Knot") {
+Knot::Knot() : caption("New Knot") {
   create_depend();
 }
 
-void knot::create_depend() {
+void Knot::create_depend() {
   Length = std::make_shared<prmLength> (this, "Length");
   parameterList.push_back(std::make_shared<prmEnergy>(this, "Moebius energy"));
   parameterList.push_back(std::make_shared<prmAcn>(this, "Average crossing number"));
@@ -28,7 +28,7 @@ void knot::create_depend() {
 //  parameterList.push_back(std::make_shared<prmExperimental>2(this, 4, "Experimental 4"));
 }
 
-void knot::clear_depend() {
+void Knot::clear_depend() {
   this->len_table.clear();
 
   Length->destroy ();

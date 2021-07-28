@@ -7,8 +7,7 @@
 #include "knotWindow_math.h"
 #include "../../math/knot/knot_surface.h"
 
-void knotWindow::init (void)
-{
+void knotWindow::init() {
   bp [0] = 0.0;
   bp [1] = 0.0;
   bp [2] = 0.4;
@@ -44,23 +43,18 @@ void knotWindow::init (void)
   setWindowIcon (QPixmap ((QString) getenv ("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
 }
 
-knotWindow::knotWindow (std::istream &is) :
-  knot ()
-{
+knotWindow::knotWindow (std::istream &is) : Knot() {
   init ();
   readIt (is);
 }
 
-knotWindow::knotWindow (diagramWindow *d) :
-  knot (d, d -> width (), d -> height ())
-{
+knotWindow::knotWindow (diagramWindow *d) : Knot (d, d -> width (), d -> height ()) {
   init ();
   setWindowTitle(caption.c_str());
   isSaved = false;
 }
 
-knotWindow::~knotWindow (void)
-{
+knotWindow::~knotWindow() {
   if (mth)
     delete mth;
 

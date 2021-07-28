@@ -24,7 +24,7 @@ void norm(double *vector) {
 
 }
 
-knot_surface::knot_surface(knot *p, double t) {
+knot_surface::knot_surface(Knot *p, double t) {
 	Parent = p;
 	thickness = t;
 	stripped = 1;

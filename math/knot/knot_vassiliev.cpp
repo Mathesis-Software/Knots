@@ -33,7 +33,7 @@ void vector_product(const double *v1, const double *v2, double *m) {
 #define			next			Parent -> next
 #define			prev			Parent -> prev
 
-double knot::prmAcn::compute() {
+double Knot::prmAcn::compute() {
 	double value = 0.0;
 
 	std::size_t i1, i2;
@@ -73,7 +73,7 @@ double knot::prmAcn::compute() {
 	return value / (2 * M_PI);
 }
 
-double knot::prmSAcn::compute() {
+double Knot::prmSAcn::compute() {
 	double value = 0.0;
 
 	std::size_t i1, i2;
@@ -113,7 +113,7 @@ double knot::prmSAcn::compute() {
 	return value / (2 * M_PI);
 }
 
-double knot::prmKI::compute() {
+double Knot::prmKI::compute() {
 	double value = 0.0;
 
 	std::size_t i1, i2;
@@ -195,7 +195,7 @@ double knot::prmKI::compute() {
 	return value / (4 * M_PI * M_PI);
 }
 
-//double knot::prmExperimental::compute() {
+//double Knot::prmExperimental::compute() {
 //	double value = 0.0;
 //
 //	std::size_t i1, i2, i3, i4;
@@ -286,7 +286,7 @@ double knot::prmKI::compute() {
 //	return value / (4 * M_PI * M_PI);
 //}
 
-double knot::prmExperimental::compute() {
+double Knot::prmExperimental::compute() {
 	double value = 0.0;
 
 	std::size_t i1, i2;
@@ -414,7 +414,7 @@ static int intersected (const double *a,
 	return 1;
 }
 
-double knot::prmSingular::compute() {
+double Knot::prmSingular::compute() {
 	double value = 0.0;
 
 	std::size_t i1, i2, i3, i4;
@@ -530,7 +530,7 @@ double knot::prmSingular::compute() {
 	return value;
 }
 
-double knot::prmExperimental2::compute() {
+double Knot::prmExperimental2::compute() {
 	double value = 0.0;
 
 	std::size_t i1, i2;

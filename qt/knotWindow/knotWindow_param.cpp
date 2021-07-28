@@ -10,8 +10,8 @@ void knotWindow::setLength ()
   double d = setDouble ("Knot length", Length -> value (), 1.0, 1000.0);
   if (d != Length -> value ())
   {
-    knot::setLength (d);
-    knot::center ();
+    Knot::setLength (d);
+    Knot::center ();
     kSurf -> destroy ();
     sSurf -> destroy ();
     repaint3d ();
@@ -26,7 +26,7 @@ void knotWindow::setNum ()
 	std::size_t i = setInt ("Set number of points", this->points.size(), 10, 30000);
   if (i != this->points.size()) {
     normalize (i);
-    knot::center ();
+    Knot::center ();
     kSurf -> destroy ();
     repaint3d ();
     isSaved = false;

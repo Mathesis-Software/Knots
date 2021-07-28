@@ -2,7 +2,7 @@
 
 #include "knot.h"
 
-void knot::normalize(int num) {
+void Knot::normalize(int num) {
 	fill_len_table ();
 
 	double len = Length -> value ();

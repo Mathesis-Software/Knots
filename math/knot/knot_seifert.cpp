@@ -2,15 +2,13 @@
 
 #include "knot.h"
 
-bool knot::noMorePoints (const double *point)
-{
+bool Knot::noMorePoints(const double *point) {
   return (point [0] * point [0] +
           point [1] * point [1] +
           point [2] * point [2] > 2.0);
 }
 
-double knot::minDist (const double *point)
-{
+double Knot::minDist(const double *point) {
   double md2 = 10000.0, tau, r[3], x[3], xr, r2, x2;
 
   for (std::size_t i = 0; i < this->points.size(); i++) {
@@ -46,8 +44,7 @@ double knot::minDist (const double *point)
   return sqrt (md2);
 }
 
-void knot::getGradient (const double *point, double *gradient)
-{
+void Knot::getGradient(const double *point, double *gradient) {
   gradient [0] = 0.0;
   gradient [1] = 0.0;
   gradient [2] = 0.0;

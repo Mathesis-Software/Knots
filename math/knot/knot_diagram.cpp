@@ -3,7 +3,7 @@
 #include "knot.h"
 #include "../diagram/diagram.h"
 
-knot::knot(diagram *D, int w, int h) : caption("Converted from diagram") {
+Knot::Knot(diagram *D, int w, int h) : caption("Converted from diagram") {
   vertex *v = D -> base;
 	do {
 		points.push_back(point(

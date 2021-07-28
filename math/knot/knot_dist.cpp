@@ -2,7 +2,7 @@
 
 #include "knot.h"
 
-void knot::fill_len_table() {
+void Knot::fill_len_table() {
   if (!len_table.empty()) {
     return;
 	}

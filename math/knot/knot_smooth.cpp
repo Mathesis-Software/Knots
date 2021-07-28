@@ -1,8 +1,7 @@
 #include <math.h>
 #include "knot.h"
 
-void knot::center()
-{
+void Knot::center() {
   // Узел перемещается так, чтобы его центр масс оказался
   // в начале координат.
 
@@ -27,8 +26,7 @@ void knot::center()
   }
 }
 
-void knot::setLength (double len)
-{
+void Knot::setLength(double len) {
   // Длина ломаной устанавливается равной len.
 
   len /= Length -> value ();
@@ -43,7 +41,7 @@ void knot::setLength (double len)
   clear_depend ();
 }
 
-void knot::decreaseEnergy() {
+void Knot::decreaseEnergy() {
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
   double oldLen = Length -> value ();
 

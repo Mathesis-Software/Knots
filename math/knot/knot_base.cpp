@@ -7,8 +7,8 @@ Knot::Knot() : caption("New Knot") {
 void Knot::create_depend() {
   Length = std::make_shared<prmLength>(*this, "Length");
   parameterList.push_back(std::make_shared<prmEnergy>(*this, "Moebius energy"));
-  parameterList.push_back(std::make_shared<prmAcn>(*this, "Average crossing number"));
-  parameterList.push_back(std::make_shared<prmSAcn>(*this, "Signed average crossing number"));
+  parameterList.push_back(std::make_shared<AverageCrossingNumber>(*this, false));
+  parameterList.push_back(std::make_shared<AverageCrossingNumber>(*this, true));
   parameterList.push_back(std::make_shared<prmAen>(*this, "Average extremum number"));
   parameterList.push_back(std::make_shared<prmKI>(*this, 2, "Order 2 Vassiliev invariant"));
   parameterList.push_back(std::make_shared<prmKI>(*this, 3, "Order 3 Vassiliev invariant"));

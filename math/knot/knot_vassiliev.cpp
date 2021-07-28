@@ -1,10 +1,23 @@
+#include <cmath>
 #include <iostream>
-
-#include <math.h>
 
 #include "knot.h"
 
 namespace {
+
+struct vector {
+	double x, y, z;
+	vector(double x, double y, double z) : x(x), y(y), z(z) {}
+
+	double length() const { return sqrt(x * x + y * y + z * z); }
+};
+
+double det(const vector &v1, const vector &v2, const vector &v3) {
+	return
+			v1.x * (v2.y * v3.z - v2.z * v3.y)
+		+ v1.y * (v2.z * v3.x - v2.x * v3.z)
+		+ v1.z * (v2.x * v3.y - v2.y * v3.x);
+}
 
 double det(const double *v1, const double *v2, const double *v3) {
 	return
@@ -33,82 +46,40 @@ void vector_product(const double *v1, const double *v2, double *m) {
 #define			next			knot.next
 #define			prev			knot.prev
 
-double Knot::prmAcn::compute() {
-	double value = 0.0;
-
-	std::size_t i1, i2;
-
-	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[points.size()];
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		tangs[i1] = new double[3];
-		tangs[i1][0] = points[next (i1)].x - points[i1].x;
-		tangs[i1][1] = points[next (i1)].y - points[i1].y;
-		tangs[i1][2] = points[next (i1)].z - points[i1].z;
-	}
-
-	double chord[3], chord_len;
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		for (i2 = 0; i2 < i1; i2++)
-		{
-			chord[0] = ( points[i1].x + points[next (i1)].x -
-										points[i2].x - points[next (i2)].x ) / 2;
-			chord[1] = ( points[i1].y + points[next (i1)].y -
-										points[i2].y - points[next (i2)].y ) / 2;
-			chord[2] = ( points[i1].z + points[next (i1)].z -
-										points[i2].z - points[next (i2)].z ) / 2;
-			chord_len = sqrt (vector_square (chord));
-			value += fabs (det (tangs[i1], tangs[i2], chord)) /
-											 (chord_len * chord_len * chord_len);
-		}
-	}
-
-	// Удаляем заранее вычисленные вспомогательные значения.
-	for (i1 = 0; i1 < points.size(); i1++)
-		delete[] tangs[i1];
-	delete[] tangs;
-
-	return value / (2 * M_PI);
+Knot::AverageCrossingNumber::AverageCrossingNumber(const Knot &knot, bool withSign) :
+	parameter(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
+	withSign(withSign) {
 }
 
-double Knot::prmSAcn::compute() {
+double Knot::AverageCrossingNumber::compute() {
 	double value = 0.0;
 
-	std::size_t i1, i2;
-
-	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[points.size()];
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		tangs[i1] = new double[3];
-		tangs[i1][0] = points[next (i1)].x - points[i1].x;
-		tangs[i1][1] = points[next (i1)].y - points[i1].y;
-		tangs[i1][2] = points[next (i1)].z - points[i1].z;
+	// tangent vectors
+	std::vector<vector> tangents;
+	for (std::size_t i = 0; i < points.size(); ++i) {
+		tangents.push_back(vector(
+			points[next(i)].x - points[i].x,
+			points[next(i)].y - points[i].y,
+			points[next(i)].z - points[i].z
+		));
 	}
 
-	double chord[3], chord_len;
-	for (i1 = 0; i1 < points.size(); i1++)
-	{
-		for (i2 = 0; i2 < i1; i2++)
-		{
-			chord[0] = ( points[i1].x + points[next (i1)].x -
-										points[i2].x - points[next (i2)].x ) / 2;
-			chord[1] = ( points[i1].y + points[next (i1)].y -
-										points[i2].y - points[next (i2)].y ) / 2;
-			chord[2] = ( points[i1].z + points[next (i1)].z -
-										points[i2].z - points[next (i2)].z ) / 2;
-			chord_len = sqrt (vector_square (chord));
-			value += det (tangs[i1], tangs[i2], chord) /
-											 (chord_len * chord_len * chord_len);
+	for (std::size_t i = 0; i < points.size(); ++i) {
+		for (std::size_t j = 0; j < i; ++j) {
+			const vector chord(
+				(points[i].x + points[next(i)].x - points[j].x - points[next(j)].x) / 2,
+				(points[i].y + points[next(i)].y - points[j].y - points[next(j)].y) / 2,
+				(points[i].z + points[next(i)].z - points[j].z - points[next(j)].z) / 2
+			);
+			const double chord_len = chord.length();
+			const double summand = det(tangents[i], tangents[j], chord) / (chord_len * chord_len * chord_len);
+			if (this->withSign) {
+				value += summand;
+			} else {
+				value += fabs(summand);
+			}
 		}
 	}
-
-	// Удаляем заранее вычисленные вспомогательные значения.
-	for (i1 = 0; i1 < points.size(); i1++)
-		delete[] tangs[i1];
-	delete[] tangs;
 
 	return value / (2 * M_PI);
 }

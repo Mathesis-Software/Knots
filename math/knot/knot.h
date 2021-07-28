@@ -75,8 +75,19 @@ protected:
 
 	addParameterClass(prmLength);
 	addParameterClass(prmEnergy);
-	addParameterClass(prmAcn);
-	addParameterClass(prmSAcn);
+
+	class AverageCrossingNumber : public parameter {
+
+	public:
+		const bool withSign;
+
+	private:
+		double compute() override;
+
+	public:
+		AverageCrossingNumber(const Knot &knot, bool withSign);
+	};
+
 	addParameterClass(prmAen);
 	addParameterClassWithOrder(prmKI);
 	addParameterClass(prmExperimental);

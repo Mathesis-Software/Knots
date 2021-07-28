@@ -2,23 +2,20 @@
 
 #include "knot.h"
 
-#define			len_table		Parent->len_table
-#define			points			Parent->points
-#define			next			Parent->next
-#define			prev			Parent->prev
+#define			points			knot.points
+#define			next			knot.next
+#define			prev			knot.prev
 
 double Knot::prmLength::compute() {
-	this->Parent->fill_len_table();
-
 	double value = 0.0;
-	for (const auto len : len_table) {
+	for (const auto len : this->knot.len_table()) {
 		value += len;
 	}
 	return value;
 }
 
 double Knot::prmAen::compute() {
-	this->Parent->fill_len_table();
+	const auto &len_table = this->knot.len_table();
 
 	double value = 0;
 
@@ -43,9 +40,9 @@ double Knot::prmAen::compute() {
 }
 
 double Knot::prmEnergy::compute() {
-	this->Parent->fill_len_table();
+	const auto &len_table = this->knot.len_table();
 
-	double len = Parent->Length->value ();
+	double len = knot.Length->value ();
 
 	double value = 0.0;
 

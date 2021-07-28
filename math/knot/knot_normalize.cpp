@@ -3,7 +3,7 @@
 #include "knot.h"
 
 void Knot::normalize(int num) {
-	fill_len_table ();
+	const auto &len_table = this->len_table();
 
 	double len = Length -> value ();
 

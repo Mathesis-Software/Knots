@@ -29,9 +29,9 @@ void vector_product(const double *v1, const double *v2, double *m) {
 
 }
 
-#define			points			Parent -> points
-#define			next			Parent -> next
-#define			prev			Parent -> prev
+#define			points			knot.points
+#define			next			knot.next
+#define			prev			knot.prev
 
 double Knot::prmAcn::compute() {
 	double value = 0.0;

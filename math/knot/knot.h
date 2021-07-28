@@ -20,24 +20,18 @@ class knot_surface;
 #define	addParameterClass(PARAM)	\
 class PARAM : public parameter {	\
 private:				\
-	Knot *Parent;				\
 	double compute() override;			\
 public:					\
-	PARAM (Knot *p, const char *n)	\
-		: parameter (*p, n)			\
-	{Parent = p;};			\
+	PARAM (const Knot &knot, const std::string &name) : parameter(knot, name) {} \
 }
 
 #define	addParameterClassWithOrder(PARAM)	\
 class PARAM : public parameter {	\
 private:				\
-	Knot *Parent;				\
-	int order;				\
 	double compute() override;			\
 public:					\
-	PARAM (Knot *p, int o, const char *n)	\
-		: parameter (*p, n)			\
-	{Parent = p; order = o;};		\
+	const int order;				\
+	PARAM (const Knot &knot, int order, const std::string &name) : parameter(knot, name), order(order) {} \
 }
 
 /***********************************************************************/
@@ -52,12 +46,12 @@ protected:
 	std::shared_ptr<parameter> Length;
 
 private:
-	std::vector<double> len_table;
+	mutable std::vector<double> _len_table;
 
 	void create_depend();
 	void clear_depend();
 
-	void fill_len_table();
+	const std::vector<double> &len_table() const;
 
 	bool noMorePoints (const double*);
 	double minDist (const double*);
@@ -66,8 +60,8 @@ protected:
 	Knot();
 	Knot(diagram*, int, int);
 
-	std::size_t next(std::size_t);
-	std::size_t prev(std::size_t);
+	std::size_t next(std::size_t) const;
+	std::size_t prev(std::size_t) const;
 
 	bool isEmpty();
 	void decreaseEnergy();
@@ -98,11 +92,11 @@ private:
 
 /***********************************************************************/
 
-inline std::size_t Knot::next(std::size_t index) {
+inline std::size_t Knot::next(std::size_t index) const {
 	return index == this->points.size() - 1 ? 0 : index + 1;
 }
 
-inline std::size_t Knot::prev(std::size_t index) {
+inline std::size_t Knot::prev(std::size_t index) const {
 	return index ? index - 1 : this->points.size() - 1;
 }
 

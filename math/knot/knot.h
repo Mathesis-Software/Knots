@@ -21,7 +21,7 @@ class knot_surface;
 class PARAM : public parameter {	\
 private:				\
 	knot *Parent;				\
-	void compute();			\
+	float compute() override;			\
 public:					\
 	PARAM (knot *p, const char *n)	\
 		: parameter (n)			\
@@ -33,7 +33,7 @@ class PARAM : public parameter {	\
 private:				\
 	knot *Parent;				\
 	int order;				\
-	void compute();			\
+	float compute() override;			\
 public:					\
 	PARAM (knot *p, int o, const char *n)	\
 		: parameter (n)			\

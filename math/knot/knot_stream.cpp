@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "knot.h"
 
 std::istream & operator >> (std::istream &is, knot *K) {

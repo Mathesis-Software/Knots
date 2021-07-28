@@ -17,10 +17,11 @@ paramWindow::paramWindow (knotWindow *p) {
   Parent = p;
   nLabels = Parent -> parameterList.size();
   pLabels = new parameterLabel* [nLabels];
-  
+ 
   int index = 0;
   for (auto param : Parent->parameterList) {
     pLabels[index] = new parameterLabel (this, param, 20, 15 + 30 * index);
+		index += 1;
   }
 
   setFixedSize (380, 25 + 30 * nLabels);
@@ -52,7 +53,7 @@ parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<parameter> param
   lbl -> setFrameStyle (QFrame::Panel | QFrame::Sunken);
   //lbl -> setBackgroundColor (Qt::lightGray);
 
-  chkbox = new QCheckBox (param -> getName (), this);
+  chkbox = new QCheckBox (param->name.c_str(), this);
   chkbox -> setGeometry (0, 0, 220, 25);
   connect (chkbox, SIGNAL (clicked ()), SLOT (doit ()));
 

@@ -1,48 +1,35 @@
 #ifndef __PARAMETER_H__
 #define __PARAMETER_H__
 
-#include <string.h>
+#include <string>
 
 class parameter {
 
-private:
+public:
+	const std::string name;
 
-  char *name;
-  bool ready;
+private:
+	bool ready;
+	float internalValue;
 
 protected:
-
-  float internalValue;
-  virtual void compute (void) = 0;
+	virtual float compute() = 0;
 
 public:
+	parameter(const std::string &name) : name(name), ready(false) {}
+	virtual ~parameter() {}
 
-  parameter (const char *n)
-  {
-    ready = 0;
-    name = new char [strlen (n) + 1];
-    strcpy (name, n);
-  };
-  virtual ~parameter (void)
-    {delete[] name;};
+	float value() {
+		if (!this->ready) {
+			this->internalValue = this->compute();
+			this->ready = true;
+		}
 
-  float value (void)
-  {
-    if (!ready)
-    {
-      compute ();
-      ready = 1;
-    }
-  
-    return internalValue;
-  };
+		return this->internalValue;
+	}
 
-  bool isReady (void)
-    {return ready;};
-  const char *getName (void)
-    {return name;};
-  void destroy (void)
-    {ready = 0;};
+	bool isReady() {return this->ready;}
+	void destroy() {this->ready = 0;}
 };
 
 #endif /* __PARAMETER_H__ */

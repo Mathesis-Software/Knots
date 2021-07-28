@@ -2,9 +2,7 @@
 #define __POINT_H__
 
 struct point {
-	double x;
-	double y;
-	double z;
+	double x, y, z;
 
 	point(double x, double y, double z) : x(x), y(y), z(z) {}
 };

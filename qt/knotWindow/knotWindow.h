@@ -26,9 +26,9 @@ private:
 	std::shared_ptr<KE::ThreeD::Knot> knot;
 
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
+	KE::ThreeD::Point seifertStartPoint;
 	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
   double thickness;
-  double bp[3];
 
   QMenu *mathMenu;
   QMenu *viewMenu;

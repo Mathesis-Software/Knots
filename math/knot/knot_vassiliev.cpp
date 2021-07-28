@@ -3,16 +3,15 @@
 
 #include "knot.h"
 
+#define			points			knot.points
+#define			next			knot.next
+#define			prev			knot.prev
+
+namespace KE { namespace ThreeD {
+
 namespace {
 
-struct vector {
-	double x, y, z;
-	vector(double x, double y, double z) : x(x), y(y), z(z) {}
-
-	double length() const { return sqrt(x * x + y * y + z * z); }
-};
-
-double det(const vector &v1, const vector &v2, const vector &v3) {
+double det(const Vector &v1, const Vector &v2, const Vector &v3) {
 	return
 			v1.x * (v2.y * v3.z - v2.z * v3.y)
 		+ v1.y * (v2.z * v3.x - v2.x * v3.z)
@@ -42,12 +41,6 @@ void vector_product(const double *v1, const double *v2, double *m) {
 
 }
 
-#define			points			knot.points
-#define			next			knot.next
-#define			prev			knot.prev
-
-namespace KE { namespace ThreeD {
-
 Knot::AverageCrossingNumber::AverageCrossingNumber(const Knot &knot, bool withSign) :
 	Computable(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
 	withSign(withSign) {
@@ -57,9 +50,9 @@ double Knot::AverageCrossingNumber::compute() {
 	double value = 0.0;
 
 	// tangent vectors
-	std::vector<vector> tangents;
+	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		tangents.push_back(vector(
+		tangents.push_back(Vector(
 			points[next(i)].x - points[i].x,
 			points[next(i)].y - points[i].y,
 			points[next(i)].z - points[i].z
@@ -68,7 +61,7 @@ double Knot::AverageCrossingNumber::compute() {
 
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		for (std::size_t j = 0; j < i; ++j) {
-			const vector chord(
+			const Vector chord(
 				(points[i].x + points[next(i)].x - points[j].x - points[next(j)].x) / 2,
 				(points[i].y + points[next(i)].y - points[j].y - points[next(j)].y) / 2,
 				(points[i].z + points[next(i)].z - points[j].z - points[next(j)].z) / 2
@@ -95,9 +88,9 @@ double Knot::VassilievInvariant::compute() {
 	double value = 0.0;
 
 	// tangent vectors
-	std::vector<vector> tangents;
+	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		tangents.push_back(vector(
+		tangents.push_back(Vector(
 			points[next(i)].x - points[i].x,
 			points[next(i)].y - points[i].y,
 			points[next(i)].z - points[i].z
@@ -111,7 +104,7 @@ double Knot::VassilievInvariant::compute() {
 		gauss[i] = new double[points.size()];
 		gauss[i][i] = 0.0;
 		for (std::size_t j = 0; j < i; j++) {
-			const vector chord(
+			const Vector chord(
 				(points[i].x + points[next(i)].x - points[j].x - points[next(j)].x) / 2,
 				(points[i].y + points[next(i)].y - points[j].y - points[next(j)].y) / 2,
 				(points[i].z + points[next(i)].z - points[j].z - points[next(j)].z) / 2

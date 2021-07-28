@@ -10,13 +10,18 @@ class seifert_list;
 class seifert_ord;
 class seifert_base;
 
+namespace KE { namespace ThreeD {
+
+class Knot;
+
+}}
+
 class seifert_base {
 
 protected:
 
   seifert_base() {}
   virtual ~seifert_base() {}
-  virtual void getGradient(const double*, double*) const = 0;
   virtual bool noMorePoints(const double*) const = 0;
   virtual double minDist(const double*) const = 0;
 
@@ -66,7 +71,7 @@ private:
   double localEps;
   seifert_list *neighborhood;
   seifert_ord *sord;
-  const seifert_base &base;
+  const KE::ThreeD::Knot &base;
 
   void searchForNeighbor();
   void checkNeighborhood();
@@ -80,7 +85,7 @@ private:
 public:
 
   seifert(const double, const double, const double,
-          const seifert_base &base, seifert* = nullptr);
+          const KE::ThreeD::Knot &base, seifert* = nullptr);
   ~seifert();
 
   friend class seifert_ord;

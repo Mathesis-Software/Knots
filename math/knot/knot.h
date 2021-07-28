@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#include "point.h"
+#include "primitives.h"
 #include "../seifert/seifert.h"
 
 class diagram;
@@ -124,9 +124,6 @@ private:
 
 	const std::vector<double> &len_table() const;
 
-	bool noMorePoints (const double*) const override;
-	double minDist (const double*) const override;
-
 public:
 	Knot(std::istream &is);
 	Knot(diagram*, int, int);
@@ -137,7 +134,11 @@ public:
 	void center();
 	std::size_t numberOfPoints() const { return this->points.size(); }
 	void normalize(std::size_t numberOfPoints);
-	void getGradient (const double*, double*) const override;
+
+	void getGradient(const double*, double*) const;
+	Vector seifertGradient(const Point &point) const;
+	bool noMorePoints (const double*) const override;
+	double minDist (const double*) const override;
 
 	void save(std::ostream &os, const double matrix[3][3]) const;
 

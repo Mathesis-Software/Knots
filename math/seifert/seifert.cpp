@@ -1,7 +1,7 @@
-// #include <iostream.h>
-#include <math.h>
+#include <cmath>
 
 #include "seifert.h"
+#include "../knot/knot.h"
 
 const int MAX_ITERATION_NUMBER = 20; // Максимальное число итераций при
                                      // добавлении новой точки в заданном
@@ -280,7 +280,7 @@ void seifert::correction (void)
 }
 
 seifert::seifert (const double x, const double y, const double z,
-                  const seifert_base &base, seifert* neighbor) : base(base) {
+                  const KE::ThreeD::Knot &base, seifert* neighbor) : base(base) {
   counter ++;
 //  cerr << "Point " << counter << '\n';
 

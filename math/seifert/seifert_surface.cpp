@@ -16,8 +16,7 @@ double det(const double *v0, const double *v1, const double *v2, const double *o
 
 namespace KE { namespace GL {
 
-SeifertSurface::SeifertSurface(const seifert_base &base, double *sp) : base(base) {
-  start_point = sp;
+SeifertSurface::SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint) : base(base), startPoint(startPoint) {
   stripped = 0;
   sides = Both;
 }
@@ -101,10 +100,7 @@ void SeifertSurface::addTriangles(seifert *s) {
 
 void SeifertSurface::calculate() {
   // Создаем граф поверхности.
-  seifert *s = new seifert (start_point [0],
-                            start_point [1],
-			    start_point [2],
-			    base);
+  seifert *s = new seifert(this->startPoint.x, this->startPoint.y, this->startPoint.z, base);
   s -> correction ();
 
   // Создаем поверхность.

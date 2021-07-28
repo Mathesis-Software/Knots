@@ -42,7 +42,7 @@ double Knot::prmAen::compute() {
 double Knot::prmEnergy::compute() {
 	const auto &len_table = this->knot.len_table();
 
-	double len = knot.Length->value ();
+	double len = knot.length->value ();
 
 	double value = 0.0;
 

@@ -34,7 +34,7 @@ private:
 
 	QLabel *lbl;
 	QCheckBox *chkbox;
-	std::shared_ptr<parameter> prm;
+	std::shared_ptr<Knot::Computable> computable;
 
 private slots:
 
@@ -42,7 +42,7 @@ private slots:
 
 public:
 
-	parameterLabel(QDialog*, std::shared_ptr<parameter>, int, int);
+	parameterLabel(QDialog*, std::shared_ptr<Knot::Computable>, int, int);
 	~parameterLabel();
 
 	void renew();

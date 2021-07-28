@@ -47,7 +47,7 @@ void vector_product(const double *v1, const double *v2, double *m) {
 #define			prev			knot.prev
 
 Knot::AverageCrossingNumber::AverageCrossingNumber(const Knot &knot, bool withSign) :
-	parameter(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
+	Computable(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
 	withSign(withSign) {
 }
 
@@ -85,7 +85,7 @@ double Knot::AverageCrossingNumber::compute() {
 }
 
 Knot::VassilievInvariant::VassilievInvariant(const Knot &knot, int order) :
-	parameter(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),
+	Computable(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),
 	order(order) {
 }
 

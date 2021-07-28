@@ -16,7 +16,6 @@ class knotWindow : public dddWindow, public Knot {
   Q_OBJECT
 
 private:
-
   surface *kSurf, *sSurf;
   double thickness;
   double bp [3];
@@ -31,8 +30,8 @@ private:
   friend class paramWindow;
   paramWindow *mth;
 
-  void init (void);
-  void initMenu (void);
+  void init();
+  void initMenu();
 
   bool smoothing;
   bool continuousSmoothing;
@@ -41,41 +40,37 @@ private:
   void startSmooth (int, int, bool = true);
 
   int timerId_smooth;
-  void doSmooth (void);
+  void doSmooth();
   void timerEvent (QTimerEvent*);
 
-  bool isEmpty (void)
-    {return Knot::isEmpty ();};
+  bool isEmpty() {return Knot::isEmpty();};
 
   void readIt (std::istream&);
   void saveIt (std::ostream&);
 
 private slots:
-
-  void stop ();
-  void math ();
-  void smooth ();
-  void setLength ();
-  void setNum ();
-  void decreaseEnergy ();
-  void switchShowKnot ();
-  void switchShowSeifert ();
-  void setThickness ();
-  void setBgColor ();
-  void setKnotColor ();
-  void setSeifertFrontColor ();
-  void setSeifertBackColor ();
-  void bp_plus ();
-  void bp_minus ();
+  void stop();
+  void math();
+  void smooth();
+  void setLength();
+  void setNumberOfPoints();
+  void decreaseEnergy();
+  void switchShowKnot();
+  void switchShowSeifert();
+  void setThickness();
+  void setBgColor();
+  void setKnotColor();
+  void setSeifertFrontColor();
+  void setSeifertBackColor();
+  void bp_plus();
+  void bp_minus();
 
 public:
-  
   knotWindow (std::istream&);
   knotWindow (diagramWindow*);
-  ~knotWindow (void);
+  ~knotWindow();
 
-  const char *mask (void)
-    {return "*.knt";};
+  const char *mask() {return "*.knt";};
 };
 
 #endif /* __KNOTWINDOW_H__ */

@@ -2,13 +2,11 @@
 #define __KNOT_H__
 
 #include <iostream>
-#include <list>
 #include <memory>
 #include <string>
 #include <vector>
 
 #include "point.h"
-#include "parameter.h"
 #include "../seifert/seifert.h"
 
 class diagram;
@@ -18,32 +16,96 @@ class knot_surface;
 /***********************************************************************/
 
 #define	addParameterClass(PARAM)	\
-class PARAM : public parameter {	\
+class PARAM : public Computable {	\
 private:				\
 	double compute() override;			\
 public:					\
-	PARAM (const Knot &knot, const std::string &name) : parameter(knot, name) {} \
+	PARAM (const Knot &knot, const std::string &name) : Computable(knot, name) {} \
 }
 
 #define	addParameterClassWithOrder(PARAM)	\
-class PARAM : public parameter {	\
+class PARAM : public Computable {	\
 private:				\
 	double compute() override;			\
 public:					\
 	const int order;				\
-	PARAM (const Knot &knot, int order, const std::string &name) : parameter(knot, name), order(order) {} \
+	PARAM (const Knot &knot, int order, const std::string &name) : Computable(knot, name), order(order) {} \
 }
 
 /***********************************************************************/
 
 class Knot : public seifert_base {
 
+public:
+	class Computable {
+
+	public:
+		const Knot &knot;
+		const std::string name;
+
+	private:
+		bool ready;
+		double internalValue;
+
+	protected:
+		virtual double compute() = 0;
+
+	public:
+		Computable(const Knot &knot, const std::string &name) : knot(knot), name(name), ready(false) {}
+		virtual ~Computable() {}
+
+		double value() {
+			if (!this->ready) {
+				this->internalValue = this->compute();
+				this->ready = true;
+			}
+
+			return this->internalValue;
+		}
+
+		bool isReady() {return this->ready;}
+		void invalidate() {this->ready = 0;}
+	};
+
+protected:
+	addParameterClass(prmLength);
+	addParameterClass(prmEnergy);
+
+	class AverageCrossingNumber : public Computable {
+
+	public:
+		const bool withSign;
+
+	private:
+		double compute() override;
+
+	public:
+		AverageCrossingNumber(const Knot &knot, bool withSign);
+	};
+
+	class VassilievInvariant : public Computable {
+
+	public:
+		const int order;
+
+	private:
+		double compute() override;
+
+	public:
+		VassilievInvariant(const Knot &knot, int order);
+	};
+
+	addParameterClass(prmAen);
+	addParameterClass(prmExperimental);
+	addParameterClass(prmSingular);
+	addParameterClassWithOrder(prmExperimental2);
+
 protected:
 	std::string caption;
 	std::vector<point> points;
 
-	std::list<std::shared_ptr<parameter>> parameterList;
-	std::shared_ptr<parameter> Length;
+	std::vector<std::shared_ptr<Computable>> computables;
+	std::shared_ptr<Computable> length;
 
 private:
 	mutable std::vector<double> _len_table;
@@ -72,38 +134,6 @@ protected:
 
 	friend std::istream & operator >> (std::istream &, Knot *);
 	friend std::ostream & operator << (std::ostream &, Knot *);
-
-	addParameterClass(prmLength);
-	addParameterClass(prmEnergy);
-
-	class AverageCrossingNumber : public parameter {
-
-	public:
-		const bool withSign;
-
-	private:
-		double compute() override;
-
-	public:
-		AverageCrossingNumber(const Knot &knot, bool withSign);
-	};
-
-	class VassilievInvariant : public parameter {
-
-	public:
-		const int order;
-
-	private:
-		double compute() override;
-
-	public:
-		VassilievInvariant(const Knot &knot, int order);
-	};
-
-	addParameterClass(prmAen);
-	addParameterClass(prmExperimental);
-	addParameterClass(prmSingular);
-	addParameterClassWithOrder(prmExperimental2);
 
 	friend class knot_surface;
 

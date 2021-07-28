@@ -5,7 +5,7 @@
 void Knot::normalize(int num) {
 	const auto &len_table = this->len_table();
 
-	double len = Length -> value ();
+	double len = this->length->value();
 
 	std::size_t length = num;
 

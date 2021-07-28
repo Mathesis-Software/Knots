@@ -1,13 +1,14 @@
-#include <stdlib.h>
+#include <cstdlib>
 
-#include <QtWidgets/qfiledialog.h>
-#include <QtWidgets/qmenubar.h>
-#include <QtWidgets/qmessagebox.h>
-#include <QtWidgets/qmenu.h>
-#include <QtWidgets/qstatusbar.h>
-#include <QtWidgets/qtoolbar.h>
-#include <QtWidgets/qtoolbutton.h>
-#include <QtWidgets/qwhatsthis.h>
+#include <QtGui/QCloseEvent>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QMessageBox>
+#include <QtWidgets/QMenu>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QWhatsThis>
 
 #include "abstractWindow.h"
 #include "../setValue/setValue.h"
@@ -60,10 +61,11 @@ int abstractWindow::askForSave() {
   return 0;
 }
 
-void abstractWindow::closeEvent (QCloseEvent*)
-{
-  if ( (!isSaved) && (askForSave ()) )
+void abstractWindow::closeEvent(QCloseEvent *event) {
+  if (!isSaved && askForSave()) {
+		event->ignore();
     return;
+	}
 
   AWRegister.remove(this);
 }
@@ -126,12 +128,12 @@ void abstractWindow::close ()
   QWidget::close ();
 }
   
-bool abstractWindow::removeAll (void)
-{
+bool abstractWindow::removeAll(void) {
   while (!abstractWindow::AWRegister.empty()) {
     abstractWindow *av = abstractWindow::AWRegister.back();
-    if ( (!av -> isSaved) && (av -> askForSave ()) )
+    if (!av->isSaved && av->askForSave()) {
       return false;
+		}
     abstractWindow::AWRegister.pop_back();
     delete av;
   }

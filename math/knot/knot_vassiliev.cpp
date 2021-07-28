@@ -29,7 +29,6 @@ static void vector_product (const double *v1, const double *v2, double *m)
   m [2] = v1 [0] * v2 [1] - v1 [1] * v2 [0];
 }
 
-#define			length			Parent -> length
 #define			points			Parent -> points
 #define			next			Parent -> next
 #define			prev			Parent -> prev
@@ -41,8 +40,8 @@ void knot::prmAcn::compute (void)
 	std::size_t i1, i2;
 
   // Вычисляем заранее касательные векторы.
-  double **tangs = new double* [length];
-  for (i1 = 0; i1 < length; i1++)
+  double **tangs = new double* [points.size()];
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tangs [i1] = new double [3];
     tangs [i1] [0] = points[next (i1)].x - points[i1].x;
@@ -51,7 +50,7 @@ void knot::prmAcn::compute (void)
   }
 
   double chord [3], chord_len;
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     for (i2 = 0; i2 < i1; i2++)
     {
@@ -70,7 +69,7 @@ void knot::prmAcn::compute (void)
   internalValue /= 2 * M_PI;
 
   // Удаляем заранее вычисленные вспомогательные значения.
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
     delete[] tangs [i1];
   delete[] tangs;
 }
@@ -82,8 +81,8 @@ void knot::prmSAcn::compute (void)
 	std::size_t i1, i2;
 
   // Вычисляем заранее касательные векторы.
-  double **tangs = new double* [length];
-  for (i1 = 0; i1 < length; i1++)
+  double **tangs = new double* [points.size()];
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tangs [i1] = new double [3];
     tangs [i1] [0] = points[next (i1)].x - points[i1].x;
@@ -92,7 +91,7 @@ void knot::prmSAcn::compute (void)
   }
 
   double chord [3], chord_len;
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     for (i2 = 0; i2 < i1; i2++)
     {
@@ -111,7 +110,7 @@ void knot::prmSAcn::compute (void)
   internalValue /= 2 * M_PI;
 
   // Удаляем заранее вычисленные вспомогательные значения.
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
     delete[] tangs [i1];
   delete[] tangs;
 }
@@ -124,8 +123,8 @@ void knot::prmKI::compute (void)
 	int o;
 
   // Вычисляем заранее касательные векторы.
-  double **tangs = new double* [length];
-  for (i1 = 0; i1 < length; i1++)
+  double **tangs = new double* [points.size()];
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tangs [i1] = new double [3];
     tangs [i1] [0] = points[next (i1)].x - points[i1].x;
@@ -135,11 +134,11 @@ void knot::prmKI::compute (void)
 
   // Вычисляем ``гауссовы произведения''.
   double chord [3], chord_len;
-  double **gauss = new double* [length];
+  double **gauss = new double* [points.size()];
 
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    gauss [i1] = new double [length];
+    gauss [i1] = new double [points.size()];
     gauss [i1] [i1] = 0.0;
     for (i2 = 0; i2 < i1; i2++)
     {
@@ -160,18 +159,18 @@ void knot::prmKI::compute (void)
 
   // В gauss_sum [i1] [i2] находится сумма ``гауссовых произведений''
   // для всех хорд с началом в i1 и концом от next (i1) до i2.
-  double **gauss_sum = new double* [length];
+  double **gauss_sum = new double* [points.size()];
 
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    gauss_sum [i1] = new double [length];
+    gauss_sum [i1] = new double [points.size()];
     gauss_sum [i1] [i1] = 0.0;
     for (i2 = next (i1); i2 != i1; i2 = next (i2))
       gauss_sum [i1] [i2] = gauss_sum [i1] [prev (i2)] + gauss [i1] [i2];
   }
 
   double tmp, tmp2;
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tmp = 0.0;
     for (i2 = next (next (i1)); i2 != i1; i2 = next (i2))
@@ -188,7 +187,7 @@ void knot::prmKI::compute (void)
   internalValue /= 4 * M_PI * M_PI;
 
   // Удаляем заранее вычисленные вспомогательные значения.
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     delete[] tangs [i1];
     delete[] gauss [i1];
@@ -206,8 +205,8 @@ void knot::prmKI::compute (void)
 //  std::size_t i1, i2, i3, i4;
 //
 //  // Вычисляем заранее касательные векторы.
-//  double **tangs = new double* [length];
-//  for (i1 = 0; i1 < length; i1++)
+//  double **tangs = new double* [points.size()];
+//  for (i1 = 0; i1 < points.size(); i1++)
 //  {
 //    tangs [i1] = new double [3];
 //    tangs [i1] [0] = points[next (i1)].x - points[i1].x;
@@ -217,15 +216,15 @@ void knot::prmKI::compute (void)
 //
 //  // Вычисляем ``гауссовы произведения''.
 //  double chord_len;
-//  double ***chord = new double** [length];
-//  double ***chord2 = new double** [length];
+//  double ***chord = new double** [points.size()];
+//  double ***chord2 = new double** [points.size()];
 //  double tmp [3], tmp2 [3];
 //
-//  for (i1 = 0; i1 < length; i1++)
+//  for (i1 = 0; i1 < points.size(); i1++)
 //  {
-//    chord [i1] = new double* [length];
-//    chord2 [i1] = new double* [length];
-//    for (i2 = 0; i2 < length; i2++)
+//    chord [i1] = new double* [points.size()];
+//    chord2 [i1] = new double* [points.size()];
+//    for (i2 = 0; i2 < points.size(); i2++)
 //    {
 //      chord [i1] [i2] = new double [3];
 //      chord2 [i1] [i2] = new double [3];
@@ -258,10 +257,10 @@ void knot::prmKI::compute (void)
 //
 //  double normal [3];
 //
-//  for (i1 = 0; i1 < length; i1++)
-//    for (i2 = i1 + 1; i2 < length; i2++)
-//      for (i3 = i2 + 1; i3 < length; i3++)
-//        for (i4 = i3 + 1; i4 < length; i4++)
+//  for (i1 = 0; i1 < points.size(); i1++)
+//    for (i2 = i1 + 1; i2 < points.size(); i2++)
+//      for (i3 = i2 + 1; i3 < points.size(); i3++)
+//        for (i4 = i3 + 1; i4 < points.size(); i4++)
 //	{
 //          vector_product (chord [i1] [i3], chord [i2] [i4], normal);
 //
@@ -274,9 +273,9 @@ void knot::prmKI::compute (void)
 //  internalValue /= 4 * M_PI * M_PI;
 //
 //  // Удаляем заранее вычисленные вспомогательные значения.
-//  for (i1 = 0; i1 < length; i1++)
+//  for (i1 = 0; i1 < points.size(); i1++)
 //  {
-//    for (i2 = 0; i2 < length; i2++)
+//    for (i2 = 0; i2 < points.size(); i2++)
 //    {
 //      delete[] chord [i1] [i2];
 //      delete[] chord2 [i1] [i2];
@@ -298,8 +297,8 @@ void knot::prmExperimental::compute (void)
 	std::size_t i1, i2;
 
   // Вычисляем заранее касательные векторы.
-  double **tangs = new double* [length];
-  for (i1 = 0; i1 < length; i1++)
+  double **tangs = new double* [points.size()];
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tangs [i1] = new double [3];
     tangs [i1] [0] = points[next (i1)].x - points[i1].x;
@@ -309,16 +308,16 @@ void knot::prmExperimental::compute (void)
 
   // Вычисляем ``гауссовы произведения''.
   double chord_len;
-  double ***chord = new double** [length];
-  double ***vector = new double** [length];
-  double **sum = new double* [length];
+  double ***chord = new double** [points.size()];
+  double ***vector = new double** [points.size()];
+  double **sum = new double* [points.size()];
 
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    chord [i1] = new double* [length];
-    vector [i1] = new double* [length];
-    sum [i1] = new double [length];
-    for (i2 = 0; i2 < length; i2++)
+    chord [i1] = new double* [points.size()];
+    vector [i1] = new double* [points.size()];
+    sum [i1] = new double [points.size()];
+    for (i2 = 0; i2 < points.size(); i2++)
     {
       chord [i1] [i2] = new double [3];
       vector [i1] [i2] = new double [3];
@@ -356,7 +355,7 @@ void knot::prmExperimental::compute (void)
   for (i = 0; i < 3; i++)
     for (j = 0; j < 3; j++)
     {
-      for (i1 = 0; i1 < length; i1++)
+      for (i1 = 0; i1 < points.size(); i1++)
       {
         sum [i1] [i1] = 0.0;
         for (i2 = next (i1); i2 != i1; i2 = next (i2))
@@ -364,7 +363,7 @@ void knot::prmExperimental::compute (void)
 	                chord [i1] [i2] [i] * vector [i1] [i2] [j];
       }
 
-      for (i1 = 0; i1 < length; i1++)
+      for (i1 = 0; i1 < points.size(); i1++)
       {
         tmp = 0.0;
 
@@ -384,9 +383,9 @@ void knot::prmExperimental::compute (void)
   internalValue /= 64 * M_PI;
 
   // Удаляем заранее вычисленные вспомогательные значения.
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    for (i2 = 0; i2 < length; i2++)
+    for (i2 = 0; i2 < points.size(); i2++)
     {
       delete[] chord [i1] [i2];
       delete[] vector [i1] [i2];
@@ -439,12 +438,12 @@ void knot::prmSingular::compute (void)
 
   // Вычисляем заранее хорды.
   double chord_len;
-  double ***chord = new double** [length];
+  double ***chord = new double** [points.size()];
 
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    chord [i1] = new double* [length];
-    for (i2 = 0; i2 < length; i2++)
+    chord [i1] = new double* [points.size()];
+    for (i2 = 0; i2 < points.size(); i2++)
       chord [i1] [i2] = new double [3];
 
     for (i2 = 0; i2 < i1; i2++)
@@ -463,7 +462,7 @@ void knot::prmSingular::compute (void)
   }
 
   double curr_cos, min_cos = 1.0;
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
     for (i2 = next (i1); i2 != prev (i1); i2 = next (i2))
     {
       curr_cos = fabs (scalar_product (chord [i1] [i2], chord [i1] [next (i2)]));
@@ -473,10 +472,10 @@ void knot::prmSingular::compute (void)
   min_cos = 4 * min_cos - 3;
 	std::cerr << min_cos << "\n";
 
-  for (i1 = 0; i1 < length - 3; i1++)
-    for (i2 = i1 + 1; i2 < length - 2; i2++)
-      for (i3 = i2 + 1; i3 < length - 1; i3++)
-        for (i4 = i3 + 1; i4 < length; i4++)
+  for (i1 = 0; i1 < points.size() - 3; i1++)
+    for (i2 = i1 + 1; i2 < points.size() - 2; i2++)
+      for (i3 = i2 + 1; i3 < points.size() - 1; i3++)
+        for (i4 = i3 + 1; i4 < points.size(); i4++)
 	{
 	  if (fabs (scalar_product (chord [i1] [i3], chord [i2] [i4])) < min_cos)
 	    continue;
@@ -537,9 +536,9 @@ void knot::prmSingular::compute (void)
         }
 
   // Удаляем заранее вычисленные вспомогательные значения.
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    for (i2 = 0; i2 < length; i2++)
+    for (i2 = 0; i2 < points.size(); i2++)
       delete[] chord [i1] [i2];
     delete[] chord [i1];
   }
@@ -554,8 +553,8 @@ void knot::prmExperimental2::compute (void)
 	int o;
 
   // Вычисляем заранее касательные векторы.
-  double **tangs = new double* [length];
-  for (i1 = 0; i1 < length; i1++)
+  double **tangs = new double* [points.size()];
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tangs [i1] = new double [3];
     tangs [i1] [0] = points[next (i1)].x - points[i1].x;
@@ -565,11 +564,11 @@ void knot::prmExperimental2::compute (void)
 
   // Вычисляем ``гауссовы произведения''.
   double chord [3], chord_len;
-  double **gauss = new double* [length];
+  double **gauss = new double* [points.size()];
 
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    gauss [i1] = new double [length];
+    gauss [i1] = new double [points.size()];
     gauss [i1] [i1] = 0.0;
     for (i2 = 0; i2 < i1; i2++)
     {
@@ -590,18 +589,18 @@ void knot::prmExperimental2::compute (void)
 
   // В gauss_sum [i1] [i2] находится сумма ``гауссовых произведений''
   // для всех хорд с началом в i1 и концом от next (i1) до i2.
-  double **gauss_sum = new double* [length];
+  double **gauss_sum = new double* [points.size()];
 
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
-    gauss_sum [i1] = new double [length];
+    gauss_sum [i1] = new double [points.size()];
     gauss_sum [i1] [i1] = 0.0;
     for (i2 = next (i1); i2 != i1; i2 = next (i2))
       gauss_sum [i1] [i2] = gauss_sum [i1] [prev (i2)] + gauss [i1] [i2];
   }
 
   double tmp, tmp2;
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     tmp = 0.0;
     for (i2 = next (next (i1)); i2 != i1; i2 = next (i2))
@@ -618,7 +617,7 @@ void knot::prmExperimental2::compute (void)
   internalValue /= 4 * M_PI * M_PI;
 
   // Удаляем заранее вычисленные вспомогательные значения.
-  for (i1 = 0; i1 < length; i1++)
+  for (i1 = 0; i1 < points.size(); i1++)
   {
     delete[] tangs [i1];
     delete[] gauss [i1];

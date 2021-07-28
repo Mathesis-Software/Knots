@@ -46,7 +46,6 @@ class knot : public seifert_base {
 
 protected:
 	std::string caption;
-	std::size_t length;
 	std::vector<point> points;
 
 	std::list<std::shared_ptr<parameter>> parameterList;
@@ -105,15 +104,15 @@ private:
 /***********************************************************************/
 
 inline std::size_t knot::next(std::size_t index) {
-	return (index == length - 1) ? 0 : index + 1;
+	return index == this->points.size() - 1 ? 0 : index + 1;
 }
 
 inline std::size_t knot::prev(std::size_t index) {
-	return index ? index - 1 : length - 1;
+	return index ? index - 1 : this->points.size() - 1;
 }
 
 inline bool knot::isEmpty() {
-	return length == 0;
+	return this->points.empty();
 }
 
 #endif /* __KNOT_H__ */

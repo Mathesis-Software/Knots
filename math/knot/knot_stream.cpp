@@ -19,7 +19,6 @@ std::istream & operator >> (std::istream &is, knot *K) {
 		return is;
 	}
 
-	K->length = length;
 	K->points.clear();
 
 	for (int i = 0; i < length; ++i) {
@@ -33,7 +32,6 @@ std::istream & operator >> (std::istream &is, knot *K) {
 			break;
 		}
 		K->points.clear();
-		K->length = 0;
 		break;
 	}
 

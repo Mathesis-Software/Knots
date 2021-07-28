@@ -1,8 +1,6 @@
 #include "knot.h"
 
 knot::knot() : caption("New Knot") {
-  length = 0;
-
   create_depend();
 }
 

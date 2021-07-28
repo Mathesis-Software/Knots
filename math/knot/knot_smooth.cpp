@@ -10,17 +10,17 @@ void knot::center (void)
          deltaY = 0.0,
          deltaZ = 0.0;
 
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < this->points.size(); i++) {
     deltaX += points[i].x;
     deltaY += points[i].y;
     deltaZ += points[i].z;
   }
 
-  deltaX /= length;
-  deltaY /= length;
-  deltaZ /= length;
+  deltaX /= this->points.size();
+  deltaY /= this->points.size();
+  deltaZ /= this->points.size();
 
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < this->points.size(); i++) {
     points[i].x -= deltaX;
     points[i].y -= deltaY;
     points[i].z -= deltaZ;
@@ -33,7 +33,7 @@ void knot::setLength (double len)
 
   len /= Length -> value ();
 
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < this->points.size(); i++) {
     points [i].x *= len;
     points [i].y *= len;
     points [i].z *= len;
@@ -49,17 +49,17 @@ void knot::decreaseEnergy (void)
   double oldLen = Length -> value ();
 
   // Расставляем точки на кривой равномерно.
-  normalize (length);
+  normalize(this->points.size());
 
   // Создаем массив расстояний между соседними точками. 
   create_len_table ();
 
 	std::size_t i, j, k;
   double xr, x2, r2, tau, lt, x [3], r [3], local [3];
-  double **delta = new double* [length];
+  double **delta = new double* [this->points.size()];
 
   // Вычисляем вектор градиента в каждой вершине ломаной.
-  for (i = 0; i < length; i++) {
+  for (i = 0; i < this->points.size(); i++) {
     // Создаем и обнуляем вектор градиента для p_i.
     delta [i] = new double [3];
     for (k = 0; k < 3; k++)
@@ -118,25 +118,25 @@ void knot::decreaseEnergy (void)
 
   // Находим максимум из длин (компонент) градиентов. 
   double max_shift = 0.0;
-  for (i = 0; i < length; i++)
+  for (i = 0; i < this->points.size(); i++)
     for (k = 0; k < 3; k++)
       if (max_shift < fabs (delta [i] [k]))
         max_shift = fabs (delta [i] [k]);
 
   // Вычисляем коэффициент, на который нужно домножить градиент.
-  double coeff = oldLen * oldLen / length / length / 10.0;
-  if (coeff > oldLen / length / max_shift / 5.0)
-    coeff = oldLen / length / max_shift / 5.0;
+  double coeff = oldLen * oldLen / this->points.size() / this->points.size() / 10.0;
+  if (coeff > oldLen / this->points.size() / max_shift / 5.0)
+    coeff = oldLen / this->points.size() / max_shift / 5.0;
 
   // Делаем сдвиг в направлении градиента.
-  for (i = 0; i < length; i++) {
+  for (i = 0; i < this->points.size(); i++) {
     points [i].x += delta [i] [0] * coeff;
     points [i].y += delta [i] [1] * coeff;
     points [i].z += delta [i] [2] * coeff;
 	}
 
   // Удаляем векторы градиента.
-  for (i = 0; i < length; i++)
+  for (i = 0; i < this->points.size(); i++)
     delete[] delta [i];
   delete[] delta;
 

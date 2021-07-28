@@ -6,9 +6,9 @@ void knot::create_len_table() {
   if (len_table)
     return;
 
-  len_table = new double [length];
+  len_table = new double [this->points.size()];
 
-  for (std::size_t i = 0; i < length; i++)
+  for (std::size_t i = 0; i < this->points.size(); i++)
   {
     len_table [i] =
       sqrt (

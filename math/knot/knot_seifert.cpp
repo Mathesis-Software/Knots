@@ -13,7 +13,7 @@ double knot::minDist (const double *point)
 {
   double md2 = 10000.0, tau, r[3], x[3], xr, r2, x2;
 
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < this->points.size(); i++) {
     x [0] = points[i].x - point [0];
     x [1] = points[i].y - point [1];
     x [2] = points[i].z - point [2];
@@ -54,7 +54,7 @@ void knot::getGradient (const double *point, double *gradient)
 
   double x [3], r [3], xr, x2, r2, a2, tau, coeff;
 
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < this->points.size(); i++) {
     x [0] = points[i].x - point [0];
     x [1] = points[i].y - point [1];
     x [2] = points[i].z - point [2];

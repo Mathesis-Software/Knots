@@ -4,7 +4,6 @@
 
 #define			create_len_table	Parent -> create_len_table
 #define			len_table		Parent -> len_table
-#define			length			Parent -> length
 #define			points			Parent -> points
 #define			next			Parent -> next
 #define			prev			Parent -> prev
@@ -15,7 +14,7 @@ void knot::prmLength::compute (void)
 
   internalValue = 0.0;
 
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < points.size(); i++) {
     internalValue += len_table[i];
 	}
 }
@@ -28,7 +27,7 @@ void knot::prmAen::compute (void)
 
   double scal, angle_cos;
   
-  for (std::size_t i = 0; i < length; i++)
+  for (std::size_t i = 0; i < points.size(); i++)
   {
     scal = (points[next (i)].x - points[i].x) *
            (points[prev (i)].x - points[i].x) +
@@ -46,7 +45,7 @@ void knot::prmAen::compute (void)
   }
 
   internalValue /= M_PI;
-  internalValue += length;
+  internalValue += points.size();
 }
 
 void knot::prmEnergy::compute (void)
@@ -58,10 +57,10 @@ void knot::prmEnergy::compute (void)
 
   internalValue = 0.0;
 
-  for (std::size_t i = 0; i < length - 2; i++)
+  for (std::size_t i = 0; i < points.size() - 2; i++)
   {
     l = len_table [i];
-    for (auto j = i + 2; j < (i ? length : length - 1); j++)
+    for (auto j = i + 2; j < (i ? points.size() : points.size() - 1); j++)
     {
       r2 = 0.65 / (
             (points[j].x - points[i].x) *
@@ -83,13 +82,13 @@ void knot::prmEnergy::compute (void)
   }
 
   double p[3], q[3];
-  for (std::size_t i = 0; i < length; i++) {
+  for (std::size_t i = 0; i < points.size(); i++) {
     l = 0;
     p[0] = (points[i].x + points[next (i)].x) / 2;
     p[1] = (points[i].y + points[next (i)].y) / 2;
     p[2] = (points[i].z + points[next (i)].z) / 2;
   
-    for (std::size_t j = i + 1; j < length; j++) {
+    for (std::size_t j = i + 1; j < points.size(); j++) {
       q[0] = (points[j].x + points[next (j)].x) / 2;
       q[1] = (points[j].y + points[next (j)].y) / 2;
       q[2] = (points[j].z + points[next (j)].z) / 2;

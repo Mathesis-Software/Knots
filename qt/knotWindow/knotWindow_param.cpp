@@ -23,9 +23,8 @@ void knotWindow::setLength ()
 
 void knotWindow::setNum ()
 {
-	std::size_t i = setInt ("Set number of points", length, 10, 30000);
-  if (i != length)
-  {
+	std::size_t i = setInt ("Set number of points", this->points.size(), 10, 30000);
+  if (i != this->points.size()) {
     normalize (i);
     knot::center ();
     kSurf -> destroy ();

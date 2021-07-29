@@ -38,7 +38,7 @@ OBJECTS = $(patsubst %.cpp, %.o, $(SOURCES))
 	@echo ' OK'
 
 .h.moc.cpp:
-	@echo -n 'Mocifiing $@ ...'
+	@echo -n 'Mocifying $@ ...'
 	@$(MOC) $< -o $@
 	@echo ' OK'
 

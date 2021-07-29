@@ -32,8 +32,7 @@ void Surface::setBackRGB(const float *rgb) {
   backRGB[2] = rgb[2];
 }
 
-void Surface::addpoint(float v0, float v1, float v2,
-                       float n0, float n1, float n2) {
+void Surface::addpoint(float v0, float v1, float v2, float n0, float n1, float n2) {
   this->points.push_back(SurfacePoint(v0, v1, v2, n0, n1, n2));
 }
 

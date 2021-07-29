@@ -43,22 +43,17 @@ public:
   Surface();
   virtual ~Surface();
 
-  bool isVisible()
-    {return visible;};
+  bool isVisible() { return this->visible; }
+  void show() { this->visible = true; }
+  void hide() { this->visible = false; }
 
-  void show()
-    {visible = 1;};
-  void hide()
-    {visible = 0;};
   void paint();
   void destroy();
 
-  float *getFrontRGB()
-    {return frontRGB;};
-  float *getBackRGB()
-    {return backRGB;};
-  void setFrontRGB (const float*);
-  void setBackRGB (const float*);
+  float *getFrontRGB() { return frontRGB; }
+  float *getBackRGB() { return backRGB; }
+  void setFrontRGB(const float*);
+  void setBackRGB(const float*);
 
 private:
 	Surface(const Surface&) = delete;

@@ -1,6 +1,8 @@
 #include "diagram.h"
 
-void diagram::addVertex(vertex* v, int x, int y) {
+namespace KE { namespace TwoD {
+
+void Diagram::addVertex(vertex* v, int x, int y) {
   if (!base) {
     base = new vertex(x, y);
     return;
@@ -36,7 +38,7 @@ void diagram::addVertex(vertex* v, int x, int y) {
   order();
 }
 
-void diagram::removeVertex(vertex* v) {
+void Diagram::removeVertex(vertex* v) {
   if (v == nullptr)
     return;
 
@@ -75,7 +77,7 @@ void diagram::removeVertex(vertex* v) {
   delete v;
 }
 
-void diagram::moveVertex(vertex *v, int x, int y) {
+void Diagram::moveVertex(vertex *v, int x, int y) {
   if (v == nullptr)
     return;
 
@@ -127,7 +129,7 @@ void diagram::moveVertex(vertex *v, int x, int y) {
   order();
 }
 
-int diagram::numByV(vertex *v) {
+int Diagram::numByV(vertex *v) {
   vertex *curr = base;
   int num;
   for (num = 0; curr != v; curr = curr->next()) {
@@ -139,10 +141,12 @@ int diagram::numByV(vertex *v) {
   return num;
 }
 
-vertex *diagram::vByNum(int num) {
+vertex *Diagram::vByNum(int num) {
   vertex *v = base;
   for (; num > 0; num --)
     v = v->next();
 
   return v;
 }
+
+}}

@@ -2,7 +2,9 @@
 
 #include "diagram.h"
 
-std::ostream & operator << (std::ostream & os, diagram *D) {
+namespace KE { namespace TwoD {
+
+std::ostream & operator << (std::ostream & os, Diagram *D) {
   vertex *v = D->base;
 
   os << "#DIAGRAM " << D->caption << "\n#POINTS " << D->length () << "\n";
@@ -34,7 +36,7 @@ std::ostream & operator << (std::ostream & os, diagram *D) {
   return os;
 }
 
-std::istream & operator >> (std::istream & is, diagram *D) {
+std::istream & operator >> (std::istream & is, Diagram *D) {
   char tmp[256];
 
   D->clear();
@@ -100,3 +102,5 @@ std::istream & operator >> (std::istream & is, diagram *D) {
 
   return is;
 }
+
+}}

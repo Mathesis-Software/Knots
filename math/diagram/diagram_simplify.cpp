@@ -1,6 +1,8 @@
 #include "diagram.h"
 
-bool diagram::simplify(int depth) {
+namespace KE { namespace TwoD {
+
+bool Diagram::simplify(int depth) {
   if (depth < 1)
     return 0;
 
@@ -34,3 +36,5 @@ bool diagram::simplify(int depth) {
 
   return changed;
 }
+
+}}

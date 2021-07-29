@@ -1,14 +1,11 @@
 #include "diagramWindow.h"
 
-void diagramWindow::simplify (void)
-{
+void diagramWindow::simplify() {
   if (!isClosed)
     return;
 
-  if (diagram::simplify (2))
-  {
+  if (Diagram::simplify(2)) {
     isSaved = false;
-    centralWidget () -> repaint ();
-    //centralWidget () -> repaint (false);
+    centralWidget()->repaint();
   }
 }

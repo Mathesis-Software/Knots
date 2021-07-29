@@ -6,10 +6,9 @@
 #include "diagramWindow.h"
 #include "../knotWindow/knotWindow.h"
 
-diagramWindow::diagramWindow (std::istream &is)
-{
-  init ();
-  readIt (is);
+diagramWindow::diagramWindow(std::istream &is) {
+  init();
+  readIt(is);
 }
 
 diagramWindow::diagramWindow() {
@@ -97,34 +96,28 @@ void diagramWindow::setmode(int newmode) {
 }
 
 void diagramWindow::clear() {
-  diagram::clear ();
+  Diagram::clear();
   isClosed = false;
   actions_convert->setEnabled(false);
   actions_simplify->setEnabled(false);
   actions_clear->setEnabled(false);
-  //centralWidget () -> repaint (false);
-  centralWidget () -> repaint();
-  setmode (DRAW_NEW_DIAGRAM);
-  actions [0] -> setChecked (true);
+  centralWidget()->repaint();
+  setmode(DRAW_NEW_DIAGRAM);
+  actions[0]->setChecked(true);
 
   isSaved = true;
 }
 
-void diagramWindow::convert ()
-{
-  if (!isClosed)
-  {
-    QMessageBox::critical (this, "Error",
-        "\nCannot convert nonclosed diagram.\n");
+void diagramWindow::convert() {
+  if (!isClosed) {
+    QMessageBox::critical(this, "Error", "\nCannot convert nonclosed diagram.\n");
     return;
   }
 
-  if (length () <= 2)
-  {
-    QMessageBox::critical (this, "Error",
-        "\nCannot convert diagram with less than 3 points.\n");
+  if (length () <= 2) {
+    QMessageBox::critical(this, "Error", "\nCannot convert diagram with less than 3 points.\n");
     return;
   }
 
-  ( new knotWindow (this) ) -> show ();
+  (new knotWindow(this))->show();
 }

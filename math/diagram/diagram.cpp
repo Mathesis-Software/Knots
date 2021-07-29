@@ -1,19 +1,21 @@
 #include "diagram.h"
 
-diagram::diagram() : caption("New Diagram"), base(nullptr) {
+namespace KE { namespace TwoD {
+
+Diagram::Diagram() : caption("New Diagram"), base(nullptr) {
 }
 
-diagram::~diagram() {
+Diagram::~Diagram() {
 	this->clear();
 }
 
-void diagram::clear() {
+void Diagram::clear() {
 	while (base != nullptr) {
 		removeVertex(base);
 	}
 }
 
-int diagram::length() {
+int Diagram::length() {
 	vertex *v = base->next();
 	int l;
 	for (l = 1; v != base; l++) {
@@ -22,7 +24,7 @@ int diagram::length() {
 	return l;
 }
 
-void diagram::order() {
+void Diagram::order() {
   vertex *v = base;
   do {
     v->order();
@@ -30,10 +32,12 @@ void diagram::order() {
   } while (v != base);
 }
 
-void diagram::shift(int x, int y) {
+void Diagram::shift(int x, int y) {
 	vertex *v = base;
 	do {
 		v->move(x, y);
 		v = v->next();
 	} while (v != base);
 }
+
+}}

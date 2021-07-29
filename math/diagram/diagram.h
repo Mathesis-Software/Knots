@@ -6,15 +6,19 @@
 
 #include "vertex.h"
 
-namespace KE { namespace ThreeD {
+namespace KE {
+
+namespace ThreeD {
 
 class Knot;
 
-}}
+}
 
-class diagram {
+namespace TwoD {
 
-friend class KE::ThreeD::Knot;
+class Diagram {
+
+friend class ThreeD::Knot;
 
 protected:
 	std::string caption;
@@ -40,21 +44,23 @@ private:
 	void order();
 
 public:
-	diagram();
-	virtual ~diagram();
+	Diagram();
+	virtual ~Diagram();
 
 	bool isEmpty();
 	
-	friend std::istream & operator>>(std::istream &, diagram *);
-	friend std::ostream & operator<<(std::ostream &, diagram *);
+	friend std::istream & operator>>(std::istream &, Diagram *);
+	friend std::ostream & operator<<(std::ostream &, Diagram *);
 
 private:
-	diagram(const diagram&) = delete;
-	diagram& operator=(const diagram&) = delete;
+	Diagram(const Diagram&) = delete;
+	Diagram& operator=(const Diagram&) = delete;
 };
 
-inline bool diagram::isEmpty() {
+inline bool Diagram::isEmpty() {
 	return this->base == nullptr;
 }
+
+}}
 
 #endif /* __DIAGRAM_H__ */

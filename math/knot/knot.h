@@ -9,8 +9,6 @@
 #include "primitives.h"
 #include "../seifert/seifert.h"
 
-class diagram;
-
 /***********************************************************************/
 
 #define	addParameterClass(PARAM)	\
@@ -37,6 +35,12 @@ namespace KE {
 namespace GL {
 
 class KnotSurface;
+
+}
+
+namespace TwoD {
+
+class Diagram;
 
 }
 
@@ -126,7 +130,7 @@ private:
 
 public:
 	Knot(std::istream &is);
-	Knot(diagram*, int, int);
+	Knot(TwoD::Diagram*, int, int);
 
 	bool isEmpty();
 	void decreaseEnergy();

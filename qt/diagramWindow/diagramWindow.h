@@ -7,7 +7,7 @@
 #include <QtWidgets/qmenu.h>
 #include <QtWidgets/qtoolbutton.h>
 
-class diagramWindow : public abstractWindow, public diagram {
+class diagramWindow : public abstractWindow, public KE::TwoD::Diagram {
 
   Q_OBJECT
 
@@ -54,13 +54,11 @@ private slots:
   void simplify ();
 
 public:
-  
-  diagramWindow (std::istream&);
-  diagramWindow (void);
-  ~diagramWindow (void);
+  diagramWindow(std::istream&);
+  diagramWindow(void);
+  ~diagramWindow(void);
 
-  bool isEmpty (void)
-    {return diagram::isEmpty ();};
+  bool isEmpty(void) {return Diagram::isEmpty ();};
 
   friend class diagramMainWidget;
 };

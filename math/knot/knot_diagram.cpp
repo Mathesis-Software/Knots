@@ -5,7 +5,7 @@
 
 namespace KE { namespace ThreeD {
 
-Knot::Knot(diagram *D, int w, int h) : caption("Converted from diagram") {
+Knot::Knot(TwoD::Diagram *D, int w, int h) : caption("Converted from diagram") {
   vertex *v = D->base;
 	do {
 		points.push_back(Point(

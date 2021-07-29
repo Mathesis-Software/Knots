@@ -33,7 +33,6 @@ private:
 class seifert_ord {
 
 private:
-
 	seifert *value;
 	seifert_ord *prev, *next;
 

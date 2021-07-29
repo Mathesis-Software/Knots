@@ -4,12 +4,6 @@
 
 namespace KE { namespace ThreeD {
 
-bool Knot::noMorePoints(const double *point) const {
-  return (point [0] * point [0] +
-          point [1] * point [1] +
-          point [2] * point [2] > 2.0);
-}
-
 double Knot::minDist(const double *point) const {
   double md2 = 10000.0, tau, r[3], x[3], xr, r2, x2;
 

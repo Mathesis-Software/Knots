@@ -92,7 +92,7 @@ void seifert::addPoint60 (double x_dir, double y_dir, double z_dir)
 	    z_dir / len_dir + z_orth2 / len_orth2);
 }
 
-void seifert::searchForNeighbor (void)
+void seifert::searchForNeighbor()
 {
   // Здесь ищутся соседи среди уже существующих точек
   // (просто просматривается весь список).
@@ -158,12 +158,12 @@ void seifert::searchForNeighbor (void)
   }
 }
 
-void seifert::checkNeighborhood (void)
-{
+void seifert::checkNeighborhood() {
   // Проверяем, не нужно ли здесь остановиться по внешним причинам.
   // (Выход за границы области видимости, добрались до узла и т.п.)
-  if (this->base.noMorePoints (coord))
-    return;
+  if (coord[0] * coord[0] + coord[1] * coord[1] + coord[2] * coord[2] > 2.0) {
+		return;
+	}
 
   // Если соседей вообще нет (т.е. это просто первая точка),
   // то создаем первую точку в направлении, перпендикулярном градиенту.
@@ -246,7 +246,7 @@ void seifert::markUsed (seifert *start, seifert *end)
     sl_start -> label = 1;
 }
 
-void seifert::correction_local (void)
+void seifert::correction_local()
 {
   if (!neighborhood -> value)
     return;
@@ -260,7 +260,7 @@ void seifert::correction_local (void)
   }
 }
 
-void seifert::correction (void)
+void seifert::correction()
 {
   correction_local ();
 
@@ -310,8 +310,7 @@ seifert::seifert (const double x, const double y, const double z,
 	}
 }
 
-seifert::~seifert (void)
-{
+seifert::~seifert() {
   if (sord -> next)
   {
     sord -> next -> prev = NULL;

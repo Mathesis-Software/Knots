@@ -52,12 +52,11 @@ private:
 class seifert {
 
 private:
-
+  const KE::ThreeD::Knot &base;
   double coord[3], gradient[3];
   double localEps;
   seifert_list *neighborhood;
   seifert_ord *sord;
-  const KE::ThreeD::Knot &base;
 
   void searchForNeighbor();
   void checkNeighborhood();

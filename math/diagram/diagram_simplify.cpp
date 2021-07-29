@@ -5,33 +5,32 @@ bool diagram::simplify(int depth) {
     return 0;
 
   vertex *v = base;
-  bool result = 0;
-  bool didSomethingInThisCycle;
-  bool mustBeRemoved;
 
-  do {
-    didSomethingInThisCycle = 0;
+  bool changed = false;
+	for (bool continueFlag = true; continueFlag; ) {
+    continueFlag = false;
 
     do {
       if (length() == 3)
         break;
 
-      mustBeRemoved = 1;
+      bool removeVertexFlag = true;
       vertex *t = v;
       for (int i = 1; i < depth; i++)
         t = t->prev();
       for (int i = 0; i < 2 * depth; i++) {
-				mustBeRemoved &= !t->crs();
+				removeVertexFlag &= !t->crs();
         t = t->next();
       }
-      if (mustBeRemoved) {
-				result = didSomethingInThisCycle = 1;
+      if (removeVertexFlag) {
+				continueFlag = true;
+				changed = true;
         removeVertex(v->next());
       } else {
         v = v->next();
 			}
     } while (v != base);
-  } while (didSomethingInThisCycle);
+  }
 
-  return result;
+  return changed;
 }

@@ -8,26 +8,12 @@
 class seifert;
 class seifert_list;
 class seifert_ord;
-class seifert_base;
 
 namespace KE { namespace ThreeD {
 
 class Knot;
 
 }}
-
-class seifert_base {
-
-protected:
-
-  seifert_base() {}
-  virtual ~seifert_base() {}
-  virtual bool noMorePoints(const double*) const = 0;
-  virtual double minDist(const double*) const = 0;
-
-  friend class seifert;
-  friend class seifert_list;
-};
 
 class seifert_list {
 

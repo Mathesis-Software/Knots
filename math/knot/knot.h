@@ -42,7 +42,7 @@ class KnotSurface;
 
 namespace ThreeD {
 
-class Knot : public seifert_base {
+class Knot {
 
 public:
 	class Computable {
@@ -137,8 +137,8 @@ public:
 
 	void getGradient(const double*, double*) const;
 	Vector seifertGradient(const Point &point) const;
-	bool noMorePoints (const double*) const override;
-	double minDist (const double*) const override;
+	bool noMorePoints (const double*) const;
+	double minDist (const double*) const;
 
 	void save(std::ostream &os, const double matrix[3][3]) const;
 

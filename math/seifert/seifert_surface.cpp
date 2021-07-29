@@ -50,14 +50,14 @@ void SeifertSurface::addTriangles(seifert *s) {
     sl->next->value->markUsed (s, sl->value);
 
     // Добавляем треугольник.
-    addpoint(s->coord, s->gradient);
+    addpoint(s->point, s->gradient);
     // Правильно ориентируем треугольник.
-    if (det(s->coord, sl->value->coord, sl->next->value->coord, s->gradient) < 0) {
-      addpoint(sl->next->value->coord, sl->next->value->gradient);
-      addpoint(sl->value->coord, sl->value->gradient);
+    if (det(s->point, sl->value->point, sl->next->value->point, s->gradient) < 0) {
+      addpoint(sl->next->value->point, sl->next->value->gradient);
+      addpoint(sl->value->point, sl->value->gradient);
     } else {
-      addpoint(sl->value->coord, sl->value->gradient);
-      addpoint(sl->next->value->coord, sl->next->value->gradient);
+      addpoint(sl->value->point, sl->value->gradient);
+      addpoint(sl->next->value->point, sl->next->value->gradient);
     }
 
     // Следующий сосед.
@@ -69,21 +69,19 @@ void SeifertSurface::addTriangles(seifert *s) {
 
 void SeifertSurface::calculate() {
   // Создаем граф поверхности.
-  seifert *s = new seifert(this->startPoint.x, this->startPoint.y, this->startPoint.z, base);
-  s->correction ();
+  seifert *s = new seifert(base, this->startPoint);
+  s->correction();
 
   // Создаем поверхность.
 
   addTriangles (s);
   seifert_ord *so = s->sord;
-  while (so->prev)
-  {
+  while (so->prev) {
     so = so->prev;
     addTriangles (so->value);
   }
   so = s->sord;
-  while (so->next)
-  {
+  while (so->next) {
     so = so->next;
     addTriangles (so->value);
   }

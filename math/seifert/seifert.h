@@ -49,7 +49,7 @@ class seifert {
 
 private:
 	const KE::ThreeD::Knot &base;
-	const KE::ThreeD::Point coord;
+	const KE::ThreeD::Point point;
 	const KE::ThreeD::Vector gradient;
 
 	double localEps;
@@ -66,8 +66,7 @@ private:
 	void correction();
 
 public:
-	seifert(const double, const double, const double,
-					const KE::ThreeD::Knot &base, seifert* = nullptr);
+	seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert* = nullptr);
 	~seifert();
 
 	friend class seifert_ord;

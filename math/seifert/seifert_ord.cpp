@@ -1,7 +1,7 @@
 #include "seifert.h"
 
 seifert_ord *seifert_ord::insert(seifert *s) {
-  if (value->coord.x > s->coord.x) {
+  if (value->point.x > s->point.x) {
     if (!prev) {
       prev = new seifert_ord (s);
       prev->next = this;
@@ -13,7 +13,7 @@ seifert_ord *seifert_ord::insert(seifert *s) {
 		next = new seifert_ord (s);
 		next->prev = this;
 		return next;
-	} else if (next->value->coord.x > s->coord.x) {
+	} else if (next->value->point.x > s->point.x) {
 		seifert_ord *so = new seifert_ord (s);
 		so->next = next;
 		so->prev = this;

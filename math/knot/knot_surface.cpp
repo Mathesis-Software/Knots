@@ -10,18 +10,6 @@ double SIN[9] =
 double COS[9] =
 	{1.0, M_SQRT1_2, 0.0, -M_SQRT1_2, -1.0, -M_SQRT1_2, 0.0, M_SQRT1_2, 1.0 };
 
-void norm(double *vector) {
-	double length = sqrt(
-		vector[0] * vector[0] +
-		vector[1] * vector[1] +
-		vector[2] * vector[2]
-	);
-
-	vector[0] /= length;
-	vector[1] /= length;
-	vector[2] /= length;
-}
-
 }
 
 namespace KE { namespace GL {
@@ -40,83 +28,61 @@ void KnotSurface::calculate() {
 
 	destroy ();
 
-	double **normal1, **normal2;
-	int *shift;
+	std::vector<ThreeD::Vector> normal1, normal2;
+	std::vector<int> shift;
 
 	/*
 	Create normal vector table
 	*/
 
-	{
-		double *v = new double[3];
+	for (std::size_t i = 0; i < points.size(); ++i) {
+		ThreeD::Vector v(points[this->knot.prev(i)], points[this->knot.next(i)]);
+		v.normalize();
 
-		normal1 = new double*[points.size()];
-		normal2 = new double*[points.size()];
-
-		for (std::size_t i = 0; i < points.size(); ++i) {
-			v[0] = points[this->knot.next(i)].x - points[this->knot.prev(i)].x;
-			v[1] = points[this->knot.next(i)].y - points[this->knot.prev(i)].y;
-			v[2] = points[this->knot.next(i)].z - points[this->knot.prev(i)].z;
-			norm (v);
-
-			normal1[i] = new double[3];
-			normal2[i] = new double[3];
-
-			if (fabs (v[1]) < M_SQRT1_2)
-			{
-				normal1[i][0] = v[2];
-				normal1[i][1] = 0.0;
-				normal1[i][2] = - v[0];
-
-				normal2[i][0] = - v[0] * v[1];
-				normal2[i][1] = v[0] * v[0] + v[2] * v[2];
-				normal2[i][2] = - v[1] * v[2];
-			}
-			else
-			{
-				normal1[i][0] = 0.0;
-				normal1[i][1] = - v[2];
-				normal1[i][2] = v[1];
-
-				normal2[i][0] = v[1] * v[1] + v[2] * v[2];
-				normal2[i][1] = - v[0] * v[1];
-				normal2[i][2] = - v[0] * v[2];
-			}
-
-			norm (normal1[i]);
-			norm (normal2[i]);
+		if (fabs(v.y) < M_SQRT1_2) {
+			ThreeD::Vector norm1(v.z, 0.0, - v.x);
+			ThreeD::Vector norm2(- v.x * v.y, v.x * v.x + v.z * v.z, - v.y * v.z);
+			norm1.normalize();
+			norm2.normalize();
+			normal1.push_back(norm1);
+			normal2.push_back(norm2);
+		} else {
+			ThreeD::Vector norm1(0.0, - v.z, v.y);
+			ThreeD::Vector norm2(v.y * v.y + v.z * v.z, - v.x * v.y, - v.x * v.z);
+			norm1.normalize();
+			norm2.normalize();
+			normal1.push_back(norm1);
+			normal2.push_back(norm2);
 		}
-
-		delete[] v;
 	}
 
 	/*
 	Create shift table
 	*/
-
 	{
 		double a, b;
 
-		shift = new int[points.size()];
-
 		for (std::size_t i = 0; i < points.size(); ++i) {
-			a = normal1[i][0] * normal1[this->knot.next(i)][0]
-				+ normal1[i][1] * normal1[this->knot.next(i)][1]
-				+ normal1[i][2] * normal1[this->knot.next(i)][2];
-			b = normal1[i][0] * normal2[this->knot.next(i)][0]
-				+ normal1[i][1] * normal2[this->knot.next(i)][1]
-				+ normal1[i][2] * normal2[this->knot.next(i)][2];
+			a = normal1[i].x * normal1[this->knot.next(i)].x
+				+ normal1[i].y * normal1[this->knot.next(i)].y
+				+ normal1[i].z * normal1[this->knot.next(i)].z;
+			b = normal1[i].x * normal2[this->knot.next(i)].x
+				+ normal1[i].y * normal2[this->knot.next(i)].y
+				+ normal1[i].z * normal2[this->knot.next(i)].z;
 
-			if (a > 0)
-				if (b > 0)
-					shift[i] = (b > a) ? 7 : 0;
-				else
-					shift[i] = (- b > a) ? 2 : 1;
-			else
-				if (b > 0)
-					shift[i] = (b > - a) ? 6 : 5;
-				else
-					shift[i] = (b > a) ? 4 : 3;
+			if (a > 0) {
+				if (b > 0) {
+					shift.push_back((b > a) ? 7 : 0);
+				} else {
+					shift.push_back((- b > a) ? 2 : 1);
+				}
+			} else {
+				if (b > 0) {
+					shift.push_back((b > - a) ? 6 : 5);
+				} else {
+					shift.push_back((b > a) ? 4 : 3);
+				}
+			}
 		}
 	}
 
@@ -133,9 +99,9 @@ void KnotSurface::calculate() {
 			j2 = (j + 1) & 0x7;
 
 			for (std::size_t i = 0; i < points.size(); ++i) {
-				n0 = normal1[i][0] * SIN[j1] + normal2[i][0] * COS[j1];
-				n1 = normal1[i][1] * SIN[j1] + normal2[i][1] * COS[j1];
-				n2 = normal1[i][2] * SIN[j1] + normal2[i][2] * COS[j1];
+				n0 = normal1[i].x * SIN[j1] + normal2[i].x * COS[j1];
+				n1 = normal1[i].y * SIN[j1] + normal2[i].y * COS[j1];
+				n2 = normal1[i].z * SIN[j1] + normal2[i].z * COS[j1];
 
 				addpoint(
 					points[i].x + thickness * n0,
@@ -144,9 +110,9 @@ void KnotSurface::calculate() {
 					n0, n1, n2
 				);
 
-				n0 = normal1[i][0] * SIN[j2] + normal2[i][0] * COS[j2];
-				n1 = normal1[i][1] * SIN[j2] + normal2[i][1] * COS[j2];
-				n2 = normal1[i][2] * SIN[j2] + normal2[i][2] * COS[j2];
+				n0 = normal1[i].x * SIN[j2] + normal2[i].x * COS[j2];
+				n1 = normal1[i].y * SIN[j2] + normal2[i].y * COS[j2];
+				n2 = normal1[i].z * SIN[j2] + normal2[i].z * COS[j2];
 
 				addpoint(
 					points[i].x + thickness * n0,
@@ -161,9 +127,9 @@ void KnotSurface::calculate() {
 				j2 &= 0x7;
 			}
 
-			n0 = normal1[0][0] * SIN[j1] + normal2[0][0] * COS[j1];
-			n1 = normal1[0][1] * SIN[j1] + normal2[0][1] * COS[j1];
-			n2 = normal1[0][2] * SIN[j1] + normal2[0][2] * COS[j1];
+			n0 = normal1[0].x * SIN[j1] + normal2[0].x * COS[j1];
+			n1 = normal1[0].y * SIN[j1] + normal2[0].y * COS[j1];
+			n2 = normal1[0].z * SIN[j1] + normal2[0].z * COS[j1];
 
 			addpoint(
 				points[0].x + thickness * n0,
@@ -172,9 +138,9 @@ void KnotSurface::calculate() {
 				n0, n1, n2
 			);
 
-			n0 = normal1[0][0] * SIN[j2] + normal2[0][0] * COS[j2];
-			n1 = normal1[0][1] * SIN[j2] + normal2[0][1] * COS[j2];
-			n2 = normal1[0][2] * SIN[j2] + normal2[0][2] * COS[j2];
+			n0 = normal1[0].x * SIN[j2] + normal2[0].x * COS[j2];
+			n1 = normal1[0].y * SIN[j2] + normal2[0].y * COS[j2];
+			n2 = normal1[0].z * SIN[j2] + normal2[0].z * COS[j2];
 
 			addpoint(
 				points[0].x + thickness * n0,
@@ -183,16 +149,6 @@ void KnotSurface::calculate() {
 				n0, n1, n2
 			);
 		}
-	}
-
-	{
-		for (std::size_t i = 0; i < points.size(); ++i) {
-			delete[] normal1[i];
-			delete[] normal2[i];
-		}
-		delete[] normal1;
-		delete[] normal2;
-		delete[] shift;
 	}
 }
 

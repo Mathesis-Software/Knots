@@ -8,9 +8,7 @@ static bool test(const KE::ThreeD::Vector &v0, const KE::ThreeD::Vector &v1, con
 	u1.add(v2, -1);
 	KE::ThreeD::Vector u2(v1);
 	u2.add(v3, -1);
-  return v0.x * (u1.y * u2.z - u1.z * u2.y) +
-				 v0.y * (u1.z * u2.x - u1.x * u2.z) +
-				 v0.z * (u1.x * u2.y - u1.y * u2.x) > 0;
+	return v0.scalar_product(u1.vector_product(u2)) > 0;
 }
 
 static void orthn(const KE::ThreeD::Vector &v0, KE::ThreeD::Vector &v1) {
@@ -72,8 +70,8 @@ void seifert_list::insert(seifert *s) {
     // Создаем переменные для векторов направлений из центра на соседей,
     // vect0 -- для нового соседа, vect1 и vect2 -- для двух подряд
     // идущих старых. Записываем в vect0 и vect1 начальные значения.
-		KE::ThreeD::Vector vect0(basepoint->coord, s->coord);
-		KE::ThreeD::Vector vect1(basepoint->coord, value->coord);
+		KE::ThreeD::Vector vect0(basepoint->point, s->point);
+		KE::ThreeD::Vector vect1(basepoint->point, value->point);
     orthn(basepoint->gradient, vect0);
     orthn(basepoint->gradient, vect1);
 
@@ -81,7 +79,7 @@ void seifert_list::insert(seifert *s) {
     seifert_list *current = this;
     for (;;) {
       // Создаем и нормируем vect2.
-			KE::ThreeD::Vector vect2(basepoint->coord, current->next->value->coord);
+			KE::ThreeD::Vector vect2(basepoint->point, current->next->value->point);
       orthn(basepoint->gradient, vect2);
 
       // Проверяем, сюда ли следует вставить нового соседа.

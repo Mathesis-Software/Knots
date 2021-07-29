@@ -27,6 +27,7 @@ static int counter = 0;
 void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 	// mutable version of direction
 	KE::ThreeD::Vector dir(direction);
+	dir.normalize();
 
 	// Создаем новую точку в заданном направлении от текущей
 	// на расстоянии localEps.
@@ -36,10 +37,8 @@ void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 	// Делаем несколько последовательных приближений.
 	for (int i = 0; fabs(tau) > MIN_TAU && i < MAX_ITERATION_NUMBER; ++i) {
 		// Считаем приближение для новой точки.
-		const double eps = dir.length() / localEps;
-
-		KE::ThreeD::Point appr(this->coord);
-		appr.move(dir, 1 / eps);
+		KE::ThreeD::Point appr(this->point);
+		appr.move(dir, localEps);
 
 		// Считаем сумму градиентов в начальной точке и
 		// в приближении новой точки.
@@ -50,11 +49,13 @@ void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 		// сумме градиентов.
 		tau = dir.scalar_product(gradient2) / gradient2.square();
 		dir.add(gradient2, -tau);
+		dir.normalize();
 	}
 
 	// Считаем последнее приближение и добавляем точку.
-	const double eps = dir.length() / localEps;
-	new seifert(coord.x + dir.x / eps, coord.y + dir.y / eps, coord.z + dir.z / eps, base, this);
+	KE::ThreeD::Point new_point(point);
+	new_point.move(dir, localEps);
+	new seifert(base, new_point, this);
 }
 
 void seifert::addPoint60(const KE::ThreeD::Vector &direction) {
@@ -78,9 +79,9 @@ void seifert::searchForNeighbor() {
 	seifert_ord *o;
 
 	for (o = sord->next;
-			 o && (o->value->coord.x - coord.x < NEAR * localEps);
+			 o && (o->value->point.x - this->point.x < NEAR * localEps);
 			 o = o->next) {
-		const KE::ThreeD::Vector coor(o->value->coord, this->coord);
+		const KE::ThreeD::Vector coor(o->value->point, this->point);
 		KE::ThreeD::Vector grad(this->gradient);
 		grad.add(o->value->gradient);
 		const double dist2 = coor.square();
@@ -96,9 +97,9 @@ void seifert::searchForNeighbor() {
 	}
 
 	for (o = sord->prev;
-			 o && (coord.x - o->value->coord.x < NEAR * localEps);
+			 o && (this->point.x - o->value->point.x < NEAR * localEps);
 			 o = o->prev) {
-		const KE::ThreeD::Vector coor(o->value->coord, this->coord);
+		const KE::ThreeD::Vector coor(o->value->point, this->point);
 		KE::ThreeD::Vector grad(this->gradient);
 		grad.add(o->value->gradient);
 		const double dist2 = coor.square();
@@ -117,7 +118,7 @@ void seifert::searchForNeighbor() {
 void seifert::checkNeighborhood() {
 	// Проверяем, не нужно ли здесь остановиться по внешним причинам.
 	// (Выход за границы области видимости, добрались до узла и т.п.)
-	if (coord.x * coord.x + coord.y * coord.y + coord.z * coord.z > 2.0) {
+	if (this->point.x * this->point.x + this->point.y * this->point.y + this->point.z * this->point.z > 2.0) {
 		return;
 	}
 
@@ -134,7 +135,7 @@ void seifert::checkNeighborhood() {
 	// Если сосед ровно один, создаем второго соседа, чтобы
 	// точка и 2 ее соседа образовывали равносторонний треугольник.
 	if (neighborhood->next == neighborhood) {
-		this->addPoint60(KE::ThreeD::Vector(this->coord, neighborhood->value->coord));
+		this->addPoint60(KE::ThreeD::Vector(this->point, neighborhood->value->point));
 	}
 
 	// Окрестность проверяется на предмет наличия ``зазоров''
@@ -146,8 +147,8 @@ void seifert::checkNeighborhood() {
 		seifert_list *start = neighborhood;
 		for (;;) {
 			// Это векторы направления на двух соседей.
-			const KE::ThreeD::Vector vect1(this->coord, neighborhood->value->coord);
-			const KE::ThreeD::Vector vect2(this->coord, neighborhood->next->value->coord);
+			const KE::ThreeD::Vector vect1(this->point, neighborhood->value->point);
+			const KE::ThreeD::Vector vect2(this->point, neighborhood->next->value->point);
 
 			if (vect1.scalar_product(vect2) < 0 ||
 					this->gradient.scalar_product(vect1.vector_product(vect2)) > 0.001 * MAX_EPS * MAX_EPS) {
@@ -215,14 +216,11 @@ void seifert::correction() {
 	}
 }
 
-seifert::seifert(const double x, const double y, const double z,
-								 const KE::ThreeD::Knot &base, seifert* neighbor) : base(base), coord(x, y, z), gradient(base.seifertGradient(coord)) {
+seifert::seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert *neighbor) : base(base), point(point), gradient(base.seifertGradient(point)) {
 	counter ++;
 //	cerr << "Point " << counter << '\n';
 
-	localEps = this->base.minDist(coord) / TIMES;
-	if (localEps > MAX_EPS)
-		localEps = MAX_EPS;
+	localEps = std::min(this->base.minDist(this->point) / TIMES, MAX_EPS);
 
 	if (neighbor)
 		sord = neighbor->sord->insert(this);

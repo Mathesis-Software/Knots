@@ -12,10 +12,7 @@ namespace KE { namespace ThreeD {
 namespace {
 
 double det(const Vector &v1, const Vector &v2, const Vector &v3) {
-	return
-			v1.x * (v2.y * v3.z - v2.z * v3.y)
-		+ v1.y * (v2.z * v3.x - v2.x * v3.z)
-		+ v1.z * (v2.x * v3.y - v2.y * v3.x);
+	return v1.scalar_product(v2.vector_product(v3));
 }
 
 double det(const double *v1, const double *v2, const double *v3) {

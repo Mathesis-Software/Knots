@@ -42,6 +42,7 @@ Knot::Knot(std::istream &is) {
 	if (!this->points.empty()) {
 		this->center();
 	}
+	this->create_depend();
 }
 
 void Knot::save(std::ostream &os, const double matrix[3][3]) const {

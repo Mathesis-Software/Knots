@@ -4,7 +4,7 @@ void diagramWindow::simplify() {
   if (!isClosed)
     return;
 
-  if (Diagram::simplify(2)) {
+  if (this->diagram->simplify(2)) {
     isSaved = false;
     centralWidget()->repaint();
   }

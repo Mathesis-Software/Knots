@@ -3,7 +3,6 @@
 
 #include <QtOpenGL/qgl.h>
 
-#include "../diagramWindow/diagramWindow.h"
 #include "../3dWindow/3dWindow.h"
 #include "../../gl/surface/surface.h"
 #include "../../math/knot/knot.h"
@@ -17,6 +16,7 @@ class SeifertSurface;
 }}
 
 class paramWindow;
+class diagramWindow;
 
 class knotWindow : public dddWindow {
 
@@ -75,8 +75,8 @@ private slots:
   void bp_minus();
 
 public:
-  knotWindow (std::istream&);
-  knotWindow (diagramWindow*);
+  knotWindow(std::istream &is);
+  knotWindow(const diagramWindow &diagram);
   ~knotWindow();
 
   const char *mask() {return "*.knt";};

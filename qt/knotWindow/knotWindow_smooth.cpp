@@ -1,4 +1,5 @@
-#include <QtWidgets/qstatusbar.h>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QStatusBar>
 
 #include "knotWindow_math.h"
 #include "../../math/knot/knot_surface.h"

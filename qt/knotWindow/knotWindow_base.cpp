@@ -5,6 +5,7 @@
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
+#include "../diagramWindow/diagramWindow.h"
 #include "../../math/knot/knot_surface.h"
 #include "../../math/seifert/seifert_surface.h"
 
@@ -45,7 +46,7 @@ knotWindow::knotWindow(std::istream &is) : knot(std::make_shared<KE::ThreeD::Kno
   this->init();
 }
 
-knotWindow::knotWindow(diagramWindow *d) : knot(std::make_shared<KE::ThreeD::Knot>(d, d->width(), d->height())), seifertStartPoint(0.0, 0.0, 0.4) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(std::make_shared<KE::ThreeD::Knot>(*d.diagram, d.width(), d.height())), seifertStartPoint(0.0, 0.0, 0.4) {
   this->init();
 	this->isSaved = false;
 }

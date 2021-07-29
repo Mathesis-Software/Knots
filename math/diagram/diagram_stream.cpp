@@ -4,69 +4,35 @@
 
 namespace KE { namespace TwoD {
 
-std::ostream & operator << (std::ostream & os, Diagram *D) {
-  vertex *v = D->base;
-
-  os << "#DIAGRAM " << D->caption << "\n#POINTS " << D->length () << "\n";
-  do {
-    os << v->x () << " " << v->y () << "\n";
-    v = v->next ();
-  } while (v != D->base);
-
-  crossing *c;
-
-  {
-    int cnum = 0;
-    do {
-      for (c = v->crs (); c; c = c->next ())
-        cnum++;
-      v = v->next ();
-    } while (v != D->base);
-
-    os << "#CROSSINGS " << cnum << "\n";
-  }
-
-  do {
-    for (c = v->crs (); c; c = c->next ())
-      os << D->numByV (v) << " "
-         << D->numByV (c->up ()) << "\n";
-    v = v->next ();
-  } while (v != D->base);
-
-  return os;
-}
-
-std::istream & operator >> (std::istream & is, Diagram *D) {
+Diagram::Diagram(std::istream &is) : base(nullptr) {
   char tmp[256];
-
-  D->clear();
 
   is.get(tmp, 32, ' ');
   if (strcmp(tmp, "#DIAGRAM") != 0)
-    return is;
+    return;
 
   is.get(tmp[0]);
   is.get(tmp, 255);
-  D->caption = tmp;
+  this->caption = tmp;
 
   {
     int length = -1;
     is.get(tmp, 32, ' ');
     is >> length;
     if (strcmp(tmp, "\n#POINTS") != 0)
-      return is;
+      return;
 
     if (length <= 0)
-      return is;
+      return;
 
     int x, y;
     for (int i = 0; i < length; i++) {
       is >> x >> y;
       if (!is.good()) {
-				D->clear();
-        return is;
+				this->clear();
+        return;
       }
-      D->addVertex(nullptr, x, y);
+      this->addVertex(nullptr, x, y);
     }
   }
 
@@ -75,32 +41,60 @@ std::istream & operator >> (std::istream & is, Diagram *D) {
     is.get(tmp, 32, ' ');
     is >> length;
     if (length < 0 || strcmp(tmp, "\n#CROSSINGS") != 0) {
-      D->clear ();
-      return is;
+      this->clear();
+      return;
     }
 
     int x, y;
     for (int i = 0; i < length; i++) {
       is >> x >> y;
-      if (!is.good() || x < 0 || y < 0 || x >= D->length() || y >= D->length()) {
-				D->clear ();
-        return is;
+      if (!is.good() || x < 0 || y < 0 || x >= this->length() || y >= this->length()) {
+				this->clear();
+        return;
       }
       if (x > y) {
-        if (!D->tryChangeCrossing (D->vByNum (x), D->vByNum (y))) {
-          D->clear ();
-          return is;
+        if (!this->tryChangeCrossing(this->vByNum(x), this->vByNum(y))) {
+          this->clear();
+          return;
         }
       } else {
-        if (!D->isCrossing (D->vByNum (x), D->vByNum (y))) {
-          D->clear ();
-          return is;
+        if (!this->isCrossing(this->vByNum(x), this->vByNum(y))) {
+          this->clear();
+          return;
         }
       }
     }
   }
+}
 
-  return is;
+void Diagram::save(std::ostream &os) {
+  vertex *v = this->base;
+
+  os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->length() << "\n";
+  do {
+    os << v->x() << " " << v->y() << "\n";
+    v = v->next();
+  } while (v != this->base);
+
+  crossing *c;
+
+  {
+    int cnum = 0;
+    do {
+      for (c = v->crs(); c; c = c->next())
+        cnum++;
+      v = v->next();
+    } while (v != this->base);
+
+    os << "#CROSSINGS " << cnum << "\n";
+  }
+
+  do {
+    for (c = v->crs(); c; c = c->next())
+      os << this->numByV(v) << " "
+         << this->numByV(c->up()) << "\n";
+    v = v->next();
+  } while (v != this->base);
 }
 
 }}

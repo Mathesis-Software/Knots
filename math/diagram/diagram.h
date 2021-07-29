@@ -20,10 +20,11 @@ class Diagram {
 
 friend class ThreeD::Knot;
 
-protected:
+public:
 	std::string caption;
 	vertex *base;
 
+public:
 	void addVertex(vertex*, int, int);
 	void removeVertex(vertex*);
 	void moveVertex(vertex*, int, int);
@@ -45,12 +46,12 @@ private:
 
 public:
 	Diagram();
-	virtual ~Diagram();
+	Diagram(std::istream &is);
+	~Diagram();
 
 	bool isEmpty();
 	
-	friend std::istream & operator>>(std::istream &, Diagram *);
-	friend std::ostream & operator<<(std::ostream &, Diagram *);
+	void save(std::ostream &os);
 
 private:
 	Diagram(const Diagram&) = delete;

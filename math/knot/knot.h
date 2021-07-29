@@ -130,7 +130,7 @@ private:
 
 public:
 	Knot(std::istream &is);
-	Knot(TwoD::Diagram*, int, int);
+	Knot(const TwoD::Diagram&, int, int);
 
 	bool isEmpty();
 	void decreaseEnergy();

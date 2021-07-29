@@ -1,17 +1,13 @@
 ROOTDIR = ../..
 
-include $(ROOTDIR)/config.mk
-
-OBJECTS = abstractWindow.o abstractWindow.moc.o
-
-#############################################################################
-
 all: abstractWindow.a
 
+include $(ROOTDIR)/config.mk
+
+OBJECTS += abstractWindow.moc.o
+
 abstractWindow.a: $(OBJECTS)
-	$(RM) $@
-	$(AR) $@ $^
-
-abstractWindow.o: abstractWindow.cpp abstractWindow.h
-
-abstractWindow.moc.o: abstractWindow.moc.cpp
+	@echo -n 'Linking $@ ...'
+	@$(RM) $@
+	@$(AR) $@ $^
+	@echo ' OK'

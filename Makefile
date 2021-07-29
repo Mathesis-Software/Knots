@@ -39,12 +39,12 @@ archive:
 	$(RM) -r KnotEditor-$(VERSION) .ls
 
 clean:
-	make -C math clean
-	make -C gl clean
-	make -C qt clean
-	make -C other clean
-	make .clean
-	$(RM) *.tar.gz
+	@make -C math clean
+	@make -C gl clean
+	@make -C qt clean
+	@make -C other clean
+	@make .clean
+	@$(RM) *.tar.gz
 
 distclean: clean
-	$(RM) knoted
+	@$(RM) knoted

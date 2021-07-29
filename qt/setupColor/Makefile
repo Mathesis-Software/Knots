@@ -1,17 +1,13 @@
 ROOTDIR = ../..
 
-include $(ROOTDIR)/config.mk
-
-OBJECTS = setupColor.o setupColor.moc.o
-
-#############################################################################
-
 all: setupColor.a
 
+include $(ROOTDIR)/config.mk
+
+OBJECTS += setupColor.moc.o
+
 setupColor.a: $(OBJECTS)
-	$(RM) $@
-	$(AR) $@ $^
-
-setupColor.o: setupColor.cpp setupColor.h
-
-setupColor.moc.o: setupColor.moc.cpp
+	@echo -n 'Linking $@ ...'
+	@$(RM) $@
+	@$(AR) $@ $^
+	@echo ' OK'

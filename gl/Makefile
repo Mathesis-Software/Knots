@@ -1,5 +1,5 @@
 all:
-	make -C surface all
+	@make -C surface all
 
 clean:
-	make -C surface .clean
+	@make -C surface .clean

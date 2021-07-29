@@ -49,11 +49,7 @@ double Knot::AverageCrossingNumber::compute() {
 	// tangent vectors
 	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		tangents.push_back(Vector(
-			points[next(i)].x - points[i].x,
-			points[next(i)].y - points[i].y,
-			points[next(i)].z - points[i].z
-		));
+		tangents.push_back(Vector(points[i], points[next(i)]));
 	}
 
 	for (std::size_t i = 0; i < points.size(); ++i) {
@@ -87,11 +83,7 @@ double Knot::VassilievInvariant::compute() {
 	// tangent vectors
 	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		tangents.push_back(Vector(
-			points[next(i)].x - points[i].x,
-			points[next(i)].y - points[i].y,
-			points[next(i)].z - points[i].z
-		));
+		tangents.push_back(Vector(points[i], points[next(i)]));
 	}
 
 	// Вычисляем ``гауссовы произведения''.

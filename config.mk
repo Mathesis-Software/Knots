@@ -26,9 +26,12 @@ LIBS = -L$(QTLIBDIR) -lstdc++ -lQt5Core -lQt5Gui -lQt5PrintSupport -lQt5Widgets 
 
 #############################################################################
 
-SOURCES = $(wildcard *.cpp)
+MOC_HEADERS = $(shell fgrep -H Q_OBJECT *.h | cut -d : -f 1 | uniq)
+MOC_SOURCES = $(patsubst %.h, %.moc.cpp, $(MOC_HEADERS))
+SOURCES = $(wildcard *.cpp) $(MOC_SOURCES)
 OBJECTS = $(patsubst %.cpp, %.o, $(SOURCES))
 
+.PRECIOUS: $(MOC_SOURCES)
 .SUFFIXES: .cpp .h .moc.cpp
 
 .cpp.o:

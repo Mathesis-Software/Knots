@@ -37,4 +37,8 @@ void Surface::addpoint(float v0, float v1, float v2,
   this->points.push_back(SurfacePoint(v0, v1, v2, n0, n1, n2));
 }
 
+void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) {
+  this->points.push_back(SurfacePoint(vertex.x, vertex.y, vertex.z, normal.x, normal.y, normal.z));
+}
+
 }}

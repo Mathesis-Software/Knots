@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "../../math/knot/primitives.h"
+
 namespace KE { namespace GL {
 
 class Surface {
@@ -35,6 +37,7 @@ protected:
 
   virtual void calculate() = 0;
   void addpoint(float v0, float v1, float v2, float n0, float n1, float n2);
+  void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
   
 public:
   Surface();

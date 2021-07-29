@@ -135,9 +135,8 @@ public:
 	std::size_t numberOfPoints() const { return this->points.size(); }
 	void normalize(std::size_t numberOfPoints);
 
-	void getGradient(const double*, double*) const;
 	Vector seifertGradient(const Point &point) const;
-	double minDist (const double*) const;
+	double minDist(const Point &point) const;
 
 	void save(std::ostream &os, const double matrix[3][3]) const;
 

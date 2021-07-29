@@ -50,15 +50,17 @@ class seifert {
 
 private:
 	const KE::ThreeD::Knot &base;
-	double coord[3], gradient[3];
+	const KE::ThreeD::Point coord;
+	const KE::ThreeD::Vector gradient;
+
 	double localEps;
 	seifert_list *neighborhood;
 	seifert_ord *sord;
 
 	void searchForNeighbor();
 	void checkNeighborhood();
-	void addPoint(double, double, double);
-	void addPoint60(double, double, double);
+	void addPoint(const KE::ThreeD::Vector &direction);
+	void addPoint60(const KE::ThreeD::Vector &direction);
 	seifert_list *hasNeighbor(seifert*);
 	void markUsed(seifert*, seifert*);
 	void correction_local();

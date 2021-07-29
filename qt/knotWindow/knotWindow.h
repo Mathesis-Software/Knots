@@ -9,17 +9,26 @@
 #include "../../math/knot/knot.h"
 #include "../../math/seifert/seifert.h"
 
+namespace KE { namespace GL {
+
+class KnotSurface;
+class SeifertSurface;
+
+}}
+
 class paramWindow;
 
-class knotWindow : public dddWindow, public knot {
+class knotWindow : public dddWindow {
 
   Q_OBJECT
 
 private:
+	std::shared_ptr<KE::ThreeD::Knot> knot;
 
-  surface *kSurf, *sSurf;
+	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
+	KE::ThreeD::Point seifertStartPoint;
+	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
   double thickness;
-  double bp [3];
 
   QMenu *mathMenu;
   QMenu *viewMenu;
@@ -31,8 +40,8 @@ private:
   friend class paramWindow;
   paramWindow *mth;
 
-  void init (void);
-  void initMenu (void);
+  void init();
+  void initMenu();
 
   bool smoothing;
   bool continuousSmoothing;
@@ -41,41 +50,36 @@ private:
   void startSmooth (int, int, bool = true);
 
   int timerId_smooth;
-  void doSmooth (void);
+  void doSmooth();
   void timerEvent (QTimerEvent*);
 
-  bool isEmpty (void)
-    {return knot::isEmpty ();};
+  bool isEmpty() {return this->knot->isEmpty();};
 
-  void readIt (std::istream&);
-  void saveIt (std::ostream&);
+  void saveIt(std::ostream&);
 
 private slots:
-
-  void stop ();
-  void math ();
-  void smooth ();
-  void setLength ();
-  void setNum ();
-  void decreaseEnergy ();
-  void switchShowKnot ();
-  void switchShowSeifert ();
-  void setThickness ();
-  void setBgColor ();
-  void setKnotColor ();
-  void setSeifertFrontColor ();
-  void setSeifertBackColor ();
-  void bp_plus ();
-  void bp_minus ();
+  void stop();
+  void math();
+  void smooth();
+  void setLength();
+  void setNumberOfPoints();
+  void decreaseEnergy();
+  void switchShowKnot();
+  void switchShowSeifert();
+  void setThickness();
+  void setBgColor();
+  void setKnotColor();
+  void setSeifertFrontColor();
+  void setSeifertBackColor();
+  void bp_plus();
+  void bp_minus();
 
 public:
-  
   knotWindow (std::istream&);
   knotWindow (diagramWindow*);
-  ~knotWindow (void);
+  ~knotWindow();
 
-  const char *mask (void)
-    {return "*.knt";};
+  const char *mask() {return "*.knt";};
 };
 
 #endif /* __KNOTWINDOW_H__ */

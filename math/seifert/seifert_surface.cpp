@@ -1,29 +1,27 @@
 #include "seifert.h"
 
-static double det (const double *v0,
-                   const double *v1,
-		   const double *v2,
-		   const double *orth)
-{
+namespace KE { namespace GL {
+
+namespace {
+
+double det(const ThreeD::Point &pt0, const ThreeD::Point &pt1, const ThreeD::Point &pt2, const ThreeD::Vector &orth) {
   return
-      (v1 [0] - v0 [0]) * (v2 [1] - v0 [1]) * orth [2]
-    - (v1 [0] - v0 [0]) * (v2 [2] - v0 [2]) * orth [1]
-    - (v1 [1] - v0 [1]) * (v2 [0] - v0 [0]) * orth [2]
-    + (v1 [1] - v0 [1]) * (v2 [2] - v0 [2]) * orth [0]
-    + (v1 [2] - v0 [2]) * (v2 [0] - v0 [0]) * orth [1]
-    - (v1 [2] - v0 [2]) * (v2 [1] - v0 [1]) * orth [0];
+      (pt1.x - pt0.x) * (pt2.y - pt0.y) * orth.z
+    - (pt1.x - pt0.x) * (pt2.z - pt0.z) * orth.y
+    - (pt1.y - pt0.y) * (pt2.x - pt0.x) * orth.z
+    + (pt1.y - pt0.y) * (pt2.z - pt0.z) * orth.x
+    + (pt1.z - pt0.z) * (pt2.x - pt0.x) * orth.y
+    - (pt1.z - pt0.z) * (pt2.y - pt0.y) * orth.x;
 }
 
-seifert_surface::seifert_surface (seifert_base *bs, double *sp)
-{
-  base = bs;
-  start_point = sp;
+}
+
+SeifertSurface::SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint) : base(base), startPoint(startPoint) {
   stripped = 0;
-  sides = surface::Both;
+  sides = Both;
 }
 
-void seifert_surface::addTriangles (seifert *s)
-{
+void SeifertSurface::addTriangles(seifert *s) {
   // Это оч. убогая версия создания поверхности из графа.
   // Просто в каждой вершине для любых двух ``соседних соседей''
   // создается новый треугольник, треугольники НИКАК не связаны.
@@ -32,99 +30,64 @@ void seifert_surface::addTriangles (seifert *s)
   // ?? -- !!
 
   // И если это единственная вершина -- ничего не делаем.
-  if (!s -> neighborhood -> value)
+  if (!s->neighborhood->value)
     return;
 
-  seifert_list *sl = s -> neighborhood;
+  seifert_list *sl = s->neighborhood;
   for (;;)
   {
     // Не нужно добавлять треугольник, если в этом месте уже есть поверхность.
-    if (sl -> label)
+    if (sl->label)
     {
-      sl = sl -> next;
-      if (sl == s -> neighborhood)
+      sl = sl->next;
+      if (sl == s->neighborhood)
         break;
       continue;
     }
 
     // Помечаем в соседних вершинах, какие треугольники не потребуются.
-    sl -> value -> markUsed (sl -> next -> value, s);
-    sl -> next -> value -> markUsed (s, sl -> value);
+    sl->value->markUsed (sl->next->value, s);
+    sl->next->value->markUsed (s, sl->value);
 
     // Добавляем треугольник.
-    addpoint (s -> coord [0],
-              s -> coord [1],
-	      s -> coord [2],
-	      s -> gradient [0],
-	      s -> gradient [1],
-	      s -> gradient [2]);
+    addpoint(s->point, s->gradient);
     // Правильно ориентируем треугольник.
-    if (det (s -> coord,
-             sl -> value -> coord,
-             sl -> next -> value -> coord,
-	     s -> gradient) < 0)
-    {
-      addpoint (sl -> next -> value -> coord [0],
-                sl -> next -> value -> coord [1],
-                sl -> next -> value -> coord [2],
-	        sl -> next -> value -> gradient [0],
-	        sl -> next -> value -> gradient [1],
-	        sl -> next -> value -> gradient [2]);
-      addpoint (sl -> value -> coord [0],
-                sl -> value -> coord [1],
-	        sl -> value -> coord [2],
-	        sl -> value -> gradient [0],
-	        sl -> value -> gradient [1],
-	        sl -> value -> gradient [2]);
-    }
-    else
-    {
-      addpoint (sl -> value -> coord [0],
-                sl -> value -> coord [1],
-	        sl -> value -> coord [2],
-	        sl -> value -> gradient [0],
-	        sl -> value -> gradient [1],
-	        sl -> value -> gradient [2]);
-      addpoint (sl -> next -> value -> coord [0],
-                sl -> next -> value -> coord [1],
-                sl -> next -> value -> coord [2],
-	        sl -> next -> value -> gradient [0],
-	        sl -> next -> value -> gradient [1],
-	        sl -> next -> value -> gradient [2]);
+    if (det(s->point, sl->value->point, sl->next->value->point, s->gradient) < 0) {
+      addpoint(sl->next->value->point, sl->next->value->gradient);
+      addpoint(sl->value->point, sl->value->gradient);
+    } else {
+      addpoint(sl->value->point, sl->value->gradient);
+      addpoint(sl->next->value->point, sl->next->value->gradient);
     }
 
     // Следующий сосед.
-    sl = sl -> next;
-    if (sl == s -> neighborhood)
+    sl = sl->next;
+    if (sl == s->neighborhood)
       break;
   }
 }
 
-void seifert_surface::calculate (void)
-{
+void SeifertSurface::calculate() {
   // Создаем граф поверхности.
-  seifert *s = new seifert (start_point [0],
-                            start_point [1],
-			    start_point [2],
-			    base);
-  s -> correction ();
+  seifert *s = new seifert(base, this->startPoint);
+  s->correction();
 
   // Создаем поверхность.
 
   addTriangles (s);
-  seifert_ord *so = s -> sord;
-  while (so -> prev)
-  {
-    so = so -> prev;
-    addTriangles (so -> value);
+  seifert_ord *so = s->sord;
+  while (so->prev) {
+    so = so->prev;
+    addTriangles (so->value);
   }
-  so = s -> sord;
-  while (so -> next)
-  {
-    so = so -> next;
-    addTriangles (so -> value);
+  so = s->sord;
+  while (so->next) {
+    so = so->next;
+    addTriangles (so->value);
   }
 
   // Удаляем граф.
   delete s;
 }
+
+}}

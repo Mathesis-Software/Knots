@@ -1,91 +1,77 @@
 #ifndef __SEIFERT_H__
 #define __SEIFERT_H__
 
-#include <stdlib.h>
-
 #include "seifert_surface.h"
 
 class seifert;
 class seifert_list;
 class seifert_ord;
-class seifert_base;
 
-class seifert_base {
+namespace KE { namespace ThreeD {
 
-protected:
+class Knot;
 
-  seifert_base (void) {};
-  virtual ~seifert_base (void) {};
-  virtual void getGradient (const double*, double*) = 0;
-  virtual bool noMorePoints (const double*) = 0;
-  virtual double minDist (const double*) = 0;
-
-  friend class seifert;
-  friend class seifert_list;
-};
+}}
 
 class seifert_list {
 
 private:
+	seifert *basepoint, *value;
+	seifert_list *prev, *next;
+	bool label;
 
-  seifert *basepoint, *value;
-  seifert_list *prev, *next;
-  bool label;
+	void insert(seifert*);
+	void insert_after(seifert*);
 
-  void insert (seifert*);
-  void insert_after (seifert*);
+	seifert_list(seifert*, seifert*);
+	~seifert_list();
 
-  seifert_list (seifert*, seifert*);
-  ~seifert_list (void);
-
-  friend class seifert;
-  friend class seifert_surface;
+	friend class seifert;
+	friend class KE::GL::SeifertSurface;
 };
 
 class seifert_ord {
 
 private:
+	seifert *value;
+	seifert_ord *prev, *next;
 
-  seifert *value;
-  seifert_ord *prev, *next;
+	seifert_ord *insert(seifert*);
 
-  seifert_ord *insert (seifert*);
+	seifert_ord(seifert*);
+	~seifert_ord();
 
-  seifert_ord (seifert*);
-  ~seifert_ord (void);
-
-  friend class seifert;
-  friend class seifert_surface;
+	friend class seifert;
+	friend class KE::GL::SeifertSurface;
 };
 
 class seifert {
 
 private:
+	const KE::ThreeD::Knot &base;
+	const KE::ThreeD::Point point;
+	const KE::ThreeD::Vector gradient;
 
-  double coord [3], gradient [3];
-  double localEps;
-  seifert_list *neighborhood;
-  seifert_ord *sord;
-  seifert_base *base;
+	double localEps;
+	seifert_list *neighborhood;
+	seifert_ord *sord;
 
-  void searchForNeighbor (void);
-  void checkNeighborhood (void);
-  void addPoint (double, double, double);
-  void addPoint60 (double, double, double);
-  seifert_list *hasNeighbor (seifert*);
-  void markUsed (seifert*, seifert*);
-  void correction_local (void);
-  void correction (void);
+	void searchForNeighbor();
+	void checkNeighborhood();
+	void addPoint(const KE::ThreeD::Vector &direction);
+	void addPoint60(const KE::ThreeD::Vector &direction);
+	seifert_list *hasNeighbor(seifert*);
+	void markUsed(seifert*, seifert*);
+	void correction_local();
+	void correction();
 
 public:
+	seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert* = nullptr);
+	~seifert();
 
-  seifert (const double, const double, const double,
-           seifert_base* = NULL, seifert* = NULL);
-  ~seifert (void);
-
-  friend class seifert_ord;
-  friend class seifert_list;
-  friend class seifert_surface;
+	friend class seifert_ord;
+	friend class seifert_list;
+	friend class KE::GL::SeifertSurface;
 };
 
 #endif /* __SEIFERT_H__ */

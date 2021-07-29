@@ -12,10 +12,9 @@ diagramWindow::diagramWindow (std::istream &is)
   readIt (is);
 }
 
-diagramWindow::diagramWindow (void)
-{
-  init ();
-  setWindowTitle (Caption);
+diagramWindow::diagramWindow() {
+  init();
+  setWindowTitle(this->caption.c_str());
 }
 
 void diagramWindow::init (void)

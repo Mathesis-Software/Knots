@@ -26,15 +26,25 @@ LIBS = -L$(QTLIBDIR) -lstdc++ -lQt5Core -lQt5Gui -lQt5PrintSupport -lQt5Widgets 
 
 #############################################################################
 
+SOURCES = $(wildcard *.cpp)
+OBJECTS = $(patsubst %.cpp, %.o, $(SOURCES))
+
 .SUFFIXES: .cpp .h .moc.cpp
 
 .cpp.o:
-	$(CC) -c $(CFLAGS) -DVERSION="\"$(VERSION)\"" -I$(QTINCDIR) $<
+	@echo -n 'Compiling $@ ...'
+	@$(CC) -MM $(CFLAGS) -DVERSION="\"$(VERSION)\"" -I$(QTINCDIR) $< -o `basename $< .cpp`.d
+	@$(CC) -c $(CFLAGS) -DVERSION="\"$(VERSION)\"" -I$(QTINCDIR) $<
+	@echo ' OK'
 
 .h.moc.cpp:
-	$(MOC) $< -o $@
+	@echo -n 'Mocifiing $@ ...'
+	@$(MOC) $< -o $@
+	@echo ' OK'
 
 #############################################################################
 
 .clean:
-	$(RM) *.a *.o *.moc.cpp gmon.out err* tmp* *.sw? .*.sw?
+	@$(RM) *.a *.o *.d *.moc.cpp gmon.out err* tmp* *.sw? .*.sw?
+
+-include *.d

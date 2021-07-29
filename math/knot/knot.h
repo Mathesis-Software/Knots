@@ -2,117 +2,169 @@
 #define __KNOT_H__
 
 #include <iostream>
-#include <list>
-#include "../headers/parameter.h"
+#include <memory>
+#include <string>
+#include <vector>
+
+#include "primitives.h"
 #include "../seifert/seifert.h"
 
 class diagram;
-class knot;
-class knot_surface;
 
 /***********************************************************************/
 
 #define	addParameterClass(PARAM)	\
-class PARAM : public parameter {	\
+class PARAM : public Computable {	\
 private:				\
-  knot *Parent;				\
-  void compute (void);			\
+	double compute() override;			\
 public:					\
-  PARAM (knot *p, const char *n)	\
-    : parameter (n)			\
-  {Parent = p;};			\
+	PARAM (const Knot &knot, const std::string &name) : Computable(knot, name) {} \
 }
 
 #define	addParameterClassWithOrder(PARAM)	\
-class PARAM : public parameter {	\
+class PARAM : public Computable {	\
 private:				\
-  knot *Parent;				\
-  int order;				\
-  void compute (void);			\
+	double compute() override;			\
 public:					\
-  PARAM (knot *p, int o, const char *n)	\
-    : parameter (n)			\
-  {Parent = p; order = o;};		\
+	const int order;				\
+	PARAM (const Knot &knot, int order, const std::string &name) : Computable(knot, name), order(order) {} \
 }
 
 /***********************************************************************/
 
-class knot : public seifert_base {
+namespace KE {
+ 
+namespace GL {
+
+class KnotSurface;
+
+}
+
+namespace ThreeD {
+
+class Knot {
+
+public:
+	class Computable {
+
+	public:
+		const Knot &knot;
+		const std::string name;
+
+	private:
+		bool ready;
+		double internalValue;
+
+	protected:
+		virtual double compute() = 0;
+
+	public:
+		Computable(const Knot &knot, const std::string &name) : knot(knot), name(name), ready(false) {}
+		virtual ~Computable() {}
+
+		double value() {
+			if (!this->ready) {
+				this->internalValue = this->compute();
+				this->ready = true;
+			}
+
+			return this->internalValue;
+		}
+
+		bool isReady() {return this->ready;}
+		void invalidate() {this->ready = 0;}
+	};
 
 protected:
+	addParameterClass(prmLength);
+	addParameterClass(prmEnergy);
 
-  char *Caption;
-  int length;
-  double **points;
+	class AverageCrossingNumber : public Computable {
 
-	std::list<parameter*> *parameterList;
-  parameter *Length;
+	public:
+		const bool withSign;
 
-private:
+	private:
+		double compute() override;
 
-  double *len_table;
+	public:
+		AverageCrossingNumber(const Knot &knot, bool withSign);
+	};
 
-  void create_depend (void);
-  void clear_depend (void);
+	class VassilievInvariant : public Computable {
 
-  void create_len_table (void);
-  void delete_len_table (void);
+	public:
+		const int order;
 
-  bool noMorePoints (const double*);
-  double minDist (const double*);
+	private:
+		double compute() override;
 
-protected:
+	public:
+		VassilievInvariant(const Knot &knot, int order);
+	};
 
-  knot (void);
-  knot (diagram*, int, int);
-  ~knot (void);
+	addParameterClass(prmAen);
+	addParameterClass(prmExperimental);
+	addParameterClass(prmSingular);
+	addParameterClassWithOrder(prmExperimental2);
 
-  int next (int);
-  int prev (int);
-
-  bool isEmpty (void);
-  void decreaseEnergy (void);
-  void setLength (double);
-  void center (void);
-  void normalize (int);
-  void getGradient (const double*, double*);
-
-  friend std::istream & operator >> (std::istream &, knot *);
-  friend std::ostream & operator << (std::ostream &, knot *);
-
-  addParameterClass(prmLength);
-  addParameterClass(prmEnergy);
-  addParameterClass(prmAcn);
-  addParameterClass(prmSAcn);
-  addParameterClass(prmAen);
-  addParameterClassWithOrder(prmKI);
-  addParameterClass(prmExperimental);
-  addParameterClass(prmSingular);
-  addParameterClassWithOrder(prmExperimental2);
-
-  friend class knot_surface;
+public:
+	std::string caption;
+	std::shared_ptr<Computable> length;
+	std::vector<std::shared_ptr<Computable>> computables;
 
 private:
+	std::vector<Point> points;
 
-  knot (const knot&);
-  knot& operator = (const knot&);
+private:
+	mutable std::vector<double> _len_table;
+
+	void create_depend();
+	void clear_depend();
+
+	const std::vector<double> &len_table() const;
+
+public:
+	Knot(std::istream &is);
+	Knot(diagram*, int, int);
+
+	bool isEmpty();
+	void decreaseEnergy();
+	void setLength(double);
+	void center();
+	std::size_t numberOfPoints() const { return this->points.size(); }
+	void normalize(std::size_t numberOfPoints);
+
+	Vector seifertGradient(const Point &point) const;
+	double minDist(const Point &point) const;
+
+	void save(std::ostream &os, const double matrix[3][3]) const;
+
+	friend class GL::KnotSurface;
+
+private:
+	std::size_t next(std::size_t) const;
+	std::size_t prev(std::size_t) const;
+
+private:
+	Knot(const Knot&) = delete;
+	Knot& operator = (const Knot&) = delete;
 };
 
 /***********************************************************************/
 
-inline int knot::next (int i)
-{
-  return (i == length - 1) ? 0 : i + 1;
+inline std::size_t Knot::next(std::size_t index) const {
+	return index == this->points.size() - 1 ? 0 : index + 1;
 }
 
-inline int knot::prev (int i)
-{
-  return i ? i - 1 : length - 1;
+inline std::size_t Knot::prev(std::size_t index) const {
+	return index ? index - 1 : this->points.size() - 1;
 }
 
-inline bool knot::isEmpty (void)
-{
-  return (length == 0);
+inline bool Knot::isEmpty() {
+	return this->points.empty();
 }
+
+}}
 
 #endif /* __KNOT_H__ */

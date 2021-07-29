@@ -37,15 +37,13 @@ aboutWindow::~aboutWindow (void)
   delete text;
 }
 
-void aboutWindow::timerEvent (QTimerEvent*)
-{
+void aboutWindow::timerEvent(QTimerEvent*) {
   picture -> update ();
 }
 
-aboutSurface::aboutSurface (const char *filename)
-{
+aboutSurface::aboutSurface(const char *filename) {
   stripped = 1;
-  sides = surface::Front;
+  sides = Front;
   show ();
 
 	std::ifstream is (filename);

@@ -1,17 +1,11 @@
 ROOTDIR = ../..
 
-include $(ROOTDIR)/config.mk
-
-OBJECTS = surface_base.o surface_gl.o
-
-#############################################################################
-
 all: surface.a
 
+include $(ROOTDIR)/config.mk
+
 surface.a: $(OBJECTS)
-	$(RM) $@
-	$(AR) $@ $^
-
-surface_base.o: surface_base.cpp surface.h
-
-surface_gl.o: surface_gl.cpp surface.h
+	@echo -n 'Linking $@ ...'
+	@$(RM) $@
+	@$(AR) $@ $^
+	@echo ' OK'

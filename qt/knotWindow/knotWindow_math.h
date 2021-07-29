@@ -9,21 +9,21 @@
 #include "knotWindow.h"
 
 class paramWindow : public QDialog {
-  
-  Q_OBJECT
+
+	Q_OBJECT
 
 private:
-  
-  knotWindow *Parent;
-  int nLabels;
-  class parameterLabel **pLabels;
-  void closeEvent (QCloseEvent*);
+ 
+	knotWindow *Parent;
+	int nLabels;
+	class parameterLabel **pLabels;
+	void closeEvent(QCloseEvent*);
 
 public:
 
-  paramWindow (knotWindow*);
-  ~paramWindow (void);
-  void recompute (void);
+	paramWindow(knotWindow*);
+	~paramWindow();
+	void recompute();
 };
 
 class parameterLabel : public QWidget {
@@ -32,20 +32,20 @@ Q_OBJECT
 
 private:
 
-  QLabel *lbl;
-  QCheckBox *chkbox;
-  parameter *prm;
+	QLabel *lbl;
+	QCheckBox *chkbox;
+	std::shared_ptr<KE::ThreeD::Knot::Computable> computable;
 
 private slots:
 
-  void doit ();
+	void doit();
 
 public:
 
-  parameterLabel (QDialog*, parameter*, int, int);
-  ~parameterLabel (void);
+	parameterLabel(QDialog*, std::shared_ptr<KE::ThreeD::Knot::Computable>, int, int);
+	~parameterLabel();
 
-  void renew (void);
+	void renew();
 };
 
 #endif /* __KNOTWINDOW_MATH_H__ */

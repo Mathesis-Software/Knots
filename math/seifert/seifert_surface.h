@@ -1,24 +1,33 @@
 #ifndef __SEIFERT_SURFACE_H__
 #define __SEIFERT_SURFACE_H__
 
+#include "../knot/primitives.h"
 #include "../../gl/surface/surface.h"
 
 class seifert;
-class seifert_base;
 
-class seifert_surface : public surface {
+namespace KE {
 
+namespace ThreeD {
+
+class Knot;
+
+}
+
+namespace GL {
+
+class SeifertSurface : public Surface {
   private:
+    const ThreeD::Knot &base;
+    const ThreeD::Point &startPoint;
 
-    seifert_base *base;
-    double *start_point;
-
-    void addTriangles (seifert *s);
-    void calculate (void);
+    void addTriangles(seifert *s);
+    void calculate();
 
   public:
-
-    seifert_surface (seifert_base*, double*);
+    SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint);
 };
+
+}}
 
 #endif /* __SEIFERT_SURFACE_H__ */

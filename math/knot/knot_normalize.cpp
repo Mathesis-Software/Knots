@@ -2,55 +2,44 @@
 
 #include "knot.h"
 
-#define		NEXT(num)		(num == old_length - 1) ? 0 : num + 1
+namespace KE { namespace ThreeD {
 
-void knot::normalize (int num)
-{
-  create_len_table ();
+void Knot::normalize(std::size_t num) {
+	const auto &len_table = this->len_table();
 
-  double len = Length -> value ();
+	double len = this->length->value();
 
-  int old_length = length;
-  length = num;
+	const auto old_points = points;
+	points.clear();
 
-  double **old_points = points;
-  points = new double* [length];
-  
-  len /= length;
+	len /= num;
 
-  {
-    int v = 0;
-    double part;
-    double llen = len_table [0];
-    double rest = llen;
+	{
+		std::size_t v = 0;
+		double part;
+		double llen = len_table[0];
+		double rest = llen;
 
-    for (int i = 0; i < length; i++)
-    {
-      points [i] = new double [3];
+		for (std::size_t i = 0; i < num; i++) {
+			const auto next_v = v == old_points.size() - 1 ? 0 : v + 1;
 
-      part = (1 - rest / llen); 
-      points [i] [0] = old_points [v] [0]
-            + part * ( old_points [NEXT (v)] [0] - old_points [v] [0] );
-      points [i] [1] = old_points [v] [1]
-            + part * ( old_points [NEXT (v)] [1] - old_points [v] [1] );
-      points [i] [2] = old_points [v] [2]
-            + part * ( old_points [NEXT (v)] [2] - old_points [v] [2] );
+			part = (1 - rest / llen);
+			points.push_back(Point(
+				old_points[v].x + part * (old_points[next_v].x - old_points[v].x),
+				old_points[v].y + part * (old_points[next_v].y - old_points[v].y),
+				old_points[v].z + part * (old_points[next_v].z - old_points[v].z)
+			));
 
-      rest -= len;
-      while (rest < 0)
-      {
-        v = NEXT (v);
-        llen = len_table [v];
-        rest += llen;
-      }
-    }
-  }
+			rest -= len;
+			while (rest < 0) {
+				v = v == old_points.size() - 1 ? 0 : v + 1;
+				llen = len_table[v];
+				rest += llen;
+			}
+		}
+	}
 
-  {
-    for (int i = 0; i < old_length; i++)
-      delete[] old_points [i];
-    delete[] old_points;
-  }
-
-  clear_depend ();
+	clear_depend();
 }
+
+}}

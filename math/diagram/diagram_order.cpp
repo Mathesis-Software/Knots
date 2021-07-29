@@ -1,12 +1,9 @@
 #include "diagram.h"
 
-void diagram::order (void)
-{
+void diagram::order() {
   vertex *v = base;
-  do
-  {
-    v -> order ();
-    v = v -> next ();
-  }
-  while (v != base);
+  do {
+    v->order();
+    v = v->next();
+  } while (v != base);
 }

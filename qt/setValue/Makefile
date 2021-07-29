@@ -1,15 +1,13 @@
 ROOTDIR = ../..
 
-include $(ROOTDIR)/config.mk
-
-OBJECTS =	\
-	setValue_Int.o		\
-	setValue_Float.o	\
-	setValue_String.o	\
-	setValue.moc.o
-
 all: setValue.a
 
+include $(ROOTDIR)/config.mk
+
+OBJECTS += setValue.moc.o
+
 setValue.a: $(OBJECTS)
-	$(RM) $@
-	$(AR) $@ $^
+	@echo -n 'Linking $@ ...'
+	@$(RM) $@
+	@$(AR) $@ $^
+	@echo ' OK'

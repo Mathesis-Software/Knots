@@ -41,7 +41,7 @@ private:
 
 public:
 	diagram();
-	~diagram();
+	virtual ~diagram();
 
 	bool isEmpty();
 	

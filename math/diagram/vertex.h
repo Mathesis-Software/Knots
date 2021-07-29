@@ -5,87 +5,78 @@ class crossing;
 
 class vertex {
 
-  friend class crossing;
+friend class crossing;
 
 private:
-
   vertex *vertex_prev, *vertex_next;
   crossing *vertex_crs;
   int coord_x, coord_y;
 
 public:
+  vertex(int, int);
+  vertex(vertex*, int, int);
+  ~vertex();
+  void exclude();
 
-  vertex (int, int);
-  vertex (vertex*, int, int);
-  ~vertex (void);
-  void exclude (void);
+  void move(int, int);
+  void moveTo(int, int);
 
-  void move (int, int);
-  void moveTo (int, int);
+  vertex *next();
+  vertex *prev();
+  crossing *crs();
+  int x() { return this->coord_x; }
+  int y() { return this->coord_y; }
 
-  vertex *next (void);
-  vertex *prev (void);
-  crossing *crs (void);
-  int x (void);
-  int y (void);
-
-  void order (void);
+  void order();
 };
 
 class crossing {
 
-  friend class vertex;
+friend class vertex;
 
 private:
 
   vertex *arc_up, *arc_down;
   crossing *next_crossing;
   crossing *prev_crossing;
-  void plus (void);
+  void plus();
 
 public:
 
-  crossing (vertex*, vertex*);
-  ~crossing (void);
+  crossing(vertex*, vertex*);
+  ~crossing();
 
-  crossing *next (void);
-  crossing *prev (void);
-  vertex *up (void);
-  vertex *down (void);
-  float x (void);
-  float y (void);
+  crossing *next();
+  crossing *prev();
+  vertex *up();
+  vertex *down();
+  float x();
+  float y();
 };
 
-bool crossed (vertex*, vertex*);
+bool crossed(vertex*, vertex*);
 
-inline vertex *vertex::next (void) {
+inline vertex *vertex::next() {
   return vertex_next;
 }
-inline vertex *vertex::prev (void) {
+inline vertex *vertex::prev() {
   return vertex_prev;
 }
-inline crossing *vertex::crs (void) {
+inline crossing *vertex::crs() {
   return vertex_crs;
 }
 
-inline int vertex::x (void) {
-  return coord_x;
-}
-inline int vertex::y (void) {
-  return coord_y;
-}
-
-inline crossing *crossing::next (void) {
+inline crossing *crossing::next() {
   return next_crossing;
 }
-inline crossing *crossing::prev (void) {
+inline crossing *crossing::prev() {
   return prev_crossing;
 }
 
-inline vertex *crossing::up (void) {
+inline vertex *crossing::up() {
   return arc_up;
 }
-inline vertex *crossing::down (void) {
+inline vertex *crossing::down() {
   return arc_down;
 }
 

@@ -1,169 +1,137 @@
 #include "diagram.h"
 
-void diagram::addVertex (vertex* v, int x, int y)
-{
-  if (!base)
-  {
-    base = new vertex (x, y);
+void diagram::addVertex(vertex* v, int x, int y) {
+  if (!base) {
+    base = new vertex(x, y);
     return;
   }
 
-  vertex *new_vertex = new vertex (v ? v : base -> prev (), x, y);
+  vertex *new_vertex = new vertex(v ? v : base->prev(), x, y);
 
   vertex *current = base;
   
-  do
-  {
-    if (crossed (current, new_vertex))
-    {
-      if (isCrossing (new_vertex -> prev (), current))
-        tryAddCrossing (new_vertex, current);
+  do {
+    if (crossed(current, new_vertex)) {
+      if (isCrossing(new_vertex->prev(), current))
+        tryAddCrossing(new_vertex, current);
       else
-        tryAddCrossing (current, new_vertex);
+        tryAddCrossing(current, new_vertex);
     }
 
-    if (crossed (current, new_vertex -> prev ()))
-    {
-      if ( (!isCrossing (current, new_vertex -> prev ())) &&
-           (!isCrossing (new_vertex -> prev (), current)) )
-        tryAddCrossing (current, new_vertex -> prev ());
-    }
-    else
-    {
-      if (isCrossing (current, new_vertex -> prev ()))
-        tryRemoveCrossing (current, new_vertex -> prev ());
-      else
-        if (isCrossing (new_vertex -> prev (), current))
-          tryRemoveCrossing (new_vertex -> prev (), current);
+    if (crossed(current, new_vertex->prev())) {
+      if (!isCrossing(current, new_vertex->prev()) &&
+          !isCrossing(new_vertex->prev(), current)) {
+        tryAddCrossing(current, new_vertex->prev());
+			}
+    } else {
+      if (isCrossing(current, new_vertex->prev()))
+        tryRemoveCrossing(current, new_vertex->prev());
+      else if (isCrossing(new_vertex->prev(), current))
+        tryRemoveCrossing(new_vertex->prev(), current);
     }
 
-    current = current -> next ();
-  }
-  while (current != base);
+    current = current->next();
+  } while (current != base);
 
-  order ();
+  order();
 }
 
-void diagram::removeVertex (vertex* v)
-{
-  if (v == NULL)
+void diagram::removeVertex(vertex* v) {
+  if (v == nullptr)
     return;
 
-  if (base == base -> next ())
-  {
+  if (base == base->next()) {
     delete base;
-    base = NULL;
+    base = nullptr;
     return;
   }
 
   if (v == base)
-    base = base -> next ();
+    base = base->next();
 
-  v -> exclude ();
+  v->exclude();
 
   vertex *current = base;
   
-  do
-  {
-    if (crossed (current, v -> prev ()))
-    {
-      if ( !isCrossing (v -> prev (), current) &&
-           !isCrossing (current, v -> prev ()) )
-      {
-        if (isCrossing (v, current))
-          tryAddCrossing (v -> prev (), current);
+  do {
+    if (crossed(current, v->prev())) {
+      if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
+        if (isCrossing(v, current))
+          tryAddCrossing(v->prev(), current);
         else
-          tryAddCrossing (current, v -> prev ());
+          tryAddCrossing(current, v->prev());
       }
-    }
-    else
-    {
-      tryRemoveCrossing (current, v -> prev ());
-      tryRemoveCrossing (v -> prev (), current);
+    } else {
+      tryRemoveCrossing(current, v->prev());
+      tryRemoveCrossing(v->prev(), current);
     }
 
-    tryRemoveCrossing (current, v);
-    current = current -> next ();
-  }
-  while (current != base);
+    tryRemoveCrossing(current, v);
+    current = current->next();
+  } while (current != base);
 
-  order ();
+  order();
 
   delete v;
 }
 
-void diagram::moveVertex (vertex *v, int x, int y)
-{
-  if (v == NULL)
+void diagram::moveVertex(vertex *v, int x, int y) {
+  if (v == nullptr)
     return;
 
-  v -> moveTo (x, y);
+  v->moveTo(x, y);
 
   vertex *current = base;
   
-  do
-  {
-    switch ( ( crossed (current, v) ? 1 : 0 ) +
-             ( crossed (current, v -> prev () ) ? 2 : 0 ) )
-    {
+  do {
+    switch ((crossed(current, v) ? 1 : 0) + (crossed(current, v->prev()) ? 2 : 0)) {
       case 0:
-        tryRemoveCrossing (current, v);
-        tryRemoveCrossing (v, current);
-        tryRemoveCrossing (current, v -> prev ());
-        tryRemoveCrossing (v -> prev (), current);
+        tryRemoveCrossing(current, v);
+        tryRemoveCrossing(v, current);
+        tryRemoveCrossing(current, v->prev());
+        tryRemoveCrossing(v->prev(), current);
         break;
-
       case 1:
-        if ( (!isCrossing (current, v)) &&
-             (!isCrossing (v, current)) )
-        {
-	  if (isCrossing (v -> prev (), current))
-            tryAddCrossing (v, current);
-	  else
-            tryAddCrossing (current, v);
-            
-	}
-        tryRemoveCrossing (current, v -> prev ());
-        tryRemoveCrossing (v -> prev (), current);
+        if (!isCrossing(current, v) && !isCrossing(v, current)) {
+					if (isCrossing(v->prev(), current))
+						tryAddCrossing(v, current);
+					else
+						tryAddCrossing(current, v);
+				}
+        tryRemoveCrossing(current, v->prev());
+        tryRemoveCrossing(v->prev(), current);
         break;
-
       case 2:
-        if ( (!isCrossing (current, v -> prev ())) &&
-             (!isCrossing (v -> prev (), current)) )
-        {
-	  if (isCrossing (v, current))
-            tryAddCrossing (v -> prev (), current);
-	  else
-            tryAddCrossing (current, v -> prev ());
-	}
-        tryRemoveCrossing (current, v);
-        tryRemoveCrossing (v, current);
+        if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
+					if (isCrossing(v, current))
+            tryAddCrossing(v->prev(), current);
+					else
+            tryAddCrossing(current, v->prev());
+				}
+        tryRemoveCrossing(current, v);
+        tryRemoveCrossing(v, current);
         break;
-
       case 3:
-        if ( (!isCrossing (current, v)) &&
-	     (!isCrossing (v, current)) )
-          tryAddCrossing (current, v);
-        if ( (!isCrossing (current, v -> prev ())) &&
-	     (!isCrossing (v -> prev (), current)) )
-          tryAddCrossing (current, v -> prev ());
+        if (!isCrossing(current, v) && !isCrossing(v, current)) {
+          tryAddCrossing(current, v);
+				}
+        if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
+          tryAddCrossing(current, v->prev());
+				}
         break;
     }
 
-    current = current -> next ();
-  }
-  while (current != base);
+    current = current->next();
+  } while (current != base);
 
-  order ();
+  order();
 }
 
-int diagram::numByV (vertex *v)
-{
+int diagram::numByV(vertex *v) {
   vertex *curr = base;
   int num;
-  for (num = 0; curr != v; curr = curr -> next ())
-  {
-    if ((curr == base) && (num > 0))
+  for (num = 0; curr != v; curr = curr->next()) {
+    if (curr == base && num > 0)
       return -1;
     num++;
   }
@@ -171,11 +139,10 @@ int diagram::numByV (vertex *v)
   return num;
 }
 
-vertex *diagram::vByNum (int num)
-{
+vertex *diagram::vByNum(int num) {
   vertex *v = base;
   for (; num > 0; num --)
-    v = v -> next ();
+    v = v->next();
 
   return v;
 }

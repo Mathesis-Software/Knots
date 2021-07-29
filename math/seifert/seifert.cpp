@@ -171,7 +171,7 @@ seifert_list *seifert::hasNeighbor(seifert *n) {
 		if (sl->value == n)
 			return sl;
 		if (sl->next == neighborhood)
-			return NULL;
+			return nullptr;
 	}
 }
 
@@ -239,17 +239,15 @@ seifert::seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, s
 }
 
 seifert::~seifert() {
-	if (sord->next)
-	{
-		sord->next->prev = NULL;
+	if (sord->next) {
+		sord->next->prev = nullptr;
 		delete sord->next->value;
-		sord->next = NULL;
+		sord->next = nullptr;
 	}
-	if (sord->prev)
-	{
-		sord->prev->next = NULL;
+	if (sord->prev) {
+		sord->prev->next = nullptr;
 		delete sord->prev->value;
-		sord->prev = NULL;
+		sord->prev = nullptr;
 	}
 	delete sord;
 	delete neighborhood;

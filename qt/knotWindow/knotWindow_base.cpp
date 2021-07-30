@@ -10,9 +10,9 @@
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::init() {
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(*this->knot, 0.05);
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 0.05);
   addSurface(this->knotSurface);
-  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(*this->knot, this->seifertStartPoint);
+  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
   addSurface(this->seifertSurface);
 
   float rgb[3];
@@ -38,15 +38,15 @@ void knotWindow::init() {
   initMenu();
   complete();
 
-  setWindowTitle(this->knot->caption.c_str());
+  setWindowTitle(this->knot.caption.c_str());
   setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
 }
 
-knotWindow::knotWindow(std::istream &is) : knot(std::make_shared<KE::ThreeD::Knot>(is)), seifertStartPoint(0.0, 0.0, 0.4) {
+knotWindow::knotWindow(std::istream &is) : knot(is), seifertStartPoint(0.0, 0.0, 0.4) {
   this->init();
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(std::make_shared<KE::ThreeD::Knot>(*d.diagram, d.width(), d.height())), seifertStartPoint(0.0, 0.0, 0.4) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagram, d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4) {
   this->init();
 	this->isSaved = false;
 }

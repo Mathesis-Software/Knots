@@ -23,7 +23,7 @@ class knotWindow : public dddWindow {
   Q_OBJECT
 
 private:
-	std::shared_ptr<KE::ThreeD::Knot> knot;
+	KE::ThreeD::Knot knot;
 
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
 	KE::ThreeD::Point seifertStartPoint;
@@ -53,7 +53,7 @@ private:
   void doSmooth();
   void timerEvent (QTimerEvent*);
 
-  bool isEmpty() {return this->knot->isEmpty();};
+  bool isEmpty() {return this->knot.isEmpty();};
 
   void saveIt(std::ostream&);
 

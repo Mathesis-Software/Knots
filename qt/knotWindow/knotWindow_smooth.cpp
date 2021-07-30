@@ -31,9 +31,9 @@ void knotWindow::doSmooth() {
 
   isSaved = false;
   for (int i = 0; i < redrawAfter; ++i) {
-    this->knot->decreaseEnergy();
+    this->knot.decreaseEnergy();
 	}
-  this->knot->center();
+  this->knot.center();
   this->knotSurface->destroy ();
   this->seifertSurface->destroy ();
   repaint3d ();

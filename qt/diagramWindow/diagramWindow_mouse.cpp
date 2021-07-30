@@ -15,7 +15,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       if (Parent->isClosed) {
         return;
 			}
-      Parent->diagram->addVertex(NULL, m->x(), m->y());
+      Parent->diagram.addVertex(NULL, m->x(), m->y());
       if (m->button() == 0x02) {
         Parent->isClosed = true;
         Parent->actions_convert->setEnabled(true);
@@ -26,13 +26,13 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       //repaint(false);
       Parent->isSaved = false;
       doSomething = true;
-      localVertex = Parent->diagram->base->prev();
+      localVertex = Parent->diagram.base->prev();
       return;
     case diagramWindow::ADD_POINT:
     {
       vertex *v = Parent->nearToEdge(m->x(), m->y());
       if (v) {
-        Parent->diagram->addVertex(v, m->x(), m->y());
+        Parent->diagram.addVertex(v, m->x(), m->y());
         localVertex = v->next();
         repaint();
         //repaint(false);
@@ -55,7 +55,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     {
       vertex *v = Parent->nearToVertex(m->x(), m->y());
       if (v) {
-        Parent->diagram->removeVertex(v);
+        Parent->diagram.removeVertex(v);
 				if (Parent->isEmpty()) {
 					Parent->clear();
 				} else {
@@ -70,7 +70,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     {
       crossing *c = Parent->nearToCross(m->x(), m->y());
       if (c) {
-        Parent->diagram->tryChangeCrossing(c->up(), c->down());
+        Parent->diagram.tryChangeCrossing(c->up(), c->down());
         repaint();
         //repaint(false);
         Parent->isSaved = false;
@@ -98,12 +98,12 @@ void diagramMainWidget::mouseReleaseEvent(QMouseEvent *m) {
     case diagramWindow::ADD_POINT:
     case diagramWindow::MOVE_POINT:
     case diagramWindow::DRAW_NEW_DIAGRAM:
-      Parent->diagram->moveVertex(localVertex, m->x(), m->y());
+      Parent->diagram.moveVertex(localVertex, m->x(), m->y());
       repaint();
       //repaint(false);
       return;
     case diagramWindow::MOVE_DIAGRAM:
-      Parent->diagram->shift(m->x() - localx, m->y() - localy);
+      Parent->diagram.shift(m->x() - localx, m->y() - localy);
       localx = m->x();
       localy = m->y();
       repaint();
@@ -122,12 +122,12 @@ void diagramMainWidget::mouseMoveEvent(QMouseEvent *m) {
     case diagramWindow::ADD_POINT:
     case diagramWindow::MOVE_POINT:
     case diagramWindow::DRAW_NEW_DIAGRAM:
-      Parent->diagram->moveVertex(localVertex, m->x(), m->y());
+      Parent->diagram.moveVertex(localVertex, m->x(), m->y());
       repaint();
       //repaint(false);
       return;
     case diagramWindow::MOVE_DIAGRAM:
-      Parent->diagram->shift(m->x() - localx, m->y() - localy);
+      Parent->diagram.shift(m->x() - localx, m->y() - localy);
       repaint();
       //repaint(false);
       localx = m->x();

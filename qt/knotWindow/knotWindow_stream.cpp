@@ -7,5 +7,5 @@ void knotWindow::saveIt(std::ostream &os) {
 			matrix[i][j] = this->currMatr(i, j);
 		}
 	}
-	this->knot->save(os, matrix);
+	this->knot.save(os, matrix);
 }

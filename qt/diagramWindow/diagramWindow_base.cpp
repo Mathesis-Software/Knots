@@ -6,9 +6,9 @@
 #include "diagramWindow.h"
 #include "../knotWindow/knotWindow.h"
 
-diagramWindow::diagramWindow(std::istream &is) : diagram(std::make_shared<KE::TwoD::Diagram>(is)) {
+diagramWindow::diagramWindow(std::istream &is) : diagram(is) {
   init();
-  setWindowTitle(this->diagram->caption.c_str());
+  setWindowTitle(this->diagram.caption.c_str());
   isClosed = true;
   actions[0]->setChecked(false);
   actions_convert->setEnabled(true);
@@ -16,9 +16,9 @@ diagramWindow::diagramWindow(std::istream &is) : diagram(std::make_shared<KE::Tw
   actions_clear->setEnabled(true);
 }
 
-diagramWindow::diagramWindow() : diagram(std::make_shared<KE::TwoD::Diagram>()) {
+diagramWindow::diagramWindow() {
   init();
-  setWindowTitle(this->diagram->caption.c_str());
+  setWindowTitle(this->diagram.caption.c_str());
 }
 
 void diagramWindow::init() {
@@ -98,7 +98,7 @@ void diagramWindow::setmode(int newmode) {
 }
 
 void diagramWindow::clear() {
-  this->diagram->clear();
+  this->diagram.clear();
   isClosed = false;
   actions_convert->setEnabled(false);
   actions_simplify->setEnabled(false);
@@ -116,10 +116,14 @@ void diagramWindow::convert() {
     return;
   }
 
-  if (this->diagram->length() <= 2) {
+  if (this->diagram.length() <= 2) {
     QMessageBox::critical(this, "Error", "\nCannot convert diagram with less than 3 points.\n");
     return;
   }
 
   (new knotWindow(*this))->show();
+}
+
+void diagramWindow::saveIt(std::ostream &os) {
+	this->diagram.save(os);
 }

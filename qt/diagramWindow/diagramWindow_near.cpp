@@ -3,7 +3,7 @@
 #include "diagramWindow.h"
 
 vertex *diagramWindow::nearToVertex(int x, int y) {
-  vertex *v = this->diagram->base;
+  vertex *v = this->diagram.base;
   if (v == nullptr) {
     return nullptr;
 	}
@@ -13,13 +13,13 @@ vertex *diagramWindow::nearToVertex(int x, int y) {
       return v;
 		}
     v = v->next();
-  } while (v != this->diagram->base);
+  } while (v != this->diagram.base);
 
   return nullptr;
 }
 
 crossing *diagramWindow::nearToCross(int x, int y) {
-  vertex *v = this->diagram->base;
+  vertex *v = this->diagram.base;
   if (v == nullptr) {
     return nullptr;
 	}
@@ -33,13 +33,13 @@ crossing *diagramWindow::nearToCross(int x, int y) {
       crs = crs->next();
     }
     v = v->next();
-  } while (v != this->diagram->base);
+  } while (v != this->diagram.base);
 
   return nullptr;
 }
 
 vertex *diagramWindow::nearToEdge(int x, int y) {
-  vertex *v = this->diagram->base;
+  vertex *v = this->diagram.base;
   if (v == nullptr) {
     return nullptr;
 	}
@@ -55,7 +55,7 @@ vertex *diagramWindow::nearToEdge(int x, int y) {
 		}
 
     v = v->next();
-  } while (isClosed ? (v != this->diagram->base) : (v->next() != this->diagram->base));
+  } while (isClosed ? (v != this->diagram.base) : (v->next() != this->diagram.base));
 
   return nullptr;
 }

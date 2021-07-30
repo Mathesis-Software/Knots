@@ -1,8 +1,6 @@
 #ifndef __DIAGRAMWINDOW_H__
 #define __DIAGRAMWINDOW_H__
 
-#include <memory>
-
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QToolButton>
 
@@ -25,7 +23,7 @@ private:
   };
 
 public:
-	std::shared_ptr<KE::TwoD::Diagram> diagram;
+	KE::TwoD::Diagram diagram;
 
 private:
   QMenu *actionsMenu;
@@ -60,7 +58,7 @@ public:
   diagramWindow();
   ~diagramWindow();
 
-  bool isEmpty() { return this->diagram->isEmpty(); }
+  bool isEmpty() { return this->diagram.isEmpty(); }
 
   friend class diagramMainWidget;
 };

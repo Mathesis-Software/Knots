@@ -22,18 +22,18 @@ abstractWindow::abstractWindow() {
 
   QMenu *fileMenu = this->menuBar()->addMenu("&File");
 
-  fileMenu -> addAction ( "&Save as...", this, SLOT (save_as()) );
-  fileMenu -> addAction ( "&Print...", this, SLOT (print()) );
-  fileMenu -> addSeparator ();
-  fileMenu -> addAction ( "&Rename...", this, SLOT (rename()) );
-  fileMenu -> addSeparator ();
-  fileMenu -> addAction ( "&Close", this, SLOT (close()) );
+  fileMenu -> addAction("&Save as...", this, SLOT(save_as()));
+  fileMenu -> addAction("&Print...", this, SLOT(print()));
+  fileMenu -> addSeparator();
+  fileMenu -> addAction("&Rename...", this, SLOT(rename()));
+  fileMenu -> addSeparator();
+  fileMenu -> addAction("&Close", this, SLOT(close()));
 
   this->toolbar = new QToolBar(this);
   addToolBar(this->toolbar);
 
-  addToolBarButton("floppy.xpm", "Save as", SLOT (save_as()));
-  addToolBarButton("printer.xpm", "Print", SLOT (print()));
+  addToolBarButton("floppy.xpm", "Save as", SLOT(save_as()));
+  addToolBarButton("printer.xpm", "Print", SLOT(print()));
 
   AWRegister.push_back(this);
 }
@@ -46,17 +46,14 @@ int abstractWindow::askForSave() {
   show();
   raise();
   while (!isSaved) {
-    QString q = (QString) "\nSave \"" + this->windowTitle () + "\" before closing?\n";
-    int answer = QMessageBox::warning (this,
-                                       "Close",
-				       q.toStdString().c_str(),
-				       "&Yes",
-				       "&No",
-				       "&Cancel");
+    QString q = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
+    int answer = QMessageBox::warning(
+			this, "Close", q.toStdString().c_str(), "&Yes", "&No", "&Cancel"
+		);
     if (answer)
       return answer - 1;
 
-    save_as ();
+    save_as();
   }
   return 0;
 }
@@ -70,36 +67,36 @@ void abstractWindow::closeEvent(QCloseEvent *event) {
   AWRegister.remove(this);
 }
 
-void abstractWindow::save_as ()
-{
-  if (isEmpty ())
+void abstractWindow::save_as() {
+  if (isEmpty()) {
     return;
+	}
 
-  QString filename = QFileDialog::getSaveFileName (nullptr, "Save", getenv ("KNOTEDITOR_DATA"), mask ());
-  if (filename.isEmpty ())
+  QString filename = QFileDialog::getSaveFileName(nullptr, "Save", getenv("KNOTEDITOR_DATA"), mask());
+  if (filename.isEmpty())
     return;
   
   {
-    std::ifstream is (filename.toStdString());
+    std::ifstream is(filename.toStdString());
     if (is) {
-      is.close ();
-      if ( QMessageBox::warning (this, "Save",
-               "\nFile " + filename + " already exist. Overwrite?\n",
-               "Yes", "No", 0, 1) )
-	return;
+      is.close();
+      if (QMessageBox::warning(
+				this, "Save", "\nFile " + filename + " already exist. Overwrite?\n", "Yes", "No", 0, 1)
+			) {
+				return;
+			}
     }
   }
 
-  std::ofstream os (filename.toStdString());
+  std::ofstream os(filename.toStdString());
   if (!os) {
-    QMessageBox::critical (this, "Error",
-        "\nCouldn't open file \"" + filename + "\"\n");
+    QMessageBox::critical(this, "Error", "\nCouldn't open file \"" + filename + "\"\n");
     return;
   }
 
-  saveIt (os);
-  os.close ();
-  statusBar () -> showMessage ("File saved.", 3000);
+  saveIt(os);
+  os.close();
+  statusBar() -> showMessage("File saved.", 3000);
   isSaved = true;
 }
 
@@ -110,14 +107,12 @@ void abstractWindow::print() {
   //}
 }
 
-void abstractWindow::rename ()
-{
+void abstractWindow::rename() {
   char *capt = new char [256];
-  strcpy (capt, windowTitle ().toStdString().c_str());
-  setString ("Rename", capt, 256);
-  if ( strcmp (capt, windowTitle ().toStdString().c_str()) )
-  {
-    setWindowTitle (capt);
+  strcpy(capt, windowTitle().toStdString().c_str());
+  setString("Rename", capt, 256);
+  if (strcmp(capt, windowTitle().toStdString().c_str())) {
+    setWindowTitle(capt);
     isSaved = false;
   }
   delete[] capt;

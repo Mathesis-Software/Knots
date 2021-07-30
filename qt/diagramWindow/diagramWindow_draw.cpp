@@ -26,7 +26,7 @@ void diagramMainWidget::drawEdge(QPainter *p, vertex *v) {
   crossing *crs = v->crs();
 
   while (crs) {
-    if (Parent->isClosed || crs->up() != Parent->diagram.base->prev()) {
+    if (Parent->diagram.isClosed || crs->up() != Parent->diagram.base->prev()) {
       x1 = (int)(crs->x() - DeltaX);
       y1 = (int)(crs->y() - DeltaY);
 
@@ -64,7 +64,7 @@ void diagramMainWidget::drawIt(QPainter *p) {
   do {
     drawEdge(p, v);
     v = v->next();
-  } while (Parent->isClosed ? (v != Parent->diagram.base) : (v->next() != Parent->diagram.base));
+  } while (Parent->diagram.isClosed ? (v != Parent->diagram.base) : (v->next() != Parent->diagram.base));
 }
 
 void diagramMainWidget::paintEvent(QPaintEvent*) {

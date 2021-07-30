@@ -9,7 +9,6 @@
 diagramWindow::diagramWindow(std::istream &is) : diagram(is) {
   init();
   setWindowTitle(this->diagram.caption.c_str());
-  isClosed = true;
   actions[0]->setChecked(false);
   actions_convert->setEnabled(true);
   actions_simplify->setEnabled(true);
@@ -50,12 +49,11 @@ void diagramWindow::init() {
 
   grp->setExclusive(false);
 
-  isClosed = false;
   mode = DRAW_NEW_DIAGRAM;
   actions[0]->setChecked(true);
 
-  actions_convert->setEnabled(isClosed);
-  actions_simplify->setEnabled(isClosed);
+  actions_convert->setEnabled(this->diagram.isClosed);
+  actions_simplify->setEnabled(this->diagram.isClosed);
   actions_clear->setEnabled(!isEmpty());
 
   setCentralWidget(new diagramMainWidget(this));
@@ -82,7 +80,7 @@ void diagramWindow::setmode(int newmode) {
     return;
   }
 
-  if (newmode == DRAW_NEW_DIAGRAM && isClosed) {
+  if (newmode == DRAW_NEW_DIAGRAM && this->diagram.isClosed) {
     actions[newmode]->toggle();
     return;
   }
@@ -99,7 +97,6 @@ void diagramWindow::setmode(int newmode) {
 
 void diagramWindow::clear() {
   this->diagram.clear();
-  isClosed = false;
   actions_convert->setEnabled(false);
   actions_simplify->setEnabled(false);
   actions_clear->setEnabled(false);
@@ -111,7 +108,7 @@ void diagramWindow::clear() {
 }
 
 void diagramWindow::convert() {
-  if (!isClosed) {
+  if (!this->diagram.isClosed) {
     QMessageBox::critical(this, "Error", "\nCannot convert nonclosed diagram.\n");
     return;
   }

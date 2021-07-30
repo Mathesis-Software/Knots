@@ -1,7 +1,7 @@
 #include "diagramWindow.h"
 
 void diagramWindow::simplify() {
-  if (!isClosed)
+  if (!this->diagram.isClosed)
     return;
 
   if (this->diagram.simplify(2)) {

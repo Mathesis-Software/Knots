@@ -4,7 +4,7 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Diagram(std::istream &is) : base(nullptr) {
+Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
   char tmp[256];
 
   is.get(tmp, 32, ' ');

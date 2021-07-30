@@ -33,7 +33,6 @@ private:
 
   QToolButton **actions;
 
-  bool isClosed;
   editorMode mode;
 
   void init();
@@ -42,10 +41,6 @@ private:
 
   void printIt(QPrinter*);
   void saveIt(std::ostream&);
-
-  vertex *nearToVertex(int x, int y);
-  crossing *nearToCross(int x, int y);
-  vertex *nearToEdge(int x, int y);
   
 private slots:
   void convert();

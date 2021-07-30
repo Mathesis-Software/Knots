@@ -23,6 +23,7 @@ friend class ThreeD::Knot;
 public:
 	std::string caption;
 	vertex *base;
+  bool isClosed;
 
 public:
 	void addVertex(vertex*, int, int);
@@ -34,6 +35,10 @@ public:
 	bool simplify(int depth);
 	void clear();
 	int length();
+
+	vertex *findVertex(double x, double y, double maxDistance) const;
+	vertex *findEdge(double x, double y, double maxDistance) const;
+	crossing *findCrossing(double x, double y, double maxDistance) const;
 
 private:
 	int numByV(vertex*);

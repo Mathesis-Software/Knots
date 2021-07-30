@@ -12,12 +12,12 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       if (Parent->isEmpty()) {
         Parent->actions_clear->setEnabled (true);
 			}
-      if (Parent->isClosed) {
+      if (Parent->diagram.isClosed) {
         return;
 			}
       Parent->diagram.addVertex(NULL, m->x(), m->y());
       if (m->button() == 0x02) {
-        Parent->isClosed = true;
+        Parent->diagram.isClosed = true;
         Parent->actions_convert->setEnabled(true);
         Parent->actions_simplify->setEnabled(true);
 				Parent->actions[0]->setChecked(false);
@@ -30,7 +30,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       return;
     case diagramWindow::ADD_POINT:
     {
-      vertex *v = Parent->nearToEdge(m->x(), m->y());
+      vertex *v = Parent->diagram.findEdge(m->x(), m->y(), 5);
       if (v) {
         Parent->diagram.addVertex(v, m->x(), m->y());
         localVertex = v->next();
@@ -43,7 +43,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::MOVE_POINT:
     {
-      vertex *v = Parent->nearToVertex(m->x(), m->y());
+      vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
       if (v) {
         localVertex = v;
         Parent->isSaved = false;
@@ -53,7 +53,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::REMOVE_POINT:
     {
-      vertex *v = Parent->nearToVertex(m->x(), m->y());
+      vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
       if (v) {
         Parent->diagram.removeVertex(v);
 				if (Parent->isEmpty()) {
@@ -68,7 +68,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::CHANGE_CROSS:
     {
-      crossing *c = Parent->nearToCross(m->x(), m->y());
+      crossing *c = Parent->diagram.findCrossing(m->x(), m->y(), 17);
       if (c) {
         Parent->diagram.tryChangeCrossing(c->up(), c->down());
         repaint();

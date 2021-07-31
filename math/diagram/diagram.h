@@ -34,7 +34,7 @@ public:
 public:
 	std::string caption;
 	vertex *base;
-  bool isClosed;
+	bool isClosed;
 
 public:
 	std::list<vertex*> vertices() const;

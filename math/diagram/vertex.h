@@ -24,8 +24,8 @@ public:
   vertex *next();
   vertex *prev();
   crossing *crs();
-  int x() { return this->coord_x; }
-  int y() { return this->coord_y; }
+  int x() const { return this->coord_x; }
+  int y() const { return this->coord_y; }
 
   void order();
 };

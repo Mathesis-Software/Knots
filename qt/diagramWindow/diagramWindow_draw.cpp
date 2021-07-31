@@ -8,11 +8,11 @@ diagramMainWidget::diagramMainWidget(diagramWindow *p) : QWidget (p) {
   Parent = p;
 }
 
-void diagramMainWidget::drawPoint(QPainter *p, vertex *v) {
-  p->drawEllipse(v->x() - 4, v->y() - 4, 9, 9);
+void diagramMainWidget::drawVertex(QPainter &painter, const vertex &v) {
+  painter.drawEllipse(v.x() - 4, v.y() - 4, 9, 9);
 }
 
-void diagramMainWidget::drawEdge(QPainter *p, const KE::TwoD::Diagram::Edge &edge) {
+void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge) {
   float deltaX = edge.end->x() - edge.start->x();
   float deltaY = edge.end->y() - edge.start->y();
   float hyp = hypot(deltaX, deltaY);
@@ -31,7 +31,7 @@ void diagramMainWidget::drawEdge(QPainter *p, const KE::TwoD::Diagram::Edge &edg
       y1 = (int)(crs->y() - deltaY);
 
       if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0)
-        p->drawLine(x0, y0, x1, y1);
+        painter.drawLine(x0, y0, x1, y1);
 
       x0 = (int)(crs->x() + deltaX);
       y0 = (int)(crs->y() + deltaY);
@@ -44,21 +44,21 @@ void diagramMainWidget::drawEdge(QPainter *p, const KE::TwoD::Diagram::Edge &edg
   y1 = edge.end->y();
 
   if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0)
-    p->drawLine (x0, y0, x1, y1);
+    painter.drawLine (x0, y0, x1, y1);
 }
 
-void diagramMainWidget::drawIt(QPainter *p) {
+void diagramMainWidget::drawIt(QPainter &painter) {
   if (Parent->isEmpty())
     return;
 
-  p->setPen(Qt::black);
-  p->setBrush(Qt::black);
+  painter.setPen(Qt::black);
+  painter.setBrush(Qt::black);
   
 	for (auto vertex : Parent->diagram.vertices()) {
-    drawPoint(p, vertex);
+    drawVertex(painter, *vertex);
   }
 	for (const auto &edge : Parent->diagram.edges()) {
-    drawEdge(p, edge);
+    drawEdge(painter, edge);
 	}
 }
 
@@ -67,7 +67,7 @@ void diagramMainWidget::paintEvent(QPaintEvent*) {
   pm.fill(Qt::white);
   QPainter pnt;
   pnt.begin(&pm);
-  drawIt(&pnt);
+  drawIt(pnt);
   pnt.end();
   QPainter main;
   main.begin(this);
@@ -78,6 +78,6 @@ void diagramMainWidget::paintEvent(QPaintEvent*) {
 void diagramWindow::printIt(QPrinter *prn) {
   QPainter pnt;
   pnt.begin(prn);
-  ((diagramMainWidget*)centralWidget())->drawIt(&pnt);
+  ((diagramMainWidget*)centralWidget())->drawIt(pnt);
   pnt.end();
 }

@@ -3,9 +3,16 @@
 
 class crossing;
 
+namespace KE { namespace TwoD {
+
+class Diagram;
+
+}}
+
 class vertex {
 
 friend class crossing;
+friend class KE::TwoD::Diagram;
 
 private:
   vertex *vertex_prev, *vertex_next;
@@ -21,8 +28,11 @@ public:
   void move(int, int);
   void moveTo(int, int);
 
-  vertex *next();
-  vertex *prev();
+private:
+  vertex *next() const { return this->vertex_next; }
+  vertex *prev() const { return this->vertex_prev; }
+
+public:
   crossing *crs();
   int x() const { return this->coord_x; }
   int y() const { return this->coord_y; }
@@ -52,12 +62,6 @@ public:
   float y();
 };
 
-inline vertex *vertex::next() {
-  return vertex_next;
-}
-inline vertex *vertex::prev() {
-  return vertex_prev;
-}
 inline crossing *vertex::crs() {
   return vertex_crs;
 }

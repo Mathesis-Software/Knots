@@ -26,14 +26,14 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       //repaint(false);
       Parent->isSaved = false;
       doSomething = true;
-      localVertex = Parent->diagram.base->prev();
+      localVertex = Parent->diagram.vertices().back();
       return;
     case diagramWindow::ADD_POINT:
     {
-      vertex *v = Parent->diagram.findEdge(m->x(), m->y(), 5);
-      if (v) {
-        Parent->diagram.addVertex(v, m->x(), m->y());
-        localVertex = v->next();
+			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = Parent->diagram.findEdge(m->x(), m->y(), 5);
+      if (edge) {
+        Parent->diagram.addVertex(edge->start, m->x(), m->y());
+        localVertex = edge->start->next();
         repaint();
         //repaint(false);
         Parent->isSaved = false;

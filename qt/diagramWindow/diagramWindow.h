@@ -67,7 +67,7 @@ private:
   diagramWindow *Parent;
 
   void drawPoint(QPainter*, vertex*);
-  void drawEdge(QPainter*, vertex*);
+  void drawEdge(QPainter*, const KE::TwoD::Diagram::Edge &edge);
 
   void paintEvent(QPaintEvent*);
   void mousePressEvent(QMouseEvent*);

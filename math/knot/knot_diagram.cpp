@@ -6,8 +6,7 @@
 namespace KE { namespace ThreeD {
 
 Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from diagram") {
-  vertex *v = diagram.base;
-	do {
+	for (auto v : diagram.vertices()) {
 		points.push_back(Point(
 			2.4 * v->x() / w - 1.2,
 			1.2 - 2.4 * v->y() / h,
@@ -31,7 +30,7 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from
 			crs = crs->next();
 		}
 		v = v->next();
-	} while (v != diagram.base);
+	}
 
   create_depend();
 

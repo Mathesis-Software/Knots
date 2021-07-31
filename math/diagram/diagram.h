@@ -2,6 +2,8 @@
 #define __DIAGRAM_H__
 
 #include <iostream>
+#include <list>
+#include <memory>
 #include <string>
 
 #include "vertex.h"
@@ -21,11 +23,22 @@ class Diagram {
 friend class ThreeD::Knot;
 
 public:
+	struct Edge {
+		vertex *start;
+		vertex *end;
+
+		Edge(vertex *start, vertex *end) : start(start), end(end) {
+		}
+	};
+
+public:
 	std::string caption;
 	vertex *base;
   bool isClosed;
 
 public:
+	std::list<vertex*> vertices() const;
+	std::list<Edge> edges() const;
 	void addVertex(vertex*, int, int);
 	void removeVertex(vertex*);
 	void moveVertex(vertex*, int, int);
@@ -37,7 +50,7 @@ public:
 	int length();
 
 	vertex *findVertex(double x, double y, double maxDistance) const;
-	vertex *findEdge(double x, double y, double maxDistance) const;
+	std::shared_ptr<Edge> findEdge(double x, double y, double maxDistance) const;
 	crossing *findCrossing(double x, double y, double maxDistance) const;
 
 private:

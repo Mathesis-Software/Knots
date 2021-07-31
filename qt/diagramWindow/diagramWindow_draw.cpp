@@ -12,38 +12,38 @@ void diagramMainWidget::drawPoint(QPainter *p, vertex *v) {
   p->drawEllipse(v->x() - 4, v->y() - 4, 9, 9);
 }
 
-void diagramMainWidget::drawEdge(QPainter *p, vertex *v) {
-  float DeltaX = v->next()->x() - v->x();
-  float DeltaY = v->next()->y() - v->y();
-  float hyp = hypot(DeltaX, DeltaY);
+void diagramMainWidget::drawEdge(QPainter *p, const KE::TwoD::Diagram::Edge &edge) {
+  float deltaX = edge.end->x() - edge.start->x();
+  float deltaY = edge.end->y() - edge.start->y();
+  float hyp = hypot(deltaX, deltaY);
 
-  DeltaX = 10 * DeltaX / hyp;
-  DeltaY = 10 * DeltaY / hyp;
+  deltaX = 10 * deltaX / hyp;
+  deltaY = 10 * deltaY / hyp;
 
-  int x0 = v->x(),
-      y0 = v->y(),
+  int x0 = edge.start->x(),
+      y0 = edge.start->y(),
       x1, y1;
-  crossing *crs = v->crs();
+  crossing *crs = edge.start->crs();
 
   while (crs) {
-    if (Parent->diagram.isClosed || crs->up() != Parent->diagram.base->prev()) {
-      x1 = (int)(crs->x() - DeltaX);
-      y1 = (int)(crs->y() - DeltaY);
+    if (Parent->diagram.isClosed || crs->up() != Parent->diagram.vertices().back()) {
+      x1 = (int)(crs->x() - deltaX);
+      y1 = (int)(crs->y() - deltaY);
 
-      if ((x1 - x0) * DeltaX + (y1 - y0) * DeltaY > 0)
+      if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0)
         p->drawLine(x0, y0, x1, y1);
 
-      x0 = (int)(crs->x() + DeltaX);
-      y0 = (int)(crs->y() + DeltaY);
+      x0 = (int)(crs->x() + deltaX);
+      y0 = (int)(crs->y() + deltaY);
     }
 
     crs = crs->next();
   }
 
-  x1 = v->next()->x();
-  y1 = v->next()->y();
+  x1 = edge.end->x();
+  y1 = edge.end->y();
 
-  if ((x1 - x0) * DeltaX + (y1 - y0) * DeltaY > 0)
+  if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0)
     p->drawLine (x0, y0, x1, y1);
 }
 
@@ -54,17 +54,12 @@ void diagramMainWidget::drawIt(QPainter *p) {
   p->setPen(Qt::black);
   p->setBrush(Qt::black);
   
-  vertex *v = Parent->diagram.base;
-
-  do {
-    drawPoint(p, v);
-    v = v->next();
-  } while (v != Parent->diagram.base);
-
-  do {
-    drawEdge(p, v);
-    v = v->next();
-  } while (Parent->diagram.isClosed ? (v != Parent->diagram.base) : (v->next() != Parent->diagram.base));
+	for (auto vertex : Parent->diagram.vertices()) {
+    drawPoint(p, vertex);
+  }
+	for (const auto &edge : Parent->diagram.edges()) {
+    drawEdge(p, edge);
+	}
 }
 
 void diagramMainWidget::paintEvent(QPaintEvent*) {

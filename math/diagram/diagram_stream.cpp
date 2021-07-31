@@ -68,33 +68,28 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
 }
 
 void Diagram::save(std::ostream &os) {
-  vertex *v = this->base;
-
   os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->length() << "\n";
-  do {
-    os << v->x() << " " << v->y() << "\n";
-    v = v->next();
-  } while (v != this->base);
+	for (auto vertex : this->vertices()) {
+    os << vertex->x() << " " << vertex->y() << "\n";
+	}
 
   crossing *c;
 
   {
     int cnum = 0;
-    do {
-      for (c = v->crs(); c; c = c->next())
+		for (auto vertex : this->vertices()) {
+      for (c = vertex->crs(); c; c = c->next())
         cnum++;
-      v = v->next();
-    } while (v != this->base);
+		}
 
     os << "#CROSSINGS " << cnum << "\n";
   }
 
-  do {
-    for (c = v->crs(); c; c = c->next())
-      os << this->numByV(v) << " "
+	for (auto vertex : this->vertices()) {
+    for (c = vertex->crs(); c; c = c->next())
+      os << this->numByV(vertex) << " "
          << this->numByV(c->up()) << "\n";
-    v = v->next();
-  } while (v != this->base);
+  }
 }
 
 }}

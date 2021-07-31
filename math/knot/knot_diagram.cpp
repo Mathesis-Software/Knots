@@ -29,7 +29,6 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from
 			}
 			crs = crs->next();
 		}
-		v = v->next();
 	}
 
   create_depend();

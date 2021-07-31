@@ -33,7 +33,11 @@ public:
 
 public:
 	std::string caption;
+
+private:
 	vertex *base;
+
+public:
 	bool isClosed;
 
 public:

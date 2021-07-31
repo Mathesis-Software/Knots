@@ -29,11 +29,11 @@ int Diagram::length() {
 }
 
 void Diagram::order() {
-  vertex *v = base;
-  do {
-    v->order();
-    v = v->next();
-  } while (v != base);
+	vertex *v = base;
+	do {
+		v->order();
+		v = v->next();
+	} while (v != base);
 }
 
 void Diagram::shift(int x, int y) {
@@ -46,28 +46,28 @@ void Diagram::shift(int x, int y) {
 
 std::list<vertex*> Diagram::vertices() const {
 	std::list<vertex*> vertices;
-  vertex *v = this->base;
-  if (v == nullptr) {
-    return vertices;
+	vertex *v = this->base;
+	if (v == nullptr) {
+		return vertices;
 	}
 
 	do {
 		vertices.push_back(v);
 		v = v->next();
-  } while (v != this->base);
+	} while (v != this->base);
 	return vertices;
 }
 
 std::list<Diagram::Edge> Diagram::edges() const {
 	std::list<Edge> edges;
-  vertex *v = this->base;
-  if (v == nullptr) {
-    return edges;
+	vertex *v = this->base;
+	if (v == nullptr) {
+		return edges;
 	}
 
-  for (; v->next() != this->base; v = v->next()) {
+	for (; v->next() != this->base; v = v->next()) {
 		edges.push_back(Edge(v, v->next()));
-  }
+	}
 	if (this->isClosed) {
 		edges.push_back(Edge(v, v->next()));
 	}
@@ -84,9 +84,9 @@ vertex *Diagram::findVertex(double x, double y, double maxDistance) const {
 			best = distance;
 			found = vertex;
 		}
-  }
+	}
 
-  return best <= maxDistance ? found : nullptr;
+	return best <= maxDistance ? found : nullptr;
 }
 
 crossing *Diagram::findCrossing(double x, double y, double maxDistance) const {
@@ -94,16 +94,16 @@ crossing *Diagram::findCrossing(double x, double y, double maxDistance) const {
 	crossing *found = nullptr;
 
 	for (auto vertex : this->vertices()) {
-    for (crossing *crs = vertex->crs(); crs != nullptr; crs = crs->next()) {
-    	const double distance = hypot(x - crs->x(), y - crs->y());
+		for (crossing *crs = vertex->crs(); crs != nullptr; crs = crs->next()) {
+			const double distance = hypot(x - crs->x(), y - crs->y());
 			if (distance < best) {
 				best = distance;
 				found = crs;
 			}
-    }
-  }
+		}
+	}
 
-  return best <= maxDistance ? found : nullptr;
+	return best <= maxDistance ? found : nullptr;
 }
 
 std::shared_ptr<Diagram::Edge> Diagram::findEdge(double x, double y, double maxDistance) const {
@@ -111,18 +111,18 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(double x, double y, double maxD
 	std::shared_ptr<Edge> found;
 
 	for (const Edge &edge : this->edges()) {
-    const double dx = edge.end->x() - edge.start->x();
-    const double dy = edge.end->y() - edge.start->y();
+		const double dx = edge.end->x() - edge.start->x();
+		const double dy = edge.end->y() - edge.start->y();
 
 		if (dx == 0 and dy == 0) {
 			// the edge has zero length
 			continue;
 		}
 
-    if (((x - edge.start->x()) * dx + (y - edge.start->y()) * dy < 0) ||
+		if (((x - edge.start->x()) * dx + (y - edge.start->y()) * dy < 0) ||
 				((x - edge.end->x()) * dx + (y - edge.end->y()) * dy > 0)) {
 			// (x, y) is outside of the perpendicular strip built on the edge segment
-		 	continue;
+			continue;
 		}
 
 		const double distance = fabs((x - edge.start->x()) * dy - (y - edge.start->y()) * dx) / hypot(dx, dy);

@@ -58,9 +58,6 @@ public:
 	crossing *findCrossing(double x, double y, double maxDistance) const;
 
 private:
-	int numByV(vertex*);
-	vertex *vByNum(int);
-
 	bool tryAddCrossing(vertex*, vertex*);
 	bool tryRemoveCrossing(vertex*, vertex*);
 

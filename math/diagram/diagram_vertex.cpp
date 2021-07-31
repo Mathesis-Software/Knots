@@ -11,7 +11,7 @@ vertex *Diagram::addVertex(vertex* v, int x, int y) {
   vertex *new_vertex = new vertex(v ? v : base->prev(), x, y);
 
   vertex *current = base;
-  
+
   do {
     if (crossed(current, new_vertex)) {
       if (isCrossing(new_vertex->prev(), current))
@@ -55,7 +55,7 @@ void Diagram::removeVertex(vertex* v) {
   v->exclude();
 
   vertex *current = base;
-  
+
   do {
     if (crossed(current, v->prev())) {
       if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
@@ -85,7 +85,7 @@ void Diagram::moveVertex(vertex *v, int x, int y) {
   v->moveTo(x, y);
 
   vertex *current = base;
-  
+
   do {
     switch ((crossed(current, v) ? 1 : 0) + (crossed(current, v->prev()) ? 2 : 0)) {
       case 0:
@@ -128,26 +128,6 @@ void Diagram::moveVertex(vertex *v, int x, int y) {
   } while (current != base);
 
   order();
-}
-
-int Diagram::numByV(vertex *v) {
-  vertex *curr = base;
-  int num;
-  for (num = 0; curr != v; curr = curr->next()) {
-    if (curr == base && num > 0)
-      return -1;
-    num++;
-  }
-
-  return num;
-}
-
-vertex *Diagram::vByNum(int num) {
-  vertex *v = base;
-  for (; num > 0; num --)
-    v = v->next();
-
-  return v;
 }
 
 }}

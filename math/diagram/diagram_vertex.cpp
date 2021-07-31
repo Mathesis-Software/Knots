@@ -2,10 +2,10 @@
 
 namespace KE { namespace TwoD {
 
-void Diagram::addVertex(vertex* v, int x, int y) {
+vertex *Diagram::addVertex(vertex* v, int x, int y) {
   if (!base) {
     base = new vertex(x, y);
-    return;
+    return base;
   }
 
   vertex *new_vertex = new vertex(v ? v : base->prev(), x, y);
@@ -36,6 +36,7 @@ void Diagram::addVertex(vertex* v, int x, int y) {
   } while (current != base);
 
   order();
+	return new_vertex;
 }
 
 void Diagram::removeVertex(vertex* v) {

@@ -43,7 +43,7 @@ public:
 public:
 	std::list<vertex*> vertices() const;
 	std::list<Edge> edges() const;
-	void addVertex(vertex*, int, int);
+	vertex *addVertex(vertex*, int, int);
 	void removeVertex(vertex*);
 	void moveVertex(vertex*, int, int);
 	bool tryChangeCrossing(vertex*, vertex*);

@@ -23,7 +23,6 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
 				Parent->actions[0]->setChecked(false);
       }
       repaint();
-      //repaint(false);
       Parent->isSaved = false;
       doSomething = true;
       localVertex = Parent->diagram.vertices().back();
@@ -32,10 +31,8 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     {
 			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = Parent->diagram.findEdge(m->x(), m->y(), 5);
       if (edge) {
-        Parent->diagram.addVertex(edge->start, m->x(), m->y());
-        localVertex = edge->start->next();
+        localVertex = Parent->diagram.addVertex(edge->start, m->x(), m->y());
         repaint();
-        //repaint(false);
         Parent->isSaved = false;
         doSomething = true;
       }

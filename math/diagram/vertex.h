@@ -35,14 +35,12 @@ class crossing {
 friend class vertex;
 
 private:
-
   vertex *arc_up, *arc_down;
   crossing *next_crossing;
   crossing *prev_crossing;
   void plus();
 
 public:
-
   crossing(vertex*, vertex*);
   ~crossing();
 
@@ -53,8 +51,6 @@ public:
   float x();
   float y();
 };
-
-bool crossed(vertex*, vertex*);
 
 inline vertex *vertex::next() {
   return vertex_next;

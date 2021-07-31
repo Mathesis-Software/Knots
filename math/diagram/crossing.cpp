@@ -101,34 +101,3 @@ float crossing::y() {
 
   return up()->y() + 1.0 * (up()->next()->y() - up()->y()) * d1 / d0;
 }
-
-bool crossed(vertex *v1, vertex *v2) {
-  if (v1 == v2 || v1->prev() == v2 || v1->next() == v2) {
-    return 0;
-	}
-
-  int det[3];
-
-  det[0] = (v1->next()->x() - v1->x()) * (v2->y() - v2->next()->y())
-         - (v1->next()->y() - v1->y()) * (v2->x() - v2->next()->x());
-  if (det[0] == 0) {
-    return 0;
-	}
-
-  det[1] = (v1->next()->x() - v1->x()) * (v2->y() - v1->y())
-         - (v1->next()->y() - v1->y()) * (v2->x() - v1->x());
-  det[2] = (v2->x() - v1->x()) * (v2->y() - v2->next()->y())
-         - (v2->y() - v1->y()) * (v2->x() - v2->next()->x());
-
-  if (det[0] < 0) {
-    det[0] = - det[0];
-    det[1] = - det[1];
-    det[2] = - det[2];
-  }
-
-  if (det[1] < 0 || det[2] < 0 || det[1] > det [0] || det[2] > det [0]) {
-    return 0;
-	}
-
-  return 1;
-}

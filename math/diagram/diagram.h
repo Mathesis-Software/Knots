@@ -29,6 +29,7 @@ public:
 
 		Edge(vertex *start, vertex *end) : start(start), end(end) {
 		}
+		bool intersects(const Edge &edge) const; 
 	};
 
 public:

@@ -3,7 +3,9 @@
 namespace KE { namespace TwoD {
 
 bool Diagram::tryAddCrossing(vertex *v1, vertex *v2) {
-	if (!crossed(v1, v2)) {
+	const Edge e1(v1, v1->next());
+	const Edge e2(v2, v2->next());
+	if (!e1.intersects(e2)) {
 		return false;
 	}
 

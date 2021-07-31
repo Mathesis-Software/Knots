@@ -135,4 +135,26 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(double x, double y, double maxD
 	return found;
 }
 
+namespace {
+	int orientation(const vertex &v0, const vertex &v1, const vertex &v2) {
+		const int area = v0.x() * (v1.y() - v2.y()) + v1.x() * (v2.y() - v0.y()) + v2.x() * (v0.y() - v1.y());
+		if (area < 0) {
+			return -1;
+		} else if (area > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
+}
+
+bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
+	const int ori = orientation(*this->start, *edge.start, *this->end); 
+	return
+		ori != 0 &&
+		ori == orientation(*edge.start, *this->end, *edge.end) &&
+		ori == orientation(*this->end, *edge.end, *this->start) &&
+		ori == orientation(*edge.end, *this->start, *edge.start);
+}
+
 }}

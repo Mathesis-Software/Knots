@@ -11,16 +11,19 @@ vertex *Diagram::addVertex(vertex* v, int x, int y) {
   vertex *new_vertex = new vertex(v ? v : base->prev(), x, y);
 
   vertex *current = base;
-
   do {
-    if (crossed(current, new_vertex)) {
+		const Edge e(current, current->next());
+		const Edge e1(new_vertex->prev(), new_vertex);
+		const Edge e2(new_vertex, new_vertex->next());
+
+    if (e.intersects(e2)) {
       if (isCrossing(new_vertex->prev(), current))
         tryAddCrossing(new_vertex, current);
       else
         tryAddCrossing(current, new_vertex);
     }
 
-    if (crossed(current, new_vertex->prev())) {
+    if (e.intersects(e1)) {
       if (!isCrossing(current, new_vertex->prev()) &&
           !isCrossing(new_vertex->prev(), current)) {
         tryAddCrossing(current, new_vertex->prev());
@@ -57,7 +60,9 @@ void Diagram::removeVertex(vertex* v) {
   vertex *current = base;
 
   do {
-    if (crossed(current, v->prev())) {
+		const Edge e(current, current->next());
+		const Edge e1(v->prev(), v);
+    if (e.intersects(e1)) {
       if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
         if (isCrossing(v, current))
           tryAddCrossing(v->prev(), current);
@@ -87,7 +92,11 @@ void Diagram::moveVertex(vertex *v, int x, int y) {
   vertex *current = base;
 
   do {
-    switch ((crossed(current, v) ? 1 : 0) + (crossed(current, v->prev()) ? 2 : 0)) {
+		const Edge e(current, current->next());
+		const Edge e1(v->prev(), v);
+		const Edge e2(v, v->next());
+
+    switch ((e.intersects(e2) ? 1 : 0) + (e.intersects(e1) ? 2 : 0)) {
       case 0:
         tryRemoveCrossing(current, v);
         tryRemoveCrossing(v, current);

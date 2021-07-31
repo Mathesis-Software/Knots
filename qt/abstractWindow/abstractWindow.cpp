@@ -76,18 +76,6 @@ void abstractWindow::save_as() {
   if (filename.isEmpty())
     return;
   
-  {
-    std::ifstream is(filename.toStdString());
-    if (is) {
-      is.close();
-      if (QMessageBox::warning(
-				this, "Save", "\nFile " + filename + " already exist. Overwrite?\n", "Yes", "No", 0, 1)
-			) {
-				return;
-			}
-    }
-  }
-
   std::ofstream os(filename.toStdString());
   if (!os) {
     QMessageBox::critical(this, "Error", "\nCouldn't open file \"" + filename + "\"\n");

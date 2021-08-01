@@ -4,66 +4,8 @@
 crossing::crossing(vertex* v1, vertex *v2) {
   arc_up = v2;
   arc_down = v1;
-  next_crossing = v1->crs();
-  prev_crossing = nullptr;
-
-  v1->vertex_crs = this;
-
-  if (!next())
-    return;
-
-  next()->prev_crossing = this;
-
-  if (abs(down()->x() - down()->next()->x()) > abs(down()->y() - down()->next()->y())) {
-    if (down()->x() > down()->next()->x())
-      while (next() && x() < next()->x())
-        plus();
-    else
-      while (next() && x() > next()->x())
-        plus();
-  }
-  else
-  {
-    if (down()->y() > down()->next()->y())
-      while (next() && y() < next()->y())
-        plus();
-    else
-      while (next() && y() > next()->y())
-        plus();
-  }
-}
-
-void crossing::plus() {
-  if (!next())
-    return;
-
-  if (!prev())
-    down()->vertex_crs = next();
-
-  crossing *nn = next()->next();
-  crossing *n = next();
-  crossing *p = prev();
-
-  if (nn)
-    nn->prev_crossing = this;
-
-  n->next_crossing = this;
-  n->prev_crossing = p;
-
-  next_crossing = nn;
-  prev_crossing = n;
-
-  if (p)
-    p->next_crossing = n;
-}
-
-crossing::~crossing() {
-  if (prev())
-    prev_crossing->next_crossing = next();
-  if (next())
-    next_crossing->prev_crossing = prev();
-  if (down()->crs() == this)
-    arc_down->vertex_crs = next();
+	v1->_crossings.push_back(this);
+	v1->order();
 }
 
 float crossing::x() {

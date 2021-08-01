@@ -18,7 +18,7 @@ friend class KE::TwoD::Diagram;
 
 private:
   vertex *vertex_prev, *vertex_next;
-  crossing *vertex_crs;
+	std::list<crossing*> _crossings;
   int coord_x, coord_y;
 
 public:
@@ -33,10 +33,9 @@ public:
 private:
   vertex *next() const { return this->vertex_next; }
   vertex *prev() const { return this->vertex_prev; }
-  crossing *crs() const { return this->vertex_crs; }
 
 public:
-	std::list<crossing*> crossings() const;
+	const std::list<crossing*> &crossings() const { return this->_crossings; }
   int x() const { return this->coord_x; }
   int y() const { return this->coord_y; }
 
@@ -49,17 +48,9 @@ friend class vertex;
 
 private:
   vertex *arc_up, *arc_down;
-  crossing *next_crossing;
-  crossing *prev_crossing;
-  void plus();
 
 public:
   crossing(vertex*, vertex*);
-  ~crossing();
-
-private:
-  crossing *next() const { return this->next_crossing; }
-  crossing *prev() const { return this->prev_crossing; }
 
 public:
   vertex *up();

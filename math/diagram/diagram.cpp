@@ -89,21 +89,21 @@ vertex *Diagram::findVertex(double x, double y, double maxDistance) const {
 	return best <= maxDistance ? found : nullptr;
 }
 
-crossing *Diagram::findCrossing(double x, double y, double maxDistance) const {
+std::shared_ptr<crossing> Diagram::findCrossing(double x, double y, double maxDistance) const {
 	double best = std::numeric_limits<double>::max();
-	crossing *found = nullptr;
+	std::shared_ptr<crossing> found;
 
 	for (auto vertex : this->vertices()) {
 		for (auto crs : vertex->crossings()) {
-			const double distance = hypot(x - crs->x(), y - crs->y());
-			if (distance < best) {
+			const double distance = hypot(x - crs.x(), y - crs.y());
+			if (distance < best && distance <= maxDistance) {
 				best = distance;
-				found = crs;
+				found = std::make_shared<crossing>(crs);
 			}
 		}
 	}
 
-	return best <= maxDistance ? found : nullptr;
+	return found;
 }
 
 std::shared_ptr<Diagram::Edge> Diagram::findEdge(double x, double y, double maxDistance) const {

@@ -13,21 +13,21 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from
 			0
 		));
 		
-		crossing *previous = nullptr;
-		for (auto crs : v->crossings()) {
+		const crossing *previous = nullptr;
+		for (const auto &crs : v->crossings()) {
 			if (previous) {
 				points.push_back(Point(
-					1.2 * (previous->x() + crs->x()) / w - 1.2,
-					1.2 - 1.2 * (previous->y() + crs->y()) / h,
+					1.2 * (previous->x() + crs.x()) / w - 1.2,
+					1.2 - 1.2 * (previous->y() + crs.y()) / h,
 					0
 				));
 			}
 			points.push_back(Point(
-				2.4 * crs->x() / w - 1.2,
-				1.2 - 2.4 * crs->y() / h,
+				2.4 * crs.x() / w - 1.2,
+				1.2 - 2.4 * crs.y() / h,
 				-0.4
 			));
-			previous = crs;
+			previous = &crs;
 		}
 	}
 

@@ -24,16 +24,16 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
       y0 = edge.start->y(),
       x1, y1;
 
-	for (auto crs : edge.start->crossings()) {
-    if (Parent->diagram.isClosed || crs->up() != Parent->diagram.vertices().back()) {
-      x1 = (int)(crs->x() - deltaX);
-      y1 = (int)(crs->y() - deltaY);
+	for (const auto &crs : edge.start->crossings()) {
+    if (Parent->diagram.isClosed || crs.up() != Parent->diagram.vertices().back()) {
+      x1 = (int)(crs.x() - deltaX);
+      y1 = (int)(crs.y() - deltaY);
 
       if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0)
         painter.drawLine(x0, y0, x1, y1);
 
-      x0 = (int)(crs->x() + deltaX);
-      y0 = (int)(crs->y() + deltaY);
+      x0 = (int)(crs.x() + deltaX);
+      y0 = (int)(crs.y() + deltaY);
     }
   }
 

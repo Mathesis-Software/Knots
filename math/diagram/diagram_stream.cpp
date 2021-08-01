@@ -75,7 +75,7 @@ void Diagram::save(std::ostream &os) {
   os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->length() << "\n";
 	std::map<vertex*,std::size_t> nums;
 	int index = 0;
-	for (auto vertex : this->vertices()) {
+	for (const auto &vertex : this->vertices()) {
 		nums[vertex] = index;
     os << vertex->x() << " " << vertex->y() << "\n";
 		index += 1;
@@ -83,16 +83,16 @@ void Diagram::save(std::ostream &os) {
 
   {
     int cnum = 0;
-		for (auto vertex : this->vertices()) {
+		for (const auto &vertex : this->vertices()) {
 			cnum += vertex->crossings().size();
 		}
 
     os << "#CROSSINGS " << cnum << "\n";
   }
 
-	for (auto vertex : this->vertices()) {
-    for (auto crs : vertex->crossings()) {
-      os << nums[vertex] << " " << nums[crs->up()] << "\n";
+	for (const auto &vertex : this->vertices()) {
+    for (const auto &crs : vertex->crossings()) {
+      os << nums[vertex] << " " << nums[crs.up()] << "\n";
 		}
   }
 }

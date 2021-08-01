@@ -56,12 +56,11 @@ public:
 
 	vertex *findVertex(double x, double y, double maxDistance) const;
 	std::shared_ptr<Edge> findEdge(double x, double y, double maxDistance) const;
-	crossing *findCrossing(double x, double y, double maxDistance) const;
+	std::shared_ptr<crossing> findCrossing(double x, double y, double maxDistance) const;
 
 private:
 	bool tryAddCrossing(vertex*, vertex*);
-	bool tryRemoveCrossing(vertex*, vertex*);
-
+	void tryRemoveCrossing(vertex*, vertex*);
 	void order();
 
 public:

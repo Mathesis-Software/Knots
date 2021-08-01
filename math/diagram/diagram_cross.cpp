@@ -9,33 +9,28 @@ bool Diagram::tryAddCrossing(vertex *v1, vertex *v2) {
 		return false;
 	}
 
-	new crossing (v1, v2);
+	v1->_crossings.push_back(crossing(v1, v2));
+	v1->order();
 
 	return true;
 }
 
 bool Diagram::tryChangeCrossing(vertex *v1, vertex *v2) {
-	if (tryRemoveCrossing (v2, v1)) {
-		return tryAddCrossing (v1, v2);
+	if (isCrossing(v2, v1)) {
+		tryRemoveCrossing(v2, v1);
+		return tryAddCrossing(v1, v2);
 	}
 
 	return false;
 }
 
-bool Diagram::tryRemoveCrossing(vertex *v1, vertex *v2) {
-	for (auto crs : v1->crossings()) {
-		if (crs->up() == v2) {
-			delete crs;
-			return true;
-		}
-	}
-
-	return false;
+void Diagram::tryRemoveCrossing(vertex *v1, vertex *v2) {
+	v1->_crossings.remove(crossing(v1, v2));
 }
 
 bool Diagram::isCrossing(vertex *v1, vertex *v2) {
-	for (auto crs : v1->crossings()) {
-		if (crs->up() == v2) {
+	for (const auto &crs : v1->crossings()) {
+		if (crs.up() == v2) {
 			return true;
 		}
 	}

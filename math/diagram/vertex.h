@@ -3,7 +3,7 @@
 
 #include <list>
 
-class crossing;
+struct crossing;
 
 namespace KE { namespace TwoD {
 
@@ -13,12 +13,12 @@ class Diagram;
 
 class vertex {
 
-friend class crossing;
+friend struct crossing;
 friend class KE::TwoD::Diagram;
 
 private:
   vertex *vertex_prev, *vertex_next;
-	std::list<crossing*> _crossings;
+	std::list<crossing> _crossings;
   int coord_x, coord_y;
 
 public:
@@ -35,14 +35,14 @@ private:
   vertex *prev() const { return this->vertex_prev; }
 
 public:
-	const std::list<crossing*> &crossings() const { return this->_crossings; }
+	const std::list<crossing> &crossings() const { return this->_crossings; }
   int x() const { return this->coord_x; }
   int y() const { return this->coord_y; }
 
   void order();
 };
 
-class crossing {
+struct crossing {
 
 friend class vertex;
 
@@ -53,17 +53,12 @@ public:
   crossing(vertex*, vertex*);
 
 public:
-  vertex *up();
-  vertex *down();
-  float x();
-  float y();
-};
+  vertex *up() const { return this->arc_up; }
+  vertex *down() const { return this->arc_down; }
+  float x() const;
+  float y() const;
 
-inline vertex *crossing::up() {
-  return arc_up;
-}
-inline vertex *crossing::down() {
-  return arc_down;
-}
+	bool operator == (const crossing &crs) const { return this->arc_up == crs.arc_up && this->arc_down == crs.arc_down; }
+};
 
 #endif /* __VERTEX_H__ */

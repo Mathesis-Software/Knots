@@ -65,7 +65,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::CHANGE_CROSS:
     {
-      crossing *c = Parent->diagram.findCrossing(m->x(), m->y(), 17);
+      auto c = Parent->diagram.findCrossing(m->x(), m->y(), 17);
       if (c) {
         Parent->diagram.tryChangeCrossing(c->up(), c->down());
         repaint();

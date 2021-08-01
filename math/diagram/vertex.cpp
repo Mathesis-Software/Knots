@@ -89,3 +89,11 @@ void vertex::order() {
 		}
   }
 }
+
+std::list<crossing*> vertex::crossings() const {
+	std::list<crossing*> crossings;
+	for (auto crs = this->crs(); crs; crs = crs->next()) {
+		crossings.push_back(crs);
+	}
+	return crossings;
+}

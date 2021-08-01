@@ -21,7 +21,7 @@ bool Diagram::simplify(int depth) {
       for (int i = 1; i < depth; i++)
         t = t->prev();
       for (int i = 0; i < 2 * depth; i++) {
-				removeVertexFlag &= !t->crs();
+				removeVertexFlag &= t->crossings().empty();
         t = t->next();
       }
       if (removeVertexFlag) {

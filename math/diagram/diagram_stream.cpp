@@ -81,21 +81,18 @@ void Diagram::save(std::ostream &os) {
 		index += 1;
 	}
 
-  crossing *c;
-
   {
     int cnum = 0;
 		for (auto vertex : this->vertices()) {
-      for (c = vertex->crs(); c; c = c->next())
-        cnum++;
+			cnum += vertex->crossings().size();
 		}
 
     os << "#CROSSINGS " << cnum << "\n";
   }
 
 	for (auto vertex : this->vertices()) {
-    for (c = vertex->crs(); c; c = c->next()) {
-      os << nums[vertex] << " " << nums[c->up()] << "\n";
+    for (auto crs : vertex->crossings()) {
+      os << nums[vertex] << " " << nums[crs->up()] << "\n";
 		}
   }
 }

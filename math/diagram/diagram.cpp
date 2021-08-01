@@ -94,7 +94,7 @@ crossing *Diagram::findCrossing(double x, double y, double maxDistance) const {
 	crossing *found = nullptr;
 
 	for (auto vertex : this->vertices()) {
-		for (crossing *crs = vertex->crs(); crs != nullptr; crs = crs->next()) {
+		for (auto crs : vertex->crossings()) {
 			const double distance = hypot(x - crs->x(), y - crs->y());
 			if (distance < best) {
 				best = distance;

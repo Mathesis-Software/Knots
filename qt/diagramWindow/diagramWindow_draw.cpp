@@ -23,9 +23,8 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
   int x0 = edge.start->x(),
       y0 = edge.start->y(),
       x1, y1;
-  crossing *crs = edge.start->crs();
 
-  while (crs) {
+	for (auto crs : edge.start->crossings()) {
     if (Parent->diagram.isClosed || crs->up() != Parent->diagram.vertices().back()) {
       x1 = (int)(crs->x() - deltaX);
       y1 = (int)(crs->y() - deltaY);
@@ -36,8 +35,6 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
       x0 = (int)(crs->x() + deltaX);
       y0 = (int)(crs->y() + deltaY);
     }
-
-    crs = crs->next();
   }
 
   x1 = edge.end->x();

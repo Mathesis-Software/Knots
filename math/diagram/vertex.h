@@ -1,6 +1,8 @@
 #ifndef __VERTEX_H__
 #define __VERTEX_H__
 
+#include <list>
+
 class crossing;
 
 namespace KE { namespace TwoD {
@@ -31,9 +33,10 @@ public:
 private:
   vertex *next() const { return this->vertex_next; }
   vertex *prev() const { return this->vertex_prev; }
+  crossing *crs() const { return this->vertex_crs; }
 
 public:
-  crossing *crs();
+	std::list<crossing*> crossings() const;
   int x() const { return this->coord_x; }
   int y() const { return this->coord_y; }
 
@@ -54,24 +57,16 @@ public:
   crossing(vertex*, vertex*);
   ~crossing();
 
-  crossing *next();
-  crossing *prev();
+private:
+  crossing *next() const { return this->next_crossing; }
+  crossing *prev() const { return this->prev_crossing; }
+
+public:
   vertex *up();
   vertex *down();
   float x();
   float y();
 };
-
-inline crossing *vertex::crs() {
-  return vertex_crs;
-}
-
-inline crossing *crossing::next() {
-  return next_crossing;
-}
-inline crossing *crossing::prev() {
-  return prev_crossing;
-}
 
 inline vertex *crossing::up() {
   return arc_up;

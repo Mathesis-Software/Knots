@@ -15,14 +15,8 @@ void Diagram::addCrossing(Vertex *v1, Vertex *v2) {
 	e1.orderCrossings();
 }
 
-bool Diagram::tryChangeCrossing(Vertex *v1, Vertex *v2) {
-	if (isCrossing(v2, v1)) {
-		this->removeCrossing(v1, v2);
-		this->addCrossing(v1, v2);
-		return true;
-	}
-
-	return false;
+void Diagram::flipCrossing(Crossing &crs) {
+	this->addCrossing(crs.up(), crs.down());
 }
 
 void Diagram::removeCrossing(Vertex *v1, Vertex *v2) {
@@ -38,6 +32,21 @@ bool Diagram::isCrossing(Vertex *v1, Vertex *v2) {
 	}
 
 	return false;
+}
+
+std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(Vertex *v1, Vertex *v2) {
+	for (const auto &crs : v1->crossings()) {
+		if (crs.up() == v2) {
+			return std::make_shared<Crossing>(crs);
+		}
+	}
+	for (const auto &crs : v2->crossings()) {
+		if (crs.up() == v1) {
+			return std::make_shared<Crossing>(crs);
+		}
+	}
+
+	return nullptr;
 }
 
 }}

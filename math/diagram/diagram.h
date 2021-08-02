@@ -101,8 +101,7 @@ public:
 	Vertex *addVertex(Vertex*, int, int);
 	void removeVertex(Vertex*);
 	void moveVertex(Vertex*, int, int);
-	bool tryChangeCrossing(Vertex*, Vertex*);
-	bool isCrossing(Vertex*, Vertex*);
+	void flipCrossing(Crossing &crossing);
 	void shift(int x, int y);
 	bool simplify(int depth);
 	void clear();
@@ -114,6 +113,8 @@ public:
 private:
 	void addCrossing(Vertex*, Vertex*);
 	void removeCrossing(Vertex*, Vertex*);
+	bool isCrossing(Vertex*, Vertex*);
+	std::shared_ptr<Crossing> getCrossing(Vertex*, Vertex*);
 	void order();
 
 public:

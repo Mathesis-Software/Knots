@@ -67,7 +67,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     {
       auto c = Parent->diagram.findCrossing(m->x(), m->y(), 17);
       if (c) {
-        Parent->diagram.tryChangeCrossing(c->up(), c->down());
+        Parent->diagram.flipCrossing(*c);
         repaint();
         //repaint(false);
         Parent->isSaved = false;

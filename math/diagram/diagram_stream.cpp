@@ -47,26 +47,18 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
       return;
     }
 
-		const auto list = this->vertices();
-		const std::vector<Vertex*> vertices(std::begin(list), std::end(list));
-    int x, y;
+		const auto list = this->edges();
+		const std::vector<Edge> edges(std::begin(list), std::end(list));
+		std::size_t x, y;
     for (int i = 0; i < length; i++) {
       is >> x >> y;
-      if (!is.good() || x < 0 || y < 0 || x >= vertices.size() || y >= vertices.size()) {
+      if (!is.good() || x >= edges.size() || y >= edges.size()) {
+				// TODO: throw exception with a message
 				this->clear();
         return;
       }
-      if (x > y) {
-        if (!this->tryChangeCrossing(vertices[x], vertices[y])) {
-          this->clear();
-          return;
-        }
-      } else {
-        if (!this->isCrossing(vertices[x], vertices[y])) {
-          this->clear();
-          return;
-        }
-      }
+			// TODO: check edges[x].intersects(edges[y])
+			this->addCrossing(edges[x].start, edges[y].start);
     }
   }
 }

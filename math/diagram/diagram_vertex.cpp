@@ -24,8 +24,7 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 		}
 
 		if (e.intersects(e1)) {
-			if (!isCrossing(current, new_vertex->prev()) &&
-					!isCrossing(new_vertex->prev(), current)) {
+			if (!getCrossing(current, new_vertex->prev())) {
 				this->addCrossing(current, new_vertex->prev());
 			}
 		} else {
@@ -60,7 +59,7 @@ void Diagram::removeVertex(Vertex* v) {
 		const Edge e(current, current->next());
 		const Edge e1(v->prev(), v);
 		if (e.intersects(e1)) {
-			if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
+			if (!getCrossing(v->prev(), current)) {
 				if (isCrossing(v, current))
 					this->addCrossing(v->prev(), current);
 				else
@@ -94,14 +93,14 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 
 		if (e.intersects(e2)) {
 			if (e.intersects(e1)) {
-				if (!isCrossing(current, v) && !isCrossing(v, current)) {
+				if (!getCrossing(current, v)) {
 					this->addCrossing(current, v);
 				}
-				if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
+				if (!getCrossing(current, v->prev())) {
 					this->addCrossing(current, v->prev());
 				}
 			} else {
-				if (!isCrossing(current, v) && !isCrossing(v, current)) {
+				if (!getCrossing(current, v)) {
 					if (isCrossing(v->prev(), current))
 						this->addCrossing(v, current);
 					else
@@ -111,7 +110,7 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 			}
 		} else {
 			if (e.intersects(e1)) {
-				if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
+				if (!getCrossing(current, v->prev())) {
 					if (isCrossing(v, current))
 						this->addCrossing(v->prev(), current);
 					else

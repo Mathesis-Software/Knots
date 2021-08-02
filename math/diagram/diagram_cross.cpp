@@ -3,14 +3,14 @@
 namespace KE { namespace TwoD {
 
 bool Diagram::tryAddCrossing(vertex *v1, vertex *v2) {
-	const Edge e1(v1, v1->next());
+	Edge e1(v1, v1->next());
 	const Edge e2(v2, v2->next());
 	if (!e1.intersects(e2)) {
 		return false;
 	}
 
 	v1->_crossings.push_back(crossing(v1, v2));
-	v1->order();
+	e1.orderCrossings();
 
 	return true;
 }

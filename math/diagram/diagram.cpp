@@ -1,4 +1,6 @@
+#include <algorithm>
 #include <cmath>
+#include <functional>
 #include <limits>
 
 #include "diagram.h"
@@ -29,11 +31,9 @@ int Diagram::length() {
 }
 
 void Diagram::order() {
-	vertex *v = base;
-	do {
-		v->order();
-		v = v->next();
-	} while (v != base);
+	for (Edge &edge : this->edges()) {
+		edge.orderCrossings();
+	}
 }
 
 void Diagram::shift(int x, int y) {
@@ -155,6 +155,24 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 		ori == orientation(*edge.start, *this->end, *edge.end) &&
 		ori == orientation(*this->end, *edge.end, *this->start) &&
 		ori == orientation(*edge.end, *this->start, *edge.start);
+}
+
+void Diagram::Edge::orderCrossings() {
+	std::function<bool(const crossing&,const crossing&)> comparator;
+  if (abs(this->dx()) > abs(this->dy())) {
+    if (this->dx() > 0) {
+			comparator = [](const crossing &c0, const crossing &c1) { return c0.x() < c1.x(); };
+		} else {
+			comparator = [](const crossing &c0, const crossing &c1) { return c0.x() > c1.x(); };
+		}
+	} else {
+    if (this->dy() > 0) {
+			comparator = [](const crossing &c0, const crossing &c1) { return c0.y() < c1.y(); };
+		} else {
+			comparator = [](const crossing &c0, const crossing &c1) { return c0.y() > c1.y(); };
+		}
+	}
+	this->start->_crossings.sort(comparator);
 }
 
 }}

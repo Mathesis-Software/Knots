@@ -38,8 +38,6 @@ public:
 	const std::list<crossing> &crossings() const { return this->_crossings; }
   int x() const { return this->coord_x; }
   int y() const { return this->coord_y; }
-
-  void order();
 };
 
 struct crossing {

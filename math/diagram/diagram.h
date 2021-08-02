@@ -24,12 +24,19 @@ friend class ThreeD::Knot;
 
 public:
 	struct Edge {
+		friend class Diagram;
+
 		vertex *start;
 		vertex *end;
 
 		Edge(vertex *start, vertex *end) : start(start), end(end) {
 		}
+		int dx() const { return this->end->x() - this->start->x(); }
+		int dy() const { return this->end->y() - this->start->y(); }
 		bool intersects(const Edge &edge) const; 
+
+	private:
+		void orderCrossings();
 	};
 
 public:

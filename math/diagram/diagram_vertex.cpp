@@ -3,91 +3,91 @@
 namespace KE { namespace TwoD {
 
 Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
-  if (!base) {
-    base = new Vertex(x, y);
-    return base;
-  }
+	if (!base) {
+		base = new Vertex(x, y);
+		return base;
+	}
 
-  Vertex *new_vertex = new Vertex(v ? v : base->prev(), x, y);
+	Vertex *new_vertex = new Vertex(v ? v : base->prev(), x, y);
 
-  Vertex *current = base;
-  do {
+	Vertex *current = base;
+	do {
 		const Edge e(current, current->next());
 		const Edge e1(new_vertex->prev(), new_vertex);
 		const Edge e2(new_vertex, new_vertex->next());
 
-    if (e.intersects(e2)) {
-      if (isCrossing(new_vertex->prev(), current))
-        this->addCrossing(new_vertex, current);
-      else
-        this->addCrossing(current, new_vertex);
-    }
+		if (e.intersects(e2)) {
+			if (isCrossing(new_vertex->prev(), current))
+				this->addCrossing(new_vertex, current);
+			else
+				this->addCrossing(current, new_vertex);
+		}
 
-    if (e.intersects(e1)) {
-      if (!isCrossing(current, new_vertex->prev()) &&
-          !isCrossing(new_vertex->prev(), current)) {
-        this->addCrossing(current, new_vertex->prev());
+		if (e.intersects(e1)) {
+			if (!isCrossing(current, new_vertex->prev()) &&
+					!isCrossing(new_vertex->prev(), current)) {
+				this->addCrossing(current, new_vertex->prev());
 			}
-    } else {
-      this->removeCrossing(current, new_vertex->prev());
-    }
+		} else {
+			this->removeCrossing(current, new_vertex->prev());
+		}
 
-    current = current->next();
-  } while (current != base);
+		current = current->next();
+	} while (current != base);
 
-  order();
+	order();
 	return new_vertex;
 }
 
 void Diagram::removeVertex(Vertex* v) {
-  if (v == nullptr)
-    return;
+	if (v == nullptr)
+		return;
 
-  if (base == base->next()) {
-    delete base;
-    base = nullptr;
-    return;
-  }
+	if (base == base->next()) {
+		delete base;
+		base = nullptr;
+		return;
+	}
 
-  if (v == base)
-    base = base->next();
+	if (v == base)
+		base = base->next();
 
-  v->exclude();
+	v->exclude();
 
-  Vertex *current = base;
+	Vertex *current = base;
 
-  do {
+	do {
 		const Edge e(current, current->next());
 		const Edge e1(v->prev(), v);
-    if (e.intersects(e1)) {
-      if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
-        if (isCrossing(v, current))
-          this->addCrossing(v->prev(), current);
-        else
-          this->addCrossing(current, v->prev());
-      }
-    } else {
-      this->removeCrossing(current, v->prev());
-    }
+		if (e.intersects(e1)) {
+			if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
+				if (isCrossing(v, current))
+					this->addCrossing(v->prev(), current);
+				else
+					this->addCrossing(current, v->prev());
+			}
+		} else {
+			this->removeCrossing(current, v->prev());
+		}
 
-    this->removeCrossing(current, v);
-    current = current->next();
-  } while (current != base);
+		this->removeCrossing(current, v);
+		current = current->next();
+	} while (current != base);
 
-  order();
+	order();
 
-  delete v;
+	delete v;
 }
 
 void Diagram::moveVertex(Vertex *v, int x, int y) {
-  if (v == nullptr)
-    return;
+	if (v == nullptr)
+		return;
 
-  v->moveTo(x, y);
+	v->moveTo(x, y);
 
-  Vertex *current = base;
+	Vertex *current = base;
 
-  do {
+	do {
 		const Edge e(current, current->next());
 		const Edge e1(v->prev(), v);
 		const Edge e2(v, v->next());
@@ -124,10 +124,10 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 			}
 		}
 
-    current = current->next();
-  } while (current != base);
+		current = current->next();
+	} while (current != base);
 
-  order();
+	order();
 }
 
 }}

@@ -67,16 +67,12 @@ void diagramMainWidget::drawIt(QPainter &painter) {
 }
 
 void diagramMainWidget::paintEvent(QPaintEvent*) {
-  QPixmap pm(width(), height());
-  pm.fill(Qt::white);
   QPainter pnt;
-  pnt.begin(&pm);
+  pnt.begin(this);
+	pnt.setRenderHint(QPainter::Antialiasing);
+	pnt.fillRect(0, 0, this->width(), this->height(), Qt::white);
   drawIt(pnt);
   pnt.end();
-  QPainter main;
-  main.begin(this);
-  main.drawPixmap(0, 0, pm);
-  main.end();
 }
 
 void diagramWindow::printIt(QPrinter *prn) {

@@ -48,7 +48,7 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
     }
 
 		const auto list = this->vertices();
-		const std::vector<vertex*> vertices(std::begin(list), std::end(list));
+		const std::vector<Vertex*> vertices(std::begin(list), std::end(list));
     int x, y;
     for (int i = 0; i < length; i++) {
       is >> x >> y;
@@ -73,7 +73,7 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
 
 void Diagram::save(std::ostream &os) {
   os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->length() << "\n";
-	std::map<vertex*,std::size_t> nums;
+	std::map<Vertex*,std::size_t> nums;
 	int index = 0;
 	for (const auto &vertex : this->vertices()) {
 		nums[vertex] = index;

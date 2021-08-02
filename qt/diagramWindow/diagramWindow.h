@@ -66,7 +66,7 @@ private:
 
   diagramWindow *Parent;
 
-  void drawVertex(QPainter&, const vertex &vertex);
+  void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
   void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
 
   void paintEvent(QPaintEvent*);

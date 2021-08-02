@@ -2,15 +2,15 @@
 
 namespace KE { namespace TwoD {
 
-vertex *Diagram::addVertex(vertex* v, int x, int y) {
+Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
   if (!base) {
-    base = new vertex(x, y);
+    base = new Vertex(x, y);
     return base;
   }
 
-  vertex *new_vertex = new vertex(v ? v : base->prev(), x, y);
+  Vertex *new_vertex = new Vertex(v ? v : base->prev(), x, y);
 
-  vertex *current = base;
+  Vertex *current = base;
   do {
 		const Edge e(current, current->next());
 		const Edge e1(new_vertex->prev(), new_vertex);
@@ -42,7 +42,7 @@ vertex *Diagram::addVertex(vertex* v, int x, int y) {
 	return new_vertex;
 }
 
-void Diagram::removeVertex(vertex* v) {
+void Diagram::removeVertex(Vertex* v) {
   if (v == nullptr)
     return;
 
@@ -57,7 +57,7 @@ void Diagram::removeVertex(vertex* v) {
 
   v->exclude();
 
-  vertex *current = base;
+  Vertex *current = base;
 
   do {
 		const Edge e(current, current->next());
@@ -83,13 +83,13 @@ void Diagram::removeVertex(vertex* v) {
   delete v;
 }
 
-void Diagram::moveVertex(vertex *v, int x, int y) {
+void Diagram::moveVertex(Vertex *v, int x, int y) {
   if (v == nullptr)
     return;
 
   v->moveTo(x, y);
 
-  vertex *current = base;
+  Vertex *current = base;
 
   do {
 		const Edge e(current, current->next());

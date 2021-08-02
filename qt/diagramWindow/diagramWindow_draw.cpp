@@ -8,7 +8,7 @@ diagramMainWidget::diagramMainWidget(diagramWindow *p) : QWidget (p) {
   Parent = p;
 }
 
-void diagramMainWidget::drawVertex(QPainter &painter, const vertex &v) {
+void diagramMainWidget::drawVertex(QPainter &painter, const KE::TwoD::Diagram::Vertex &v) {
   painter.drawEllipse(v.x() - 4, v.y() - 4, 9, 9);
 }
 

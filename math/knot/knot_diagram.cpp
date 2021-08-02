@@ -13,7 +13,7 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from
 			0
 		));
 		
-		const crossing *previous = nullptr;
+		const TwoD::Diagram::Crossing *previous = nullptr;
 		for (const auto &crs : v->crossings()) {
 			if (previous) {
 				points.push_back(Point(

@@ -2,7 +2,7 @@
 
 #include "diagramWindow.h"
 
-static vertex *localVertex = NULL;
+static KE::TwoD::Diagram::Vertex *localVertex = NULL;
 static int localx, localy;
 static bool doSomething = false;
 
@@ -40,7 +40,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::MOVE_POINT:
     {
-      vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
+			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
       if (v) {
         localVertex = v;
         Parent->isSaved = false;
@@ -50,7 +50,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::REMOVE_POINT:
     {
-      vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
+			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
       if (v) {
         Parent->diagram.removeVertex(v);
 				if (Parent->isEmpty()) {

@@ -1,12 +1,13 @@
-#include <stdlib.h>
 #include "diagram.h"
 
-crossing::crossing(vertex* v1, vertex *v2) {
+namespace KE { namespace TwoD {
+
+Diagram::Crossing::Crossing(Vertex* v1, Vertex *v2) {
   arc_up = v2;
   arc_down = v1;
 }
 
-float crossing::x() const {
+float Diagram::Crossing::x() const {
   int d0, d1;
 
   d0 = (up()->next()->x() - up()->x())
@@ -25,7 +26,7 @@ float crossing::x() const {
   return up()->x() + 1.0 * (up()->next()->x() - up()->x()) * d1 / d0;
 }     
 
-float crossing::y() const {
+float Diagram::Crossing::y() const {
   int d0, d1;
 
   d0 = (up()->next()->x() - up()->x()) * (down()->y() - down()->next()->y())
@@ -41,3 +42,5 @@ float crossing::y() const {
 
   return up()->y() + 1.0 * (up()->next()->y() - up()->y()) * d1 / d0;
 }
+
+}}

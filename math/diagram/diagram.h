@@ -6,62 +6,6 @@
 #include <memory>
 #include <string>
 
-struct crossing;
-
-namespace KE { namespace TwoD {
-
-class Diagram;
-
-}}
-
-class vertex {
-
-friend struct crossing;
-friend class KE::TwoD::Diagram;
-
-private:
-  vertex *vertex_prev, *vertex_next;
-	std::list<crossing> _crossings;
-  int coord_x, coord_y;
-
-public:
-  vertex(int, int);
-  vertex(vertex*, int, int);
-  ~vertex();
-  void exclude();
-
-  void move(int, int);
-  void moveTo(int, int);
-
-private:
-  vertex *next() const { return this->vertex_next; }
-  vertex *prev() const { return this->vertex_prev; }
-
-public:
-	const std::list<crossing> &crossings() const { return this->_crossings; }
-  int x() const { return this->coord_x; }
-  int y() const { return this->coord_y; }
-};
-
-struct crossing {
-
-friend class vertex;
-
-private:
-  vertex *arc_up, *arc_down;
-
-public:
-  crossing(vertex*, vertex*);
-
-public:
-  vertex *up() const { return this->arc_up; }
-  vertex *down() const { return this->arc_down; }
-  float x() const;
-  float y() const;
-
-	bool operator == (const crossing &crs) const { return this->arc_up == crs.arc_up && this->arc_down == crs.arc_down; }
-};
-
 namespace KE {
 
 namespace ThreeD {
@@ -77,13 +21,43 @@ class Diagram {
 friend class ThreeD::Knot;
 
 public:
+	struct Crossing;
+
+	class Vertex {
+
+	friend class Diagram;
+
+	private:
+		Vertex *vertex_prev, *vertex_next;
+		std::list<Crossing> _crossings;
+		int coord_x, coord_y;
+
+	public:
+		Vertex(int, int);
+		Vertex(Vertex*, int, int);
+		~Vertex();
+		void exclude();
+
+		void move(int, int);
+		void moveTo(int, int);
+
+	private:
+		Vertex *next() const { return this->vertex_next; }
+		Vertex *prev() const { return this->vertex_prev; }
+
+	public:
+		const std::list<KE::TwoD::Diagram::Crossing> &crossings() const { return this->_crossings; }
+		int x() const { return this->coord_x; }
+		int y() const { return this->coord_y; }
+	};
+
 	struct Edge {
 		friend class Diagram;
 
-		vertex *start;
-		vertex *end;
+		Vertex *start;
+		Vertex *end;
 
-		Edge(vertex *start, vertex *end) : start(start), end(end) {
+		Edge(Vertex *start, Vertex *end) : start(start), end(end) {
 		}
 		int dx() const { return this->end->x() - this->start->x(); }
 		int dy() const { return this->end->y() - this->start->y(); }
@@ -93,35 +67,54 @@ public:
 		void orderCrossings();
 	};
 
+	struct Crossing {
+
+	friend class Vertex;
+
+	private:
+		Vertex *arc_up, *arc_down;
+
+	public:
+		Crossing(Vertex*, Vertex*);
+
+	public:
+		Vertex *up() const { return this->arc_up; }
+		Vertex *down() const { return this->arc_down; }
+		float x() const;
+		float y() const;
+
+		bool operator == (const Crossing &crs) const { return this->arc_up == crs.arc_up && this->arc_down == crs.arc_down; }
+	};
+
 public:
 	std::string caption;
 
 private:
-	vertex *base;
+	Vertex *base;
 
 public:
 	bool isClosed;
 
 public:
-	std::list<vertex*> vertices() const;
+	std::list<Vertex*> vertices() const;
 	std::list<Edge> edges() const;
-	vertex *addVertex(vertex*, int, int);
-	void removeVertex(vertex*);
-	void moveVertex(vertex*, int, int);
-	bool tryChangeCrossing(vertex*, vertex*);
-	bool isCrossing(vertex*, vertex*);
+	Vertex *addVertex(Vertex*, int, int);
+	void removeVertex(Vertex*);
+	void moveVertex(Vertex*, int, int);
+	bool tryChangeCrossing(Vertex*, Vertex*);
+	bool isCrossing(Vertex*, Vertex*);
 	void shift(int x, int y);
 	bool simplify(int depth);
 	void clear();
 	int length();
 
-	vertex *findVertex(double x, double y, double maxDistance) const;
+	Vertex *findVertex(double x, double y, double maxDistance) const;
 	std::shared_ptr<Edge> findEdge(double x, double y, double maxDistance) const;
-	std::shared_ptr<crossing> findCrossing(double x, double y, double maxDistance) const;
+	std::shared_ptr<Crossing> findCrossing(double x, double y, double maxDistance) const;
 
 private:
-	bool tryAddCrossing(vertex*, vertex*);
-	void tryRemoveCrossing(vertex*, vertex*);
+	bool tryAddCrossing(Vertex*, Vertex*);
+	void tryRemoveCrossing(Vertex*, Vertex*);
 	void order();
 
 public:

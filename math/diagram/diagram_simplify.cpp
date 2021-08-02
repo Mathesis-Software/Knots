@@ -6,7 +6,7 @@ bool Diagram::simplify(int depth) {
   if (depth < 1)
     return 0;
 
-  vertex *v = base;
+  Vertex *v = base;
 
   bool changed = false;
 	for (bool continueFlag = true; continueFlag; ) {
@@ -17,7 +17,7 @@ bool Diagram::simplify(int depth) {
         break;
 
       bool removeVertexFlag = true;
-      vertex *t = v;
+      Vertex *t = v;
       for (int i = 1; i < depth; i++)
         t = t->prev();
       for (int i = 0; i < 2 * depth; i++) {

@@ -21,15 +21,6 @@ void Diagram::clear() {
 	this->isClosed = false;
 }
 
-int Diagram::length() {
-	Vertex *v = base->next();
-	int l;
-	for (l = 1; v != base; l++) {
-		v = v->next();
-	}
-	return l;
-}
-
 void Diagram::order() {
 	for (Edge &edge : this->edges()) {
 		edge.orderCrossings();

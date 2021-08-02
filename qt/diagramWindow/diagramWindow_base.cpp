@@ -113,7 +113,7 @@ void diagramWindow::convert() {
     return;
   }
 
-  if (this->diagram.length() <= 2) {
+  if (this->diagram.vertices().size() <= 2) {
     QMessageBox::critical(this, "Error", "\nCannot convert diagram with less than 3 points.\n");
     return;
   }

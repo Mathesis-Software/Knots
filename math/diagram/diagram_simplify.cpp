@@ -13,7 +13,7 @@ bool Diagram::simplify(int depth) {
     continueFlag = false;
 
     do {
-      if (length() == 3)
+      if (this->vertices().size() == 3)
         break;
 
       bool removeVertexFlag = true;

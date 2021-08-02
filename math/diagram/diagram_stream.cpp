@@ -52,7 +52,7 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
     int x, y;
     for (int i = 0; i < length; i++) {
       is >> x >> y;
-      if (!is.good() || x < 0 || y < 0 || x >= this->length() || y >= this->length()) {
+      if (!is.good() || x < 0 || y < 0 || x >= vertices.size() || y >= vertices.size()) {
 				this->clear();
         return;
       }
@@ -72,7 +72,7 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
 }
 
 void Diagram::save(std::ostream &os) {
-  os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->length() << "\n";
+  os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->vertices().size() << "\n";
 	std::map<Vertex*,std::size_t> nums;
 	int index = 0;
 	for (const auto &vertex : this->vertices()) {

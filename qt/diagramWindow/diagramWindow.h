@@ -53,7 +53,7 @@ public:
   diagramWindow();
   ~diagramWindow();
 
-  bool isEmpty() { return this->diagram.isEmpty(); }
+  bool isEmpty() { return this->diagram.vertices().empty(); }
 
   friend class diagramMainWidget;
 };

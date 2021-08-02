@@ -106,7 +106,6 @@ public:
 	void shift(int x, int y);
 	bool simplify(int depth);
 	void clear();
-	int length();
 
 	Vertex *findVertex(double x, double y, double maxDistance) const;
 	std::shared_ptr<Edge> findEdge(double x, double y, double maxDistance) const;
@@ -122,18 +121,12 @@ public:
 	Diagram(std::istream &is);
 	~Diagram();
 
-	bool isEmpty();
-	
 	void save(std::ostream &os);
 
 private:
 	Diagram(const Diagram&) = delete;
 	Diagram& operator=(const Diagram&) = delete;
 };
-
-inline bool Diagram::isEmpty() {
-	return this->base == nullptr;
-}
 
 }}
 

@@ -75,6 +75,8 @@ public:
 		int dy() const { return this->end->y() - this->start->y(); }
 		bool intersects(const Edge &edge) const; 
 
+		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
+
 	private:
 		void orderCrossings();
 	};

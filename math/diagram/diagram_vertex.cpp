@@ -35,8 +35,9 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 }
 
 void Diagram::removeVertex(Vertex* v) {
-	if (v == nullptr)
+	if (v == nullptr) {
 		return;
+	}
 
 	if (base == base->next()) {
 		delete base;
@@ -44,28 +45,33 @@ void Diagram::removeVertex(Vertex* v) {
 		return;
 	}
 
-	if (v == base)
+	if (v == base) {
 		base = base->next();
+	}
 
 	v->exclude();
 
+	const Edge removed1(v->prev(), v);
+	const Edge removed2(v, v->next());
+	const Edge merged(v->prev(), v->next());
 	for (const Edge &edge : this->edges()) {
-		const Edge e1(v->prev(), v);
-		if (edge.intersects(e1)) {
-			if (!getCrossing(v->prev(), edge.start)) {
-				if (isCrossing(v, edge.start))
-					this->addCrossing(v->prev(), edge.start);
-				else
-					this->addCrossing(edge.start, v->prev());
-			}
-		} else {
-			this->removeCrossing(edge.start, v->prev());
+		auto removed_crossing1 = this->getCrossing(removed1.start, edge.start);
+		auto removed_crossing2 = this->getCrossing(removed2.start, edge.start);
+
+		this->removeCrossing(removed1.start, edge.start);
+		this->removeCrossing(removed2.start, edge.start);
+
+		if (!edge.intersects(merged)) {
+			continue;
 		}
-
-		this->removeCrossing(edge.start, v);
+		// TODO: delete '.start' comparison; compare edges directly
+		if ((removed_crossing1 && removed_crossing1->up().start == removed1.start) ||
+				(removed_crossing2 && removed_crossing2->up() == removed2)) {
+			this->addCrossing(edge.start, merged.start);
+		} else {
+			this->addCrossing(merged.start, edge.start);
+		}
 	}
-
-	order();
 
 	delete v;
 }

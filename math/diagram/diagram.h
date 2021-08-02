@@ -1,6 +1,7 @@
 #ifndef __DIAGRAM_H__
 #define __DIAGRAM_H__
 
+#include <cmath>
 #include <iostream>
 #include <list>
 #include <memory>
@@ -15,6 +16,16 @@ class Knot;
 }
 
 namespace TwoD {
+
+struct FloatPoint {
+	const float x, y;
+	FloatPoint(float x, float y) : x(x), y(y) {
+	}
+
+	float distance(const FloatPoint &pt) const {
+		return hypotf(x - pt.x, y - pt.y);
+	}
+};
 
 class Diagram {
 
@@ -49,6 +60,7 @@ public:
 		const std::list<KE::TwoD::Diagram::Crossing> &crossings() const { return this->_crossings; }
 		int x() const { return this->coord_x; }
 		int y() const { return this->coord_y; }
+		FloatPoint coords() const { return FloatPoint(this->coord_x, this->coord_y); }
 	};
 
 	struct Edge {
@@ -78,10 +90,9 @@ public:
 		Crossing(Vertex*, Vertex*);
 
 	public:
-		Vertex *up() const { return this->arc_up; }
-		Vertex *down() const { return this->arc_down; }
-		float x() const;
-		float y() const;
+		Edge up() const { return Edge(this->arc_up, this->arc_up->next()); }
+		Edge down() const { return Edge(this->arc_down, this->arc_down->next()); }
+		std::shared_ptr<FloatPoint> coords() const;
 
 		bool operator == (const Crossing &crs) const { return this->arc_up == crs.arc_up && this->arc_down == crs.arc_down; }
 	};
@@ -106,9 +117,9 @@ public:
 	bool simplify(int depth);
 	void clear();
 
-	Vertex *findVertex(double x, double y, double maxDistance) const;
-	std::shared_ptr<Edge> findEdge(double x, double y, double maxDistance) const;
-	std::shared_ptr<Crossing> findCrossing(double x, double y, double maxDistance) const;
+	Vertex *findVertex(const FloatPoint &pt, float maxDistance) const;
+	std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
+	std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
 private:
 	void addCrossing(Vertex*, Vertex*);

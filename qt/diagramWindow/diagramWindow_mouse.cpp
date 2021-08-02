@@ -29,7 +29,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       return;
     case diagramWindow::ADD_POINT:
     {
-			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = Parent->diagram.findEdge(m->x(), m->y(), 5);
+			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = Parent->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5);
       if (edge) {
         localVertex = Parent->diagram.addVertex(edge->start, m->x(), m->y());
         repaint();
@@ -40,7 +40,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::MOVE_POINT:
     {
-			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
+			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
       if (v) {
         localVertex = v;
         Parent->isSaved = false;
@@ -50,7 +50,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::REMOVE_POINT:
     {
-			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(m->x(), m->y(), 17);
+			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
       if (v) {
         Parent->diagram.removeVertex(v);
 				if (Parent->isEmpty()) {
@@ -65,7 +65,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::CHANGE_CROSS:
     {
-      auto c = Parent->diagram.findCrossing(m->x(), m->y(), 17);
+      auto c = Parent->diagram.findCrossing(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
       if (c) {
         Parent->diagram.flipCrossing(*c);
         repaint();

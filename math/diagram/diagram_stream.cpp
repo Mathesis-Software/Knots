@@ -84,7 +84,7 @@ void Diagram::save(std::ostream &os) {
 
 	for (const auto &vertex : this->vertices()) {
     for (const auto &crs : vertex->crossings()) {
-      os << nums[vertex] << " " << nums[crs.up()] << "\n";
+      os << nums[vertex] << " " << nums[crs.up().start] << "\n";
 		}
   }
 }

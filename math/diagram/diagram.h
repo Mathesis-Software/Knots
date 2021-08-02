@@ -89,7 +89,7 @@ public:
 		Vertex *arc_up, *arc_down;
 
 	public:
-		Crossing(Vertex*, Vertex*);
+		Crossing(Vertex *v1, Vertex *v2) : arc_up(v2), arc_down(v1) {}
 
 	public:
 		Edge up() const { return Edge(this->arc_up, this->arc_up->next()); }

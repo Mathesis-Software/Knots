@@ -10,23 +10,23 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 
 	Vertex *new_vertex = new Vertex(v ? v : base->prev(), x, y);
 
+	const Edge removed(new_vertex->prev(), new_vertex->next());
+	const Edge new1(new_vertex->prev(), new_vertex);
+	const Edge new2(new_vertex, new_vertex->next());
+
 	for (const Edge &edge : this->edges()) {
-		const Edge e1(new_vertex->prev(), new_vertex);
-		const Edge e2(new_vertex, new_vertex->next());
+		auto removed_crossing = this->getCrossing(removed.start, edge.start);
+		this->removeCrossing(removed.start, edge.start);
 
-		if (edge.intersects(e2)) {
-			if (isCrossing(new_vertex->prev(), edge.start))
-				this->addCrossing(new_vertex, edge.start);
-			else
-				this->addCrossing(edge.start, new_vertex);
-		}
-
-		if (edge.intersects(e1)) {
-			if (!getCrossing(edge.start, new_vertex->prev())) {
-				this->addCrossing(edge.start, new_vertex->prev());
+		for (const Edge new_edge : {new1, new2}) {
+			if (edge.intersects(new_edge)) {
+				// TODO: delete '.start' comparison; compare edges directly
+				if (removed_crossing && removed_crossing->up().start == removed.start) {
+					this->addCrossing(edge.start, new_edge.start);
+				} else {
+					this->addCrossing(new_edge.start, edge.start);
+				}
 			}
-		} else {
-			this->removeCrossing(edge.start, new_vertex->prev());
 		}
 	}
 
@@ -57,7 +57,6 @@ void Diagram::removeVertex(Vertex* v) {
 	for (const Edge &edge : this->edges()) {
 		auto removed_crossing1 = this->getCrossing(removed1.start, edge.start);
 		auto removed_crossing2 = this->getCrossing(removed2.start, edge.start);
-
 		this->removeCrossing(removed1.start, edge.start);
 		this->removeCrossing(removed2.start, edge.start);
 

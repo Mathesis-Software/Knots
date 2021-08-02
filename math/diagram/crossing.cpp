@@ -2,11 +2,6 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Crossing::Crossing(Vertex* v1, Vertex *v2) {
-	arc_up = v2;
-	arc_down = v1;
-}
-
 std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
 	const int d0 = this->up().dy() * this->down().dx() - this->up().dx() * this->down().dy();
 

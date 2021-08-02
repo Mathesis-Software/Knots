@@ -24,16 +24,6 @@ void Diagram::removeCrossing(Vertex *v1, Vertex *v2) {
 	v2->_crossings.remove(Crossing(v2, v1));
 }
 
-bool Diagram::isCrossing(Vertex *v1, Vertex *v2) {
-	for (const auto &crs : v1->crossings()) {
-		if (crs.up.start == v2) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
 std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(Vertex *v1, Vertex *v2) {
 	for (const auto &crs : v1->crossings()) {
 		if (crs.up.start == v2) {

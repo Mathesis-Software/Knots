@@ -126,7 +126,6 @@ public:
 private:
 	void addCrossing(Vertex*, Vertex*);
 	void removeCrossing(Vertex*, Vertex*);
-	bool isCrossing(Vertex*, Vertex*);
 	std::shared_ptr<Crossing> getCrossing(Vertex*, Vertex*);
 	void order();
 

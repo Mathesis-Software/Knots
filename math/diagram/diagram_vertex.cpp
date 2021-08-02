@@ -79,40 +79,34 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 
 	v->moveTo(x, y);
 
+	const Edge changed1(v->prev(), v);
+	const Edge changed2(v, v->next());
 	for (const Edge &edge : this->edges()) {
-		const Edge e1(v->prev(), v);
-		const Edge e2(v, v->next());
+		auto changed_crossing1 = this->getCrossing(changed1.start, edge.start);
+		auto changed_crossing2 = this->getCrossing(changed2.start, edge.start);
 
-		if (edge.intersects(e2)) {
-			if (edge.intersects(e1)) {
-				if (!getCrossing(edge.start, v)) {
-					this->addCrossing(edge.start, v);
+		if (edge.intersects(changed1)) {
+			if (!changed_crossing1) {
+				if (changed_crossing2 && changed_crossing2->up == changed2) {
+					this->addCrossing(edge.start, changed1.start);
+				} else {
+					this->addCrossing(changed1.start, edge.start);
 				}
-				if (!getCrossing(edge.start, v->prev())) {
-					this->addCrossing(edge.start, v->prev());
-				}
-			} else {
-				if (!getCrossing(edge.start, v)) {
-					if (isCrossing(v->prev(), edge.start))
-						this->addCrossing(v, edge.start);
-					else
-						this->addCrossing(edge.start, v);
-				}
-				this->removeCrossing(edge.start, v->prev());
 			}
 		} else {
-			if (edge.intersects(e1)) {
-				if (!getCrossing(edge.start, v->prev())) {
-					if (isCrossing(v, edge.start))
-						this->addCrossing(v->prev(), edge.start);
-					else
-						this->addCrossing(edge.start, v->prev());
+			this->removeCrossing(edge.start, changed1.start);
+		}
+
+		if (edge.intersects(changed2)) {
+			if (!changed_crossing2) {
+				if (changed_crossing1 && changed_crossing1->up == changed1) {
+					this->addCrossing(edge.start, changed2.start);
+				} else {
+					this->addCrossing(changed2.start, edge.start);
 				}
-				this->removeCrossing(edge.start, v);
-			} else {
-				this->removeCrossing(edge.start, v);
-				this->removeCrossing(edge.start, v->prev());
 			}
+		} else {
+			this->removeCrossing(edge.start, changed2.start);
 		}
 	}
 

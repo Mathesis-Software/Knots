@@ -25,7 +25,8 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
 				x1, y1;
 
 	for (const auto &crs : edge.start->crossings()) {
-    if (Parent->diagram.isClosed || crs.up().start != Parent->diagram.vertices().back()) {
+		// TODO: remove this check; there should be no invisible edges
+    if (Parent->diagram.isClosed || crs.up.start != Parent->diagram.vertices().back()) {
 			auto coords = crs.coords();
 			if (!coords) {
 				continue;

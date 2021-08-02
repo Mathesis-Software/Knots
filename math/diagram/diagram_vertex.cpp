@@ -20,8 +20,7 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 
 		for (const Edge new_edge : {new1, new2}) {
 			if (edge.intersects(new_edge)) {
-				// TODO: delete '.start' comparison; compare edges directly
-				if (removed_crossing && removed_crossing->up().start == removed.start) {
+				if (removed_crossing && removed_crossing->up == removed) {
 					this->addCrossing(edge.start, new_edge.start);
 				} else {
 					this->addCrossing(new_edge.start, edge.start);
@@ -63,9 +62,8 @@ void Diagram::removeVertex(Vertex* v) {
 		if (!edge.intersects(merged)) {
 			continue;
 		}
-		// TODO: delete '.start' comparison; compare edges directly
-		if ((removed_crossing1 && removed_crossing1->up().start == removed1.start) ||
-				(removed_crossing2 && removed_crossing2->up() == removed2)) {
+		if ((removed_crossing1 && removed_crossing1->up == removed1) ||
+				(removed_crossing2 && removed_crossing2->up == removed2)) {
 			this->addCrossing(edge.start, merged.start);
 		} else {
 			this->addCrossing(merged.start, edge.start);

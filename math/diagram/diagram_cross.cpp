@@ -2,36 +2,34 @@
 
 namespace KE { namespace TwoD {
 
-void Diagram::addCrossing(Vertex *v1, Vertex *v2) {
-	this->removeCrossing(v1, v2);
+void Diagram::addCrossing(const Edge &up, const Edge &down) {
+	this->removeCrossing(up, down);
 
-	Edge e1(v1, v1->next());
-	const Edge e2(v2, v2->next());
-	if (!e1.intersects(e2)) {
+	if (!up.intersects(down)) {
 		return;
 	}
 
-	v1->_crossings.push_back(Crossing(v1, v2));
-	e1.orderCrossings();
+	down.start->_crossings.push_back(Crossing(up, down));
+	down.orderCrossings();
 }
 
 void Diagram::flipCrossing(Crossing &crs) {
-	this->addCrossing(crs.up.start, crs.down.start);
+	this->addCrossing(crs.down, crs.up);
 }
 
-void Diagram::removeCrossing(Vertex *v1, Vertex *v2) {
-	v1->_crossings.remove(Crossing(v1, v2));
-	v2->_crossings.remove(Crossing(v2, v1));
+void Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
+	edge1.start->_crossings.remove(Crossing(edge2, edge1));
+	edge2.start->_crossings.remove(Crossing(edge1, edge2));
 }
 
-std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(Vertex *v1, Vertex *v2) {
-	for (const auto &crs : v1->crossings()) {
-		if (crs.up.start == v2) {
+std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const Edge &edge2) {
+	for (const auto &crs : edge1.start->crossings()) {
+		if (crs.up == edge2) {
 			return std::make_shared<Crossing>(crs);
 		}
 	}
-	for (const auto &crs : v2->crossings()) {
-		if (crs.up.start == v1) {
+	for (const auto &crs : edge2.start->crossings()) {
+		if (crs.up == edge1) {
 			return std::make_shared<Crossing>(crs);
 		}
 	}

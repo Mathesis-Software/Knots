@@ -151,7 +151,7 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 		ori == orientation(*edge.end, *this->start, *edge.start);
 }
 
-void Diagram::Edge::orderCrossings() {
+void Diagram::Edge::orderCrossings() const {
 	std::function<bool(const Crossing&,const Crossing&)> comparator;
   if (abs(this->dx()) > abs(this->dy())) {
     if (this->dx() > 0) {

@@ -15,15 +15,15 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 	const Edge new2(new_vertex, new_vertex->next());
 
 	for (const Edge &edge : this->edges()) {
-		auto removed_crossing = this->getCrossing(removed.start, edge.start);
-		this->removeCrossing(removed.start, edge.start);
+		auto removed_crossing = this->getCrossing(removed, edge);
+		this->removeCrossing(removed, edge);
 
 		for (const Edge new_edge : {new1, new2}) {
 			if (edge.intersects(new_edge)) {
 				if (removed_crossing && removed_crossing->up == removed) {
-					this->addCrossing(edge.start, new_edge.start);
+					this->addCrossing(new_edge, edge);
 				} else {
-					this->addCrossing(new_edge.start, edge.start);
+					this->addCrossing(edge, new_edge);
 				}
 			}
 		}
@@ -54,19 +54,19 @@ void Diagram::removeVertex(Vertex* v) {
 	const Edge removed2(v, v->next());
 	const Edge merged(v->prev(), v->next());
 	for (const Edge &edge : this->edges()) {
-		auto removed_crossing1 = this->getCrossing(removed1.start, edge.start);
-		auto removed_crossing2 = this->getCrossing(removed2.start, edge.start);
-		this->removeCrossing(removed1.start, edge.start);
-		this->removeCrossing(removed2.start, edge.start);
+		auto removed_crossing1 = this->getCrossing(removed1, edge);
+		auto removed_crossing2 = this->getCrossing(removed2, edge);
+		this->removeCrossing(removed1, edge);
+		this->removeCrossing(removed2, edge);
 
 		if (!edge.intersects(merged)) {
 			continue;
 		}
 		if ((removed_crossing1 && removed_crossing1->up == removed1) ||
 				(removed_crossing2 && removed_crossing2->up == removed2)) {
-			this->addCrossing(edge.start, merged.start);
+			this->addCrossing(merged, edge);
 		} else {
-			this->addCrossing(merged.start, edge.start);
+			this->addCrossing(edge, merged);
 		}
 	}
 
@@ -82,31 +82,31 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 	const Edge changed1(v->prev(), v);
 	const Edge changed2(v, v->next());
 	for (const Edge &edge : this->edges()) {
-		auto changed_crossing1 = this->getCrossing(changed1.start, edge.start);
-		auto changed_crossing2 = this->getCrossing(changed2.start, edge.start);
+		auto changed_crossing1 = this->getCrossing(changed1, edge);
+		auto changed_crossing2 = this->getCrossing(changed2, edge);
 
 		if (edge.intersects(changed1)) {
 			if (!changed_crossing1) {
 				if (changed_crossing2 && changed_crossing2->up == changed2) {
-					this->addCrossing(edge.start, changed1.start);
+					this->addCrossing(changed1, edge);
 				} else {
-					this->addCrossing(changed1.start, edge.start);
+					this->addCrossing(edge, changed1);
 				}
 			}
 		} else {
-			this->removeCrossing(edge.start, changed1.start);
+			this->removeCrossing(edge, changed1);
 		}
 
 		if (edge.intersects(changed2)) {
 			if (!changed_crossing2) {
 				if (changed_crossing1 && changed_crossing1->up == changed1) {
-					this->addCrossing(edge.start, changed2.start);
+					this->addCrossing(changed2, edge);
 				} else {
-					this->addCrossing(changed2.start, edge.start);
+					this->addCrossing(edge, changed2);
 				}
 			}
 		} else {
-			this->removeCrossing(edge.start, changed2.start);
+			this->removeCrossing(edge, changed2);
 		}
 	}
 

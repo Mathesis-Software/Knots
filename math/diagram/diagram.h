@@ -78,25 +78,17 @@ public:
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
 
 	private:
-		void orderCrossings();
+		void orderCrossings() const;
 	};
 
 	struct Crossing {
-
-	friend class Vertex;
-
-	private:
-		Vertex *arc_up, *arc_down;
-
-	public:
 		const Edge up, down;
 
-		Crossing(Vertex *v1, Vertex *v2) : arc_up(v2), arc_down(v1), up(arc_up, arc_up->next()), down(arc_down, arc_down->next()) {}
+		Crossing(const Edge &up, const Edge &down) : up(up), down(down) {}
 
-	public:
 		std::shared_ptr<FloatPoint> coords() const;
 
-		bool operator == (const Crossing &crs) const { return this->arc_up == crs.arc_up && this->arc_down == crs.arc_down; }
+		bool operator == (const Crossing &crs) const { return this->up == crs.up && this->down == crs.down; }
 	};
 
 public:
@@ -124,9 +116,9 @@ public:
 	std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
 private:
-	void addCrossing(Vertex*, Vertex*);
-	void removeCrossing(Vertex*, Vertex*);
-	std::shared_ptr<Crossing> getCrossing(Vertex*, Vertex*);
+	void addCrossing(const Edge &up, const Edge &down);
+	void removeCrossing(const Edge &edge1, const Edge &edge2);
+	std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
 	void order();
 
 public:

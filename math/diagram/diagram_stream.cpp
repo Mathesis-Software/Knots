@@ -58,7 +58,7 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
         return;
       }
 			// TODO: check edges[x].intersects(edges[y])
-			this->addCrossing(edges[x].start, edges[y].start);
+			this->addCrossing(edges[y], edges[x]);
     }
   }
 }

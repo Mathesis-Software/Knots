@@ -18,21 +18,18 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 
     if (e.intersects(e2)) {
       if (isCrossing(new_vertex->prev(), current))
-        tryAddCrossing(new_vertex, current);
+        this->addCrossing(new_vertex, current);
       else
-        tryAddCrossing(current, new_vertex);
+        this->addCrossing(current, new_vertex);
     }
 
     if (e.intersects(e1)) {
       if (!isCrossing(current, new_vertex->prev()) &&
           !isCrossing(new_vertex->prev(), current)) {
-        tryAddCrossing(current, new_vertex->prev());
+        this->addCrossing(current, new_vertex->prev());
 			}
     } else {
-      if (isCrossing(current, new_vertex->prev()))
-        tryRemoveCrossing(current, new_vertex->prev());
-      else if (isCrossing(new_vertex->prev(), current))
-        tryRemoveCrossing(new_vertex->prev(), current);
+      this->removeCrossing(current, new_vertex->prev());
     }
 
     current = current->next();
@@ -65,16 +62,15 @@ void Diagram::removeVertex(Vertex* v) {
     if (e.intersects(e1)) {
       if (!isCrossing(v->prev(), current) && !isCrossing(current, v->prev())) {
         if (isCrossing(v, current))
-          tryAddCrossing(v->prev(), current);
+          this->addCrossing(v->prev(), current);
         else
-          tryAddCrossing(current, v->prev());
+          this->addCrossing(current, v->prev());
       }
     } else {
-      tryRemoveCrossing(current, v->prev());
-      tryRemoveCrossing(v->prev(), current);
+      this->removeCrossing(current, v->prev());
     }
 
-    tryRemoveCrossing(current, v);
+    this->removeCrossing(current, v);
     current = current->next();
   } while (current != base);
 
@@ -96,42 +92,37 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 		const Edge e1(v->prev(), v);
 		const Edge e2(v, v->next());
 
-    switch ((e.intersects(e2) ? 1 : 0) + (e.intersects(e1) ? 2 : 0)) {
-      case 0:
-        tryRemoveCrossing(current, v);
-        tryRemoveCrossing(v, current);
-        tryRemoveCrossing(current, v->prev());
-        tryRemoveCrossing(v->prev(), current);
-        break;
-      case 1:
-        if (!isCrossing(current, v) && !isCrossing(v, current)) {
+		if (e.intersects(e2)) {
+			if (e.intersects(e1)) {
+				if (!isCrossing(current, v) && !isCrossing(v, current)) {
+					this->addCrossing(current, v);
+				}
+				if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
+					this->addCrossing(current, v->prev());
+				}
+			} else {
+				if (!isCrossing(current, v) && !isCrossing(v, current)) {
 					if (isCrossing(v->prev(), current))
-						tryAddCrossing(v, current);
+						this->addCrossing(v, current);
 					else
-						tryAddCrossing(current, v);
+						this->addCrossing(current, v);
 				}
-        tryRemoveCrossing(current, v->prev());
-        tryRemoveCrossing(v->prev(), current);
-        break;
-      case 2:
-        if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
+				this->removeCrossing(current, v->prev());
+			}
+		} else {
+			if (e.intersects(e1)) {
+				if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
 					if (isCrossing(v, current))
-            tryAddCrossing(v->prev(), current);
+						this->addCrossing(v->prev(), current);
 					else
-            tryAddCrossing(current, v->prev());
+						this->addCrossing(current, v->prev());
 				}
-        tryRemoveCrossing(current, v);
-        tryRemoveCrossing(v, current);
-        break;
-      case 3:
-        if (!isCrossing(current, v) && !isCrossing(v, current)) {
-          tryAddCrossing(current, v);
-				}
-        if (!isCrossing(current, v->prev()) && !isCrossing(v->prev(), current)) {
-          tryAddCrossing(current, v->prev());
-				}
-        break;
-    }
+				this->removeCrossing(current, v);
+			} else {
+				this->removeCrossing(current, v);
+				this->removeCrossing(current, v->prev());
+			}
+		}
 
     current = current->next();
   } while (current != base);

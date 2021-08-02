@@ -112,8 +112,8 @@ public:
 	std::shared_ptr<Crossing> findCrossing(double x, double y, double maxDistance) const;
 
 private:
-	bool tryAddCrossing(Vertex*, Vertex*);
-	void tryRemoveCrossing(Vertex*, Vertex*);
+	void addCrossing(Vertex*, Vertex*);
+	void removeCrossing(Vertex*, Vertex*);
 	void order();
 
 public:

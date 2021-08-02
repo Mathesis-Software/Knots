@@ -10,29 +10,25 @@ Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
 
 	Vertex *new_vertex = new Vertex(v ? v : base->prev(), x, y);
 
-	Vertex *current = base;
-	do {
-		const Edge e(current, current->next());
+	for (const Edge &edge : this->edges()) {
 		const Edge e1(new_vertex->prev(), new_vertex);
 		const Edge e2(new_vertex, new_vertex->next());
 
-		if (e.intersects(e2)) {
-			if (isCrossing(new_vertex->prev(), current))
-				this->addCrossing(new_vertex, current);
+		if (edge.intersects(e2)) {
+			if (isCrossing(new_vertex->prev(), edge.start))
+				this->addCrossing(new_vertex, edge.start);
 			else
-				this->addCrossing(current, new_vertex);
+				this->addCrossing(edge.start, new_vertex);
 		}
 
-		if (e.intersects(e1)) {
-			if (!getCrossing(current, new_vertex->prev())) {
-				this->addCrossing(current, new_vertex->prev());
+		if (edge.intersects(e1)) {
+			if (!getCrossing(edge.start, new_vertex->prev())) {
+				this->addCrossing(edge.start, new_vertex->prev());
 			}
 		} else {
-			this->removeCrossing(current, new_vertex->prev());
+			this->removeCrossing(edge.start, new_vertex->prev());
 		}
-
-		current = current->next();
-	} while (current != base);
+	}
 
 	order();
 	return new_vertex;
@@ -53,25 +49,21 @@ void Diagram::removeVertex(Vertex* v) {
 
 	v->exclude();
 
-	Vertex *current = base;
-
-	do {
-		const Edge e(current, current->next());
+	for (const Edge &edge : this->edges()) {
 		const Edge e1(v->prev(), v);
-		if (e.intersects(e1)) {
-			if (!getCrossing(v->prev(), current)) {
-				if (isCrossing(v, current))
-					this->addCrossing(v->prev(), current);
+		if (edge.intersects(e1)) {
+			if (!getCrossing(v->prev(), edge.start)) {
+				if (isCrossing(v, edge.start))
+					this->addCrossing(v->prev(), edge.start);
 				else
-					this->addCrossing(current, v->prev());
+					this->addCrossing(edge.start, v->prev());
 			}
 		} else {
-			this->removeCrossing(current, v->prev());
+			this->removeCrossing(edge.start, v->prev());
 		}
 
-		this->removeCrossing(current, v);
-		current = current->next();
-	} while (current != base);
+		this->removeCrossing(edge.start, v);
+	}
 
 	order();
 
@@ -84,47 +76,42 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 
 	v->moveTo(x, y);
 
-	Vertex *current = base;
-
-	do {
-		const Edge e(current, current->next());
+	for (const Edge &edge : this->edges()) {
 		const Edge e1(v->prev(), v);
 		const Edge e2(v, v->next());
 
-		if (e.intersects(e2)) {
-			if (e.intersects(e1)) {
-				if (!getCrossing(current, v)) {
-					this->addCrossing(current, v);
+		if (edge.intersects(e2)) {
+			if (edge.intersects(e1)) {
+				if (!getCrossing(edge.start, v)) {
+					this->addCrossing(edge.start, v);
 				}
-				if (!getCrossing(current, v->prev())) {
-					this->addCrossing(current, v->prev());
+				if (!getCrossing(edge.start, v->prev())) {
+					this->addCrossing(edge.start, v->prev());
 				}
 			} else {
-				if (!getCrossing(current, v)) {
-					if (isCrossing(v->prev(), current))
-						this->addCrossing(v, current);
+				if (!getCrossing(edge.start, v)) {
+					if (isCrossing(v->prev(), edge.start))
+						this->addCrossing(v, edge.start);
 					else
-						this->addCrossing(current, v);
+						this->addCrossing(edge.start, v);
 				}
-				this->removeCrossing(current, v->prev());
+				this->removeCrossing(edge.start, v->prev());
 			}
 		} else {
-			if (e.intersects(e1)) {
-				if (!getCrossing(current, v->prev())) {
-					if (isCrossing(v, current))
-						this->addCrossing(v->prev(), current);
+			if (edge.intersects(e1)) {
+				if (!getCrossing(edge.start, v->prev())) {
+					if (isCrossing(v, edge.start))
+						this->addCrossing(v->prev(), edge.start);
 					else
-						this->addCrossing(current, v->prev());
+						this->addCrossing(edge.start, v->prev());
 				}
-				this->removeCrossing(current, v);
+				this->removeCrossing(edge.start, v);
 			} else {
-				this->removeCrossing(current, v);
-				this->removeCrossing(current, v->prev());
+				this->removeCrossing(edge.start, v);
+				this->removeCrossing(edge.start, v->prev());
 			}
 		}
-
-		current = current->next();
-	} while (current != base);
+	}
 
 	order();
 }

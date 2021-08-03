@@ -91,42 +91,42 @@ public:
 		bool operator == (const Crossing &crs) const { return this->up == crs.up && this->down == crs.down; }
 	};
 
-public:
-	std::string caption;
+	public:
+		std::string caption;
 
-private:
-	Vertex *base;
+	private:
+		Vertex *base;
 
-public:
-	bool isClosed;
+	public:
+		bool isClosed;
 
-public:
-	std::list<Vertex*> vertices() const;
-	std::list<Edge> edges() const;
-	Vertex *addVertex(Vertex*, int, int);
-	void removeVertex(Vertex*);
-	void moveVertex(Vertex*, int, int);
-	void flipCrossing(Crossing &crossing);
-	void shift(int x, int y);
-	bool simplify(int depth);
-	void clear();
+	public:
+		std::list<Vertex*> vertices() const;
+		std::list<Edge> edges() const;
+		Vertex *addVertex(Vertex*, int, int);
+		void removeVertex(Vertex*);
+		void moveVertex(Vertex*, int, int);
+		void flipCrossing(Crossing &crossing);
+		void shift(int x, int y);
+		bool simplify(int depth);
+		void clear();
 
-	Vertex *findVertex(const FloatPoint &pt, float maxDistance) const;
-	std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
-	std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
+		Vertex *findVertex(const FloatPoint &pt, float maxDistance) const;
+		std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
+		std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
-private:
-	void addCrossing(const Edge &up, const Edge &down);
-	void removeCrossing(const Edge &edge1, const Edge &edge2);
-	std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
-	void order();
+	private:
+		void addCrossing(const Edge &up, const Edge &down);
+		void removeCrossing(const Edge &edge1, const Edge &edge2);
+		std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
+		void order();
 
-public:
-	Diagram();
-	Diagram(std::istream &is);
-	~Diagram();
+	public:
+		Diagram();
+		Diagram(std::istream &is);
+		~Diagram();
 
-	void save(std::ostream &os);
+		void save(std::ostream &os);
 
 private:
 	Diagram(const Diagram&) = delete;

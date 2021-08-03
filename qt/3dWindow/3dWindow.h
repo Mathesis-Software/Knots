@@ -54,15 +54,16 @@ class dddMainWidget : public QOpenGLWidget {
 
 private:
   dddWindow *Parent;
-  void resizeGL (int, int);
+  void initializeGL() override;
+  void resizeGL(int, int) override;
   void paintGL();
 
 public:
-  dddMainWidget (dddWindow*);
+  dddMainWidget(dddWindow*);
   ~dddMainWidget();
 
   void multMatrix() {
-    makeCurrent ();
+    makeCurrent();
     glMultMatrixd (Parent -> currentMatrix);
 	}
 };

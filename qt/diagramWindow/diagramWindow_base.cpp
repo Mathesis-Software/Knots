@@ -52,8 +52,8 @@ void diagramWindow::init() {
   mode = DRAW_NEW_DIAGRAM;
   actions[0]->setChecked(true);
 
-  actions_convert->setEnabled(this->diagram.isClosed);
-  actions_simplify->setEnabled(this->diagram.isClosed);
+  actions_convert->setEnabled(this->diagram.isClosed());
+  actions_simplify->setEnabled(this->diagram.isClosed());
   actions_clear->setEnabled(!isEmpty());
 
   setCentralWidget(new diagramMainWidget(this));
@@ -80,7 +80,7 @@ void diagramWindow::setmode(int newmode) {
     return;
   }
 
-  if (newmode == DRAW_NEW_DIAGRAM && this->diagram.isClosed) {
+  if (newmode == DRAW_NEW_DIAGRAM && this->diagram.isClosed()) {
     actions[newmode]->toggle();
     return;
   }
@@ -108,7 +108,7 @@ void diagramWindow::clear() {
 }
 
 void diagramWindow::convert() {
-  if (!this->diagram.isClosed) {
+  if (!this->diagram.isClosed()) {
     QMessageBox::critical(this, "Error", "\nCannot convert nonclosed diagram.\n");
     return;
   }

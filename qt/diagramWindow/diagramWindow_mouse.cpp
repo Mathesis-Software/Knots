@@ -12,12 +12,12 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       if (Parent->isEmpty()) {
         Parent->actions_clear->setEnabled (true);
 			}
-      if (Parent->diagram.isClosed) {
+      if (Parent->diagram.isClosed()) {
         return;
 			}
       Parent->diagram.addVertex(m->x(), m->y());
       if (m->button() == 0x02) {
-        Parent->diagram.isClosed = true;
+        Parent->diagram.close();
         Parent->actions_convert->setEnabled(true);
         Parent->actions_simplify->setEnabled(true);
 				Parent->actions[0]->setChecked(false);

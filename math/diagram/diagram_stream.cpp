@@ -6,7 +6,7 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
+Diagram::Diagram(std::istream &is) : base(nullptr), _isClosed(false) {
   char tmp[256];
 
   is.get(tmp, 32, ' ');
@@ -38,29 +38,28 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
     }
   }
 
-  {
-    int length = -1;
-    is.get(tmp, 32, ' ');
-    is >> length;
-    if (length < 0 || strcmp(tmp, "\n#CROSSINGS") != 0) {
-      this->clear();
-      return;
-    }
+	int length = -1;
+	is.get(tmp, 32, ' ');
+	is >> length;
+	if (length < 0 || strcmp(tmp, "\n#CROSSINGS") != 0) {
+		this->clear();
+		return;
+	}
 
-		const auto list = this->edges();
-		const std::vector<Edge> edges(std::begin(list), std::end(list));
-		std::size_t x, y;
-    for (int i = 0; i < length; i++) {
-      is >> x >> y;
-      if (!is.good() || x >= edges.size() || y >= edges.size()) {
-				// TODO: throw exception with a message
-				this->clear();
-        return;
-      }
-			// TODO: check edges[x].intersects(edges[y])
-			this->addCrossing(edges[y], edges[x]);
-    }
-  }
+	const auto list = this->edges();
+	const std::vector<Edge> edges(std::begin(list), std::end(list));
+	std::size_t x, y;
+	for (int i = 0; i < length; i++) {
+		is >> x >> y;
+		if (!is.good() || x >= edges.size() || y >= edges.size()) {
+			// TODO: throw exception with a message
+			this->clear();
+			return;
+		}
+		// TODO: check edges[x].intersects(edges[y])
+		this->addCrossing(edges[y], edges[x]);
+	}
+	this->close();
 }
 
 void Diagram::save(std::ostream &os) {

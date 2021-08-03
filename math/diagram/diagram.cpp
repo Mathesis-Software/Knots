@@ -6,7 +6,7 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Diagram() : caption("New Diagram"), base(nullptr), isClosed(false) {
+Diagram::Diagram() : caption("New Diagram"), base(nullptr), _isClosed(false) {
 }
 
 Diagram::~Diagram() {
@@ -17,7 +17,7 @@ void Diagram::clear() {
 	while (base != nullptr) {
 		removeVertex(base);
 	}
-	this->isClosed = false;
+	this->_isClosed = false;
 }
 
 void Diagram::order() {
@@ -56,7 +56,7 @@ std::list<Diagram::Edge> Diagram::edges() const {
 		}
 		previous = vertex;
 	}
-	if (this->isClosed && this->vertices().size() >= 2) {
+	if (this->_isClosed && this->vertices().size() >= 2) {
 		edges.push_back(Edge(this->vertices().back(), this->vertices().front()));
 	}
 

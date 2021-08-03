@@ -96,17 +96,19 @@ public:
 
 	private:
 		Vertex *base;
+		bool _isClosed;
 
 	public:
-		bool isClosed;
-
-	public:
+		bool isClosed() const { return this->_isClosed; }
 		std::list<Vertex*> vertices() const;
 		std::list<Edge> edges() const;
+
 		Vertex *addVertex(int, int);
 		Vertex *addVertex(const Edge &edge, int, int);
 		void removeVertex(Vertex*);
 		void moveVertex(Vertex*, int, int);
+		void close();
+
 		void flipCrossing(Crossing &crossing);
 		void shift(int x, int y);
 		bool simplify(int depth);

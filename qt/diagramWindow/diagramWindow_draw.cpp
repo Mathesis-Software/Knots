@@ -25,22 +25,19 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
 				x1, y1;
 
 	for (const auto &crs : edge.start->crossings()) {
-		// TODO: remove this check; there should be no invisible edges
-    if (Parent->diagram.isClosed || crs.up.start != Parent->diagram.vertices().back()) {
-			auto coords = crs.coords();
-			if (!coords) {
-				continue;
-			}
-      x1 = coords->x - deltaX;
-      y1 = coords->y - deltaY;
+		auto coords = crs.coords();
+		if (!coords) {
+			continue;
+		}
+    x1 = coords->x - deltaX;
+    y1 = coords->y - deltaY;
 
-      if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0) {
-        painter.drawLine(x0, y0, x1, y1);
-			}
+    if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0) {
+      painter.drawLine(x0, y0, x1, y1);
+		}
 
-      x0 = coords->x + deltaX;
-      y0 = coords->y + deltaY;
-    }
+    x0 = coords->x + deltaX;
+    y0 = coords->y + deltaY;
   }
 
   x1 = edge.end->x();

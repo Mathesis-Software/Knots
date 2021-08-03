@@ -27,11 +27,9 @@ void Diagram::order() {
 }
 
 void Diagram::shift(int x, int y) {
-	Vertex *v = base;
-	do {
-		v->move(x, y);
-		v = v->next();
-	} while (v != base);
+	for (Vertex *vertex : this->vertices()) {
+		vertex->move(x, y);
+	}
 }
 
 std::list<Diagram::Vertex*> Diagram::vertices() const {
@@ -50,17 +48,18 @@ std::list<Diagram::Vertex*> Diagram::vertices() const {
 
 std::list<Diagram::Edge> Diagram::edges() const {
 	std::list<Edge> edges;
-	Vertex *v = this->base;
-	if (v == nullptr) {
-		return edges;
+
+	Vertex *previous = nullptr;
+	for (Vertex *vertex : this->vertices()) {
+		if (previous) {
+			edges.push_back(Edge(previous, vertex));
+		}
+		previous = vertex;
+	}
+	if (this->isClosed && this->vertices().size() >= 2) {
+		edges.push_back(Edge(this->vertices().back(), this->vertices().front()));
 	}
 
-	for (; v->next() != this->base; v = v->next()) {
-		edges.push_back(Edge(v, v->next()));
-	}
-	if (this->isClosed) {
-		edges.push_back(Edge(v, v->next()));
-	}
 	return edges;
 }
 

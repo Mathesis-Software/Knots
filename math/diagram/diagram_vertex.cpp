@@ -23,10 +23,10 @@ Diagram::Vertex *Diagram::addVertex(const Edge &edge, int x, int y) {
 
 		for (const Edge new_edge : {new1, new2}) {
 			if (e.intersects(new_edge)) {
-				if (removed_crossing && removed_crossing->up == edge) {
-					this->addCrossing(new_edge, e);
-				} else {
+				if (removed_crossing && removed_crossing->up == e) {
 					this->addCrossing(e, new_edge);
+				} else {
+					this->addCrossing(new_edge, e);
 				}
 			}
 		}
@@ -65,11 +65,11 @@ void Diagram::removeVertex(Vertex* v) {
 		if (!edge.intersects(merged)) {
 			continue;
 		}
-		if ((removed_crossing1 && removed_crossing1->up == removed1) ||
-				(removed_crossing2 && removed_crossing2->up == removed2)) {
-			this->addCrossing(merged, edge);
-		} else {
+		if ((removed_crossing1 && removed_crossing1->up == edge) ||
+				(removed_crossing2 && removed_crossing2->up == edge)) {
 			this->addCrossing(edge, merged);
+		} else {
+			this->addCrossing(merged, edge);
 		}
 	}
 
@@ -90,10 +90,10 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 
 		if (edge.intersects(changed1)) {
 			if (!changed_crossing1) {
-				if (changed_crossing2 && changed_crossing2->up == changed2) {
-					this->addCrossing(changed1, edge);
-				} else {
+				if (changed_crossing2 && changed_crossing2->up == edge) {
 					this->addCrossing(edge, changed1);
+				} else {
+					this->addCrossing(changed1, edge);
 				}
 			}
 		} else {
@@ -102,10 +102,10 @@ void Diagram::moveVertex(Vertex *v, int x, int y) {
 
 		if (edge.intersects(changed2)) {
 			if (!changed_crossing2) {
-				if (changed_crossing1 && changed_crossing1->up == changed1) {
-					this->addCrossing(changed2, edge);
-				} else {
+				if (changed_crossing1 && changed_crossing1->up == edge) {
 					this->addCrossing(edge, changed2);
+				} else {
+					this->addCrossing(changed2, edge);
 				}
 			}
 		} else {

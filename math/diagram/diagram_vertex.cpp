@@ -2,28 +2,31 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Vertex *Diagram::addVertex(Vertex* v, int x, int y) {
+Diagram::Vertex *Diagram::addVertex(int x, int y) {
 	if (!base) {
 		base = new Vertex(x, y);
 		return base;
+	} else {
+		return this->addVertex(Edge(base->prev(), base), x, y);
 	}
+}
 
-	Vertex *new_vertex = new Vertex(v ? v : base->prev(), x, y);
+Diagram::Vertex *Diagram::addVertex(const Edge &edge, int x, int y) {
+	Vertex *new_vertex = new Vertex(edge.start, x, y);
 
-	const Edge removed(new_vertex->prev(), new_vertex->next());
-	const Edge new1(new_vertex->prev(), new_vertex);
-	const Edge new2(new_vertex, new_vertex->next());
+	const Edge new1(edge.start, new_vertex);
+	const Edge new2(new_vertex, edge.end);
 
-	for (const Edge &edge : this->edges()) {
-		auto removed_crossing = this->getCrossing(removed, edge);
-		this->removeCrossing(removed, edge);
+	for (const Edge &e : this->edges()) {
+		auto removed_crossing = this->getCrossing(edge, e);
+		this->removeCrossing(edge, e);
 
 		for (const Edge new_edge : {new1, new2}) {
-			if (edge.intersects(new_edge)) {
-				if (removed_crossing && removed_crossing->up == removed) {
-					this->addCrossing(new_edge, edge);
+			if (e.intersects(new_edge)) {
+				if (removed_crossing && removed_crossing->up == edge) {
+					this->addCrossing(new_edge, e);
 				} else {
-					this->addCrossing(edge, new_edge);
+					this->addCrossing(e, new_edge);
 				}
 			}
 		}

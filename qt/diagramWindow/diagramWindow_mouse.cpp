@@ -2,7 +2,7 @@
 
 #include "diagramWindow.h"
 
-static KE::TwoD::Diagram::Vertex *localVertex = NULL;
+static KE::TwoD::Diagram::Vertex *localVertex = nullptr;
 static int localx, localy;
 static bool doSomething = false;
 
@@ -15,7 +15,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       if (Parent->diagram.isClosed) {
         return;
 			}
-      Parent->diagram.addVertex(NULL, m->x(), m->y());
+      Parent->diagram.addVertex(m->x(), m->y());
       if (m->button() == 0x02) {
         Parent->diagram.isClosed = true;
         Parent->actions_convert->setEnabled(true);
@@ -31,7 +31,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     {
 			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = Parent->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5);
       if (edge) {
-        localVertex = Parent->diagram.addVertex(edge->start, m->x(), m->y());
+        localVertex = Parent->diagram.addVertex(*edge, m->x(), m->y());
         repaint();
         Parent->isSaved = false;
         doSomething = true;

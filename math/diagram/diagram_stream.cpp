@@ -34,7 +34,7 @@ Diagram::Diagram(std::istream &is) : base(nullptr), isClosed(true) {
 				this->clear();
         return;
       }
-      this->addVertex(nullptr, x, y);
+      this->addVertex(x, y);
     }
   }
 

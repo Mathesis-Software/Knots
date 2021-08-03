@@ -103,7 +103,8 @@ public:
 	public:
 		std::list<Vertex*> vertices() const;
 		std::list<Edge> edges() const;
-		Vertex *addVertex(Vertex*, int, int);
+		Vertex *addVertex(int, int);
+		Vertex *addVertex(const Edge &edge, int, int);
 		void removeVertex(Vertex*);
 		void moveVertex(Vertex*, int, int);
 		void flipCrossing(Crossing &crossing);

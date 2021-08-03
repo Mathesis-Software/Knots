@@ -73,7 +73,7 @@ public:
 		}
 		int dx() const { return this->end->x() - this->start->x(); }
 		int dy() const { return this->end->y() - this->start->y(); }
-		bool intersects(const Edge &edge) const; 
+		bool intersects(const Edge &edge) const;
 
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
 
@@ -111,7 +111,7 @@ public:
 
 		void flipCrossing(Crossing &crossing);
 		void shift(int x, int y);
-		bool simplify(int depth);
+		bool simplify(std::size_t depth);
 		void clear();
 
 		Vertex *findVertex(const FloatPoint &pt, float maxDistance) const;

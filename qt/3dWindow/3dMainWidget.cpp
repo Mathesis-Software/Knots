@@ -35,8 +35,8 @@ void dddMainWidget::initializeGL() {
 }
 
 void dddMainWidget::paintGL() {
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClearColor(Parent->backgroundRGB[0], Parent->backgroundRGB[1], Parent->backgroundRGB[2], 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

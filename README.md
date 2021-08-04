@@ -12,4 +12,4 @@ In July 2021, I found it and made it compilable, installable, and runnable on Ub
 
 It even contains some docs (in Russian).
 
-![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-07-26.png?raw=true)
+![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-08-04.png?raw=true)

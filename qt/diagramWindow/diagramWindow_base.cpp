@@ -29,10 +29,7 @@ void diagramWindow::init() {
 	actions_simplify = actionsMenu->addAction("&Simplify", this, SLOT(simplify()));
 	actions_clear = actionsMenu->addAction("C&lear", this, SLOT(clear()));
 	
-	addToolBarSeparator();
 	addToolBarButton("mini_trefoil.xpm", "Convert to knot", SLOT(convert()));
-	addToolBarSeparator();
-	addToolBarButton("clear.xpm", "Clear", SLOT(clear()));
 
 	addToolBarSeparator();
 	actions = new QToolButton*[editorModeNumber];

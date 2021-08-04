@@ -32,9 +32,6 @@ abstractWindow::abstractWindow() {
   this->toolbar = new QToolBar(this);
   addToolBar(this->toolbar);
 
-  addToolBarButton("floppy.xpm", "Save as", SLOT(save_as()));
-  addToolBarButton("printer.xpm", "Print", SLOT(print()));
-
   AWRegister.push_back(this);
 }
 
@@ -123,7 +120,7 @@ bool abstractWindow::removeAll(void) {
   return true;
 }
 
-QToolButton *abstractWindow::addToolBarButton(const char *filename,
+QToolButton *abstractWindow::addToolBarButton(const QString &filename,
                                               const char *label,
 			                      const char *slot,
 					      const char *whatsthis) {

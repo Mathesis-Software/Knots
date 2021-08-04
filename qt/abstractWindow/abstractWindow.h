@@ -25,7 +25,7 @@ protected:
 
   int askForSave(void);
 
-  QToolButton *addToolBarButton(const char*, const char*, const char*, const char* = 0);
+  QToolButton *addToolBarButton(const QString&, const char*, const char*, const char* = 0);
   void addToolBarSeparator(void);
   void complete(bool = false);
 

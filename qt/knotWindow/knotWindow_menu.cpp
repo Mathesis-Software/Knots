@@ -21,11 +21,11 @@ void knotWindow::initMenu() {
   view_showKnot = viewMenu->addAction("Show &knot", this, SLOT(switchShowKnot()));
   view_showKnot->setCheckable(true);
   view_showKnot->setChecked(this->knotSurface->isVisible());  
-  view_showSeifertSurface = viewMenu->addAction("Show &Seifert surface", this, SLOT (switchShowSeifert()) );
+  view_showSeifertSurface = viewMenu->addAction("Show &Seifert surface", this, SLOT(switchShowSeifert()));
   view_showSeifertSurface->setCheckable(true);
   view_showSeifertSurface->setChecked(this->seifertSurface->isVisible());  
   
-  QMenu *optionsMenu = menuBar()->addMenu ("&Options");
+  QMenu *optionsMenu = menuBar()->addMenu("&Options");
   optionsMenu->addAction("&Thickness...", this, SLOT(setThickness()));
   optionsMenu->addSeparator();
   optionsMenu->addAction("Back&ground color...", this, SLOT(setBgColor()));
@@ -33,14 +33,12 @@ void knotWindow::initMenu() {
   optionsMenu->addAction("Seifert surface &front color...", this, SLOT(setSeifertFrontColor()));
   optionsMenu->addAction("Seifert surface &back color...", this, SLOT(setSeifertBackColor()));
 
-  addToolBarSeparator ();
-  addToolBarButton ("start.xpm", "Start smoothing", SLOT (smooth()));
-  addToolBarButton ("stop.xpm", "Interrupt smoothing", SLOT (stop()));
-  addToolBarSeparator ();
-  addToolBarButton ("math.xpm", "Show parameters", SLOT (math()));
-  addToolBarSeparator ();
-  addToolBarButton ("plus.xpm", "Shift Seifert surface along gradient",
-             SLOT (bp_plus()));
-  addToolBarButton ("minus.xpm", "Shift Seifert surface along gradient",
-             SLOT (bp_minus()));
+  addToolBarSeparator();
+  addToolBarButton("start.xpm", "Start smoothing", SLOT(smooth()));
+  addToolBarButton("stop.xpm", "Interrupt smoothing", SLOT(stop()));
+  addToolBarSeparator();
+  addToolBarButton("math.xpm", "Show parameters", SLOT(math()));
+  addToolBarSeparator();
+  addToolBarButton("plus.xpm", "Shift Seifert surface along gradient", SLOT(bp_plus()));
+  addToolBarButton("minus.xpm", "Shift Seifert surface along gradient", SLOT(bp_minus()));
 }

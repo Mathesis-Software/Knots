@@ -8,7 +8,7 @@
 #include "3dWindow.h"
 
 dddWindow::dddWindow() {
-	setCentralWidget (new dddMainWidget (this));
+	setCentralWidget(new dddMainWidget(this));
 
 	backgroundRGB [0] = 1.0;
 	backgroundRGB [1] = 1.0;
@@ -25,25 +25,15 @@ dddWindow::dddWindow() {
 	}
 	isInertia = false;
 
-	addToolBarSeparator ();
-
-	QToolButton **rotateButton = new QToolButton* [6];
-	rotateButton [0] = addToolBarButton ("rotate0.xpm", "Rotate", 0);
-	rotateButton [1] = addToolBarButton ("rotate1.xpm", "Rotate", 0);
-	rotateButton [2] = addToolBarButton ("rotate2.xpm", "Rotate", 0);
-	rotateButton [3] = addToolBarButton ("rotate3.xpm", "Rotate", 0);
-	rotateButton [4] = addToolBarButton ("rotate4.xpm", "Rotate", 0);
-	rotateButton [5] = addToolBarButton ("rotate5.xpm", "Rotate", 0);
 	QButtonGroup *grp = new QButtonGroup;
 	for (int i = 0; i < 6; i++) {
-		grp->addButton(rotateButton[i]);
-		this->connect(rotateButton[i], &QToolButton::pressed, [=](){ this->rotate(i); });
+		QToolButton *button = addToolBarButton(QString("rotate%1.xpm").arg(i), "Rotate", 0);
+		grp->addButton(button);
+		this->connect(button, &QToolButton::pressed, [=](){ this->rotate(i); });
 	}
-	delete[] rotateButton;
 
-	addToolBarSeparator ();
-	addToolBarButton ("inertia.xpm", "Inertia", SLOT (inertia()))
-		-> setCheckable (true);
+	addToolBarSeparator();
+	addToolBarButton("inertia.xpm", "Inertia", SLOT(inertia()))->setCheckable(true);
 }
 
 dddWindow::~dddWindow() {
@@ -53,7 +43,7 @@ dddWindow::~dddWindow() {
 
 void dddWindow::printIt(QPrinter *prn) {
 	QPainter pnt;
-	pnt.begin (prn);
+	pnt.begin(prn);
 	raise();
 	pnt.drawPixmap(0, 0, QPixmap::grabWindow(centralWidget()->winId()));
 	pnt.end();

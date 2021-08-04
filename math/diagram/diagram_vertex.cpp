@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "diagram.h"
 
 namespace KE { namespace TwoD {
@@ -7,12 +9,12 @@ Diagram::Vertex *Diagram::addVertex(int x, int y) {
 		return nullptr;
 	}
 
-	if (!base) {
-		base = new Vertex(x, y);
-		return base;
+	Vertex *new_vertex = new Vertex(x, y);
+	if (this->_vertices.empty()) {
+		this->_vertices.push_back(new_vertex);
 	} else {
-		Vertex *end = base->prev();
-		Vertex *new_vertex = new Vertex(end, x, y);
+		Vertex *end = this->_vertices.back();
+		this->_vertices.push_back(new_vertex);
 		const Edge new_edge(end, new_vertex);
 		for (const Edge &e : this->edges()) {
 			if (e.intersects(new_edge)) {
@@ -20,12 +22,14 @@ Diagram::Vertex *Diagram::addVertex(int x, int y) {
 				e.orderCrossings();
 			}
 		}
-		return new_vertex;
 	}
+	return new_vertex;
 }
 
 Diagram::Vertex *Diagram::addVertex(const Edge &edge, int x, int y) {
-	Vertex *new_vertex = new Vertex(edge.start, x, y);
+	Vertex *new_vertex = new Vertex(x, y);
+	auto iter = std::find(this->_vertices.begin(), this->_vertices.end(), edge.end);
+	this->_vertices.insert(iter, new_vertex);
 
 	const Edge new1(edge.start, new_vertex);
 	const Edge new2(new_vertex, edge.end);
@@ -50,20 +54,6 @@ Diagram::Vertex *Diagram::addVertex(const Edge &edge, int x, int y) {
 }
 
 void Diagram::removeVertex(Vertex* v) {
-	if (v == nullptr) {
-		return;
-	}
-
-	if (base == base->next()) {
-		delete base;
-		base = nullptr;
-		return;
-	}
-
-	if (v == base) {
-		base = base->next();
-	}
-
 	std::shared_ptr<const Edge> removed1;
 	std::shared_ptr<const Edge> removed2;
 	for (const Edge &edge : this->edges()) {
@@ -78,7 +68,7 @@ void Diagram::removeVertex(Vertex* v) {
 		merged = std::make_shared<const Edge>(removed1->start, removed2->end);
 	}
 
-	v->exclude();
+	this->_vertices.remove(v);
 
 	for (const Edge &edge : this->edges()) {
 		std::shared_ptr<Crossing> removed_crossing1;

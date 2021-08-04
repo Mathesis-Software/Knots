@@ -39,28 +39,20 @@ public:
 	friend class Diagram;
 
 	private:
-		Vertex *vertex_prev, *vertex_next;
 		std::list<Crossing> _crossings;
-		int coord_x, coord_y;
+		int _x, _y;
 
 	public:
-		Vertex(int, int);
-		Vertex(Vertex*, int, int);
-		~Vertex();
-		void exclude();
+		Vertex(int x, int y) : _x(x), _y(y) {}
 
-		void move(int, int);
-		void moveTo(int, int);
-
-	private:
-		Vertex *next() const { return this->vertex_next; }
-		Vertex *prev() const { return this->vertex_prev; }
+		void move(int dx, int dy) { this->_x += dx; this->_y += dy; }
+		void moveTo(int x, int y) { this->_x = x; this->_y = y; }
 
 	public:
 		const std::list<KE::TwoD::Diagram::Crossing> &crossings() const { return this->_crossings; }
-		int x() const { return this->coord_x; }
-		int y() const { return this->coord_y; }
-		FloatPoint coords() const { return FloatPoint(this->coord_x, this->coord_y); }
+		int x() const { return this->_x; }
+		int y() const { return this->_y; }
+		FloatPoint coords() const { return FloatPoint(this->_x, this->_y); }
 	};
 
 	struct Edge {
@@ -95,12 +87,12 @@ public:
 		std::string caption;
 
 	private:
-		Vertex *base;
+		std::list<Vertex*> _vertices;
 		bool _isClosed;
 
 	public:
 		bool isClosed() const { return this->_isClosed; }
-		std::list<Vertex*> vertices() const;
+		const std::list<Vertex*> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
 
 		Vertex *addVertex(int, int);

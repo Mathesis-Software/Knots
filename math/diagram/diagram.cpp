@@ -6,7 +6,7 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Diagram() : caption("New Diagram"), base(nullptr), _isClosed(false) {
+Diagram::Diagram() : caption("New Diagram"), _isClosed(false) {
 }
 
 Diagram::~Diagram() {
@@ -14,9 +14,10 @@ Diagram::~Diagram() {
 }
 
 void Diagram::clear() {
-	while (base != nullptr) {
-		removeVertex(base);
+	for (auto vertex : this->_vertices) {
+		delete vertex;
 	}
+	this->_vertices.clear();
 	this->_isClosed = false;
 }
 
@@ -30,20 +31,6 @@ void Diagram::shift(int x, int y) {
 	for (Vertex *vertex : this->vertices()) {
 		vertex->move(x, y);
 	}
-}
-
-std::list<Diagram::Vertex*> Diagram::vertices() const {
-	std::list<Vertex*> vertices;
-	Vertex *v = this->base;
-	if (v == nullptr) {
-		return vertices;
-	}
-
-	do {
-		vertices.push_back(v);
-		v = v->next();
-	} while (v != this->base);
-	return vertices;
 }
 
 std::list<Diagram::Edge> Diagram::edges() const {

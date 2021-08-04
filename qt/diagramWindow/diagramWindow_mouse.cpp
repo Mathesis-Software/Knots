@@ -15,7 +15,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       if (Parent->diagram.isClosed()) {
         return;
 			}
-      Parent->diagram.addVertex(m->x(), m->y());
+      localVertex = Parent->diagram.addVertex(m->x(), m->y());
       if (m->button() == 0x02) {
         Parent->diagram.close();
         Parent->actions_convert->setEnabled(true);
@@ -25,7 +25,6 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
       repaint();
       Parent->isSaved = false;
       doSomething = true;
-      localVertex = Parent->diagram.vertices().back();
       return;
     case diagramWindow::ADD_POINT:
     {
@@ -97,14 +96,12 @@ void diagramMainWidget::mouseReleaseEvent(QMouseEvent *m) {
     case diagramWindow::DRAW_NEW_DIAGRAM:
       Parent->diagram.moveVertex(localVertex, m->x(), m->y());
       repaint();
-      //repaint(false);
       return;
     case diagramWindow::MOVE_DIAGRAM:
       Parent->diagram.shift(m->x() - localx, m->y() - localy);
       localx = m->x();
       localy = m->y();
       repaint();
-      //repaint(false);
       return;
     default:
       return;

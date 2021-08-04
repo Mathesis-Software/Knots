@@ -6,7 +6,7 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Diagram(std::istream &is) : base(nullptr), _isClosed(false) {
+Diagram::Diagram(std::istream &is) : _isClosed(false) {
   char tmp[256];
 
   is.get(tmp, 32, ' ');

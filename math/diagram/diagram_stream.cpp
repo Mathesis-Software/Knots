@@ -1,39 +1,19 @@
 #include <map>
 #include <vector>
 
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
-#include <rapidjson/ostreamwrapper.h>
-#include <rapidjson/writer.h>
-
+#include "../../util/rapidjson.h"
 #include "diagram.h"
 
 namespace KE { namespace TwoD {
 
-namespace {
-	std::string get_string(const rapidjson::Document &doc, const std::string &key) {
-		if (doc.HasMember(key.c_str())) {
-			const auto &obj = doc[key.c_str()];
-			if (obj.IsString()) {
-				return std::string(obj.GetString(), obj.GetStringLength());
-			}
-		}
-		return "";
-	}
-}
-
-Diagram::Diagram(std::istream &is) : _isClosed(false) {
-	rapidjson::Document doc;
-	rapidjson::IStreamWrapper wrapper(is);
-	doc.ParseStream(wrapper);
-
+Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}
-	if (!doc.IsObject() || get_string(doc, "type") != "diagram") {
+	if (!doc.IsObject() || Util::rapidjson::get_string(doc, "type") != "diagram") {
 		throw std::runtime_error("The file does not represent a diagram");
 	}
-	this->caption = get_string(doc, "name");
+	this->caption = Util::rapidjson::get_string(doc, "name");
 	if (!doc.HasMember("components")) {
 		throw std::runtime_error("The file contains no diagram components");
 	}
@@ -86,7 +66,7 @@ Diagram::Diagram(std::istream &is) : _isClosed(false) {
 	}
 }
 
-void Diagram::save(std::ostream &os) {
+rapidjson::Document Diagram::save() const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "diagram", doc.GetAllocator());
@@ -122,9 +102,7 @@ void Diagram::save(std::ostream &os) {
 	components.PushBack(first, doc.GetAllocator());
 	doc.AddMember("components", components, doc.GetAllocator());
 
-	rapidjson::OStreamWrapper wrapper(os);
-	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
-	doc.Accept(writer);
+	return doc;
 }
 
 }}

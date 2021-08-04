@@ -4,6 +4,9 @@
 #include <QtWidgets/QMessageBox>
 #include <QtGui/QPixmap>
 
+#include <rapidjson/istreamwrapper.h>
+
+#include "../../util/rapidjson.h"
 #include "manager.h"
 #include "about.h"
 #include "icon_provider.h"
@@ -59,43 +62,36 @@ void keManager::open() {
 		return;
 	}
 
-	std::ifstream is(filename.toStdString());
-	if (!is) {
-		QMessageBox::critical(0, "Error", "\nCouldn't open file \"" + filename + "\"\n");
-		return;
-	}
-
-	QFileInfo finfo(filename);
-
 	abstractWindow *aw = nullptr;
 
-	if (finfo.suffix() == "knt") {
-		try {
-			aw = new knotWindow(is);
-		} catch (const std::runtime_error &e) {
-			abstractWindow::AWRegister.pop_back();
-			QMessageBox::critical(0, "Knot opening error", QString("\n") + e.what() + "\n");
-			return;
+	try {
+		std::ifstream is(filename.toStdString());
+		if (!is) {
+			throw std::runtime_error("Cannot read the file content");
 		}
-	} else if (finfo.suffix() == "dgr") {
-		try {
-			aw = new diagramWindow(is);
-		} catch (const std::runtime_error &e) {
-			abstractWindow::AWRegister.pop_back();
-			QMessageBox::critical(0, "Diagram opening error", QString("\n") + e.what() + "\n");
-			return;
+		rapidjson::Document doc;
+		rapidjson::IStreamWrapper wrapper(is);
+		doc.ParseStream(wrapper);
+		is.close();
+
+		if (doc.IsNull()) {
+			throw std::runtime_error("The file is not in JSON format");
+		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "diagram") {
+			aw = new diagramWindow(doc);
+		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "link") {
+			aw = new knotWindow(doc);
+		} else {
+			throw std::runtime_error("The file does not represent a knot nor a diagram");
 		}
-	} else {
-		QMessageBox::critical(0, "File opening error", "\nUnknown file type.\n");
-		return;
-	}
-
-	is.close();
-
-	if (aw->isEmpty()) {
-		aw->close();
-	} else {
-		aw->show();
+		
+		if (aw->isEmpty()) {
+			aw->close();
+		} else {
+			aw->show();
+		}
+	} catch (const std::runtime_error &e) {
+		abstractWindow::AWRegister.pop_back();
+		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
 	}
 }
 

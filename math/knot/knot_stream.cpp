@@ -1,36 +1,16 @@
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
-#include <rapidjson/ostreamwrapper.h>
-#include <rapidjson/writer.h>
-
+#include "../../util/rapidjson.h"
 #include "knot.h"
 
 namespace KE { namespace ThreeD {
 
-namespace {
-	std::string get_string(const rapidjson::Document &doc, const std::string &key) {
-		if (doc.HasMember(key.c_str())) {
-			const auto &obj = doc[key.c_str()];
-			if (obj.IsString()) {
-				return std::string(obj.GetString(), obj.GetStringLength());
-			}
-		}
-		return "";
-	}
-}
-
-Knot::Knot(std::istream &is) {
-	rapidjson::Document doc;
-	rapidjson::IStreamWrapper wrapper(is);
-	doc.ParseStream(wrapper);
-
+Knot::Knot(const rapidjson::Document &doc) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}
-	if (!doc.IsObject() || get_string(doc, "type") != "link") {
+	if (!doc.IsObject() || Util::rapidjson::get_string(doc, "type") != "link") {
 		throw std::runtime_error("The file does not represent a knot");
 	}
-	this->caption = get_string(doc, "name");
+	this->caption = Util::rapidjson::get_string(doc, "name");
 	if (!doc.HasMember("components")) {
 		throw std::runtime_error("The file contains no diagram components");
 	}
@@ -54,16 +34,16 @@ Knot::Knot(std::istream &is) {
 	}
 }
 
-void Knot::save(std::ostream &os) const {
+rapidjson::Document Knot::save() const {
 	double matrix[3][3] = {
 		{1.0, 0.0, 0.0},
 		{0.0, 1.0, 0.0},
 		{0.0, 0.0, 1.0}
 	};
-	this->save(os, matrix);
+	return this->save(matrix);
 }
 
-void Knot::save(std::ostream &os, const double matrix[3][3]) const {
+rapidjson::Document Knot::save(const double matrix[3][3]) const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "link", doc.GetAllocator());
@@ -85,10 +65,7 @@ void Knot::save(std::ostream &os, const double matrix[3][3]) const {
 	components.PushBack(first, doc.GetAllocator());
 	doc.AddMember("components", components, doc.GetAllocator());
 
-	rapidjson::OStreamWrapper wrapper(os);
-	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
-	writer.SetMaxDecimalPlaces(5);
-	doc.Accept(writer);
+	return doc;
 }
 
 }}

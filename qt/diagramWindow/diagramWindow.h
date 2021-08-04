@@ -49,7 +49,7 @@ private slots:
 	void simplify();
 
 public:
-	diagramWindow(std::istream&);
+	diagramWindow(const rapidjson::Document &doc);
 	diagramWindow();
 	~diagramWindow();
 

@@ -2,10 +2,11 @@
 #define __DIAGRAM_H__
 
 #include <cmath>
-#include <iostream>
 #include <list>
 #include <memory>
 #include <string>
+
+#include <rapidjson/document.h>
 
 namespace KE {
 
@@ -118,10 +119,10 @@ public:
 
 	public:
 		Diagram();
-		Diagram(std::istream &is);
+		Diagram(const rapidjson::Document &doc);
 		~Diagram();
 
-		void save(std::ostream &os);
+		rapidjson::Document save() const;
 
 private:
 	Diagram(const Diagram&) = delete;

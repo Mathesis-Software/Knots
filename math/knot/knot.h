@@ -1,10 +1,11 @@
 #ifndef __KNOT_H__
 #define __KNOT_H__
 
-#include <iostream>
 #include <memory>
 #include <string>
 #include <vector>
+
+#include <rapidjson/document.h>
 
 #include "primitives.h"
 #include "../seifert/seifert.h"
@@ -129,7 +130,7 @@ private:
 	const std::vector<double> &len_table() const;
 
 public:
-	Knot(std::istream &is);
+	Knot(const rapidjson::Document &doc);
 	Knot(const TwoD::Diagram&, int, int);
 
 	bool isEmpty();
@@ -142,8 +143,8 @@ public:
 	Vector seifertGradient(const Point &point) const;
 	double minDist(const Point &point) const;
 
-	void save(std::ostream &os) const;
-	void save(std::ostream &os, const double matrix[3][3]) const;
+	rapidjson::Document save() const;
+	rapidjson::Document save(const double matrix[3][3]) const;
 
 	friend class GL::KnotSurface;
 

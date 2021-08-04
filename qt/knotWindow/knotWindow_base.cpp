@@ -1,6 +1,6 @@
-#include <QtWidgets/qmenubar.h>
-#include <QtWidgets/qmessagebox.h>
-#include <QtGui/qpixmap.h>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QMessageBox>
+#include <QtGui/QPixmap>
 #include <QtCore/QTimerEvent>
 
 #include "knotWindow.h"
@@ -42,7 +42,7 @@ void knotWindow::init() {
   setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
 }
 
-knotWindow::knotWindow(std::istream &is) : knot(is), seifertStartPoint(0.0, 0.0, 0.4) {
+knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4) {
   this->init();
 }
 

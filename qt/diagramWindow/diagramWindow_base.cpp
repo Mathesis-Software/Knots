@@ -3,10 +3,13 @@
 #include <QtWidgets/QMessageBox>
 #include <QtGui/QPixmap>
 
+#include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/writer.h>
+
 #include "diagramWindow.h"
 #include "../knotWindow/knotWindow.h"
 
-diagramWindow::diagramWindow(std::istream &is) : diagram(is) {
+diagramWindow::diagramWindow(const rapidjson::Document &doc) : diagram(doc) {
 	init();
 	setWindowTitle(this->diagram.caption.c_str());
 	actions[0]->setChecked(false);
@@ -122,5 +125,8 @@ void diagramWindow::convert() {
 }
 
 void diagramWindow::saveIt(std::ostream &os) {
-	this->diagram.save(os);
+	const rapidjson::Document doc = this->diagram.save();
+	rapidjson::OStreamWrapper wrapper(os);
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
+	doc.Accept(writer);
 }

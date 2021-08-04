@@ -75,7 +75,7 @@ private slots:
   void bp_minus();
 
 public:
-  knotWindow(std::istream &is);
+  knotWindow(const rapidjson::Document &doc);
   knotWindow(const diagramWindow &diagram);
   ~knotWindow();
 

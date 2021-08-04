@@ -1,3 +1,6 @@
+#include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/writer.h>
+
 #include "knotWindow.h"
 
 void knotWindow::saveIt(std::ostream &os) {
@@ -7,5 +10,9 @@ void knotWindow::saveIt(std::ostream &os) {
 			matrix[i][j] = this->currMatr(i, j);
 		}
 	}
-	this->knot.save(os, matrix);
+	const rapidjson::Document doc = this->knot.save(matrix);
+	rapidjson::OStreamWrapper wrapper(os);
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
+	writer.SetMaxDecimalPlaces(5);
+	doc.Accept(writer);
 }

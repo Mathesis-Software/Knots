@@ -100,20 +100,20 @@ void Diagram::save(std::ostream &os) {
 		nums[vertex] = index;
 		index += 1;
 		rapidjson::Value point(rapidjson::kArrayType);
-   	point.PushBack(vertex->x(), doc.GetAllocator());
-   	point.PushBack(vertex->y(), doc.GetAllocator());
+	 	point.PushBack(vertex->x(), doc.GetAllocator());
+	 	point.PushBack(vertex->y(), doc.GetAllocator());
 		vertices.PushBack(point, doc.GetAllocator());
 	}
 
 	rapidjson::Value crossings(rapidjson::kArrayType);
 	for (const auto &vertex : this->vertices()) {
-    for (const auto &crs : vertex->crossings()) {
+		for (const auto &crs : vertex->crossings()) {
 			rapidjson::Value c(rapidjson::kArrayType);
 			c.PushBack(nums[vertex], doc.GetAllocator());
 			c.PushBack(nums[crs.up.start], doc.GetAllocator());
 			crossings.PushBack(c, doc.GetAllocator());
 		}
-  }
+	}
 
 	rapidjson::Value components(rapidjson::kArrayType);
 	rapidjson::Value first(rapidjson::kObjectType);

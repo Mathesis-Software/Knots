@@ -20,13 +20,14 @@ class KnotSurface : public Surface {
 private:
 	const ThreeD::Knot &knot;
   double thickness;
-	const std::vector<double> sines;
-	const std::vector<double> cosines;
+	std::vector<double> sines;
+	std::vector<double> cosines;
 
 public:
   KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle);
   void calculate(void);
-  void setThickness(double t) {thickness = t;}
+  void setThickness(double thickness);
+	void setNumberOfPointsOnCircle(std::size_t pointsOnCircle);
 
 private:
 	KnotSurface(const KnotSurface&) = delete;

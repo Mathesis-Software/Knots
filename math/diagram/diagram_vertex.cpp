@@ -4,16 +4,16 @@
 
 namespace KE { namespace TwoD {
 
-Diagram::Vertex *Diagram::addVertex(int x, int y) {
+std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 	if (this->isClosed()) {
 		return nullptr;
 	}
 
-	Vertex *new_vertex = new Vertex(x, y);
+	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
 	if (this->_vertices.empty()) {
 		this->_vertices.push_back(new_vertex);
 	} else {
-		Vertex *end = this->_vertices.back();
+		std::shared_ptr<Vertex> end = this->_vertices.back();
 		this->_vertices.push_back(new_vertex);
 		const Edge new_edge(end, new_vertex);
 		for (const Edge &e : this->edges()) {
@@ -26,8 +26,8 @@ Diagram::Vertex *Diagram::addVertex(int x, int y) {
 	return new_vertex;
 }
 
-Diagram::Vertex *Diagram::addVertex(const Edge &edge, int x, int y) {
-	Vertex *new_vertex = new Vertex(x, y);
+std::shared_ptr<Diagram::Vertex> Diagram::addVertex(const Edge &edge, int x, int y) {
+	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
 	auto iter = std::find(this->_vertices.begin(), this->_vertices.end(), edge.end);
 	this->_vertices.insert(iter, new_vertex);
 
@@ -53,13 +53,13 @@ Diagram::Vertex *Diagram::addVertex(const Edge &edge, int x, int y) {
 	return new_vertex;
 }
 
-void Diagram::removeVertex(Vertex* v) {
+void Diagram::removeVertex(const std::shared_ptr<Vertex> &vertex) {
 	std::shared_ptr<const Edge> removed1;
 	std::shared_ptr<const Edge> removed2;
 	for (const Edge &edge : this->edges()) {
-		if (edge.end == v) {
+		if (edge.end == vertex) {
 			removed1 = std::make_shared<const Edge>(edge);
-		} else if (edge.start == v) {
+		} else if (edge.start == vertex) {
 			removed2 = std::make_shared<const Edge>(edge);
 		}
 	}
@@ -68,7 +68,7 @@ void Diagram::removeVertex(Vertex* v) {
 		merged = std::make_shared<const Edge>(removed1->start, removed2->end);
 	}
 
-	this->_vertices.remove(v);
+	this->_vertices.remove(vertex);
 
 	for (const Edge &edge : this->edges()) {
 		std::shared_ptr<Crossing> removed_crossing1;
@@ -92,22 +92,17 @@ void Diagram::removeVertex(Vertex* v) {
 			this->addCrossing(*merged, edge);
 		}
 	}
-
-	delete v;
 }
 
-void Diagram::moveVertex(Vertex *v, int x, int y) {
-	if (v == nullptr)
-		return;
-
-	v->moveTo(x, y);
+void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
+	vertex->moveTo(x, y);
 
 	std::shared_ptr<const Edge> changed1;
 	std::shared_ptr<const Edge> changed2;
 	for (const Edge &edge : this->edges()) {
-		if (edge.end == v) {
+		if (edge.end == vertex) {
 			changed1 = std::make_shared<const Edge>(edge);
-		} else if (edge.start == v) {
+		} else if (edge.start == vertex) {
 			changed2 = std::make_shared<const Edge>(edge);
 		}
 	}

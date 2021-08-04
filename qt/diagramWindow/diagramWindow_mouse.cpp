@@ -2,7 +2,7 @@
 
 #include "diagramWindow.h"
 
-static KE::TwoD::Diagram::Vertex *localVertex = nullptr;
+static std::shared_ptr<KE::TwoD::Diagram::Vertex> localVertex;
 static int localx, localy;
 static bool doSomething = false;
 
@@ -39,9 +39,9 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::MOVE_POINT:
     {
-			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
-      if (v) {
-        localVertex = v;
+			const auto vertex = Parent->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
+      if (vertex) {
+        localVertex = vertex;
         Parent->isSaved = false;
         doSomething = true;
       }
@@ -49,9 +49,9 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
     }
     case diagramWindow::REMOVE_POINT:
     {
-			KE::TwoD::Diagram::Vertex *v = Parent->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
-      if (v) {
-        Parent->diagram.removeVertex(v);
+			const auto vertex = Parent->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
+      if (vertex) {
+        Parent->diagram.removeVertex(vertex);
 				if (Parent->isEmpty()) {
 					Parent->clear();
 				} else {

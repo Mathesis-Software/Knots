@@ -64,7 +64,7 @@ Diagram::Diagram(std::istream &is) : _isClosed(false) {
 
 void Diagram::save(std::ostream &os) {
   os << "#DIAGRAM " << this->caption << "\n#POINTS " << this->vertices().size() << "\n";
-	std::map<Vertex*,std::size_t> nums;
+	std::map<std::shared_ptr<Vertex>,std::size_t> nums;
 	int index = 0;
 	for (const auto &vertex : this->vertices()) {
 		nums[vertex] = index;

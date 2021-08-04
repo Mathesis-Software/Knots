@@ -13,7 +13,7 @@ bool Diagram::simplify(std::size_t depth) {
 		return false;
 	}
 
-	std::set<Vertex*> crossings;
+	std::set<std::shared_ptr<Vertex>> crossings;
 	for (const auto edge : edges) {
 		for (const auto crs : edge.start->crossings()) {
 			crossings.insert(crs.up.start);

@@ -14,9 +14,6 @@ Diagram::~Diagram() {
 }
 
 void Diagram::clear() {
-	for (auto vertex : this->_vertices) {
-		delete vertex;
-	}
 	this->_vertices.clear();
 	this->_isClosed = false;
 }
@@ -27,17 +24,17 @@ void Diagram::order() {
 	}
 }
 
-void Diagram::shift(int x, int y) {
-	for (Vertex *vertex : this->vertices()) {
-		vertex->move(x, y);
+void Diagram::shift(int dx, int dy) {
+	for (auto vertex : this->vertices()) {
+		vertex->move(dx, dy);
 	}
 }
 
 std::list<Diagram::Edge> Diagram::edges() const {
 	std::list<Edge> edges;
 
-	Vertex *previous = nullptr;
-	for (Vertex *vertex : this->vertices()) {
+	std::shared_ptr<Vertex> previous = nullptr;
+	for (auto vertex : this->vertices()) {
 		if (previous) {
 			edges.push_back(Edge(previous, vertex));
 		}
@@ -50,19 +47,19 @@ std::list<Diagram::Edge> Diagram::edges() const {
 	return edges;
 }
 
-Diagram::Vertex *Diagram::findVertex(const FloatPoint &pt, float maxDistance) const {
+std::shared_ptr<Diagram::Vertex> Diagram::findVertex(const FloatPoint &pt, float maxDistance) const {
 	float best = std::numeric_limits<float>::max();
-	Vertex *found = nullptr;
+	std::shared_ptr<Vertex> found;
 
 	for (auto vertex : this->vertices()) {
 		const float distance = pt.distance(vertex->coords());
-		if (distance < best) {
+		if (distance < best && distance <= maxDistance) {
 			best = distance;
 			found = vertex;
 		}
 	}
 
-	return best <= maxDistance ? found : nullptr;
+	return found;
 }
 
 std::shared_ptr<Diagram::Crossing> Diagram::findCrossing(const FloatPoint &pt, float maxDistance) const {

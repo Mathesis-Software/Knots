@@ -58,10 +58,10 @@ public:
 	struct Edge {
 		friend class Diagram;
 
-		Vertex *start;
-		Vertex *end;
+		const std::shared_ptr<Vertex> start;
+		const std::shared_ptr<Vertex> end;
 
-		Edge(Vertex *start, Vertex *end) : start(start), end(end) {
+		Edge(const std::shared_ptr<Vertex> &start, const std::shared_ptr<Vertex> &end) : start(start), end(end) {
 		}
 		int dx() const { return this->end->x() - this->start->x(); }
 		int dy() const { return this->end->y() - this->start->y(); }
@@ -87,18 +87,18 @@ public:
 		std::string caption;
 
 	private:
-		std::list<Vertex*> _vertices;
+		std::list<std::shared_ptr<Vertex>> _vertices;
 		bool _isClosed;
 
 	public:
 		bool isClosed() const { return this->_isClosed; }
-		const std::list<Vertex*> &vertices() const { return this->_vertices; }
+		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
 
-		Vertex *addVertex(int, int);
-		Vertex *addVertex(const Edge &edge, int, int);
-		void removeVertex(Vertex*);
-		void moveVertex(Vertex*, int, int);
+		std::shared_ptr<Vertex> addVertex(int x, int y);
+		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);
+		void removeVertex(const std::shared_ptr<Vertex> &vertex);
+		void moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
 		void close();
 
 		void flipCrossing(Crossing &crossing);
@@ -106,7 +106,7 @@ public:
 		bool simplify(std::size_t depth);
 		void clear();
 
-		Vertex *findVertex(const FloatPoint &pt, float maxDistance) const;
+		std::shared_ptr<Vertex> findVertex(const FloatPoint &pt, float maxDistance) const;
 		std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
 		std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 

@@ -10,7 +10,7 @@
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::init() {
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 0.05);
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 0.05, 28);
   addSurface(this->knotSurface);
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
   addSurface(this->seifertSurface);

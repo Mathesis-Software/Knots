@@ -5,16 +5,26 @@
 
 namespace {
 
-double SIN[9] =
-	{0.0, M_SQRT1_2, 1.0, M_SQRT1_2, 0.0, -M_SQRT1_2, -1.0, -M_SQRT1_2, 0.0 };
-double COS[9] =
-	{1.0, M_SQRT1_2, 0.0, -M_SQRT1_2, -1.0, -M_SQRT1_2, 0.0, M_SQRT1_2, 1.0 };
+std::vector<double> sines_vector(std::size_t length) {
+	std::vector<double> sines;
+	for (std::size_t i = 0; i <= length; ++i) {
+		sines.push_back(sin(2 * M_PI / length * i));
+	}
+	return sines;
+}
+std::vector<double> cosines_vector(std::size_t length) {
+	std::vector<double> cosines;
+	for (std::size_t i = 0; i <= length; ++i) {
+		cosines.push_back(cos(2 * M_PI / length * i));
+	}
+	return cosines;
+}
 
 }
 
 namespace KE { namespace GL {
 
-KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness) : knot(knot), thickness(thickness) {
+KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle) : knot(knot), thickness(thickness), sines(sines_vector(pointsOnCircle)), cosines(cosines_vector(pointsOnCircle)) {
 	stripped = 1;
 	sides = Front;
 }
@@ -29,7 +39,7 @@ void KnotSurface::calculate() {
 	destroy ();
 
 	std::vector<ThreeD::Vector> normal1, normal2;
-	std::vector<int> shift;
+	std::vector<std::size_t> shift;
 
 	/*
 	Create normal vector table
@@ -59,31 +69,26 @@ void KnotSurface::calculate() {
 	/*
 	Create shift table
 	*/
-	{
-		double a, b;
-
-		for (std::size_t i = 0; i < points.size(); ++i) {
-			a = normal1[i].x * normal1[this->knot.next(i)].x
-				+ normal1[i].y * normal1[this->knot.next(i)].y
-				+ normal1[i].z * normal1[this->knot.next(i)].z;
-			b = normal1[i].x * normal2[this->knot.next(i)].x
-				+ normal1[i].y * normal2[this->knot.next(i)].y
-				+ normal1[i].z * normal2[this->knot.next(i)].z;
-
-			if (a > 0) {
-				if (b > 0) {
-					shift.push_back((b > a) ? 7 : 0);
-				} else {
-					shift.push_back((- b > a) ? 2 : 1);
-				}
-			} else {
-				if (b > 0) {
-					shift.push_back((b > - a) ? 6 : 5);
-				} else {
-					shift.push_back((b > a) ? 4 : 3);
-				}
+	for (std::size_t i = 0; i < points.size(); ++i) {
+		std::size_t best = 0;
+		double diff = std::numeric_limits<double>::max();
+		for (std::size_t rotation = 0; rotation < this->sines.size() - 1; ++rotation) {
+			ThreeD::Vector no(
+				normal1[this->knot.next(i)].x * this->cosines[rotation]	-
+					normal2[this->knot.next(i)].x * this->sines[rotation],
+				normal1[this->knot.next(i)].y * this->cosines[rotation]	-
+					normal2[this->knot.next(i)].y * this->sines[rotation],
+				normal1[this->knot.next(i)].z * this->cosines[rotation]	-
+					normal2[this->knot.next(i)].z * this->sines[rotation]
+			);
+			no.normalize();
+			const double value = 1 - normal1[i].scalar_product(no);
+			if (value < diff) {
+				diff = value;
+				best = rotation;
 			}
 		}
+		shift.push_back(best);
 	}
 
 	/*
@@ -94,14 +99,14 @@ void KnotSurface::calculate() {
 		int j, j1, j2;
 		double n0, n1, n2;
 
-		for (j = 0; j < 8; ++j) {
+		for (j = 0; j < this->sines.size() - 1; ++j) {
 			j1 = j;
-			j2 = (j + 1) & 0x7;
+			j2 = (j + 1) % (this->sines.size() - 1);
 
 			for (std::size_t i = 0; i < points.size(); ++i) {
-				n0 = normal1[i].x * SIN[j1] + normal2[i].x * COS[j1];
-				n1 = normal1[i].y * SIN[j1] + normal2[i].y * COS[j1];
-				n2 = normal1[i].z * SIN[j1] + normal2[i].z * COS[j1];
+				n0 = normal1[i].x * this->sines[j1] + normal2[i].x * this->cosines[j1];
+				n1 = normal1[i].y * this->sines[j1] + normal2[i].y * this->cosines[j1];
+				n2 = normal1[i].z * this->sines[j1] + normal2[i].z * this->cosines[j1];
 
 				addpoint(
 					points[i].x + thickness * n0,
@@ -110,9 +115,9 @@ void KnotSurface::calculate() {
 					n0, n1, n2
 				);
 
-				n0 = normal1[i].x * SIN[j2] + normal2[i].x * COS[j2];
-				n1 = normal1[i].y * SIN[j2] + normal2[i].y * COS[j2];
-				n2 = normal1[i].z * SIN[j2] + normal2[i].z * COS[j2];
+				n0 = normal1[i].x * this->sines[j2] + normal2[i].x * this->cosines[j2];
+				n1 = normal1[i].y * this->sines[j2] + normal2[i].y * this->cosines[j2];
+				n2 = normal1[i].z * this->sines[j2] + normal2[i].z * this->cosines[j2];
 
 				addpoint(
 					points[i].x + thickness * n0,
@@ -123,13 +128,13 @@ void KnotSurface::calculate() {
 
 				j1 += shift[i];
 				j2 += shift[i];
-				j1 &= 0x7;
-				j2 &= 0x7;
+				j1 %= this->sines.size() - 1;
+				j2 %= this->sines.size() - 1;
 			}
 
-			n0 = normal1[0].x * SIN[j1] + normal2[0].x * COS[j1];
-			n1 = normal1[0].y * SIN[j1] + normal2[0].y * COS[j1];
-			n2 = normal1[0].z * SIN[j1] + normal2[0].z * COS[j1];
+			n0 = normal1[0].x * this->sines[j1] + normal2[0].x * this->cosines[j1];
+			n1 = normal1[0].y * this->sines[j1] + normal2[0].y * this->cosines[j1];
+			n2 = normal1[0].z * this->sines[j1] + normal2[0].z * this->cosines[j1];
 
 			addpoint(
 				points[0].x + thickness * n0,
@@ -138,9 +143,9 @@ void KnotSurface::calculate() {
 				n0, n1, n2
 			);
 
-			n0 = normal1[0].x * SIN[j2] + normal2[0].x * COS[j2];
-			n1 = normal1[0].y * SIN[j2] + normal2[0].y * COS[j2];
-			n2 = normal1[0].z * SIN[j2] + normal2[0].z * COS[j2];
+			n0 = normal1[0].x * this->sines[j2] + normal2[0].x * this->cosines[j2];
+			n1 = normal1[0].y * this->sines[j2] + normal2[0].y * this->cosines[j2];
+			n2 = normal1[0].z * this->sines[j2] + normal2[0].z * this->cosines[j2];
 
 			addpoint(
 				points[0].x + thickness * n0,

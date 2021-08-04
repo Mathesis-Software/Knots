@@ -1,4 +1,3 @@
-#include <cstring>
 #include <map>
 #include <vector>
 
@@ -28,35 +27,35 @@ Diagram::Diagram(std::istream &is) : _isClosed(false) {
 	rapidjson::IStreamWrapper wrapper(is);
 	doc.ParseStream(wrapper);
 
+	if (doc.IsNull()) {
+		throw std::runtime_error("The file is not in JSON format");
+	}
 	if (!doc.IsObject() || get_string(doc, "type") != "diagram") {
-		// throw error
-		return;
+		throw std::runtime_error("The file does not represent a diagram");
 	}
 	this->caption = get_string(doc, "name");
 	if (!doc.HasMember("components")) {
-		// throw error
-		return;
+		throw std::runtime_error("The file contains no diagram components");
 	}
 	const auto &components = doc["components"];
-	if (!components.IsArray() || components.Size() != 1) {
-		// throw error
-		return;
+	if (!components.IsArray()) {
+		throw std::runtime_error("Components format is incorrect: a list expected");
+	}
+	if (components.Size() != 1) {
+		throw std::runtime_error("The app does not support multi-component diagrams");
 	}
 	const auto &first = components[0];
 	if (!first.IsObject() || !first.HasMember("vertices") || !first.HasMember("crossings")) {
-		// throw error
-		return;
+		throw std::runtime_error("Component format is incorrect: `vertices` and `crossings` fields expected");
 	}
 	const auto &vertices = first["vertices"];
 	if (!vertices.IsArray()) {
-		// throw error
-		return;
+		throw std::runtime_error("Vertices must be a list of points");
 	}
 	for (rapidjson::SizeType i = 0; i < vertices.Size(); ++i) {
 		const auto &point = vertices[i];
 		if (!point.IsArray() || point.Size() != 2 || !point[0].IsInt() || !point[1].IsInt()) {
-			// throw error
-			return;
+			throw std::runtime_error("Each vertex must be an array of two integers");
 		}
 		this->addVertex(point[0].GetInt(), point[1].GetInt());
 	}
@@ -71,20 +70,17 @@ Diagram::Diagram(std::istream &is) : _isClosed(false) {
 	const std::vector<Edge> edges(std::begin(list), std::end(list));
 	const auto &crossings = first["crossings"];
 	if (!crossings.IsArray()) {
-		// throw error
-		return;
+		throw std::runtime_error("Crossings must be a list of index pairs");
 	}
 	for (rapidjson::SizeType i = 0; i < crossings.Size(); ++i) {
 		const auto &point = crossings[i];
 		if (!point.IsArray() || point.Size() != 2 || !point[0].IsInt() || !point[1].IsInt()) {
-			// throw error
-			return;
+			throw std::runtime_error("Each crossing an index pair");
 		}
-		const int x = point[0].GetInt();
-	 	const int y = point[1].GetInt();
-		if (x < 0 || x >= edges.size() || y < 0 || y >= edges.size()) {
-			// throw error
-			return;
+		const std::size_t x = point[0].GetInt();
+	 	const std::size_t y = point[1].GetInt();
+		if (x >= edges.size() || y >= edges.size()) {
+			throw std::runtime_error("Vertex index in crossings is out of range");
 		}
 		this->addCrossing(edges[y], edges[x]);
 	}

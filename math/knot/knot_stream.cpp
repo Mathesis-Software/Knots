@@ -24,30 +24,31 @@ Knot::Knot(std::istream &is) {
 	rapidjson::IStreamWrapper wrapper(is);
 	doc.ParseStream(wrapper);
 
+	if (doc.IsNull()) {
+		throw std::runtime_error("The file is not in JSON format");
+	}
 	if (!doc.IsObject() || get_string(doc, "type") != "link") {
-		// throw error
-		return;
+		throw std::runtime_error("The file does not represent a knot");
 	}
 	this->caption = get_string(doc, "name");
 	if (!doc.HasMember("components")) {
-		// throw error
-		return;
+		throw std::runtime_error("The file contains no diagram components");
 	}
 	const auto &components = doc["components"];
-	if (!components.IsArray() || components.Size() != 1) {
-		// throw error
-		return;
+	if (!components.IsArray()) {
+		throw std::runtime_error("Components format is incorrect: a list expected");
+	}
+	if (components.Size() != 1) {
+		throw std::runtime_error("The app does not support multi-component diagrams");
 	}
 	const auto &first = components[0];
 	if (!first.IsArray() || first.Size() < 3) {
-		// throw error
-		return;
+		throw std::runtime_error("Component format is incorrect: expected a list of at least three points");
 	}
 	for (rapidjson::SizeType i = 0; i < first.Size(); ++i) {
 		const auto &point = first[i];
 		if (!point.IsArray() || point.Size() != 3 || !point[0].IsNumber() || !point[1].IsNumber() || !point[2].IsNumber()) {
-			// throw error
-			return;
+			throw std::runtime_error("Each point must be an array of three integers");
 		}
 		this->points.push_back(Point(point[0].GetDouble(), point[1].GetDouble(), point[2].GetDouble()));
 	}

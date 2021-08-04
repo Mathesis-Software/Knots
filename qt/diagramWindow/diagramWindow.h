@@ -12,72 +12,71 @@ class diagramWindow : public abstractWindow {
 Q_OBJECT
 
 private:
-  enum editorMode {
-    DRAW_NEW_DIAGRAM = 0,
-    ADD_POINT = 1,
-    MOVE_POINT = 2,
-    REMOVE_POINT = 3,
-    CHANGE_CROSS = 4,
-    MOVE_DIAGRAM = 5,
-    editorModeNumber = 6
-  };
+	enum editorMode {
+		DRAW_NEW_DIAGRAM = 0,
+		ADD_POINT = 1,
+		MOVE_POINT = 2,
+		REMOVE_POINT = 3,
+		CHANGE_CROSS = 4,
+		MOVE_DIAGRAM = 5,
+		editorModeNumber = 6
+	};
 
 public:
 	KE::TwoD::Diagram diagram;
 
 private:
-  QMenu *actionsMenu;
-  QAction *actions_convert;
-  QAction *actions_simplify;
-  QAction *actions_clear;
+	QMenu *actionsMenu;
+	QAction *actions_convert;
+	QAction *actions_simplify;
+	QAction *actions_clear;
 
-  QToolButton **actions;
+	QToolButton **actions;
 
-  editorMode mode;
+	editorMode mode;
 
-  void init();
+	void init();
 
-  const char *mask() {return "*.dgr";};
+	const char *mask() {return "*.dgr";};
 
-  void printIt(QPrinter*);
-  void saveIt(std::ostream&);
-  
+	void printIt(QPrinter*);
+	void saveIt(std::ostream&);
+	
 private slots:
-  void convert();
-  void clear();
-  void setmode(int);
-  void simplify();
+	void convert();
+	void clear();
+	void setmode(int);
+	void simplify();
 
 public:
-  diagramWindow(std::istream&);
-  diagramWindow();
-  ~diagramWindow();
+	diagramWindow(std::istream&);
+	diagramWindow();
+	~diagramWindow();
 
-  bool isEmpty() { return this->diagram.vertices().empty(); }
+	bool isEmpty() { return this->diagram.vertices().empty(); }
 
-  friend class diagramMainWidget;
+	friend class diagramMainWidget;
 };
 
 class diagramMainWidget : public QWidget {
 
-  Q_OBJECT
+	Q_OBJECT
 
 private:
+	diagramWindow *Parent;
 
-  diagramWindow *Parent;
+	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
+	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
 
-  void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
-  void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
-
-  void paintEvent(QPaintEvent*);
-  void mousePressEvent(QMouseEvent*);
-  void mouseReleaseEvent(QMouseEvent*);
-  void mouseMoveEvent(QMouseEvent*);
+	void paintEvent(QPaintEvent*);
+	void mousePressEvent(QMouseEvent*);
+	void mouseReleaseEvent(QMouseEvent*);
+	void mouseMoveEvent(QMouseEvent*);
 
 public:
-  diagramMainWidget(diagramWindow *p);
+	diagramMainWidget(diagramWindow *p);
 
-  void drawIt(QPainter &painter);
+	void drawIt(QPainter &painter);
 };
 
 #endif /* __DIAGRAMWINDOW_H__ */

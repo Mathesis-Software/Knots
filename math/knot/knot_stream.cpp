@@ -1,63 +1,93 @@
-#include <cstring>
+#include <rapidjson/document.h>
+#include <rapidjson/istreamwrapper.h>
+#include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/writer.h>
 
 #include "knot.h"
 
 namespace KE { namespace ThreeD {
 
+namespace {
+	std::string get_string(const rapidjson::Document &doc, const std::string &key) {
+		if (doc.HasMember(key.c_str())) {
+			const auto &obj = doc[key.c_str()];
+			if (obj.IsString()) {
+				return std::string(obj.GetString(), obj.GetStringLength());
+			}
+		}
+		return "";
+	}
+}
+
 Knot::Knot(std::istream &is) {
-	char tmp[256];
+	rapidjson::Document doc;
+	rapidjson::IStreamWrapper wrapper(is);
+	doc.ParseStream(wrapper);
 
-	is.get(tmp, 32, ' ');
-	if (strcmp(tmp, "#KNOT") != 0) {
+	if (!doc.IsObject() || get_string(doc, "type") != "link") {
+		// throw error
 		return;
 	}
-
-	is.get(tmp [0]);
-	is.get(tmp, 255);
-	this->caption = tmp;
-
-	is.get(tmp, 32, ' ');
-	int length;
-	is >> length;
-	if (strcmp(tmp, "\n#LENGTH") != 0 || length <= 0) {
+	this->caption = get_string(doc, "name");
+	if (!doc.HasMember("components")) {
+		// throw error
 		return;
 	}
-
-	this->points.clear();
-
-	for (int i = 0; i < length; ++i) {
-		double x, y, z;
-		is >> x >> y >> z;
-		this->points.push_back(Point(x, y, z));
-		if (is.good()) {
-			continue;
-		}
-		if (is.eof() && i == length - 1) {
-			break;
-		}
-		this->points.clear();
-		break;
+	const auto &components = doc["components"];
+	if (!components.IsArray() || components.Size() != 1) {
+		// throw error
+		return;
 	}
-
-	if (!this->points.empty()) {
-		this->center();
+	const auto &first = components[0];
+	if (!first.IsArray() || first.Size() < 3) {
+		// throw error
+		return;
 	}
-	this->create_depend();
+	for (rapidjson::SizeType i = 0; i < first.Size(); ++i) {
+		const auto &point = first[i];
+		if (!point.IsArray() || point.Size() != 3 || !point[0].IsNumber() || !point[1].IsNumber() || !point[2].IsNumber()) {
+			// throw error
+			return;
+		}
+		this->points.push_back(Point(point[0].GetDouble(), point[1].GetDouble(), point[2].GetDouble()));
+	}
+}
+
+void Knot::save(std::ostream &os) const {
+	double matrix[3][3] = {
+		{1.0, 0.0, 0.0},
+		{0.0, 1.0, 0.0},
+		{0.0, 0.0, 1.0}
+	};
+	this->save(os, matrix);
 }
 
 void Knot::save(std::ostream &os, const double matrix[3][3]) const {
-	os << "#KNOT " << this->caption << "\n#LENGTH " << this->points.size() << "\n";
+	rapidjson::Document doc;
+	doc.SetObject();
+	doc.AddMember("type", "link", doc.GetAllocator());
+	doc.AddMember("name", rapidjson::StringRef(this->caption.data(), this->caption.size()), doc.GetAllocator());
+	rapidjson::Value first(rapidjson::kArrayType);
 	for (const auto &pt : this->points) {
-    os << matrix[0][0] * pt.x +
-          matrix[1][0] * pt.y +
-          matrix[2][0] * pt.z << ' ' <<
-          matrix[0][1] * pt.x +
-          matrix[1][1] * pt.y +
-          matrix[2][1] * pt.z << ' ' <<
-          matrix[0][2] * pt.x +
-          matrix[1][2] * pt.y +
-          matrix[2][2] * pt.z << '\n';
+		rapidjson::Value point(rapidjson::kArrayType);
+		for (std::size_t i = 0; i < 3; ++i) {
+    	point.PushBack(
+				matrix[0][i] * pt.x +
+				matrix[1][i] * pt.y +
+				matrix[2][i] * pt.z,
+				doc.GetAllocator()
+			);
+		}
+		first.PushBack(point, doc.GetAllocator());
 	}
+	rapidjson::Value components(rapidjson::kArrayType);
+	components.PushBack(first, doc.GetAllocator());
+	doc.AddMember("components", components, doc.GetAllocator());
+
+	rapidjson::OStreamWrapper wrapper(os);
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
+	writer.SetMaxDecimalPlaces(5);
+	doc.Accept(writer);
 }
 
 }}

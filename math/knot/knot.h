@@ -142,6 +142,7 @@ public:
 	Vector seifertGradient(const Point &point) const;
 	double minDist(const Point &point) const;
 
+	void save(std::ostream &os) const;
 	void save(std::ostream &os, const double matrix[3][3]) const;
 
 	friend class GL::KnotSurface;

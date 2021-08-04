@@ -32,6 +32,8 @@ Knot::Knot(const rapidjson::Document &doc) {
 		}
 		this->points.push_back(Point(point[0].GetDouble(), point[1].GetDouble(), point[2].GetDouble()));
 	}
+
+	this->create_depend();
 }
 
 rapidjson::Document Knot::save() const {

@@ -33,7 +33,7 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
 		y1 = coords->y - deltaY;
 
 		if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0) {
-			painter.drawLine(x0, y0, x1, y1);
+			painter.drawLine(QPointF(x0, y0), QPointF(x1, y1));
 		}
 
 		x0 = coords->x + deltaX;
@@ -44,7 +44,7 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
 	y1 = edge.end->y();
 
 	if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0) {
-		painter.drawLine(x0, y0, x1, y1);
+		painter.drawLine(QPointF(x0, y0), QPointF(x1, y1));
 	}
 }
 

@@ -41,30 +41,23 @@ void KnotSurface::calculate() {
 	destroy ();
 
 	std::vector<ThreeD::Vector> normal1, normal2;
-	std::vector<std::size_t> shift;
-
 	/* Creating normal vector table */
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		ThreeD::Vector v(points[this->knot.prev(i)], points[this->knot.next(i)]);
 		v.normalize();
 
-		if (fabs(v.y) < M_SQRT1_2) {
-			ThreeD::Vector norm1(v.z, 0.0, - v.x);
-			ThreeD::Vector norm2(- v.x * v.y, v.x * v.x + v.z * v.z, - v.y * v.z);
-			norm1.normalize();
-			norm2.normalize();
-			normal1.push_back(norm1);
-			normal2.push_back(norm2);
-		} else {
-			ThreeD::Vector norm1(0.0, - v.z, v.y);
-			ThreeD::Vector norm2(v.y * v.y + v.z * v.z, - v.x * v.y, - v.x * v.z);
-			norm1.normalize();
-			norm2.normalize();
-			normal1.push_back(norm1);
-			normal2.push_back(norm2);
+		ThreeD::Vector norm1(0.0, - v.z, v.y);
+		if (fabs(v.y) < fabs(v.x)) {
+			norm1 = ThreeD::Vector(v.z, 0.0, - v.x);
 		}
+		ThreeD::Vector norm2 = v.vector_product(norm1);
+		norm1.normalize();
+		norm2.normalize();
+		normal1.push_back(norm1);
+		normal2.push_back(norm2);
 	}
 
+	std::vector<std::size_t> shift;
 	/* Creating shift table */
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		std::size_t best = 0;

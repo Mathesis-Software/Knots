@@ -45,6 +45,14 @@ struct Vector {
 		this->y /= len;
 		this->z /= len;
 	}
+
+	static Vector linear(const Vector &v0, double coef0, const Vector &v1, double coef1) {
+		return Vector(
+			coef0 * v0.x + coef1 * v1.x,
+			coef0 * v0.y + coef1 * v1.y,
+			coef0 * v0.z + coef1 * v1.z
+		);
+	}
 };
 
 inline void Point::move(const Vector &v, double coef) {

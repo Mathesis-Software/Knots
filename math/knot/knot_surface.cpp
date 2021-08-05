@@ -68,19 +68,14 @@ void KnotSurface::calculate() {
 	/* Creating shift table */
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		std::size_t best = 0;
-		double diff = std::numeric_limits<double>::max();
+		double diff = - std::numeric_limits<double>::max();
 		for (std::size_t rotation = 0; rotation < this->sines.size() - 1; ++rotation) {
-			ThreeD::Vector no(
-				normal1[this->knot.next(i)].x * this->cosines[rotation]	-
-					normal2[this->knot.next(i)].x * this->sines[rotation],
-				normal1[this->knot.next(i)].y * this->cosines[rotation]	-
-					normal2[this->knot.next(i)].y * this->sines[rotation],
-				normal1[this->knot.next(i)].z * this->cosines[rotation]	-
-					normal2[this->knot.next(i)].z * this->sines[rotation]
+			const ThreeD::Vector no = ThreeD::Vector::linear(
+				normal1[this->knot.next(i)], this->cosines[rotation],
+				normal2[this->knot.next(i)], - this->sines[rotation]
 			);
-			no.normalize();
-			const double value = 1 - normal1[i].scalar_product(no);
-			if (value < diff) {
+			const double value = normal1[i].scalar_product(no);
+			if (value > diff) {
 				diff = value;
 				best = rotation;
 			}
@@ -93,58 +88,23 @@ void KnotSurface::calculate() {
 		std::size_t j1 = j;
 		std::size_t j2 = (j + 1) % (this->sines.size() - 1);
 
-		double n0, n1, n2;
+		for (std::size_t i = 0; i <= points.size(); ++i) {
+			const std::size_t ix = i < points.size() ? i : 0;
+			for (auto jx : {j1, j2}) {
+				const ThreeD::Vector n = ThreeD::Vector::linear(
+					normal1[ix], this->sines[jx],
+					normal2[ix], this->cosines[jx]
+				);
+				ThreeD::Point new_point(points[ix]);
+				new_point.move(n, thickness);
+				addpoint(new_point, n);
+			}
 
-		for (std::size_t i = 0; i < points.size(); ++i) {
-			n0 = normal1[i].x * this->sines[j1] + normal2[i].x * this->cosines[j1];
-			n1 = normal1[i].y * this->sines[j1] + normal2[i].y * this->cosines[j1];
-			n2 = normal1[i].z * this->sines[j1] + normal2[i].z * this->cosines[j1];
-
-			addpoint(
-				points[i].x + thickness * n0,
-				points[i].y + thickness * n1,
-				points[i].z + thickness * n2,
-				n0, n1, n2
-			);
-
-			n0 = normal1[i].x * this->sines[j2] + normal2[i].x * this->cosines[j2];
-			n1 = normal1[i].y * this->sines[j2] + normal2[i].y * this->cosines[j2];
-			n2 = normal1[i].z * this->sines[j2] + normal2[i].z * this->cosines[j2];
-
-			addpoint(
-				points[i].x + thickness * n0,
-				points[i].y + thickness * n1,
-				points[i].z + thickness * n2,
-				n0, n1, n2
-			);
-
-			j1 += shift[i];
-			j2 += shift[i];
+			j1 += shift[ix];
+			j2 += shift[ix];
 			j1 %= this->sines.size() - 1;
 			j2 %= this->sines.size() - 1;
 		}
-
-		n0 = normal1[0].x * this->sines[j1] + normal2[0].x * this->cosines[j1];
-		n1 = normal1[0].y * this->sines[j1] + normal2[0].y * this->cosines[j1];
-		n2 = normal1[0].z * this->sines[j1] + normal2[0].z * this->cosines[j1];
-
-		addpoint(
-			points[0].x + thickness * n0,
-			points[0].y + thickness * n1,
-			points[0].z + thickness * n2,
-			n0, n1, n2
-		);
-
-		n0 = normal1[0].x * this->sines[j2] + normal2[0].x * this->cosines[j2];
-		n1 = normal1[0].y * this->sines[j2] + normal2[0].y * this->cosines[j2];
-		n2 = normal1[0].z * this->sines[j2] + normal2[0].z * this->cosines[j2];
-
-		addpoint(
-			points[0].x + thickness * n0,
-			points[0].y + thickness * n1,
-			points[0].z + thickness * n2,
-			n0, n1, n2
-		);
 	}
 }
 

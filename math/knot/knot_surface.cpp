@@ -56,18 +56,27 @@ void KnotSurface::calculate() {
 	}
 
 	std::vector<std::size_t> shift;
+	std::vector<double> scalars;
 	/* Creating shift table */
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		std::size_t best = 0;
-		double diff = - std::numeric_limits<double>::max();
+		scalars.clear();
 		for (std::size_t rotation = 0; rotation < this->sines.size() - 1; ++rotation) {
 			const ThreeD::Vector no = ThreeD::Vector::linear(
 				normal1[this->knot.next(i)], this->cosines[rotation],
 				normal2[this->knot.next(i)], - this->sines[rotation]
 			);
-			const double value = normal1[i].scalar_product(no);
-			if (value > diff) {
-				diff = value;
+			scalars.push_back(normal1[i].scalar_product(no));
+		}
+		const double last = scalars.back();
+		for (std::size_t index = scalars.size() - 1; index > 0; --index) {
+			scalars[index] += scalars[index - 1];
+		}
+		scalars.front() += last;
+		std::size_t best = 0;
+		double diff = scalars.front();
+		for (std::size_t rotation = 1; rotation < scalars.size(); ++rotation) {
+			if (scalars[rotation] > diff) {
+				diff = scalars[rotation];
 				best = rotation;
 			}
 		}

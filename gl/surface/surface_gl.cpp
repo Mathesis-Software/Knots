@@ -15,7 +15,7 @@ void KE::GL::Surface::paint() {
     glMaterialfv(GL_BACK, GL_DIFFUSE, backRGB);
 
     // Двусторонняя ли поверхность?
-    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, (sides == Both));
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, this->showBackSide);
 
     // Связаны ли треугольники?
     glBegin(stripped ? GL_TRIANGLE_STRIP : GL_TRIANGLES);

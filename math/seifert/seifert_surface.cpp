@@ -16,9 +16,7 @@ double det(const ThreeD::Point &pt0, const ThreeD::Point &pt1, const ThreeD::Poi
 
 }
 
-SeifertSurface::SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint) : base(base), startPoint(startPoint) {
-  stripped = 0;
-  sides = Both;
+SeifertSurface::SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
 }
 
 void SeifertSurface::addTriangles(seifert *s) {

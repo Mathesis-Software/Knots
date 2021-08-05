@@ -2,7 +2,7 @@
 
 namespace KE { namespace GL {
 
-Surface::Surface() {
+Surface::Surface(bool stripped, bool showBackSide) : stripped(stripped), showBackSide(showBackSide) {
   frontRGB[0] = 1.0;
   frontRGB[1] = 1.0;
   frontRGB[2] = 1.0;
@@ -30,10 +30,6 @@ void Surface::setBackRGB(const float *rgb) {
   backRGB[0] = rgb[0];
   backRGB[1] = rgb[1];
   backRGB[2] = rgb[2];
-}
-
-void Surface::addpoint(float v0, float v1, float v2, float n0, float n1, float n2) {
-  this->points.push_back(SurfacePoint(v0, v1, v2, n0, n1, n2));
 }
 
 void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) {

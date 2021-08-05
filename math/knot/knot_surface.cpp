@@ -5,9 +5,7 @@
 
 namespace KE { namespace GL {
 
-KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle) : knot(knot) {
-	stripped = 1;
-	sides = Front;
+KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle) : Surface(true, false), knot(knot) {
 	this->setThickness(thickness);
 	this->setNumberOfPointsOnCircle(pointsOnCircle);
 }

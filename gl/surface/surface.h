@@ -24,23 +24,19 @@ private:
 		}
   };
 
+  const bool stripped;
+  const bool showBackSide;
+  bool visible;
+
 	std::vector<SurfacePoint> points;
   float frontRGB[3], backRGB[3];
 
-  bool visible;
-
 protected:
-
-  enum {Front, Both};
-  bool stripped;
-  int sides;
-
   virtual void calculate() = 0;
-  void addpoint(float v0, float v1, float v2, float n0, float n1, float n2);
   void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
   
 public:
-  Surface();
+  Surface(bool stripped, bool showBackSide);
   virtual ~Surface();
 
   bool isVisible() { return this->visible; }

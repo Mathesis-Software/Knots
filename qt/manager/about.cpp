@@ -41,26 +41,22 @@ void aboutWindow::timerEvent(QTimerEvent*) {
   picture -> update ();
 }
 
-aboutSurface::aboutSurface(const char *filename) {
-  stripped = 1;
-  sides = Front;
-  show ();
+aboutSurface::aboutSurface(const char *filename) : Surface(true, false) {
+  show();
 
-	std::ifstream is (filename);
+	std::ifstream is(filename);
 
-  float p [6];
+  float p[6];
 
-  if (is)
-  {
-    while (!is.eof ())
-    {
-      is >> p [0] >> p [1] >> p [2] >> p [3] >> p [4] >> p [5];
-      if (is.good ())
-        addpoint (p [0], p [1], p [2], p [3], p [4], p [5]);
+  if (is) {
+    while (!is.eof()) {
+      is >> p[0] >> p[1] >> p[2] >> p[3] >> p[4] >> p[5];
+      if (is.good())
+        addpoint(KE::ThreeD::Point(p[0], p[1], p[2]), KE::ThreeD::Vector(p[3], p[4], p[5]));
       else
         break;
     }
-    is.close ();
+    is.close();
   }
 }
 

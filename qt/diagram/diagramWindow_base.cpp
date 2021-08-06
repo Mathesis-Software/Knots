@@ -33,7 +33,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	addToolBarButton("mini_trefoil.xpm", "Convert to knot", SLOT(convert()));
 
 	addToolBarSeparator();
-	actions = new QToolButton*[editorModeNumber];
+	actions = new QToolButton*[6];
 	actions[0] = addToolBarButton("draw_diagram.xpm", "Draw diagram", 0);
 	actions[1] = addToolBarButton("add_point.xpm", "Add point", 0);
 	actions[2] = addToolBarButton("move_point.xpm", "Move point", 0);
@@ -42,7 +42,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	actions[5] = addToolBarButton("move_diagram.xpm", "Move diagram", 0);
 
 	QButtonGroup *grp = new QButtonGroup;
-	for (int i = 0; i < editorModeNumber; i++) {
+	for (int i = 0; i < 6; i++) {
 		actions[i]->setCheckable(true);
 		grp->addButton(actions[i]);
 		this->connect(actions[i], &QToolButton::pressed, [=](){ this->setmode(i); });
@@ -50,7 +50,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 
 	grp->setExclusive(false);
 
-	mode = DRAW_NEW_DIAGRAM;
+	mode = DiagramWidget::NEW_DIAGRAM;
 	actions[0]->setChecked(true);
 
 	actions_convert->setEnabled(widget->diagram.isClosed());
@@ -68,7 +68,7 @@ diagramWindow::~diagramWindow() {
 }
 
 void diagramWindow::setmode(int newmode) {
-	if (newmode < 0 || newmode >= editorModeNumber) {
+	if (newmode < 0 || newmode >= 6) {
 		return;
 	}
 
@@ -79,17 +79,17 @@ void diagramWindow::setmode(int newmode) {
 		return;
 	}
 
-	if (newmode == DRAW_NEW_DIAGRAM && this->diagramWidget()->diagram.isClosed()) {
+	if (newmode == DiagramWidget::NEW_DIAGRAM && this->diagramWidget()->diagram.isClosed()) {
 		actions[newmode]->toggle();
 		return;
 	}
 
-	if (newmode != DRAW_NEW_DIAGRAM && isEmpty()) {
+	if (newmode != DiagramWidget::NEW_DIAGRAM && isEmpty()) {
 		actions[newmode]->toggle();
 		return;
 	}
 
-	this->mode = (editorMode)newmode;
+	this->mode = static_cast<DiagramWidget::EditingMode>(newmode);
 
 	actions[oldmode]->setChecked(false);
 }
@@ -100,7 +100,7 @@ void diagramWindow::clear() {
 	actions_simplify->setEnabled(false);
 	actions_clear->setEnabled(false);
 	this->centralWidget()->repaint();
-	setmode(DRAW_NEW_DIAGRAM);
+	setmode(DiagramWidget::NEW_DIAGRAM);
 	actions[0]->setChecked(true);
 
 	isSaved = true;

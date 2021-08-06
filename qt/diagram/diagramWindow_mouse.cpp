@@ -8,7 +8,7 @@ static bool doSomething = false;
 
 void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 	switch (Parent->mode) {
-		case diagramWindow::DRAW_NEW_DIAGRAM:
+		case NEW_DIAGRAM:
 			if (Parent->isEmpty()) {
 				Parent->actions_clear->setEnabled (true);
 			}
@@ -26,7 +26,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			Parent->isSaved = false;
 			doSomething = true;
 			return;
-		case diagramWindow::ADD_POINT:
+		case ADD_VERTEX:
 		{
 			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = this->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5);
 			if (edge) {
@@ -37,7 +37,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			}
 			return;
 		}
-		case diagramWindow::MOVE_POINT:
+		case MOVE_VERTEX:
 		{
 			const auto vertex = this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
 			if (vertex) {
@@ -47,7 +47,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			}
 			return;
 		}
-		case diagramWindow::REMOVE_POINT:
+		case REMOVE_VERTEX:
 		{
 			const auto vertex = this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
 			if (vertex) {
@@ -61,7 +61,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			}
 			return;
 		}
-		case diagramWindow::CHANGE_CROSS:
+		case FLIP_CROSSING:
 		{
 			auto c = this->diagram.findCrossing(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
 			if (c) {
@@ -71,7 +71,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			}
 			return;
 		}
-		case diagramWindow::MOVE_DIAGRAM:
+		case MOVE_DIAGRAM:
 			localx = m->x();
 			localy = m->y();
 			Parent->isSaved = false;
@@ -89,13 +89,13 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 	doSomething = false;
 
 	switch (Parent->mode) {
-		case diagramWindow::ADD_POINT:
-		case diagramWindow::MOVE_POINT:
-		case diagramWindow::DRAW_NEW_DIAGRAM:
+		case ADD_VERTEX:
+		case MOVE_VERTEX:
+		case NEW_DIAGRAM:
 			this->diagram.moveVertex(localVertex, m->x(), m->y());
 			repaint();
 			return;
-		case diagramWindow::MOVE_DIAGRAM:
+		case MOVE_DIAGRAM:
 			this->diagram.shift(m->x() - localx, m->y() - localy);
 			localx = m->x();
 			localy = m->y();
@@ -111,13 +111,13 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
 		return;
 
 	switch (Parent->mode) {
-		case diagramWindow::ADD_POINT:
-		case diagramWindow::MOVE_POINT:
-		case diagramWindow::DRAW_NEW_DIAGRAM:
+		case ADD_VERTEX:
+		case MOVE_VERTEX:
+		case NEW_DIAGRAM:
 			this->diagram.moveVertex(localVertex, m->x(), m->y());
 			repaint();
 			return;
-		case diagramWindow::MOVE_DIAGRAM:
+		case MOVE_DIAGRAM:
 			this->diagram.shift(m->x() - localx, m->y() - localy);
 			repaint();
 			localx = m->x();

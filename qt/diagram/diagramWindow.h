@@ -14,6 +14,16 @@ class DiagramWidget : public QWidget {
 	Q_OBJECT
 
 public:
+	enum EditingMode {
+		NEW_DIAGRAM = 0,
+		ADD_VERTEX = 1,
+		MOVE_VERTEX = 2,
+		REMOVE_VERTEX = 3,
+		FLIP_CROSSING = 4,
+		MOVE_DIAGRAM = 5
+	};
+
+public:
 	KE::TwoD::Diagram diagram;
 
 private:
@@ -39,17 +49,6 @@ class diagramWindow : public abstractWindow {
 Q_OBJECT
 
 private:
-	enum editorMode {
-		DRAW_NEW_DIAGRAM = 0,
-		ADD_POINT = 1,
-		MOVE_POINT = 2,
-		REMOVE_POINT = 3,
-		CHANGE_CROSS = 4,
-		MOVE_DIAGRAM = 5,
-		editorModeNumber = 6
-	};
-
-private:
 	QMenu *actionsMenu;
 	QAction *actions_convert;
 	QAction *actions_simplify;
@@ -57,7 +56,7 @@ private:
 
 	QToolButton **actions;
 
-	editorMode mode;
+	DiagramWidget::EditingMode mode;
 
 	void init(DiagramWidget *widget);
 

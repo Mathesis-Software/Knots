@@ -4,15 +4,15 @@
 
 #include "diagramWindow.h"
 
-diagramMainWidget::diagramMainWidget(diagramWindow *p) : QWidget (p) {
+DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget (p) {
 	Parent = p;
 }
 
-void diagramMainWidget::drawVertex(QPainter &painter, const KE::TwoD::Diagram::Vertex &v) {
+void DiagramWidget::drawVertex(QPainter &painter, const KE::TwoD::Diagram::Vertex &v) {
 	painter.drawEllipse(v.x() - 4, v.y() - 4, 9, 9);
 }
 
-void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge) {
+void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge) {
 	float deltaX = edge.end->x() - edge.start->x();
 	float deltaY = edge.end->y() - edge.start->y();
 	float hyp = hypotf(deltaX, deltaY);
@@ -48,7 +48,7 @@ void diagramMainWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edg
 	}
 }
 
-void diagramMainWidget::drawIt(QPainter &painter) {
+void DiagramWidget::drawIt(QPainter &painter) {
 	if (Parent->isEmpty())
 		return;
 
@@ -63,7 +63,7 @@ void diagramMainWidget::drawIt(QPainter &painter) {
 	}
 }
 
-void diagramMainWidget::paintEvent(QPaintEvent*) {
+void DiagramWidget::paintEvent(QPaintEvent*) {
 	QPainter pnt;
 	pnt.begin(this);
 	pnt.setRenderHint(QPainter::Antialiasing);
@@ -75,6 +75,6 @@ void diagramMainWidget::paintEvent(QPaintEvent*) {
 void diagramWindow::printIt(QPrinter *prn) {
 	QPainter pnt;
 	pnt.begin(prn);
-	((diagramMainWidget*)centralWidget())->drawIt(pnt);
+	((DiagramWidget*)centralWidget())->drawIt(pnt);
 	pnt.end();
 }

@@ -6,7 +6,7 @@ static std::shared_ptr<KE::TwoD::Diagram::Vertex> localVertex;
 static int localx, localy;
 static bool doSomething = false;
 
-void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
+void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 	switch (Parent->mode) {
 		case diagramWindow::DRAW_NEW_DIAGRAM:
 			if (Parent->isEmpty()) {
@@ -82,7 +82,7 @@ void diagramMainWidget::mousePressEvent(QMouseEvent *m) {
 	}
 }
 
-void diagramMainWidget::mouseReleaseEvent(QMouseEvent *m) {
+void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 	if (!doSomething)
 		return;
 
@@ -106,7 +106,7 @@ void diagramMainWidget::mouseReleaseEvent(QMouseEvent *m) {
 	}
 }
 
-void diagramMainWidget::mouseMoveEvent(QMouseEvent *m) {
+void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
 	if (!doSomething)
 		return;
 

@@ -56,7 +56,7 @@ void diagramWindow::init() {
 	actions_simplify->setEnabled(this->diagram.isClosed());
 	actions_clear->setEnabled(!isEmpty());
 
-	setCentralWidget(new diagramMainWidget(this));
+	setCentralWidget(new DiagramWidget(this));
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 

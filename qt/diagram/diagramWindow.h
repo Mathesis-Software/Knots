@@ -55,10 +55,10 @@ public:
 
 	bool isEmpty() { return this->diagram.vertices().empty(); }
 
-	friend class diagramMainWidget;
+	friend class DiagramWidget;
 };
 
-class diagramMainWidget : public QWidget {
+class DiagramWidget : public QWidget {
 
 	Q_OBJECT
 
@@ -74,7 +74,7 @@ private:
 	void mouseMoveEvent(QMouseEvent*);
 
 public:
-	diagramMainWidget(diagramWindow *p);
+	DiagramWidget(diagramWindow *p);
 
 	void drawIt(QPainter &painter);
 };

@@ -5,7 +5,7 @@
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
-#include "../diagramWindow/diagramWindow.h"
+#include "../diagram/diagramWindow.h"
 #include "../../math/knot/knot_surface.h"
 #include "../../math/seifert/seifert_surface.h"
 

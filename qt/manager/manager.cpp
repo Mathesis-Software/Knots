@@ -11,7 +11,7 @@
 #include "about.h"
 #include "icon_provider.h"
 #include "../knotWindow/knotWindow.h"
-#include "../diagramWindow/diagramWindow.h"
+#include "../diagram/diagramWindow.h"
 
 keManager::keManager() {
 	fileMenu = this->addMenu("&File");

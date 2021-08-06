@@ -7,6 +7,33 @@
 #include "../abstractWindow/abstractWindow.h"
 #include "../../math/diagram/diagram.h"
 
+class diagramWindow;
+
+class DiagramWidget : public QWidget {
+
+	Q_OBJECT
+
+public:
+	KE::TwoD::Diagram diagram;
+
+private:
+	diagramWindow *Parent;
+
+	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
+	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
+
+	void paintEvent(QPaintEvent*);
+	void mousePressEvent(QMouseEvent*);
+	void mouseReleaseEvent(QMouseEvent*);
+	void mouseMoveEvent(QMouseEvent*);
+
+public:
+	DiagramWidget(diagramWindow *p, const rapidjson::Document &doc);
+	DiagramWidget(diagramWindow *p);
+
+	void drawIt(QPainter &painter);
+};
+
 class diagramWindow : public abstractWindow {
 
 Q_OBJECT
@@ -22,9 +49,6 @@ private:
 		editorModeNumber = 6
 	};
 
-public:
-	KE::TwoD::Diagram diagram;
-
 private:
 	QMenu *actionsMenu;
 	QAction *actions_convert;
@@ -35,9 +59,9 @@ private:
 
 	editorMode mode;
 
-	void init();
+	void init(DiagramWidget *widget);
 
-	const char *mask() {return "*.dgr";};
+	const char *mask() const override {return "*.dgr";};
 
 	void printIt(QPrinter*);
 	void saveIt(std::ostream&);
@@ -53,30 +77,10 @@ public:
 	diagramWindow();
 	~diagramWindow();
 
-	bool isEmpty() { return this->diagram.vertices().empty(); }
+	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
+	bool isEmpty() const override;
 
 	friend class DiagramWidget;
-};
-
-class DiagramWidget : public QWidget {
-
-	Q_OBJECT
-
-private:
-	diagramWindow *Parent;
-
-	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
-	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
-
-	void paintEvent(QPaintEvent*);
-	void mousePressEvent(QMouseEvent*);
-	void mouseReleaseEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent*);
-
-public:
-	DiagramWidget(diagramWindow *p);
-
-	void drawIt(QPainter &painter);
 };
 
 #endif /* __DIAGRAMWINDOW_H__ */

@@ -133,7 +133,7 @@ public:
 	Knot(const rapidjson::Document &doc);
 	Knot(const TwoD::Diagram&, int, int);
 
-	bool isEmpty();
+	bool isEmpty() const;
 	void decreaseEnergy();
 	void setLength(double);
 	void center();
@@ -167,7 +167,7 @@ inline std::size_t Knot::prev(std::size_t index) const {
 	return index ? index - 1 : this->points.size() - 1;
 }
 
-inline bool Knot::isEmpty() {
+inline bool Knot::isEmpty() const {
 	return this->points.empty();
 }
 

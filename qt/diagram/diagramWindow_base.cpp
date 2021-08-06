@@ -9,9 +9,8 @@
 #include "diagramWindow.h"
 #include "../knotWindow/knotWindow.h"
 
-diagramWindow::diagramWindow(const rapidjson::Document &doc) : diagram(doc) {
-	init();
-	setWindowTitle(this->diagram.caption.c_str());
+diagramWindow::diagramWindow(const rapidjson::Document &doc) {
+	this->init(new DiagramWidget(this, doc));
 	actions[0]->setChecked(false);
 	actions_convert->setEnabled(true);
 	actions_simplify->setEnabled(true);
@@ -19,11 +18,13 @@ diagramWindow::diagramWindow(const rapidjson::Document &doc) : diagram(doc) {
 }
 
 diagramWindow::diagramWindow() {
-	init();
-	setWindowTitle(this->diagram.caption.c_str());
+	this->init(new DiagramWidget(this));
 }
 
-void diagramWindow::init() {
+void diagramWindow::init(DiagramWidget *widget) {
+	setCentralWidget(widget);
+	setWindowTitle(widget->diagram.caption.c_str());
+
 	actionsMenu = this->menuBar()->addMenu("&Actions");
 	actions_convert = actionsMenu->addAction("&Convert", this, SLOT(convert()));
 	actions_simplify = actionsMenu->addAction("&Simplify", this, SLOT(simplify()));
@@ -52,11 +53,9 @@ void diagramWindow::init() {
 	mode = DRAW_NEW_DIAGRAM;
 	actions[0]->setChecked(true);
 
-	actions_convert->setEnabled(this->diagram.isClosed());
-	actions_simplify->setEnabled(this->diagram.isClosed());
+	actions_convert->setEnabled(widget->diagram.isClosed());
+	actions_simplify->setEnabled(widget->diagram.isClosed());
 	actions_clear->setEnabled(!isEmpty());
-
-	setCentralWidget(new DiagramWidget(this));
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 
@@ -80,7 +79,7 @@ void diagramWindow::setmode(int newmode) {
 		return;
 	}
 
-	if (newmode == DRAW_NEW_DIAGRAM && this->diagram.isClosed()) {
+	if (newmode == DRAW_NEW_DIAGRAM && this->diagramWidget()->diagram.isClosed()) {
 		actions[newmode]->toggle();
 		return;
 	}
@@ -96,11 +95,11 @@ void diagramWindow::setmode(int newmode) {
 }
 
 void diagramWindow::clear() {
-	this->diagram.clear();
+	this->diagramWidget()->diagram.clear();
 	actions_convert->setEnabled(false);
 	actions_simplify->setEnabled(false);
 	actions_clear->setEnabled(false);
-	centralWidget()->repaint();
+	this->centralWidget()->repaint();
 	setmode(DRAW_NEW_DIAGRAM);
 	actions[0]->setChecked(true);
 
@@ -108,12 +107,12 @@ void diagramWindow::clear() {
 }
 
 void diagramWindow::convert() {
-	if (!this->diagram.isClosed()) {
+	if (!this->diagramWidget()->diagram.isClosed()) {
 		QMessageBox::critical(this, "Error", "\nCannot convert non-closed diagram.\n");
 		return;
 	}
 
-	if (this->diagram.vertices().size() <= 2) {
+	if (this->diagramWidget()->diagram.vertices().size() <= 2) {
 		QMessageBox::critical(this, "Error", "\nCannot convert diagram with less than three points.\n");
 		return;
 	}
@@ -122,8 +121,13 @@ void diagramWindow::convert() {
 }
 
 void diagramWindow::saveIt(std::ostream &os) {
-	const rapidjson::Document doc = this->diagram.save();
+	const rapidjson::Document doc = this->diagramWidget()->diagram.save();
 	rapidjson::OStreamWrapper wrapper(os);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	doc.Accept(writer);
+}
+
+bool diagramWindow::isEmpty() const {
+	auto widget = this->diagramWidget();
+	return widget == nullptr || widget->diagram.vertices().empty();
 }

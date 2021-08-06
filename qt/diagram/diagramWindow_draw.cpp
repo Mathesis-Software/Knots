@@ -4,7 +4,11 @@
 
 #include "diagramWindow.h"
 
-DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget (p) {
+DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget(p) {
+	Parent = p;
+}
+
+DiagramWidget::DiagramWidget(diagramWindow *p, const rapidjson::Document &doc) : QWidget(p), diagram(doc) {
 	Parent = p;
 }
 
@@ -24,7 +28,7 @@ void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &e
 				y0 = edge.start->y(),
 				x1, y1;
 
-	for (const auto &crs : this->Parent->diagram.crossings(edge, false)) {
+	for (const auto &crs : this->diagram.crossings(edge, false)) {
 		auto coords = crs.coords();
 		if (!coords) {
 			continue;
@@ -55,10 +59,10 @@ void DiagramWidget::drawIt(QPainter &painter) {
 	painter.setPen(Qt::black);
 	painter.setBrush(Qt::black);
 	
-	for (auto vertex : Parent->diagram.vertices()) {
+	for (auto vertex : this->diagram.vertices()) {
 		drawVertex(painter, *vertex);
 	}
-	for (const auto &edge : Parent->diagram.edges()) {
+	for (const auto &edge : this->diagram.edges()) {
 		drawEdge(painter, edge);
 	}
 }
@@ -75,6 +79,6 @@ void DiagramWidget::paintEvent(QPaintEvent*) {
 void diagramWindow::printIt(QPrinter *prn) {
 	QPainter pnt;
 	pnt.begin(prn);
-	((DiagramWidget*)centralWidget())->drawIt(pnt);
+	this->diagramWidget()->drawIt(pnt);
 	pnt.end();
 }

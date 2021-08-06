@@ -47,13 +47,13 @@ private:
   bool continuousSmoothing;
   int smoothSteps;
   int redrawAfter;
-  void startSmooth (int, int, bool = true);
+  void startSmooth(int, int, bool = true);
 
   int timerId_smooth;
   void doSmooth();
-  void timerEvent (QTimerEvent*);
+  void timerEvent(QTimerEvent*);
 
-  bool isEmpty() {return this->knot.isEmpty();};
+  bool isEmpty() const override {return this->knot.isEmpty();};
 
   void saveIt(std::ostream&);
 
@@ -79,7 +79,7 @@ public:
   knotWindow(const diagramWindow &diagram);
   ~knotWindow();
 
-  const char *mask() {return "*.knt";};
+  const char *mask() const override {return "*.knt";};
 };
 
 #endif /* __KNOTWINDOW_H__ */

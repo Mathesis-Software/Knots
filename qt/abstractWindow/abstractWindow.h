@@ -41,9 +41,9 @@ public:
   abstractWindow();
   virtual ~abstractWindow();
 
-  virtual bool isEmpty() = 0;
+  virtual bool isEmpty() const = 0;
 
-  virtual const char *mask() = 0;
+  virtual const char *mask() const = 0;
 
   static std::list<abstractWindow*> AWRegister;
   static bool removeAll();

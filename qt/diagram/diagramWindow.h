@@ -32,10 +32,10 @@ private:
 	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
 	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
 
-	void paintEvent(QPaintEvent*);
-	void mousePressEvent(QMouseEvent*);
-	void mouseReleaseEvent(QMouseEvent*);
-	void mouseMoveEvent(QMouseEvent*);
+	void paintEvent(QPaintEvent*) override;
+	void mousePressEvent(QMouseEvent*) override;
+	void mouseReleaseEvent(QMouseEvent*) override;
+	void mouseMoveEvent(QMouseEvent*) override;
 
 public:
 	DiagramWidget(diagramWindow *p, const rapidjson::Document &doc);

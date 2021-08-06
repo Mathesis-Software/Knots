@@ -19,7 +19,7 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 		for (const Edge &e : this->edges()) {
 			if (e.intersects(new_edge)) {
 				this->addCrossing(new_edge, e);
-				e.orderCrossings();
+				e.orderCrossings(e.start->crossings);
 			}
 		}
 	}
@@ -49,7 +49,7 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(const Edge &edge, int x, int
 		}
 	}
 
-	order();
+	this->order();
 	return new_vertex;
 }
 
@@ -139,7 +139,7 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 		}
 	}
 
-	order();
+	this->order();
 }
 
 void Diagram::close() {

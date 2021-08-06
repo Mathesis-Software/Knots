@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <functional>
 #include <limits>
 
 #include "diagram.h"
@@ -20,7 +19,7 @@ void Diagram::clear() {
 
 void Diagram::order() {
 	for (Edge &edge : this->edges()) {
-		edge.orderCrossings();
+		edge.orderCrossings(edge.start->crossings);
 	}
 }
 
@@ -66,8 +65,8 @@ std::shared_ptr<Diagram::Crossing> Diagram::findCrossing(const FloatPoint &pt, f
 	float best = std::numeric_limits<float>::max();
 	std::shared_ptr<Crossing> found;
 
-	for (auto vertex : this->vertices()) {
-		for (auto crs : vertex->crossings()) {
+	for (const auto &edge : this->edges()) {
+		for (auto crs : this->crossings(edge, false)) {
 			const auto coords = crs.coords();
 			if (!coords) {
 				continue;
@@ -132,24 +131,6 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 		ori == orientation(*edge.start, *this->end, *edge.end) &&
 		ori == orientation(*this->end, *edge.end, *this->start) &&
 		ori == orientation(*edge.end, *this->start, *edge.start);
-}
-
-void Diagram::Edge::orderCrossings() const {
-	std::function<bool(const Crossing&,const Crossing&)> comparator;
-  if (abs(this->dx()) > abs(this->dy())) {
-    if (this->dx() > 0) {
-			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->x < c1.coords()->x; };
-		} else {
-			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->x > c1.coords()->x; };
-		}
-	} else {
-    if (this->dy() > 0) {
-			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->y < c1.coords()->y; };
-		} else {
-			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->y > c1.coords()->y; };
-		}
-	}
-	this->start->_crossings.sort(comparator);
 }
 
 }}

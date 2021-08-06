@@ -13,6 +13,7 @@ struct Point {
 	Point(double x, double y, double z) : x(x), y(y), z(z) {}
 
 	void move(const Vector &v, double coef = 1.0);
+	double distanceTo(const Point &pt) const;
 };
 
 struct Vector {
@@ -59,6 +60,10 @@ inline void Point::move(const Vector &v, double coef) {
 	this->x += v.x * coef;
 	this->y += v.y * coef;
 	this->z += v.z * coef;
+}
+
+inline double Point::distanceTo(const Point &pt) const {
+	return Vector(pt, *this).length();
 }
 
 }}

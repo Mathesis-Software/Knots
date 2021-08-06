@@ -2,6 +2,7 @@
 #define __DIAGRAM_H__
 
 #include <cmath>
+#include <functional>
 #include <list>
 #include <memory>
 #include <string>
@@ -40,7 +41,7 @@ public:
 	friend class Diagram;
 
 	private:
-		std::list<Crossing> _crossings;
+		std::list<Crossing> crossings;
 		int _x, _y;
 
 	public:
@@ -49,11 +50,13 @@ public:
 		void move(int dx, int dy) { this->_x += dx; this->_y += dy; }
 		void moveTo(int x, int y) { this->_x = x; this->_y = y; }
 
-	public:
-		const std::list<KE::TwoD::Diagram::Crossing> &crossings() const { return this->_crossings; }
 		int x() const { return this->_x; }
 		int y() const { return this->_y; }
 		FloatPoint coords() const { return FloatPoint(this->_x, this->_y); }
+
+	private:
+		Vertex(const Vertex&) = delete;
+		Vertex& operator=(const Vertex&) = delete;
 	};
 
 	struct Edge {
@@ -71,7 +74,7 @@ public:
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
 
 	private:
-		void orderCrossings() const;
+		void orderCrossings(std::list<Crossing> &crossings) const;
 	};
 
 	struct Crossing {
@@ -92,20 +95,29 @@ public:
 		bool _isClosed;
 
 	public:
+		Diagram();
+		Diagram(const rapidjson::Document &doc);
+		~Diagram();
+
+		rapidjson::Document save() const;
+
+		void clear();
+		void close();
 		bool isClosed() const { return this->_isClosed; }
+
 		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
+		std::list<Crossing> crossings(const Edge &edge, bool includeUp) const;
 
 		std::shared_ptr<Vertex> addVertex(int x, int y);
 		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);
 		void removeVertex(const std::shared_ptr<Vertex> &vertex);
 		void moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
-		void close();
 
 		void flipCrossing(Crossing &crossing);
+
 		void shift(int x, int y);
 		bool simplify(std::size_t depth);
-		void clear();
 
 		std::shared_ptr<Vertex> findVertex(const FloatPoint &pt, float maxDistance) const;
 		std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
@@ -116,13 +128,6 @@ public:
 		void removeCrossing(const Edge &edge1, const Edge &edge2);
 		std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
 		void order();
-
-	public:
-		Diagram();
-		Diagram(const rapidjson::Document &doc);
-		~Diagram();
-
-		rapidjson::Document save() const;
 
 private:
 	Diagram(const Diagram&) = delete;

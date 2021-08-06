@@ -86,10 +86,10 @@ rapidjson::Document Diagram::save() const {
 	}
 
 	rapidjson::Value crossings(rapidjson::kArrayType);
-	for (const auto &vertex : this->vertices()) {
-		for (const auto &crs : vertex->crossings()) {
+	for (const auto &edge : this->edges()) {
+		for (const auto &crs : this->crossings(edge, false)) {
 			rapidjson::Value c(rapidjson::kArrayType);
-			c.PushBack(nums[vertex], doc.GetAllocator());
+			c.PushBack(nums[edge.start], doc.GetAllocator());
 			c.PushBack(nums[crs.up.start], doc.GetAllocator());
 			crossings.PushBack(c, doc.GetAllocator());
 		}

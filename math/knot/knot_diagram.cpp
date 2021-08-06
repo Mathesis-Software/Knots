@@ -28,7 +28,7 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from
 			points.push_back(Point(
 				2.4 * current->x / w - 1.2,
 				1.2 - 2.4 * current->y / h,
-				crs.up == edge ? 0.4 : -0.4
+				crs.up == edge ? 0.2 : -0.2
 			));
 			if (crs.up == edge) {
 				count_up += 1;

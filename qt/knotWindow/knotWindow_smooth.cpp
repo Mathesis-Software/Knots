@@ -12,11 +12,11 @@ void knotWindow::smooth() {
 
 void knotWindow::stop() {
   if (smoothing) {
-    killTimer (timerId_smooth);
+    killTimer(timerId_smooth);
     smoothing = false;
-    math_decreaseEnergy->setEnabled (true);
-    math_stop->setEnabled (false);
-    statusBar ()->showMessage ("Smoothing completed.", 3000);
+    math_decreaseEnergy->setEnabled(true);
+    math_stop->setEnabled(false);
+    statusBar()->showMessage("Smoothing complete", 3000);
   }
 }
 
@@ -26,7 +26,7 @@ void knotWindow::doSmooth() {
       redrawAfter = smoothSteps;
     smoothSteps -= redrawAfter;
     if (!smoothSteps)
-      stop ();
+      stop();
   }
 
   isSaved = false;
@@ -34,21 +34,21 @@ void knotWindow::doSmooth() {
     this->knot.decreaseEnergy();
 	}
   this->knot.center();
-  this->knotSurface->destroy ();
-  this->seifertSurface->destroy ();
-  repaint3d ();
+  this->knotSurface->destroy();
+  this->seifertSurface->destroy();
+  repaint3d();
   if (mth)
-    mth->recompute ();
+    mth->recompute();
 }
 
-void knotWindow::startSmooth (int st, int ra, bool cont) {
+void knotWindow::startSmooth(int st, int ra, bool cont) {
   smoothSteps = st;
   redrawAfter = ra;
   continuousSmoothing = cont;
   smoothing = true;
-  math_decreaseEnergy->setEnabled (false);
-  math_stop->setEnabled (true);
+  math_decreaseEnergy->setEnabled(false);
+  math_stop->setEnabled(true);
 
-  timerId_smooth = startTimer (1);
-  statusBar ()->showMessage ("Smoothing...");
+  timerId_smooth = startTimer(1);
+  statusBar()->showMessage("Smoothing…");
 }

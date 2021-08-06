@@ -6,7 +6,7 @@
 
 namespace KE { namespace ThreeD {
 
-Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption("Converted from diagram") {
+Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption + " (from diagram)") {
 	const auto edges = diagram.edges();
 	auto count_vertex = 0;
 	auto count_down = 0;

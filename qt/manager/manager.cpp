@@ -16,7 +16,7 @@
 keManager::keManager() {
 	fileMenu = this->addMenu("&File");
 	fileMenu->addAction("&New diagram", this, SLOT(new_diagram()));
-	fileMenu->addAction("&Open...", this, SLOT(open()));
+	fileMenu->addAction("&Open…", this, SLOT(open()));
 	fileMenu->addSeparator();
 	fileMenu->addAction("&Close all windows", this, SLOT(close_all_windows()));
 	fileMenu->addAction("E&xit", this, SLOT(exit()));

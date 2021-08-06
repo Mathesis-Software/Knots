@@ -22,10 +22,10 @@ abstractWindow::abstractWindow() {
 
   QMenu *fileMenu = this->menuBar()->addMenu("&File");
 
-  fileMenu -> addAction("&Save as...", this, SLOT(save_as()));
-  fileMenu -> addAction("&Print...", this, SLOT(print()));
+  fileMenu -> addAction("&Save as…", this, SLOT(save_as()));
+  fileMenu -> addAction("&Print…", this, SLOT(print()));
   fileMenu -> addSeparator();
-  fileMenu -> addAction("&Rename...", this, SLOT(rename()));
+  fileMenu -> addAction("&Rename…", this, SLOT(rename()));
   fileMenu -> addSeparator();
   fileMenu -> addAction("&Close", this, SLOT(close()));
 

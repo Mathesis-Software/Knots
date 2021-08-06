@@ -5,7 +5,7 @@
 int main(int argc, char **argv) {
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QApplication qa(argc, argv);
-  qa.setFont(QFont("Helvetica", 12));
+  qa.setFont(QFont("Helvetica", 11));
 
   keManager kem;
   kem.show();

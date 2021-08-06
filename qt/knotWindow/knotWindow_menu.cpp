@@ -9,13 +9,13 @@ void knotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("&Math");
   mathMenu->addAction("&View parameters", this, SLOT(math()));
   mathMenu->addSeparator();
-  math_decreaseEnergy = mathMenu->addAction("Decrease &energy...", this, SLOT(decreaseEnergy()));
+  math_decreaseEnergy = mathMenu->addAction("Decrease &energy…", this, SLOT(decreaseEnergy()));
   math_decreaseEnergy->setEnabled(!smoothing);
   math_stop = mathMenu->addAction("&Stop", this, SLOT(stop()));
   math_stop->setEnabled(smoothing);
   mathMenu->addSeparator();
-  mathMenu->addAction("Number of &points...", this, SLOT(setNumberOfPoints()));
-  mathMenu->addAction("&Length...", this, SLOT(setLength()));
+  mathMenu->addAction("Number of &points…", this, SLOT(setNumberOfPoints()));
+  mathMenu->addAction("&Length…", this, SLOT(setLength()));
   
   viewMenu = menuBar()->addMenu("&View");
   view_showKnot = viewMenu->addAction("Show &knot", this, SLOT(switchShowKnot()));
@@ -26,12 +26,12 @@ void knotWindow::initMenu() {
   view_showSeifertSurface->setChecked(this->seifertSurface->isVisible());  
   
   QMenu *optionsMenu = menuBar()->addMenu("&Options");
-  optionsMenu->addAction("&Thickness...", this, SLOT(setThickness()));
+  optionsMenu->addAction("&Thickness…", this, SLOT(setThickness()));
   optionsMenu->addSeparator();
-  optionsMenu->addAction("Back&ground color...", this, SLOT(setBgColor()));
-  optionsMenu->addAction("&Knot color...", this, SLOT(setKnotColor()));
-  optionsMenu->addAction("Seifert surface &front color...", this, SLOT(setSeifertFrontColor()));
-  optionsMenu->addAction("Seifert surface &back color...", this, SLOT(setSeifertBackColor()));
+  optionsMenu->addAction("Back&ground color…", this, SLOT(setBgColor()));
+  optionsMenu->addAction("&Knot color…", this, SLOT(setKnotColor()));
+  optionsMenu->addAction("Seifert surface &front color…", this, SLOT(setSeifertFrontColor()));
+  optionsMenu->addAction("Seifert surface &back color…", this, SLOT(setSeifertBackColor()));
 
   addToolBarSeparator();
   addToolBarButton("start.xpm", "Start smoothing", SLOT(smooth()));

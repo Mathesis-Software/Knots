@@ -4,26 +4,6 @@
 
 namespace KE { namespace TwoD {
 
-std::list<Diagram::Crossing> Diagram::crossings(const Edge &edge, bool includeUp) const {
-	if (!includeUp) {
-		return edge.start->crossings;
-	}
-
-	auto list = edge.start->crossings;
-	for (const auto &e : this->edges()) {
-		if (e == edge) {
-			continue;
-		}
-		for (const auto &crs : e.start->crossings) {
-			if (crs.up == edge) {
-				list.push_back(crs);
-			}
-		}
-	}
-	edge.orderCrossings(list);
-	return list;
-}
-
 void Diagram::addCrossing(const Edge &up, const Edge &down) {
 	this->removeCrossing(up, down);
 
@@ -45,12 +25,12 @@ void Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
 }
 
 std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const Edge &edge2) {
-	for (const auto &crs : this->crossings(edge1, false)) {
+	for (const auto &crs : this->crossings(edge1)) {
 		if (crs.up == edge2) {
 			return std::make_shared<Crossing>(crs);
 		}
 	}
-	for (const auto &crs : this->crossings(edge2, false)) {
+	for (const auto &crs : this->crossings(edge2)) {
 		if (crs.up == edge1) {
 			return std::make_shared<Crossing>(crs);
 		}

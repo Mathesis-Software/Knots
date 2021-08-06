@@ -66,7 +66,7 @@ std::shared_ptr<Diagram::Crossing> Diagram::findCrossing(const FloatPoint &pt, f
 	std::shared_ptr<Crossing> found;
 
 	for (const auto &edge : this->edges()) {
-		for (auto crs : this->crossings(edge, false)) {
+		for (const auto &crs : this->crossings(edge)) {
 			const auto coords = crs.coords();
 			if (!coords) {
 				continue;

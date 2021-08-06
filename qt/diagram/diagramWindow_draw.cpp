@@ -28,7 +28,7 @@ void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &e
 				y0 = edge.start->y(),
 				x1, y1;
 
-	for (const auto &crs : this->diagram.crossings(edge, false)) {
+	for (const auto &crs : this->diagram.crossings(edge)) {
 		auto coords = crs.coords();
 		if (!coords) {
 			continue;

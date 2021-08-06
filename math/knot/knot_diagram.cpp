@@ -1,4 +1,5 @@
 #include <cmath>
+#include <map>
 
 #include "knot.h"
 #include "../diagram/diagram.h"
@@ -7,6 +8,16 @@ namespace KE { namespace ThreeD {
 
 Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption + " (from diagram)") {
 	const auto edges = diagram.edges();
+	std::map<std::shared_ptr<TwoD::Diagram::Vertex>,std::list<TwoD::Diagram::Crossing>> all_crossings;
+	for (const auto &edge : edges) {
+		const auto crossings = diagram.crossings(edge);
+		auto &list = all_crossings[edge.start];
+		list.insert(list.end(), crossings.begin(), crossings.end());
+		for (const auto &crs : crossings) {
+			all_crossings[crs.up.start].push_back(crs);
+		}
+	}
+
 	for (const auto &edge : edges) {
 		const auto coords = edge.start->coords();
 		points.push_back(Point(
@@ -14,8 +25,9 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption
 			1.2 - 2.4 * coords.y / h,
 			0
 		));
-		
-		for (const auto &crs : diagram.crossings(edge, true)) {
+		auto &crossings = all_crossings[edge.start];
+		edge.orderCrossings(crossings);
+		for (const auto &crs : crossings) {
 			std::shared_ptr<TwoD::FloatPoint> current = crs.coords();
 			if (!current) {
 				continue;

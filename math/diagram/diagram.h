@@ -70,11 +70,9 @@ public:
 		int dx() const { return this->end->x() - this->start->x(); }
 		int dy() const { return this->end->y() - this->start->y(); }
 		bool intersects(const Edge &edge) const;
+		void orderCrossings(std::list<Crossing> &crossings) const;
 
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
-
-	private:
-		void orderCrossings(std::list<Crossing> &crossings) const;
 	};
 
 	struct Crossing {
@@ -107,7 +105,7 @@ public:
 
 		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
-		std::list<Crossing> crossings(const Edge &edge, bool includeUp) const;
+		const std::list<Crossing> &crossings(const Edge &edge) const { return edge.start->crossings; }
 
 		std::shared_ptr<Vertex> addVertex(int x, int y);
 		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);

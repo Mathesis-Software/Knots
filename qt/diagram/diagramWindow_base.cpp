@@ -45,7 +45,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	for (int i = 0; i < 6; i++) {
 		actions[i]->setCheckable(true);
 		grp->addButton(actions[i]);
-		this->connect(actions[i], &QToolButton::pressed, [=](){ this->setmode(i); });
+		this->connect(actions[i], &QToolButton::pressed, [=](){ this->setMode(static_cast<DiagramWidget::EditingMode>(i)); });
 	}
 
 	grp->setExclusive(false);
@@ -67,31 +67,24 @@ diagramWindow::~diagramWindow() {
 	delete[] actions;
 }
 
-void diagramWindow::setmode(int newmode) {
-	if (newmode < 0 || newmode >= 6) {
+void diagramWindow::setMode(DiagramWidget::EditingMode mode) {
+	if (mode == this->mode) {
+		actions[mode]->toggle();
 		return;
 	}
 
-	int oldmode = this->mode;
-
-	if (newmode == oldmode) {
-		actions[newmode]->toggle();
+	if (mode == DiagramWidget::NEW_DIAGRAM && this->diagramWidget()->diagram.isClosed()) {
+		actions[mode]->toggle();
 		return;
 	}
 
-	if (newmode == DiagramWidget::NEW_DIAGRAM && this->diagramWidget()->diagram.isClosed()) {
-		actions[newmode]->toggle();
+	if (mode != DiagramWidget::NEW_DIAGRAM && this->isEmpty()) {
+		actions[mode]->toggle();
 		return;
 	}
 
-	if (newmode != DiagramWidget::NEW_DIAGRAM && isEmpty()) {
-		actions[newmode]->toggle();
-		return;
-	}
-
-	this->mode = static_cast<DiagramWidget::EditingMode>(newmode);
-
-	actions[oldmode]->setChecked(false);
+	actions[this->mode]->setChecked(false);
+	this->mode = mode;
 }
 
 void diagramWindow::clear() {
@@ -100,7 +93,7 @@ void diagramWindow::clear() {
 	actions_simplify->setEnabled(false);
 	actions_clear->setEnabled(false);
 	this->centralWidget()->repaint();
-	setmode(DiagramWidget::NEW_DIAGRAM);
+	this->setMode(DiagramWidget::NEW_DIAGRAM);
 	actions[0]->setChecked(true);
 
 	isSaved = true;

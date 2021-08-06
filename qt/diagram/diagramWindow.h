@@ -64,11 +64,12 @@ private:
 
 	void printIt(QPrinter*);
 	void saveIt(std::ostream&);
+
+	void setMode(DiagramWidget::EditingMode mode);
 	
 private slots:
 	void convert();
 	void clear();
-	void setmode(int);
 	void simplify();
 
 public:

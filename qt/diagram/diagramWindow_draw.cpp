@@ -53,9 +53,6 @@ void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &e
 }
 
 void DiagramWidget::drawIt(QPainter &painter) {
-	if (Parent->isEmpty())
-		return;
-
 	painter.setPen(Qt::black);
 	painter.setBrush(Qt::black);
 	

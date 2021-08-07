@@ -43,22 +43,18 @@ void diagramWindow::init(DiagramWidget *widget) {
 	);
 
 	addToolBarSeparator();
-	actions = new QToolButton*[6];
-	actions[0] = addToolBarButton("draw_diagram.xpm", "Draw diagram", 0);
-	actions[1] = addToolBarButton("add_point.xpm", "Add point", 0);
-	actions[2] = addToolBarButton("move_point.xpm", "Move point", 0);
-	actions[3] = addToolBarButton("delete_point.xpm", "Delete point", 0);
-	actions[4] = addToolBarButton("change_crossing.xpm", "Change crossing", 0);
-	actions[5] = addToolBarButton("move_diagram.xpm", "Move diagram", 0);
-
-	QButtonGroup *grp = new QButtonGroup;
-	for (int i = 0; i < 6; i++) {
-		actions[i]->setCheckable(true);
-		grp->addButton(actions[i]);
-		this->connect(actions[i], &QToolButton::pressed, [=](){ this->setMode(static_cast<DiagramWidget::EditingMode>(i)); });
-	}
-
-	grp->setExclusive(false);
+	actions = new QAction*[6];
+	auto addAction = [this](const QString &icon, const QString &text, DiagramWidget::EditingMode mode) {
+		QAction *action = this->addToolbarAction(icon, text, [this, mode] { this->setMode(mode); });
+		action->setCheckable(true);
+		return action;
+	};
+	actions[0] = addAction("draw_diagram.xpm", "Draw diagram", DiagramWidget::NEW_DIAGRAM);
+	actions[1] = addAction("add_point.xpm", "Add vertex", DiagramWidget::ADD_VERTEX);
+	actions[2] = addAction("move_point.xpm", "Move vertex", DiagramWidget::MOVE_VERTEX);
+	actions[3] = addAction("delete_point.xpm", "Delete vertex", DiagramWidget::REMOVE_VERTEX);
+	actions[4] = addAction("change_crossing.xpm", "Flip crossing", DiagramWidget::FLIP_CROSSING);
+	actions[5] = addAction("move_diagram.xpm", "Move diagram", DiagramWidget::MOVE_DIAGRAM);
 
 	actions[0]->setChecked(true);
 

@@ -2,7 +2,6 @@
 #define __DIAGRAMWINDOW_H__
 
 #include <QtWidgets/QMenu>
-#include <QtWidgets/QToolButton>
 
 #include "DiagramWidget.h"
 #include "../abstractWindow/abstractWindow.h"
@@ -14,7 +13,7 @@ Q_OBJECT
 private:
 	QMenu *actionsMenu;
 
-	QToolButton **actions;
+	QAction **actions;
 
 	void init(DiagramWidget *widget);
 

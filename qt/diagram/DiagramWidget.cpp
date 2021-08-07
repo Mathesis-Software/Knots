@@ -194,7 +194,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 			break;
 	}
 
-	this->Parent->updateMenuItems();
+	this->Parent->updateActions();
 }
 
 void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {

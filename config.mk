@@ -8,7 +8,7 @@ AR = ar rc
 RM = rm -f
 INSTALL = install
 
-CFLAGS = -O3 -pipe -fPIC
+CFLAGS = -O3 -pipe -fPIC -std=c++17
 CFLAGS += -W -Wall -Wno-deprecated-copy
 
 DEBUGOPT =

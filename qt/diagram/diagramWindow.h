@@ -12,10 +12,9 @@ class diagramWindow : public abstractWindow {
 Q_OBJECT
 
 private:
+	std::map<QAction*,std::function<void(QAction&)>> actionsMap;
+
 	QMenu *actionsMenu;
-	QAction *actions_convert;
-	QAction *actions_simplify;
-	QAction *actions_clear;
 
 	QToolButton **actions;
 
@@ -27,6 +26,7 @@ private:
 	void saveIt(std::ostream&);
 
 	void setMode(DiagramWidget::EditingMode mode);
+	void registerAction(QAction *action, std::function<void(QAction&)> controller);
 	
 private slots:
 	void convert();
@@ -40,7 +40,7 @@ public:
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
 	bool isEmpty() const override;
-	void updateMenuItems();
+	void updateActions();
 
 	friend class DiagramWidget;
 };

@@ -20,12 +20,22 @@ diagramWindow::diagramWindow() {
 
 void diagramWindow::init(DiagramWidget *widget) {
 	setCentralWidget(widget);
-	setWindowTitle(widget->diagram.caption.c_str());
+	const auto &diagram = widget->diagram;
+	setWindowTitle(diagram.caption.c_str());
 
 	actionsMenu = this->menuBar()->addMenu("&Actions");
-	actions_convert = actionsMenu->addAction("&Convert", this, SLOT(convert()));
-	actions_simplify = actionsMenu->addAction("&Simplify", this, SLOT(simplify()));
-	actions_clear = actionsMenu->addAction("C&lear", this, SLOT(clear()));
+	this->registerAction(
+		actionsMenu->addAction("&Convert", this, SLOT(convert())),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
+	);
+	this->registerAction(
+		actionsMenu->addAction("&Simplify", this, SLOT(simplify())),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
+	);
+	this->registerAction(
+		actionsMenu->addAction("C&lear", this, SLOT(clear())),
+		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
+	);
 	
 	addToolBarButton("mini_trefoil.xpm", "Convert to knot", SLOT(convert()));
 
@@ -47,19 +57,23 @@ void diagramWindow::init(DiagramWidget *widget) {
 
 	grp->setExclusive(false);
 
-	this->updateMenuItems();
 	actions[0]->setChecked(true);
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 
 	complete();
+
+	this->updateActions();
 }
 
-void diagramWindow::updateMenuItems() {
-	const auto widget = this->diagramWidget();
-	this->actions_convert->setEnabled(widget && widget->diagram.isClosed());
-	this->actions_simplify->setEnabled(widget && widget->diagram.isClosed());
-	this->actions_clear->setEnabled(!isEmpty());
+void diagramWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {
+	this->actionsMap[action] = controller;
+}
+
+void diagramWindow::updateActions() {
+	for (auto &[action, controller] : this->actionsMap) {
+		controller(*action);
+	}
 }
 
 diagramWindow::~diagramWindow() {
@@ -82,12 +96,12 @@ void diagramWindow::setMode(DiagramWidget::EditingMode mode) {
 
 void diagramWindow::clear() {
 	this->diagramWidget()->clear();
-	this->updateMenuItems();
 	for (int mo = 0; mo < 6; ++mo) {
 		actions[mo]->setChecked(mo == 0);
 	}
 
 	isSaved = true;
+	this->updateActions();
 }
 
 void diagramWindow::convert() {

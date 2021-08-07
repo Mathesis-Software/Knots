@@ -29,7 +29,7 @@ protected:
   QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
   QToolButton *addToolBarButton(const QString&, const char*, const char*);
   void addToolBarSeparator(void);
-  void complete(bool = false);
+  void complete();
 
 	void registerAction(QAction *action, std::function<void(QAction&)> controller);
 

@@ -22,12 +22,12 @@ abstractWindow::abstractWindow() {
 
   QMenu *fileMenu = this->menuBar()->addMenu("&File");
 
-  fileMenu -> addAction("&Save as…", this, SLOT(save_as()));
-  fileMenu -> addAction("&Print…", this, SLOT(print()));
-  fileMenu -> addSeparator();
-  fileMenu -> addAction("&Rename…", this, SLOT(rename()));
-  fileMenu -> addSeparator();
-  fileMenu -> addAction("&Close", this, SLOT(close()));
+  fileMenu->addAction("&Save as…", this, SLOT(save_as()));
+  fileMenu->addAction("&Print…", this, SLOT(print()));
+  fileMenu->addSeparator();
+  fileMenu->addAction("&Rename…", this, SLOT(rename()));
+  fileMenu->addSeparator();
+  fileMenu->addAction("&Close", this, SLOT(close()));
 
   this->toolbar = new QToolBar(this);
   addToolBar(this->toolbar);
@@ -81,7 +81,7 @@ void abstractWindow::save_as() {
 
   saveIt(os);
   os.close();
-  statusBar() -> showMessage("File saved.", 3000);
+  statusBar()->showMessage("File saved.", 3000);
   isSaved = true;
 }
 
@@ -143,12 +143,8 @@ void abstractWindow::addToolBarSeparator() {
   this->toolbar->addSeparator();
 }
 
-void abstractWindow::complete(bool showWhatsThis) {
-  if (showWhatsThis) {
-    addToolBarSeparator ();
-    //QWhatsThis::whatsThisButton (this->toolbar) -> setFixedSize (30, 30);
-  }
-  this->toolbar->show ();
+void abstractWindow::complete() {
+  this->toolbar->show();
   statusBar()->isVisible();
   resize(508, 594);
 }

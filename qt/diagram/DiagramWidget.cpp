@@ -20,7 +20,7 @@ bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 		case NEW_DIAGRAM:
 			return !this->diagram.isClosed();
 		case ADD_VERTEX:
-			return !this->diagram.vertices().size() > 1;
+			return this->diagram.vertices().size() > 1;
 		case MOVE_VERTEX:
 		case REMOVE_VERTEX:
 		case MOVE_DIAGRAM:

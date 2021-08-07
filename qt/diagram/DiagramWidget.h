@@ -26,7 +26,7 @@ public:
 
 private:
 	diagramWindow *Parent;
-	DiagramWidget::EditingMode editingMode;
+	DiagramWidget::EditingMode _editingMode;
 
 	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
 	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
@@ -42,6 +42,7 @@ public:
 
 	void drawIt(QPainter &painter);
 
+	EditingMode editingMode() const { return this->_editingMode; }
 	bool canSetEditingMode(DiagramWidget::EditingMode mode) const;
 	bool setEditingMode(DiagramWidget::EditingMode mode);
 

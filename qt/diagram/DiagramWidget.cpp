@@ -7,11 +7,11 @@ static std::shared_ptr<KE::TwoD::Diagram::Vertex> localVertex;
 static int localx, localy;
 static bool doSomething = false;
 
-DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget(p), editingMode(NEW_DIAGRAM) {
+DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget(p), _editingMode(NEW_DIAGRAM) {
 	Parent = p;
 }
 
-DiagramWidget::DiagramWidget(diagramWindow *p, const rapidjson::Document &doc) : QWidget(p), diagram(doc), editingMode(NEW_DIAGRAM) {
+DiagramWidget::DiagramWidget(diagramWindow *p, const rapidjson::Document &doc) : QWidget(p), diagram(doc), _editingMode(NEW_DIAGRAM) {
 	Parent = p;
 }
 
@@ -25,8 +25,8 @@ bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 }
 
 bool DiagramWidget::setEditingMode(DiagramWidget::EditingMode mode) {
-	if (mode != this->editingMode && this->canSetEditingMode(mode)) {
-		this->editingMode = mode;
+	if (mode != this->_editingMode && this->canSetEditingMode(mode)) {
+		this->_editingMode = mode;
 		return true;
 	} else {
 		return false;
@@ -101,20 +101,19 @@ void DiagramWidget::paintEvent(QPaintEvent*) {
 }
 
 void DiagramWidget::mousePressEvent(QMouseEvent *m) {
-	switch (this->editingMode) {
+	switch (this->_editingMode) {
 		case NEW_DIAGRAM:
 			if (this->diagram.isClosed()) {
-				return;
+				break;
 			}
 			localVertex = this->diagram.addVertex(m->x(), m->y());
 			if (m->button() == 0x02) {
 				this->diagram.close();
-				Parent->actions[0]->setChecked(false);
 			}
 			repaint();
 			Parent->isSaved = false;
 			doSomething = true;
-			return;
+			break;
 		case ADD_VERTEX:
 		{
 			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = this->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5);
@@ -124,7 +123,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 				Parent->isSaved = false;
 				doSomething = true;
 			}
-			return;
+			break;
 		}
 		case MOVE_VERTEX:
 		{
@@ -134,7 +133,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 				Parent->isSaved = false;
 				doSomething = true;
 			}
-			return;
+			break;
 		}
 		case REMOVE_VERTEX:
 		{
@@ -148,7 +147,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 					Parent->isSaved = false;
 				}
 			}
-			return;
+			break;
 		}
 		case FLIP_CROSSING:
 		{
@@ -158,17 +157,18 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 				repaint();
 				Parent->isSaved = false;
 			}
-			return;
+			break;
 		}
 		case MOVE_DIAGRAM:
 			localx = m->x();
 			localy = m->y();
 			Parent->isSaved = false;
 			doSomething = true;
-			return;
+			break;
 		default:
-			return;
+			break;
 	}
+	this->Parent->updateActions();
 }
 
 void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
@@ -177,7 +177,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 
 	doSomething = false;
 
-	switch (this->editingMode) {
+	switch (this->_editingMode) {
 		case ADD_VERTEX:
 		case MOVE_VERTEX:
 		case NEW_DIAGRAM:
@@ -201,7 +201,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
 	if (!doSomething)
 		return;
 
-	switch (this->editingMode) {
+	switch (this->_editingMode) {
 		case ADD_VERTEX:
 		case MOVE_VERTEX:
 		case NEW_DIAGRAM:

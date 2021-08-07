@@ -13,8 +13,6 @@ Q_OBJECT
 private:
 	QMenu *actionsMenu;
 
-	QAction **actions;
-
 	void init(DiagramWidget *widget);
 
 	const char *mask() const override {return "*.dgr";};

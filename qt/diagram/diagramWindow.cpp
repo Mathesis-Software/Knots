@@ -11,7 +11,6 @@
 
 diagramWindow::diagramWindow(const rapidjson::Document &doc) {
 	this->init(new DiagramWidget(this, doc));
-	actions[0]->setChecked(false);
 }
 
 diagramWindow::diagramWindow() {
@@ -43,20 +42,21 @@ void diagramWindow::init(DiagramWidget *widget) {
 	);
 
 	addToolBarSeparator();
-	actions = new QAction*[6];
-	auto addAction = [this](const QString &icon, const QString &text, DiagramWidget::EditingMode mode) {
+	auto addAction = [this, widget](const QString &icon, const QString &text, DiagramWidget::EditingMode mode) {
 		QAction *action = this->addToolbarAction(icon, text, [this, mode] { this->setMode(mode); });
 		action->setCheckable(true);
-		return action;
+		this->registerAction(action, [widget, mode](QAction &action) {
+			const bool canSet = widget->canSetEditingMode(mode);
+			action.setChecked(canSet && widget->editingMode() == mode);
+			action.setEnabled(canSet);
+		});
 	};
-	actions[0] = addAction("draw_diagram.xpm", "Draw diagram", DiagramWidget::NEW_DIAGRAM);
-	actions[1] = addAction("add_point.xpm", "Add vertex", DiagramWidget::ADD_VERTEX);
-	actions[2] = addAction("move_point.xpm", "Move vertex", DiagramWidget::MOVE_VERTEX);
-	actions[3] = addAction("delete_point.xpm", "Delete vertex", DiagramWidget::REMOVE_VERTEX);
-	actions[4] = addAction("change_crossing.xpm", "Flip crossing", DiagramWidget::FLIP_CROSSING);
-	actions[5] = addAction("move_diagram.xpm", "Move diagram", DiagramWidget::MOVE_DIAGRAM);
-
-	actions[0]->setChecked(true);
+	addAction("draw_diagram.xpm", "Draw diagram", DiagramWidget::NEW_DIAGRAM);
+	addAction("add_point.xpm", "Add vertex", DiagramWidget::ADD_VERTEX);
+	addAction("move_point.xpm", "Move vertex", DiagramWidget::MOVE_VERTEX);
+	addAction("delete_point.xpm", "Delete vertex", DiagramWidget::REMOVE_VERTEX);
+	addAction("change_crossing.xpm", "Flip crossing", DiagramWidget::FLIP_CROSSING);
+	addAction("move_diagram.xpm", "Move diagram", DiagramWidget::MOVE_DIAGRAM);
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 
@@ -67,27 +67,15 @@ void diagramWindow::init(DiagramWidget *widget) {
 
 diagramWindow::~diagramWindow() {
 	delete actionsMenu;
-	delete[] actions;
 }
 
 void diagramWindow::setMode(DiagramWidget::EditingMode mode) {
-	if (!this->diagramWidget()->setEditingMode(mode)) {
-		actions[mode]->toggle();
-		return;
-	}
-
-	for (int mo = 0; mo < 6; ++mo) {
-		if (static_cast<DiagramWidget::EditingMode>(mo) != mode) {
-			actions[mo]->setChecked(false);
-		}
-	}
+	this->diagramWidget()->setEditingMode(mode);
+	this->updateActions();
 }
 
 void diagramWindow::clear() {
 	this->diagramWidget()->clear();
-	for (int mo = 0; mo < 6; ++mo) {
-		actions[mo]->setChecked(mo == 0);
-	}
 
 	isSaved = true;
 	this->updateActions();

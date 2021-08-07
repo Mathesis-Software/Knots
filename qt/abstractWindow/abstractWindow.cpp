@@ -152,3 +152,13 @@ void abstractWindow::complete(bool showWhatsThis) {
   statusBar()->isVisible();
   resize(508, 594);
 }
+
+void abstractWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {
+	this->actionsMap[action] = controller;
+}
+
+void abstractWindow::updateActions() {
+	for (auto &[action, controller] : this->actionsMap) {
+		controller(*action);
+	}
+}

@@ -69,16 +69,6 @@ void diagramWindow::init(DiagramWidget *widget) {
 	this->updateActions();
 }
 
-void diagramWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {
-	this->actionsMap[action] = controller;
-}
-
-void diagramWindow::updateActions() {
-	for (auto &[action, controller] : this->actionsMap) {
-		controller(*action);
-	}
-}
-
 diagramWindow::~diagramWindow() {
 	delete actionsMenu;
 	delete[] actions;

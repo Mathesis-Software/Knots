@@ -14,6 +14,7 @@ class abstractWindow : public QMainWindow {
 
 private:
   QToolBar *toolbar;
+	std::map<QAction*,std::function<void(QAction&)>> actionsMap;
 
 protected:
   bool isSaved;
@@ -30,6 +31,8 @@ protected:
   void addToolBarSeparator(void);
   void complete(bool = false);
 
+	void registerAction(QAction *action, std::function<void(QAction&)> controller);
+
 private slots:
   void save_as();
   void print();
@@ -41,6 +44,8 @@ public slots:
 public:
   abstractWindow();
   virtual ~abstractWindow();
+
+	void updateActions();
 
   virtual bool isEmpty() const = 0;
 

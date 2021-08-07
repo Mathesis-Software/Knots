@@ -106,6 +106,7 @@ public:
 		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
 		const std::list<Crossing> &crossings(const Edge &edge) const { return edge.start->crossings; }
+		bool hasCrossings() const;
 
 		std::shared_ptr<Vertex> addVertex(int x, int y);
 		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);

@@ -19,8 +19,14 @@ bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 	switch (mode) {
 		case NEW_DIAGRAM:
 			return !this->diagram.isClosed();
-		default:
+		case ADD_VERTEX:
+			return !this->diagram.vertices().size() > 1;
+		case MOVE_VERTEX:
+		case REMOVE_VERTEX:
+		case MOVE_DIAGRAM:
 			return !this->diagram.vertices().empty();
+		case FLIP_CROSSING:
+			return this->diagram.hasCrossings();
 	}
 }
 

@@ -4,6 +4,16 @@
 
 namespace KE { namespace TwoD {
 
+bool Diagram::hasCrossings() const {
+	for (const auto &vertex : this->vertices()) {
+		if (!vertex->crossings.empty()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void Diagram::addCrossing(const Edge &up, const Edge &down) {
 	this->removeCrossing(up, down);
 

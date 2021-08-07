@@ -63,7 +63,7 @@ void knotWindow::timerEvent(QTimerEvent *te) {
   if (smoothing && (te->timerId() == timerId_smooth)) {
     doSmooth();
 	} else {
-    dddWindow::timerEvent (te);
+    GLWindow::timerEvent (te);
 	}
 }
 

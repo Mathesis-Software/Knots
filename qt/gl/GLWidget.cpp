@@ -1,13 +1,13 @@
-#include "3dWindow.h"
+#include "GLWindow.h"
 
-dddMainWidget::dddMainWidget(dddWindow *p) : QOpenGLWidget(p) {
+GLWidget::GLWidget(GLWindow *p) : QOpenGLWidget(p) {
   Parent = p;
 }
 
-dddMainWidget::~dddMainWidget() {
+GLWidget::~GLWidget() {
 }
 
-void dddMainWidget::resizeGL(int w, int h) {
+void GLWidget::resizeGL(int w, int h) {
   glViewport(0, 0, w, h);
 
   float pos[] = {5.0, 5.0, 10.0, 1.0};
@@ -29,12 +29,12 @@ void dddMainWidget::resizeGL(int w, int h) {
   glMultMatrixd(Parent->currentMatrix);
 }
 
-void dddMainWidget::initializeGL() {
+void GLWidget::initializeGL() {
 	glEnable(GL_LINE_SMOOTH);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
-void dddMainWidget::paintGL() {
+void GLWidget::paintGL() {
 	//glEnable(GL_BLEND);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   glClearColor(Parent->backgroundRGB[0], Parent->backgroundRGB[1], Parent->backgroundRGB[2], 1.0);

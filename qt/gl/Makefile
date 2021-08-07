@@ -1,10 +1,10 @@
 ROOTDIR = ../..
 
-all: 3dWindow.a
+all: gl.a
 
 include $(ROOTDIR)/config.mk
 
-3dWindow.a: $(OBJECTS)
+gl.a: $(OBJECTS)
 	@echo -n 'Linking $@ ...'
 	@$(RM) $@
 	@$(AR) $@ $^

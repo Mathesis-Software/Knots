@@ -5,7 +5,7 @@
 
 void knotWindow::setBgColor ()
 {
-  setup3dMainWidgetColor *setup = new setup3dMainWidgetColor(this, backgroundRGB);
+  setupGLWidgetColor *setup = new setupGLWidgetColor(this, backgroundRGB);
   setup -> setWindowTitle ("Background color");
   setup -> exec ();
   delete setup;
@@ -13,8 +13,8 @@ void knotWindow::setBgColor ()
 
 void knotWindow::setKnotColor ()
 {
-  setup3dMainWidgetColor *setup =
-    new setup3dMainWidgetColor(this, this->knotSurface->getFrontRGB(), this->knotSurface->isVisible());
+  setupGLWidgetColor *setup =
+    new setupGLWidgetColor(this, this->knotSurface->getFrontRGB(), this->knotSurface->isVisible());
   setup -> setWindowTitle ("Knot color");
   setup -> exec ();
   delete setup;
@@ -22,8 +22,8 @@ void knotWindow::setKnotColor ()
 
 void knotWindow::setSeifertFrontColor ()
 {
-  setup3dMainWidgetColor *setup =
-    new setup3dMainWidgetColor(this, this->seifertSurface->getFrontRGB(), this->seifertSurface->isVisible());
+  setupGLWidgetColor *setup =
+    new setupGLWidgetColor(this, this->seifertSurface->getFrontRGB(), this->seifertSurface->isVisible());
   setup -> setWindowTitle ("Seifert surface color");
   setup -> exec ();
   delete setup;
@@ -31,8 +31,8 @@ void knotWindow::setSeifertFrontColor ()
 
 void knotWindow::setSeifertBackColor ()
 {
-  setup3dMainWidgetColor *setup =
-    new setup3dMainWidgetColor(this, this->seifertSurface->getBackRGB(), this->seifertSurface->isVisible());
+  setupGLWidgetColor *setup =
+    new setupGLWidgetColor(this, this->seifertSurface->getBackRGB(), this->seifertSurface->isVisible());
   setup -> setWindowTitle ("Seifert surface color");
   setup -> exec ();
   delete setup;

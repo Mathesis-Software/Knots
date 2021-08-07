@@ -3,7 +3,7 @@
 
 #include <QtOpenGL/qgl.h>
 
-#include "../3dWindow/3dWindow.h"
+#include "../gl/GLWindow.h"
 #include "../../gl/surface/surface.h"
 #include "../../math/knot/knot.h"
 #include "../../math/seifert/seifert.h"
@@ -18,7 +18,7 @@ class SeifertSurface;
 class paramWindow;
 class diagramWindow;
 
-class knotWindow : public dddWindow {
+class knotWindow : public GLWindow {
 
   Q_OBJECT
 

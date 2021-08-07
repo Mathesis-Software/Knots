@@ -50,7 +50,6 @@ void diagramWindow::init(DiagramWidget *widget) {
 
 	grp->setExclusive(false);
 
-	mode = DiagramWidget::NEW_DIAGRAM;
 	actions[0]->setChecked(true);
 
 	actions_convert->setEnabled(widget->diagram.isClosed());
@@ -68,32 +67,23 @@ diagramWindow::~diagramWindow() {
 }
 
 void diagramWindow::setMode(DiagramWidget::EditingMode mode) {
-	if (mode == this->mode) {
+	if (!this->diagramWidget()->setEditingMode(mode)) {
 		actions[mode]->toggle();
 		return;
 	}
 
-	if (mode == DiagramWidget::NEW_DIAGRAM && this->diagramWidget()->diagram.isClosed()) {
-		actions[mode]->toggle();
-		return;
+	for (int mo = 0; mo < 6; ++mo) {
+		if (static_cast<DiagramWidget::EditingMode>(mo) != mode) {
+			actions[mo]->setChecked(false);
+		}
 	}
-
-	if (mode != DiagramWidget::NEW_DIAGRAM && this->isEmpty()) {
-		actions[mode]->toggle();
-		return;
-	}
-
-	actions[this->mode]->setChecked(false);
-	this->mode = mode;
 }
 
 void diagramWindow::clear() {
-	this->diagramWidget()->diagram.clear();
+	this->diagramWidget()->clear();
 	actions_convert->setEnabled(false);
 	actions_simplify->setEnabled(false);
 	actions_clear->setEnabled(false);
-	this->centralWidget()->repaint();
-	this->setMode(DiagramWidget::NEW_DIAGRAM);
 	actions[0]->setChecked(true);
 
 	isSaved = true;
@@ -123,4 +113,11 @@ void diagramWindow::saveIt(std::ostream &os) {
 bool diagramWindow::isEmpty() const {
 	auto widget = this->diagramWidget();
 	return widget == nullptr || widget->diagram.vertices().empty();
+}
+
+void diagramWindow::simplify() {
+	if (this->diagramWidget()->diagram.simplify(2)) {
+		this->isSaved = false;
+		this->centralWidget()->repaint();
+	}
 }

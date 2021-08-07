@@ -146,12 +146,11 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			const auto vertex = this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
 			if (vertex) {
 				this->diagram.removeVertex(vertex);
-				if (Parent->isEmpty()) {
-					Parent->clear();
-				} else {
-					repaint();
-					Parent->isSaved = false;
+				if (this->diagram.vertices().empty()) {
+					this->setEditingMode(NEW_DIAGRAM);
 				}
+				this->repaint();
+				this->Parent->isSaved = false;
 			}
 			break;
 		}

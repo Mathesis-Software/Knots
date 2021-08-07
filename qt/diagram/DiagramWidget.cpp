@@ -100,27 +100,15 @@ void DiagramWidget::paintEvent(QPaintEvent*) {
 	pnt.end();
 }
 
-void diagramWindow::printIt(QPrinter *prn) {
-	QPainter pnt;
-	pnt.begin(prn);
-	this->diagramWidget()->drawIt(pnt);
-	pnt.end();
-}
-
 void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 	switch (this->editingMode) {
 		case NEW_DIAGRAM:
-			if (Parent->isEmpty()) {
-				Parent->actions_clear->setEnabled (true);
-			}
 			if (this->diagram.isClosed()) {
 				return;
 			}
 			localVertex = this->diagram.addVertex(m->x(), m->y());
 			if (m->button() == 0x02) {
 				this->diagram.close();
-				Parent->actions_convert->setEnabled(true);
-				Parent->actions_simplify->setEnabled(true);
 				Parent->actions[0]->setChecked(false);
 			}
 			repaint();
@@ -195,16 +183,18 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 		case NEW_DIAGRAM:
 			this->diagram.moveVertex(localVertex, m->x(), m->y());
 			repaint();
-			return;
+			break;
 		case MOVE_DIAGRAM:
 			this->diagram.shift(m->x() - localx, m->y() - localy);
 			localx = m->x();
 			localy = m->y();
 			repaint();
-			return;
+			break;
 		default:
-			return;
+			break;
 	}
+
+	this->Parent->updateMenuItems();
 }
 
 void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {

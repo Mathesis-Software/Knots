@@ -40,6 +40,7 @@ public:
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
 	bool isEmpty() const override;
+	void updateMenuItems();
 
 	friend class DiagramWidget;
 };

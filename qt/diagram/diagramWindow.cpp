@@ -12,9 +12,6 @@
 diagramWindow::diagramWindow(const rapidjson::Document &doc) {
 	this->init(new DiagramWidget(this, doc));
 	actions[0]->setChecked(false);
-	actions_convert->setEnabled(true);
-	actions_simplify->setEnabled(true);
-	actions_clear->setEnabled(true);
 }
 
 diagramWindow::diagramWindow() {
@@ -50,15 +47,19 @@ void diagramWindow::init(DiagramWidget *widget) {
 
 	grp->setExclusive(false);
 
+	this->updateMenuItems();
 	actions[0]->setChecked(true);
-
-	actions_convert->setEnabled(widget->diagram.isClosed());
-	actions_simplify->setEnabled(widget->diagram.isClosed());
-	actions_clear->setEnabled(!isEmpty());
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 
 	complete();
+}
+
+void diagramWindow::updateMenuItems() {
+	const auto widget = this->diagramWidget();
+	this->actions_convert->setEnabled(widget && widget->diagram.isClosed());
+	this->actions_simplify->setEnabled(widget && widget->diagram.isClosed());
+	this->actions_clear->setEnabled(!isEmpty());
 }
 
 diagramWindow::~diagramWindow() {
@@ -81,10 +82,10 @@ void diagramWindow::setMode(DiagramWidget::EditingMode mode) {
 
 void diagramWindow::clear() {
 	this->diagramWidget()->clear();
-	actions_convert->setEnabled(false);
-	actions_simplify->setEnabled(false);
-	actions_clear->setEnabled(false);
-	actions[0]->setChecked(true);
+	this->updateMenuItems();
+	for (int mo = 0; mo < 6; ++mo) {
+		actions[mo]->setChecked(mo == 0);
+	}
 
 	isSaved = true;
 }
@@ -111,7 +112,7 @@ void diagramWindow::saveIt(std::ostream &os) {
 }
 
 bool diagramWindow::isEmpty() const {
-	auto widget = this->diagramWidget();
+	const auto widget = this->diagramWidget();
 	return widget == nullptr || widget->diagram.vertices().empty();
 }
 
@@ -120,4 +121,11 @@ void diagramWindow::simplify() {
 		this->isSaved = false;
 		this->centralWidget()->repaint();
 	}
+}
+
+void diagramWindow::printIt(QPrinter *prn) {
+	QPainter pnt;
+	pnt.begin(prn);
+	this->diagramWidget()->drawIt(pnt);
+	pnt.end();
 }

@@ -7,24 +7,18 @@
 
 #include "../../gl/surface/surface.h"
 
-class aboutWindow : public QWidget
-{
-
-Q_OBJECT
+class aboutWindow : public QWidget {
 
 public:
-  
-  aboutWindow (QWidget*);
-  ~aboutWindow (void);
+	aboutWindow(QWidget*);
+	~aboutWindow();
 
 private:
+	class pictureWidget *picture;
+	class textWidget *text;
 
-  class pictureWidget *picture;
-  class textWidget *text;
-
-  void timerEvent (QTimerEvent*);
-  void mousePressEvent (QMouseEvent*)
-    {delete this;};
+	void timerEvent(QTimerEvent*);
+	void mousePressEvent(QMouseEvent*) { delete this; }
 
 	int timer_id;
 };
@@ -32,46 +26,33 @@ private:
 class aboutSurface : public KE::GL::Surface {
 
 public:
-
-  aboutSurface (const char*);
-  void calculate (void) {};
+	aboutSurface(const char*);
+	void calculate() {}
 };
 
-class pictureWidget : public QOpenGLWidget
-{
-
-Q_OBJECT
+class pictureWidget : public QOpenGLWidget {
 
 public:
-
-  pictureWidget (QWidget*);
-  ~pictureWidget (void);
+	pictureWidget(QWidget*);
+	~pictureWidget();
 
 private:
+	aboutSurface *aboutSurf;
+	float x, y, z;
 
-  aboutSurface *aboutSurf;
-  float x, y, z;
-  
-  void resizeGL (int, int);
-  void paintGL ();
-  void mousePressEvent (QMouseEvent*)
-    {delete parent ();};
+	void resizeGL(int, int);
+	void paintGL();
+	void mousePressEvent(QMouseEvent*) { delete parent(); }
 };
 
-class textWidget : public QLabel
-{
-
-Q_OBJECT
+class textWidget : public QLabel {
 
 public:
-
-  textWidget (QWidget*);
-  ~textWidget (void) {};
+	textWidget(QWidget*);
+	~textWidget() {}
 
 private:
-
-  void mousePressEvent (QMouseEvent*)
-    {delete parent ();};
+	void mousePressEvent(QMouseEvent*) { delete parent(); }
 };
 
 #endif /* __ABOUT_H__ */

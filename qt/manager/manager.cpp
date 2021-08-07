@@ -1,8 +1,9 @@
 #include <fstream>
 
+#include <QtGui/QPixmap>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
-#include <QtGui/QPixmap>
 
 #include <rapidjson/istreamwrapper.h>
 
@@ -15,15 +16,15 @@
 
 keManager::keManager() {
 	fileMenu = this->addMenu("&File");
-	fileMenu->addAction("&New diagram", this, SLOT(new_diagram()));
-	fileMenu->addAction("&Open…", this, SLOT(open()));
+	fileMenu->addAction("&New diagram", [this] { this->new_diagram(); });
+	fileMenu->addAction("&Open…", [this] { this->open(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("&Close all windows", this, SLOT(close_all_windows()));
-	fileMenu->addAction("E&xit", this, SLOT(exit()));
+	fileMenu->addAction("&Close all windows", [this] { this->close_all_windows(); });
+	fileMenu->addAction("E&xit", [this] { this->exit(); });
 	addSeparator();
 	aboutMenu = this->addMenu("&About");
-	aboutMenu->addAction("About &Knot Editor", this, SLOT(about()));
-	aboutMenu->addAction("About &Qt", this, SLOT(about_qt()));
+	aboutMenu->addAction("About &Knot Editor", [this] { this->about(); });
+	aboutMenu->addAction("About &Qt", [this] { this->about_qt(); });
 
 	setWindowTitle("Knot Editor");
 	setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));

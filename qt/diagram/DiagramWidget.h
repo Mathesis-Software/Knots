@@ -9,8 +9,6 @@ class diagramWindow;
 
 class DiagramWidget : public QWidget {
 
-	Q_OBJECT
-
 public:
 	enum EditingMode {
 		NEW_DIAGRAM = 0,

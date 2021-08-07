@@ -8,8 +8,6 @@
 
 class diagramWindow : public abstractWindow {
 
-Q_OBJECT
-
 private:
 	QMenu *actionsMenu;
 

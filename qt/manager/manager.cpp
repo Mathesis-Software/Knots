@@ -11,7 +11,7 @@
 #include "manager.h"
 #include "about.h"
 #include "icon_provider.h"
-#include "../knotWindow/knotWindow.h"
+#include "../knot/knotWindow.h"
 #include "../diagram/diagramWindow.h"
 
 keManager::keManager() {

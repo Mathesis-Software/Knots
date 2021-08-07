@@ -6,7 +6,7 @@ all:
 	@make -C abstractWindow all
 	@make -C diagram all
 	@make -C gl all
-	@make -C knotWindow all
+	@make -C knot all
 	@make -C manager all
 
 clean:
@@ -15,6 +15,6 @@ clean:
 	@make -C abstractWindow .clean
 	@make -C diagram .clean
 	@make -C gl .clean
-	@make -C knotWindow .clean
+	@make -C knot .clean
 	@make -C manager .clean
 	@$(RM) manager/KnotEditor

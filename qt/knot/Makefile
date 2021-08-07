@@ -1,10 +1,10 @@
 ROOTDIR = ../..
 
-all: knotWindow.a
+all: knot.a
 
 include $(ROOTDIR)/config.mk
 
-knotWindow.a: $(OBJECTS)
+knot.a: $(OBJECTS)
 	@echo -n 'Linking $@ ...'
 	@$(RM) $@
 	@$(AR) $@ $^

@@ -37,7 +37,10 @@ void diagramWindow::init(DiagramWidget *widget) {
 		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
 	);
 	
-	addToolBarButton("mini_trefoil.xpm", "Convert to knot", SLOT(convert()));
+	this->registerAction(
+		this->addToolbarAction("mini_trefoil.xpm", "Convert to knot", [this] { this->convert(); }),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
+	);
 
 	addToolBarSeparator();
 	actions = new QToolButton*[6];

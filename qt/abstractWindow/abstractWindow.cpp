@@ -120,6 +120,11 @@ bool abstractWindow::removeAll(void) {
   return true;
 }
 
+QAction *abstractWindow::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {
+  const QIcon icon((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + iconFilename);
+	return this->toolbar->addAction(icon, text, functor);
+}
+
 QToolButton *abstractWindow::addToolBarButton(const QString &filename, const char *label, const char *slot) {
   QToolButton *qtb = new QToolButton(nullptr);
   QPixmap pm((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + filename);

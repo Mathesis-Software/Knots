@@ -24,15 +24,15 @@ void diagramWindow::init(DiagramWidget *widget) {
 
 	actionsMenu = this->menuBar()->addMenu("&Actions");
 	this->registerAction(
-		actionsMenu->addAction("&Convert", this, SLOT(convert())),
+		actionsMenu->addAction("&Convert", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("&Simplify", this, SLOT(simplify())),
+		actionsMenu->addAction("&Simplify", [this] { this->simplify(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("C&lear", this, SLOT(clear())),
+		actionsMenu->addAction("C&lear", [this] { this->clear(); }),
 		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
 	);
 	

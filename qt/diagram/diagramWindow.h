@@ -22,7 +22,6 @@ private:
 
 	void setMode(DiagramWidget::EditingMode mode);
 	
-private slots:
 	void convert();
 	void clear();
 	void simplify();

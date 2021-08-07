@@ -1,10 +1,9 @@
 #ifndef __KNOTWINDOW_MATH_H__
 #define __KNOTWINDOW_MATH_H__
 
-#include <QtWidgets/qcheckbox.h>
-#include <QtWidgets/qlabel.h>
-//#include <qwindow.h>
-#include <QtWidgets/qdialog.h>
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QDialog>
 
 #include "knotWindow.h"
 

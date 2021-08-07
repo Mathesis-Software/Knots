@@ -5,8 +5,8 @@
 #include <list>
 
 #include <QtPrintSupport/QPrinter>
-#include <QtWidgets/qmainwindow.h>
-#include <QtWidgets/qtoolbutton.h>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QToolButton>
 
 class abstractWindow : public QMainWindow {
 

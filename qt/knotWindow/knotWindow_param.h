@@ -1,9 +1,9 @@
 #ifndef __KNOTWINDOW_PARAM_H__
 #define __KNOTWINDOW_PARAM_H__
 
-#include <QtWidgets/qdialog.h>
-#include <QtWidgets/qlineedit.h>
-#include <QtWidgets/qpushbutton.h>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 class setupSmooth : public QDialog {
 

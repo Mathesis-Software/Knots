@@ -3,10 +3,10 @@
 
 #include <cstdbool>
 
-#include <QtWidgets/qdialog.h>
-#include <QtWidgets/qlabel.h>
-#include <QtWidgets/qpushbutton.h>
-#include <QtWidgets/qslider.h>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
 
 class setupColor : public QDialog {
 

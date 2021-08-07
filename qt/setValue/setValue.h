@@ -1,9 +1,9 @@
 #ifndef __SETVALUE_H__
 #define __SETVALUE_H__
 
-#include <QtWidgets/qdialog.h>
-#include <QtWidgets/qlineedit.h>
-#include <QtWidgets/qpushbutton.h>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 
 char *setString (const char*, char*, const int);
 int setInt (const char*, int, int, int);

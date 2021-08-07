@@ -1,9 +1,8 @@
-#include <QtGui/qpixmap.h>
-#include <QtGui/qpainter.h>
-//#include <qprinter.h>
-#include <QtWidgets/qtoolbar.h>
-#include <QtWidgets/qtoolbutton.h>
-#include <QtWidgets/qbuttongroup.h>
+#include <QtGui/QPixmap>
+#include <QtGui/QPainter>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QToolButton>
+#include <QtWidgets/QButtonGroup>
 
 #include "3dWindow.h"
 

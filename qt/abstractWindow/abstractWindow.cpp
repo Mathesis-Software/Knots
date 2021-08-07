@@ -120,21 +120,16 @@ bool abstractWindow::removeAll(void) {
   return true;
 }
 
-QToolButton *abstractWindow::addToolBarButton(const QString &filename,
-                                              const char *label,
-			                      const char *slot,
-					      const char *whatsthis) {
+QToolButton *abstractWindow::addToolBarButton(const QString &filename, const char *label, const char *slot) {
+  QToolButton *qtb = new QToolButton(nullptr);
   QPixmap pm((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + filename);
-  QToolButton *qtb = new QToolButton(0);
   qtb->setIcon(pm);
   qtb->setText(label);
   if (slot) {
     this->connect(qtb, SIGNAL(pressed()), slot);
   }
-  //qtb -> setUsesBigPixmap (true);
-  qtb -> setFixedSize (pm.width () + 6, 30);
-  //if (whatsthis)
-  //  QWhatsThis::add (qtb, whatsthis);
+  //qtb->setUsesBigPixmap (true);
+  qtb->setFixedSize(pm.width () + 6, 30);
   this->toolbar->addWidget(qtb);
   return qtb;
 }

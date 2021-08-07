@@ -17,6 +17,7 @@ DiagramWidget::DiagramWidget(diagramWindow *p, const rapidjson::Document &doc) :
 
 bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 	switch (mode) {
+		default:
 		case NEW_DIAGRAM:
 			return !this->diagram.isClosed();
 		case ADD_VERTEX:

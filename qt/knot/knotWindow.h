@@ -57,6 +57,9 @@ private:
 
   void saveIt(std::ostream&);
 
+private:
+	void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter);
+
 private slots:
   void stop();
   void math();

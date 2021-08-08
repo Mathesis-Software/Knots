@@ -6,7 +6,6 @@
 
 #include <QtWidgets/QOpenGLWidget>
 
-#include "../setupColor/setupColor.h"
 #include "../abstractWindow/abstractWindow.h"
 #include "../../gl/surface/surface.h"
 
@@ -15,6 +14,7 @@ class GLWindow : public abstractWindow {
 
 private:
 	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
+	float backgroundRGB[3];
 
 	double *currentSpeedMatrix;
 	double *currentMatrix;
@@ -33,19 +33,23 @@ private slots:
 	void rotate(int);
 
 protected:
-	float backgroundRGB[3];
-
 	void timerEvent(QTimerEvent*);
 	void addSurface(std::shared_ptr<KE::GL::Surface> s) {this->surfaces.push_back(s);};
 	double currMatr(int i, int j) {return currentMatrix[4 * i + j];}
 	void repaint3d();
+
+	const float *getBackgroundRGB() { return this->backgroundRGB; }
+	void setBackgroundRGB(const float rgb[3]) {
+		this->backgroundRGB[0] = rgb[0];
+		this->backgroundRGB[1] = rgb[1];
+		this->backgroundRGB[2] = rgb[2];
+	}
 
 public:
 	GLWindow();
 	~GLWindow();
 
 	friend class GLWidget;
-	friend class setupGLWidgetColor;
 };
 
 class GLWidget : public QOpenGLWidget {
@@ -64,21 +68,6 @@ public:
 		makeCurrent();
 		glMultMatrixd(Parent->currentMatrix);
 	}
-};
-
-class setupGLWidgetColor : public setupColor {
-
-Q_OBJECT
-
-private:
-	GLWindow *Parent;
-
-private slots:
-	void apply() { Parent->repaint3d(); }
-		
-public:
-	setupGLWidgetColor(GLWindow *p, float *rgb, bool just = true)
-		: setupColor(rgb, just) {Parent = p;};
 };
 
 #endif /* __GLWINDOW_H__ */

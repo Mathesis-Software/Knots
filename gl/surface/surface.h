@@ -46,10 +46,10 @@ public:
   void paint();
   void destroy();
 
-  float *getFrontRGB() { return frontRGB; }
-  float *getBackRGB() { return backRGB; }
-  void setFrontRGB(const float*);
-  void setBackRGB(const float*);
+  const float *getFrontRGB() const { return this->frontRGB; }
+  const float *getBackRGB() const { return this->backRGB; }
+  void setFrontRGB(const float rgb[3]);
+  void setBackRGB(const float rgb[3]);
 
 private:
 	Surface(const Surface&) = delete;

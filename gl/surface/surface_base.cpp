@@ -20,13 +20,13 @@ void Surface::destroy() {
 	this->points.clear();
 }
 
-void Surface::setFrontRGB(const float *rgb) {
+void Surface::setFrontRGB(const float rgb[3]) {
   frontRGB[0] = rgb[0];
   frontRGB[1] = rgb[1];
   frontRGB[2] = rgb[2];
 }
 
-void Surface::setBackRGB(const float *rgb) {
+void Surface::setBackRGB(const float rgb[3]) {
   backRGB[0] = rgb[0];
   backRGB[1] = rgb[1];
   backRGB[2] = rgb[2];

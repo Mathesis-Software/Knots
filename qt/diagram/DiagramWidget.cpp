@@ -60,8 +60,8 @@ void DiagramWidget::highlightCrossing(QPainter &painter, const KE::TwoD::Diagram
 	}
 }
 
-void DiagramWidget::drawVertex(QPainter &painter, const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
-	if (vertex == this->capturedVertex) {
+void DiagramWidget::drawVertex(QPainter &painter, const KE::TwoD::Diagram::Vertex &vertex, bool highlight) {
+	if (highlight) {
 		painter.setPen(Qt::lightGray);
 		painter.setBrush(Qt::lightGray);
 	} else {
@@ -69,12 +69,12 @@ void DiagramWidget::drawVertex(QPainter &painter, const std::shared_ptr<KE::TwoD
 		painter.setBrush(Qt::black);
 	}
 
-	auto coords = vertex->coords();
+	auto coords = vertex.coords();
 	painter.drawEllipse(QPointF(coords.x, coords.y), 4.5, 4.5);
 }
 
-void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge) {
-	if (this->capturedEdge && edge == *this->capturedEdge) {
+void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge, bool highlight) {
+	if (highlight) {
 		painter.setPen(Qt::lightGray);
 	} else {
 		painter.setPen(Qt::black);
@@ -120,10 +120,10 @@ void DiagramWidget::drawIt(QPainter &painter) {
 		this->highlightCrossing(painter, *this->capturedCrossing);
 	}
 	for (const auto &edge : this->diagram.edges()) {
-		drawEdge(painter, edge);
+		drawEdge(painter, edge, this->capturedEdge && edge == *this->capturedEdge);
 	}
 	for (const auto &vertex : this->diagram.vertices()) {
-		drawVertex(painter, vertex);
+		drawVertex(painter, *vertex, vertex == this->capturedVertex);
 	}
 }
 

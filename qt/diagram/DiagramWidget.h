@@ -26,7 +26,10 @@ private:
 	diagramWindow *Parent;
 	DiagramWidget::EditingMode _editingMode;
 
-	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex);
+	std::shared_ptr<KE::TwoD::Diagram::Vertex> capturedVertex;
+
+	void setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
+	void drawVertex(QPainter&, const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
 	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
 
 	void paintEvent(QPaintEvent*) override;

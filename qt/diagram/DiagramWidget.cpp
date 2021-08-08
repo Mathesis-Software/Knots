@@ -3,16 +3,17 @@
 
 #include "diagramWindow.h"
 
-static std::shared_ptr<KE::TwoD::Diagram::Vertex> localVertex;
 static int localx, localy;
 static bool doSomething = false;
 
 DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget(p), _editingMode(NEW_DIAGRAM) {
 	Parent = p;
+	this->setMouseTracking(true);
 }
 
 DiagramWidget::DiagramWidget(diagramWindow *p, const rapidjson::Document &doc) : QWidget(p), diagram(doc), _editingMode(NEW_DIAGRAM) {
 	Parent = p;
+	this->setMouseTracking(true);
 }
 
 bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
@@ -34,6 +35,7 @@ bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 bool DiagramWidget::setEditingMode(DiagramWidget::EditingMode mode) {
 	if (mode != this->_editingMode && this->canSetEditingMode(mode)) {
 		this->_editingMode = mode;
+		this->setCapturedVertex(nullptr);
 		return true;
 	} else {
 		return false;
@@ -46,11 +48,23 @@ void DiagramWidget::clear() {
 	this->setEditingMode(NEW_DIAGRAM);
 }
 
-void DiagramWidget::drawVertex(QPainter &painter, const KE::TwoD::Diagram::Vertex &v) {
-	painter.drawEllipse(v.x() - 4, v.y() - 4, 9, 9);
+void DiagramWidget::drawVertex(QPainter &painter, const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
+	if (vertex == this->capturedVertex) {
+		painter.setPen(Qt::lightGray);
+		painter.setBrush(Qt::lightGray);
+	} else {
+		painter.setPen(Qt::black);
+		painter.setBrush(Qt::black);
+	}
+
+	auto coords = vertex->coords();
+	painter.drawEllipse(coords.x - 4, coords.y - 4, 9, 9);
 }
 
 void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge) {
+	painter.setPen(Qt::black);
+	painter.setBrush(Qt::black);
+
 	float deltaX = edge.end->x() - edge.start->x();
 	float deltaY = edge.end->y() - edge.start->y();
 	float hyp = hypotf(deltaX, deltaY);
@@ -87,14 +101,11 @@ void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &e
 }
 
 void DiagramWidget::drawIt(QPainter &painter) {
-	painter.setPen(Qt::black);
-	painter.setBrush(Qt::black);
-	
-	for (auto vertex : this->diagram.vertices()) {
-		drawVertex(painter, *vertex);
-	}
 	for (const auto &edge : this->diagram.edges()) {
 		drawEdge(painter, edge);
+	}
+	for (auto vertex : this->diagram.vertices()) {
+		drawVertex(painter, vertex);
 	}
 }
 
@@ -113,40 +124,30 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			if (this->diagram.isClosed()) {
 				break;
 			}
-			localVertex = this->diagram.addVertex(m->x(), m->y());
+			this->setCapturedVertex(this->diagram.addVertex(m->x(), m->y()));
 			if (m->button() == 0x02) {
 				this->diagram.close();
 			}
-			repaint();
 			Parent->isSaved = false;
-			doSomething = true;
 			break;
 		case ADD_VERTEX:
 		{
 			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = this->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5);
 			if (edge) {
-				localVertex = this->diagram.addVertex(*edge, m->x(), m->y());
-				repaint();
+				this->setCapturedVertex(this->diagram.addVertex(*edge, m->x(), m->y()));
 				Parent->isSaved = false;
-				doSomething = true;
 			}
 			break;
 		}
 		case MOVE_VERTEX:
-		{
-			const auto vertex = this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
-			if (vertex) {
-				localVertex = vertex;
+			if (this->capturedVertex) {
 				Parent->isSaved = false;
-				doSomething = true;
 			}
 			break;
-		}
 		case REMOVE_VERTEX:
-		{
-			const auto vertex = this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
-			if (vertex) {
-				this->diagram.removeVertex(vertex);
+			if (this->capturedVertex) {
+				this->diagram.removeVertex(this->capturedVertex);
+				this->setCapturedVertex(nullptr);
 				if (this->diagram.vertices().empty()) {
 					this->setEditingMode(NEW_DIAGRAM);
 				}
@@ -154,7 +155,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 				this->Parent->isSaved = false;
 			}
 			break;
-		}
 		case FLIP_CROSSING:
 		{
 			auto c = this->diagram.findCrossing(KE::TwoD::FloatPoint(m->x(), m->y()), 17);
@@ -178,23 +178,24 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 }
 
 void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
-	if (!doSomething)
-		return;
-
-	doSomething = false;
-
 	switch (this->_editingMode) {
 		case ADD_VERTEX:
 		case MOVE_VERTEX:
 		case NEW_DIAGRAM:
-			this->diagram.moveVertex(localVertex, m->x(), m->y());
-			repaint();
+			if (this->capturedVertex) {
+				this->diagram.moveVertex(this->capturedVertex, m->x(), m->y());
+				this->setCapturedVertex(nullptr);
+				repaint();
+			}
 			break;
 		case MOVE_DIAGRAM:
-			this->diagram.shift(m->x() - localx, m->y() - localy);
-			localx = m->x();
-			localy = m->y();
-			repaint();
+			if (doSomething) {
+				this->diagram.shift(m->x() - localx, m->y() - localy);
+				localx = m->x();
+				localy = m->y();
+				repaint();
+				doSomething = false;
+			}
 			break;
 		default:
 			break;
@@ -204,23 +205,44 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 }
 
 void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
-	if (!doSomething)
+	if (m->buttons() == 0) {
+		switch (this->_editingMode) {
+			case MOVE_VERTEX:
+			case REMOVE_VERTEX:
+				this->setCapturedVertex(this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17));
+				break;
+			default:
+				break;
+		}
 		return;
+	}
 
 	switch (this->_editingMode) {
 		case ADD_VERTEX:
 		case MOVE_VERTEX:
 		case NEW_DIAGRAM:
-			this->diagram.moveVertex(localVertex, m->x(), m->y());
-			repaint();
+			if (this->capturedVertex) {
+				this->diagram.moveVertex(this->capturedVertex, m->x(), m->y());
+				repaint();
+			}
 			return;
 		case MOVE_DIAGRAM:
-			this->diagram.shift(m->x() - localx, m->y() - localy);
-			repaint();
-			localx = m->x();
-			localy = m->y();
+			if (doSomething) {
+				this->diagram.shift(m->x() - localx, m->y() - localy);
+				repaint();
+				localx = m->x();
+				localy = m->y();
+			}
 			return;
 		default:
 			return;
+	}
+}
+
+void DiagramWidget::setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
+	auto old = this->capturedVertex;
+	this->capturedVertex = vertex;
+	if (old != this->capturedVertex) {
+		this->repaint();
 	}
 }

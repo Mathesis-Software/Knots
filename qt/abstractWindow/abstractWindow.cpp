@@ -103,19 +103,12 @@ void abstractWindow::rename() {
 	delete[] capt;
 }
 
-void abstractWindow::close ()
-{
-	QWidget::close ();
-}
-
-bool abstractWindow::removeAll(void) {
+bool abstractWindow::closeAllWindows() {
 	while (!abstractWindow::AWRegister.empty()) {
 		abstractWindow *av = abstractWindow::AWRegister.back();
-		if (!av->isSaved && av->askForSave()) {
+		if (!av->close()) {
 			return false;
 		}
-		abstractWindow::AWRegister.pop_back();
-		delete av;
 	}
 	return true;
 }

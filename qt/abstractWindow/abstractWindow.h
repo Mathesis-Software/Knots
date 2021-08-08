@@ -38,9 +38,6 @@ private slots:
   void print();
   void rename();
 
-public slots:
-  void close();
-
 public:
   abstractWindow();
   virtual ~abstractWindow();
@@ -52,7 +49,7 @@ public:
   virtual const char *mask() const = 0;
 
   static std::list<abstractWindow*> AWRegister;
-  static bool removeAll();
+  static bool closeAllWindows();
 };
 
 #endif /* __ABSTRACTWINDOW_H__ */

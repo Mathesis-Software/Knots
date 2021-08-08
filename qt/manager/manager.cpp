@@ -37,7 +37,7 @@ keManager::~keManager() {
 }
 
 void keManager::closeEvent(QCloseEvent*) {
-	if (abstractWindow::removeAll()) {
+	if (abstractWindow::closeAllWindows()) {
 		qApp->quit();
 	}
 }
@@ -115,5 +115,5 @@ void keManager::exit() {
 }
 
 void keManager::close_all_windows() {
-	abstractWindow::removeAll();
+	abstractWindow::closeAllWindows();
 }

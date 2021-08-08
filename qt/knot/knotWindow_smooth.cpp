@@ -17,6 +17,7 @@ void knotWindow::stop() {
     math_decreaseEnergy->setEnabled(true);
     math_stop->setEnabled(false);
     statusBar()->showMessage("Smoothing complete", 3000);
+		this->updateActions();
   }
 }
 
@@ -51,4 +52,5 @@ void knotWindow::startSmooth(int st, int ra, bool cont) {
 
   timerId_smooth = startTimer(1);
   statusBar()->showMessage("Smoothing…");
+	this->updateActions();
 }

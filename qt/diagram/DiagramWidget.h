@@ -26,6 +26,7 @@ private:
 	diagramWindow *Parent;
 	DiagramWidget::EditingMode _editingMode;
 
+	QPoint capturedPoint;
 	std::shared_ptr<KE::TwoD::Diagram::Vertex> capturedVertex;
 	std::shared_ptr<KE::TwoD::Diagram::Edge> capturedEdge;
 	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;

@@ -3,9 +3,6 @@
 
 #include "diagramWindow.h"
 
-static int localx, localy;
-static bool doSomething = false;
-
 DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget(p), _editingMode(NEW_DIAGRAM) {
 	Parent = p;
 	this->setMouseTracking(true);
@@ -116,14 +113,23 @@ void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &e
 }
 
 void DiagramWidget::drawIt(QPainter &painter) {
-	if (this->capturedCrossing) {
-		this->highlightCrossing(painter, *this->capturedCrossing);
-	}
-	for (const auto &edge : this->diagram.edges()) {
-		drawEdge(painter, edge, this->capturedEdge && edge == *this->capturedEdge);
-	}
-	for (const auto &vertex : this->diagram.vertices()) {
-		drawVertex(painter, *vertex, vertex == this->capturedVertex);
+	if (this->capturedPoint.isNull()) {
+		if (this->capturedCrossing) {
+			this->highlightCrossing(painter, *this->capturedCrossing);
+		}
+		for (const auto &edge : this->diagram.edges()) {
+			drawEdge(painter, edge, this->capturedEdge && edge == *this->capturedEdge);
+		}
+		for (const auto &vertex : this->diagram.vertices()) {
+			drawVertex(painter, *vertex, vertex == this->capturedVertex);
+		}
+	} else {
+		for (const auto &edge : this->diagram.edges()) {
+			drawEdge(painter, edge, true);
+		}
+		for (const auto &vertex : this->diagram.vertices()) {
+			drawVertex(painter, *vertex, true);
+		}
 	}
 }
 
@@ -182,10 +188,8 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			break;
 		}
 		case MOVE_DIAGRAM:
-			localx = m->x();
-			localy = m->y();
+			this->capturedPoint = m->pos();
 			Parent->isSaved = false;
-			doSomething = true;
 			break;
 		default:
 			break;
@@ -205,12 +209,10 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 			}
 			break;
 		case MOVE_DIAGRAM:
-			if (doSomething) {
-				this->diagram.shift(m->x() - localx, m->y() - localy);
-				localx = m->x();
-				localy = m->y();
+			if (!this->capturedPoint.isNull()) {
+				this->diagram.shift(m->x() - this->capturedPoint.x(), m->y() - this->capturedPoint.y());
+				this->capturedPoint = QPoint();
 				repaint();
-				doSomething = false;
 			}
 			break;
 		default:
@@ -249,11 +251,10 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
 			}
 			return;
 		case MOVE_DIAGRAM:
-			if (doSomething) {
-				this->diagram.shift(m->x() - localx, m->y() - localy);
+			if (!this->capturedPoint.isNull()) {
+				this->diagram.shift(m->x() - this->capturedPoint.x(), m->y() - this->capturedPoint.y());
+				this->capturedPoint = m->pos();
 				repaint();
-				localx = m->x();
-				localy = m->y();
 			}
 			return;
 		default:

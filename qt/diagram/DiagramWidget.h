@@ -32,9 +32,11 @@ private:
 
 	void setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
 	void setCapturedEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
+	void setCapturedCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
 
 	void drawVertex(QPainter&, const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
 	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
+	void highlightCrossing(QPainter &painter, const KE::TwoD::Diagram::Crossing &crossing);
 
 	void paintEvent(QPaintEvent*) override;
 	void mousePressEvent(QMouseEvent*) override;

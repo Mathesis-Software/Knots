@@ -14,19 +14,21 @@ bool Diagram::hasCrossings() const {
 	return false;
 }
 
-void Diagram::addCrossing(const Edge &up, const Edge &down) {
+std::shared_ptr<Diagram::Crossing> Diagram::addCrossing(const Edge &up, const Edge &down) {
 	this->removeCrossing(up, down);
 
 	if (!up.intersects(down)) {
-		return;
+		return nullptr;
 	}
 
-	down.start->crossings.push_back(Crossing(up, down));
+	std::shared_ptr<Crossing> new_crossing = std::make_shared<Crossing>(up, down);
+	down.start->crossings.push_back(*new_crossing);
 	down.orderCrossings(down.start->crossings);
+	return new_crossing;
 }
 
-void Diagram::flipCrossing(Crossing &crs) {
-	this->addCrossing(crs.down, crs.up);
+std::shared_ptr<Diagram::Crossing> Diagram::flipCrossing(Crossing &crs) {
+	return this->addCrossing(crs.down, crs.up);
 }
 
 void Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {

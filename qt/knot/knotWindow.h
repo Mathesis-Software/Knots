@@ -1,8 +1,6 @@
 #ifndef __KNOTWINDOW_H__
 #define __KNOTWINDOW_H__
 
-#include <QtOpenGL/qgl.h>
-
 #include "../gl/GLWindow.h"
 #include "../../gl/surface/surface.h"
 #include "../../math/knot/knot.h"

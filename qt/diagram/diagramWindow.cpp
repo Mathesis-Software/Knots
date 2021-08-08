@@ -1,6 +1,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
+#include <QtGui/QPainter>
 #include <QtGui/QPixmap>
 
 #include <rapidjson/ostreamwrapper.h>

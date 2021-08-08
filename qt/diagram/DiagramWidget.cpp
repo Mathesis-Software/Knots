@@ -36,6 +36,7 @@ bool DiagramWidget::setEditingMode(DiagramWidget::EditingMode mode) {
 	if (mode != this->_editingMode && this->canSetEditingMode(mode)) {
 		this->_editingMode = mode;
 		this->setCapturedVertex(nullptr);
+		this->setCapturedEdge(nullptr);
 		return true;
 	} else {
 		return false;
@@ -62,8 +63,11 @@ void DiagramWidget::drawVertex(QPainter &painter, const std::shared_ptr<KE::TwoD
 }
 
 void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge) {
-	painter.setPen(Qt::black);
-	painter.setBrush(Qt::black);
+	if (this->capturedEdge && edge == *this->capturedEdge) {
+		painter.setPen(Qt::lightGray);
+	} else {
+		painter.setPen(Qt::black);
+	}
 
 	float deltaX = edge.end->x() - edge.start->x();
 	float deltaY = edge.end->y() - edge.start->y();
@@ -132,9 +136,9 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			break;
 		case ADD_VERTEX:
 		{
-			std::shared_ptr<KE::TwoD::Diagram::Edge> edge = this->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5);
-			if (edge) {
-				this->setCapturedVertex(this->diagram.addVertex(*edge, m->x(), m->y()));
+			if (this->capturedEdge) {
+				this->setCapturedVertex(this->diagram.addVertex(*this->capturedEdge, m->x(), m->y()));
+				this->setCapturedEdge(nullptr);
 				Parent->isSaved = false;
 			}
 			break;
@@ -211,6 +215,8 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
 			case REMOVE_VERTEX:
 				this->setCapturedVertex(this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17));
 				break;
+			case ADD_VERTEX:
+				this->setCapturedEdge(this->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5));
 			default:
 				break;
 		}
@@ -243,6 +249,14 @@ void DiagramWidget::setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::V
 	auto old = this->capturedVertex;
 	this->capturedVertex = vertex;
 	if (old != this->capturedVertex) {
+		this->repaint();
+	}
+}
+
+void DiagramWidget::setCapturedEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge) {
+	auto old = this->capturedEdge;
+	this->capturedEdge = edge;
+	if (old != this->capturedEdge) {
 		this->repaint();
 	}
 }

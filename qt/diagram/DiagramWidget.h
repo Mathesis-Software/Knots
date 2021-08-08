@@ -27,8 +27,12 @@ private:
 	DiagramWidget::EditingMode _editingMode;
 
 	std::shared_ptr<KE::TwoD::Diagram::Vertex> capturedVertex;
+	std::shared_ptr<KE::TwoD::Diagram::Edge> capturedEdge;
+	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;
 
 	void setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
+	void setCapturedEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
+
 	void drawVertex(QPainter&, const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
 	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge);
 

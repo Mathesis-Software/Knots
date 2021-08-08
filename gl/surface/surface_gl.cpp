@@ -7,7 +7,7 @@ void KE::GL::Surface::paint() {
   if (visible) {
     // Если нужно, сначала делаем вычисления.
     if (this->points.empty()) {
-      calculate ();
+      calculate();
 		}
 
     // Устанавливаем цвета обеих сторон поверхности.
@@ -25,6 +25,6 @@ void KE::GL::Surface::paint() {
       glVertex3fv(pt.vertex);
     }
  
-    glEnd ();
+    glEnd();
   }
 }

@@ -16,8 +16,8 @@ private:
 	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
 	float backgroundRGB[3];
 
-	double *currentSpeedMatrix;
-	double *currentMatrix;
+	std::unique_ptr<double[]> currentMatrix;
+	std::unique_ptr<double[]> currentSpeedMatrix;
 
 	bool isInertia;
 	int timerId_rotate;
@@ -34,8 +34,8 @@ private slots:
 
 protected:
 	void timerEvent(QTimerEvent*);
-	void addSurface(std::shared_ptr<KE::GL::Surface> s) {this->surfaces.push_back(s);};
-	double currMatr(int i, int j) {return currentMatrix[4 * i + j];}
+	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
+	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
 	void repaint3d();
 
 	const float *getBackgroundRGB() { return this->backgroundRGB; }
@@ -47,7 +47,6 @@ protected:
 
 public:
 	GLWindow();
-	~GLWindow();
 
 	friend class GLWidget;
 };
@@ -66,7 +65,7 @@ public:
 
 	void multMatrix() {
 		makeCurrent();
-		glMultMatrixd(Parent->currentMatrix);
+		glMultMatrixd(Parent->currentMatrix.get());
 	}
 };
 

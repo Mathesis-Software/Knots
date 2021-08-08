@@ -26,7 +26,7 @@ void GLWidget::resizeGL(int w, int h) {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glTranslatef(0.0, 0.0, -10.0);
-  glMultMatrixd(Parent->currentMatrix);
+  glMultMatrixd(Parent->currentMatrix.get());
 }
 
 void GLWidget::initializeGL() {

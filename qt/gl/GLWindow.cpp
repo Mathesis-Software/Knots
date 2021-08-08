@@ -6,15 +6,13 @@
 
 #include "GLWindow.h"
 
-GLWindow::GLWindow() {
+GLWindow::GLWindow() : currentMatrix(new double[16]), currentSpeedMatrix(new double[9]) {
 	setCentralWidget(new GLWidget(this));
 
 	backgroundRGB[0] = 1.0;
 	backgroundRGB[1] = 1.0;
 	backgroundRGB[2] = 1.0;
 
-	currentMatrix = new double[16];
-	currentSpeedMatrix = new double[9];
 	{
 		int i;
 		for (i = 0; i < 16; i++)
@@ -33,11 +31,6 @@ GLWindow::GLWindow() {
 
 	addToolBarSeparator();
 	addToolBarButton("inertia.xpm", "Inertia", SLOT(inertia()))->setCheckable(true);
-}
-
-GLWindow::~GLWindow() {
-	delete[] currentMatrix;
-	delete[] currentSpeedMatrix;
 }
 
 void GLWindow::printIt(QPrinter *prn) {

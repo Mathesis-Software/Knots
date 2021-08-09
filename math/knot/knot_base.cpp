@@ -19,8 +19,6 @@ void Knot::create_depend() {
 }
 
 void Knot::clear_depend() {
-  this->_len_table.clear();
-
   this->length->invalidate();
   for (auto computable : this->computables) {
     computable->invalidate();

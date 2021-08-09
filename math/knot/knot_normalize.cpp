@@ -5,7 +5,7 @@
 namespace KE { namespace ThreeD {
 
 void Knot::normalize(std::size_t num) {
-	const auto &len_table = this->len_table();
+	const auto len_table = this->len_table();
 
 	double len = this->length->value();
 

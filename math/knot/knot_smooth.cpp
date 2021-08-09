@@ -45,7 +45,7 @@ void Knot::decreaseEnergy() {
   normalize(this->points.size());
 
   // Создаем массив расстояний между соседними точками.
-	const auto &len_table = this->len_table();
+	const auto len_table = this->len_table();
 
   double lt, local[3];
 	std::vector<Vector> delta;

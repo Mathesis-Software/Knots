@@ -14,7 +14,7 @@ double Knot::prmLength::compute() {
 
 double Knot::prmAen::compute() {
 	const auto &points = this->knot.points;
-	const auto &len_table = this->knot.len_table();
+	const auto len_table = this->knot.len_table();
 
 	double value = 0;
 
@@ -35,7 +35,7 @@ double Knot::prmAen::compute() {
 
 double Knot::prmEnergy::compute() {
 	const auto &points = this->knot.points;
-	const auto &len_table = this->knot.len_table();
+	const auto len_table = this->knot.len_table();
 
 	double len = knot.length->value ();
 

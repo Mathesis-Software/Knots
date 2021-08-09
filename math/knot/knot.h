@@ -122,12 +122,10 @@ private:
 	std::vector<Point> points;
 
 private:
-	mutable std::vector<double> _len_table;
-
 	void create_depend();
 	void clear_depend();
 
-	const std::vector<double> &len_table() const;
+	const std::vector<double> len_table() const;
 
 public:
 	Knot(const rapidjson::Document &doc);

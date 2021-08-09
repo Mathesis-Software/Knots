@@ -155,6 +155,7 @@ public:
 
 	Snapshot points() const;
 
+	void smooth(std::size_t steps);
 	void decreaseEnergy();
 	void setLength(double);
 	void center();

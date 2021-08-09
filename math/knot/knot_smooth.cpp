@@ -39,6 +39,14 @@ void Knot::setLength(double len) {
   clear_depend ();
 }
 
+void Knot::smooth(std::size_t steps) {
+	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+  for (std::size_t i = 0; i < steps; ++i) {
+    this->decreaseEnergy();
+	}
+  this->center();
+}
+
 void Knot::decreaseEnergy() {
 	std::lock_guard<std::recursive_mutex> guard(this->mutex);
   // Сохраняем длину кривой, чтобы в конце восстановить ее.

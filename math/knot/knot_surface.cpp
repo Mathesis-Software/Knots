@@ -1,7 +1,6 @@
 #include <cmath>
 
 #include "knot_surface.h"
-#include "knot.h"
 
 namespace KE { namespace GL {
 
@@ -11,8 +10,10 @@ KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t
 }
 
 void KnotSurface::setThickness(double thickness) {
-	this->thickness = thickness;
-	this->destroy();
+	if (thickness != this->thickness) {
+		this->thickness = thickness;
+		this->destroy(true);
+	}
 }
 
 void KnotSurface::setNumberOfPointsOnCircle(std::size_t pointsOnCircle) {
@@ -26,17 +27,24 @@ void KnotSurface::setNumberOfPointsOnCircle(std::size_t pointsOnCircle) {
 		this->sines.push_back(sin(2 * M_PI / pointsOnCircle * i));
 		this->cosines.push_back(cos(2 * M_PI / pointsOnCircle * i));
 	}
-	this->destroy();
+	this->destroy(true);
+}
+
+bool KnotSurface::destroy(bool force) {
+	if (!force && this->stored && !this->stored->isObsolete()) {
+		return false;
+	}
+	Surface::destroy();
+	return true;
 }
 
 void KnotSurface::calculate() {
 	const auto points = this->knot.points();
+	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(points);
 
 	if (points.size() == 0) {
 		return;
 	}
-
-	destroy ();
 
 	std::vector<ThreeD::Vector> normal1, normal2;
 	/* Creating normal vector table */

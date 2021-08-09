@@ -32,6 +32,7 @@ private:
   float frontRGB[3], backRGB[3];
 
 protected:
+  void destroy();
   virtual void calculate() = 0;
   void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
   
@@ -44,7 +45,6 @@ public:
   void hide() { this->visible = false; }
 
   void paint();
-  void destroy();
 
   const float *getFrontRGB() const { return this->frontRGB; }
   const float *getBackRGB() const { return this->backRGB; }

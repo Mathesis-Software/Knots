@@ -1,13 +1,21 @@
 #ifndef __SEIFERT_H__
 #define __SEIFERT_H__
 
-#include "seifert_surface.h"
+#include "../knot/primitives.h"
 
 class seifert;
 class seifert_list;
 class seifert_ord;
 
-namespace KE { namespace ThreeD {
+namespace KE {
+
+namespace GL {
+
+class SeifertSurface;
+
+}
+
+namespace ThreeD {
 
 class Knot;
 

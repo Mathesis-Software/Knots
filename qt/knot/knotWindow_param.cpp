@@ -10,10 +10,10 @@
 void knotWindow::setLength() {
   double d = setDouble ("Knot length", this->knot.length->value(), 1.0, 1000.0);
   if (d != this->knot.length->value()) {
-    this->knot.setLength (d);
+    this->knot.setLength(d);
     this->knot.center();
-    this->knotSurface->destroy();
-    this->seifertSurface->destroy();
+    this->knotSurface->destroy(false);
+    this->seifertSurface->destroy(false);
     repaint3d();
     isSaved = false;
     if (mth) {
@@ -27,7 +27,7 @@ void knotWindow::setNumberOfPoints() {
   if (numberOfPoints != this->knot.numberOfPoints()) {
     this->knot.normalize(numberOfPoints);
     this->knot.center();
-    this->knotSurface->destroy();
+    this->knotSurface->destroy(false);
     repaint3d();
     isSaved = false;
     if (mth) {

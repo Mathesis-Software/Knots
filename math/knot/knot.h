@@ -128,7 +128,7 @@ public:
 		Snapshot(const Knot &knot, const std::vector<Point> &points, std::size_t generation);
 
 	public:
-		bool isObsolete() const;
+		bool isObsolete() const { return this->generation < this->knot.generation; }
 
 		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
 		std::size_t size() const { return this->points->size(); }

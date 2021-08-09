@@ -3,6 +3,7 @@
 
 #include "knotWindow_math.h"
 #include "../../math/knot/knot_surface.h"
+#include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::smooth() {
   if (!smoothing) {
@@ -32,8 +33,8 @@ void knotWindow::doSmooth() {
 
   isSaved = false;
 	this->knot.smooth(redrawAfter);
-  this->knotSurface->destroy();
-  this->seifertSurface->destroy();
+  this->knotSurface->destroy(false);
+  this->seifertSurface->destroy(false);
   repaint3d();
   if (mth)
     mth->recompute();

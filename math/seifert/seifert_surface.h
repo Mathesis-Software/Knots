@@ -1,32 +1,29 @@
 #ifndef __SEIFERT_SURFACE_H__
 #define __SEIFERT_SURFACE_H__
 
-#include "../knot/primitives.h"
+#include "../knot/knot.h"
 #include "../../gl/surface/surface.h"
 
 class seifert;
 
-namespace KE {
-
-namespace ThreeD {
-
-class Knot;
-
-}
-
-namespace GL {
+namespace KE { namespace GL {
 
 class SeifertSurface : public Surface {
+
+private:
+	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 private:
 	const ThreeD::Knot &base;
 	const ThreeD::Point &startPoint;
 
 	void addTriangles(seifert *s);
-	void calculate();
+	void calculate() override;
 
 public:
 	SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint);
+
+	bool destroy(bool force);
 };
 
 }}

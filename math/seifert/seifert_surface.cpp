@@ -1,4 +1,5 @@
 #include "seifert.h"
+#include "seifert_surface.h"
 
 namespace KE { namespace GL {
 
@@ -65,23 +66,32 @@ void SeifertSurface::addTriangles(seifert *s) {
   }
 }
 
+bool SeifertSurface::destroy(bool force) {
+	if (!force && this->stored && !this->stored->isObsolete()) {
+		return false;
+	}
+	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(this->base.points());
+	Surface::destroy();
+	return true;
+}
+
 void SeifertSurface::calculate() {
   // Создаем граф поверхности.
-  seifert *s = new seifert(base, this->startPoint);
+  seifert *s = new seifert(this->base, this->startPoint);
   s->correction();
 
   // Создаем поверхность.
 
-  addTriangles (s);
+  addTriangles(s);
   seifert_ord *so = s->sord;
   while (so->prev) {
     so = so->prev;
-    addTriangles (so->value);
+    addTriangles(so->value);
   }
   so = s->sord;
   while (so->next) {
     so = so->next;
-    addTriangles (so->value);
+    addTriangles(so->value);
   }
 
   // Удаляем граф.

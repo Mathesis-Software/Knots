@@ -3,17 +3,10 @@
 
 #include <vector>
 
+#include "knot.h"
 #include "../../gl/surface/surface.h"
 
-namespace KE {
-
-namespace ThreeD {
-
-class Knot;
-
-}
-
-namespace GL {
+namespace KE { namespace GL {
 
 class KnotSurface : public Surface {
 
@@ -22,10 +15,12 @@ private:
   double thickness;
 	std::vector<double> sines;
 	std::vector<double> cosines;
+	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 public:
   KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle);
-  void calculate(void);
+  void calculate() override;
+  bool destroy(bool force);
   void setThickness(double thickness);
 	void setNumberOfPointsOnCircle(std::size_t pointsOnCircle);
 

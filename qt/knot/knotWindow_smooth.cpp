@@ -7,7 +7,7 @@
 
 void knotWindow::smooth() {
   if (!this->smoothingThread.isRunning()) {
-    this->startSmooth(0, 4);
+    this->startSmooth(0, 20);
 	}
 }
 

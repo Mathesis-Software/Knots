@@ -1,39 +1,21 @@
 #include "knot.h"
+#include "computables/length.h"
 
 namespace KE { namespace ThreeD {
 
-Knot::Snapshot::Snapshot(const Knot &knot, const std::vector<Point> &points, std::size_t generation) : knot(knot), points(new std::vector<Point>(points)), generation(generation) {
+Knot::Snapshot::Snapshot(const Knot &knot, const std::vector<Point> &points) : knot(knot), points(new std::vector<Point>(points)), generation(knot.generation()) {
 }
 
 Knot::Snapshot Knot::points() const {
-	if (this->lockCount > 0 || !this->latest || this->latest->generation != this->generation) {
+	if (this->lockCount > 0 || !this->latest || this->latest->generation != this->generation()) {
 		std::lock_guard<std::recursive_mutex> guard(this->dataChangeMutex);
-		this->latest = std::shared_ptr<Snapshot>(new Snapshot(*this, this->_points, this->generation));
+		this->latest = std::shared_ptr<Snapshot>(new Snapshot(*this, this->_points));
 	}
 	return *this->latest;
 }
 
 void Knot::create_depend() {
-  this->length = std::make_shared<prmLength>(*this, "Length");
-  this->computables.push_back(std::make_shared<prmEnergy>(*this, "Moebius energy"));
-  this->computables.push_back(std::make_shared<AverageCrossingNumber>(*this, false));
-  this->computables.push_back(std::make_shared<AverageCrossingNumber>(*this, true));
-  this->computables.push_back(std::make_shared<prmAen>(*this, "Average extremum number"));
-	for (int order = 2; order <= 4; ++order) {
-		this->computables.push_back(std::make_shared<VassilievInvariant>(*this, order));
-	}
-  this->computables.push_back(std::make_shared<prmExperimental>(*this, "Experimental"));
-  this->computables.push_back(std::make_shared<prmSingular>(*this, "Singular"));
-//  this->computables.push_back(std::make_shared<prmExperimental>2(*this, 2, "Experimental 2"));
-//  this->computables.push_back(std::make_shared<prmExperimental>2(*this, 3, "Experimental 3"));
-//  this->computables.push_back(std::make_shared<prmExperimental>2(*this, 4, "Experimental 4"));
-}
-
-void Knot::clear_depend() {
-  this->length->invalidate();
-  for (auto computable : this->computables) {
-    computable->invalidate();
-  }
+  this->length = std::make_shared<Computables::Length>(*this);
 }
 
 }}

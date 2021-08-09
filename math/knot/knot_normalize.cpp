@@ -50,12 +50,8 @@ std::vector<Point> Knot::normalizedPoints(std::size_t newNumberOfPoints) const {
 void Knot::normalize(std::size_t newNumberOfPoints) {
 	auto normalized = this->normalizedPoints(newNumberOfPoints);
 
-	{
-		counting_lock guard(*this);
-		this->_points.swap(normalized);
-	}
-
-	clear_depend();
+	counting_lock guard(*this);
+	this->_points.swap(normalized);
 }
 
 }}

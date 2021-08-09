@@ -4,6 +4,7 @@
 #include "knotWindow_math.h"
 #include "knotWindow_param.h"
 #include "../setValue/setValue.h"
+#include "../../math/knot/computables/length.h"
 #include "../../math/knot/knot_surface.h"
 #include "../../math/seifert/seifert_surface.h"
 

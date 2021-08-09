@@ -1,4 +1,6 @@
-#include <math.h>
+#include <cmath>
+
+#include "computables/length.h"
 #include "knot.h"
 
 namespace KE { namespace ThreeD {
@@ -38,9 +40,6 @@ void Knot::setLength(double len) {
     pt.y *= len;
     pt.z *= len;
 	}
-
-  // Все параметры придется пересчитывать.
-  clear_depend ();
 }
 
 void Knot::decreaseEnergy() {
@@ -152,14 +151,8 @@ void Knot::decreaseEnergy() {
 		pt.move(shift, - 1.0 / points.size());
 	}
 
-	{
-		counting_lock guard(*this);
-		this->_points.swap(points);
-	}
-
-  // Ломаная изменилась, так что все параметры придется пересчитывать.
-  // Удаляем старые значения.
-  clear_depend();
+	counting_lock guard(*this);
+	this->_points.swap(points);
 }
 
 }}

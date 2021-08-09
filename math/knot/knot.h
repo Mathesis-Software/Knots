@@ -11,27 +11,6 @@
 #include "primitives.h"
 #include "../seifert/seifert.h"
 
-/***********************************************************************/
-
-#define	addParameterClass(PARAM)	\
-class PARAM : public Computable {	\
-private:				\
-	double compute() override;			\
-public:					\
-	PARAM (const Knot &knot, const std::string &name) : Computable(knot, name) {} \
-}
-
-#define	addParameterClassWithOrder(PARAM)	\
-class PARAM : public Computable {	\
-private:				\
-	double compute() override;			\
-public:					\
-	const int order;				\
-	PARAM (const Knot &knot, int order, const std::string &name) : Computable(knot, name), order(order) {} \
-}
-
-/***********************************************************************/
-
 namespace KE {
 
 namespace GL {
@@ -48,71 +27,13 @@ class Diagram;
 
 namespace ThreeD {
 
+namespace Computables {
+
+class Computable;
+
+}
+
 class Knot {
-
-public:
-	class Computable {
-
-	public:
-		const Knot &knot;
-		const std::string name;
-
-	private:
-		bool ready;
-		double internalValue;
-
-	protected:
-		virtual double compute() = 0;
-
-	public:
-		Computable(const Knot &knot, const std::string &name) : knot(knot), name(name), ready(false) {}
-		virtual ~Computable() {}
-
-		double value() {
-			if (!this->ready) {
-				this->internalValue = this->compute();
-				this->ready = true;
-			}
-
-			return this->internalValue;
-		}
-
-		bool isReady() {return this->ready;}
-		void invalidate() {this->ready = 0;}
-	};
-
-protected:
-	addParameterClass(prmLength);
-	addParameterClass(prmEnergy);
-
-	class AverageCrossingNumber : public Computable {
-
-	public:
-		const bool withSign;
-
-	private:
-		double compute() override;
-
-	public:
-		AverageCrossingNumber(const Knot &knot, bool withSign);
-	};
-
-	class VassilievInvariant : public Computable {
-
-	public:
-		const int order;
-
-	private:
-		double compute() override;
-
-	public:
-		VassilievInvariant(const Knot &knot, int order);
-	};
-
-	addParameterClass(prmAen);
-	addParameterClass(prmExperimental);
-	addParameterClass(prmSingular);
-	addParameterClassWithOrder(prmExperimental2);
 
 public:
 	class Snapshot {
@@ -125,10 +46,10 @@ public:
 		const std::size_t generation;
 
 	private:
-		Snapshot(const Knot &knot, const std::vector<Point> &points, std::size_t generation);
+		Snapshot(const Knot &knot, const std::vector<Point> &points);
 
 	public:
-		bool isObsolete() const { return this->generation < this->knot.generation; }
+		bool isObsolete() const { return this->generation < this->knot.generation(); }
 
 		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
 		std::size_t size() const { return this->points->size(); }
@@ -154,28 +75,27 @@ private:
 		}
 		~counting_lock() {
 			this->knot.lockCount -= 1;
-			this->knot.generation += 1;
+			this->knot._generation += 1;
 			this->knot.dataChangeMutex.unlock();
 		}
 	};
 
 public:
 	std::string caption;
-	std::shared_ptr<Computable> length;
-	std::vector<std::shared_ptr<Computable>> computables;
+	std::shared_ptr<Computables::Computable> length;
 
 private:
 	mutable std::recursive_mutex dataChangeMutex;
 	std::mutex writeMethodMutex;
 	std::vector<Point> _points;
-	volatile std::size_t generation;
+	volatile std::size_t _generation;
 	mutable volatile std::size_t lockCount;
 	mutable std::shared_ptr<Snapshot> latest;
 
 private:
 	void create_depend();
-	void clear_depend();
 
+public:
 	const std::vector<double> len_table() const;
 
 public:
@@ -183,6 +103,7 @@ public:
 	Knot(const TwoD::Diagram&, int, int);
 
 	Snapshot points() const;
+	std::size_t generation() const { return this->_generation; }
 
 	void decreaseEnergy();
 	void setLength(double);

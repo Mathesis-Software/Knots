@@ -33,7 +33,7 @@ private:
 
 	QLabel *lbl;
 	QCheckBox *chkbox;
-	std::shared_ptr<KE::ThreeD::Knot::Computable> computable;
+	std::shared_ptr<KE::ThreeD::Computables::Computable> computable;
 
 private slots:
 
@@ -41,7 +41,7 @@ private slots:
 
 public:
 
-	parameterLabel(QDialog*, std::shared_ptr<KE::ThreeD::Knot::Computable>, int, int);
+	parameterLabel(QDialog*, std::shared_ptr<KE::ThreeD::Computables::Computable>, int, int);
 	~parameterLabel();
 
 	void renew();

@@ -41,72 +41,69 @@ void Knot::setLength(double len) {
   clear_depend ();
 }
 
-void Knot::smooth(std::size_t steps) {
-	counting_lock guard(*this);
-
-  for (std::size_t i = 0; i < steps; ++i) {
-    this->decreaseEnergy();
-	}
-  this->center();
-}
-
 void Knot::decreaseEnergy() {
-	counting_lock guard(*this);
-
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
-  double oldLen = this->length->value();
+	const auto snapshot = this->points();
+	double totalLength = snapshot[0].distanceTo(snapshot[snapshot.size() - 1]);
+	for (std::size_t i = 0; i < snapshot.size() - 1; ++i) {
+		totalLength += snapshot[i].distanceTo(snapshot[i + 1]);
+	}
 
   // Расставляем точки на кривой равномерно.
-  normalize(this->_points.size());
+  auto points = this->normalizedPoints(snapshot.size());
+
+	std::vector<Vector> edges;
+	edges.reserve(points.size());
+	for (std::size_t i = 0; i < points.size() - 1; ++i) {
+		edges.push_back(Vector(points[i], points[i + 1]));
+	}
+	edges.push_back(Vector(points.back(), points.front()));
 
   // Создаем массив расстояний между соседними точками.
-	const auto len_table = this->len_table();
+	std::vector<double> lengths;
+	lengths.reserve(edges.size());
+	for (const auto &edge : edges) {
+		lengths.push_back(edge.length());
+	}
 
-  double lt, local[3];
 	std::vector<Vector> delta;
 
   // Вычисляем вектор градиента в каждой вершине ломаной.
-  for (std::size_t i = 0; i < this->_points.size(); i++) {
+  for (std::size_t i = 0; i < points.size(); i++) {
     // Создаем вектор градиента для p_i.
     Vector delta_i(0.0, 0.0, 0.0);
     // Вычисляем общие коэффициенты для всех слагаемых в p_i.
-    lt = len_table[i] + len_table[prev(i)];
-		local[0] =
-			(this->_points[i].x - this->_points[next(i)].x) / len_table[i] +
-			(this->_points[i].x - this->_points[prev(i)].x) / len_table[prev(i)];
-		local[1] =
-			(this->_points[i].y - this->_points[next(i)].y) / len_table[i] +
-			(this->_points[i].y - this->_points[prev(i)].y) / len_table[prev(i)];
-		local[2] =
-			(this->_points[i].z - this->_points[next(i)].z) / len_table[i] +
-			(this->_points[i].z - this->_points[prev(i)].z) / len_table[prev(i)];
+    const double lt = lengths[i] + lengths[prev(i)];
+		const Vector local = Vector::linear(
+			edges[i], - 1 / lengths[i],
+			edges[prev(i)], 1 / lengths[prev(i)]
+		);
 
     for (std::size_t j = next(i); j != prev(i); j = next(j)) {
       // Ищем ближайшую к p_i точку на ребре p_jp_{j+1}:
       //   если -xr / r2 < 0, это p_j,
       //   если -xr / r2 > 1 -- p_{j+1},
       //   иначе -- точка внутри ребра.
-			Vector x(this->_points[i], this->_points[j]);
-			const Vector r(this->_points[j], this->_points[next(j)]);
-			double xr = x.scalar_product(r);
-      double r2 = len_table[j] * len_table[j];
+			Vector x(points[i], points[j]);
+			double xr = x.scalar_product(edges[j]);
+      double r2 = lengths[j] * lengths[j];
       double x2 = x.square();
 
       // Записываем в x[] вектор от p_i до ближайшей точки,
       // а в x2 -- квадрат его длины.
       if (xr + r2 < 0.0) {
         x2 += r2 + 2 * xr;
-				x.add(r);
+				x.add(edges[j]);
       } else if (xr < 0.0) {
         double tau = xr / r2;
         x2 -= tau * xr;
-				x.add(r, -tau);
+				x.add(edges[j], -tau);
       }
 
       // Добавляем к градиенту в p_i слагаемое от взаимодействия с p_jp_{j+1}.
-      delta_i.x -= len_table[j] / x2 * (x.x * lt / x2 + local[0]);
-      delta_i.y -= len_table[j] / x2 * (x.y * lt / x2 + local[1]);
-      delta_i.z -= len_table[j] / x2 * (x.z * lt / x2 + local[2]);
+      delta_i.x -= lengths[j] / x2 * (x.x * lt / x2 + local.x);
+      delta_i.y -= lengths[j] / x2 * (x.y * lt / x2 + local.y);
+      delta_i.z -= lengths[j] / x2 * (x.z * lt / x2 + local.z);
     }
 		delta.push_back(delta_i);
   }
@@ -120,21 +117,45 @@ void Knot::decreaseEnergy() {
 	}
 
   // Вычисляем коэффициент, на который нужно домножить градиент.
-  double coeff = oldLen * oldLen / this->_points.size() / this->_points.size() / 10.0;
-  if (coeff > oldLen / this->_points.size() / max_shift / 5.0)
-    coeff = oldLen / this->_points.size() / max_shift / 5.0;
+  double coeff = totalLength * totalLength / points.size() / points.size() / 10.0;
+  if (coeff > totalLength / points.size() / max_shift / 5.0)
+    coeff = totalLength / points.size() / max_shift / 5.0;
 
   // Делаем сдвиг в направлении градиента.
-  for (std::size_t i = 0; i < this->_points.size(); i++) {
-		_points[i].move(delta[i], coeff);
+  for (std::size_t i = 0; i < points.size(); i++) {
+		points[i].move(delta[i], coeff);
+	}
+
+	double newLength = points.back().distanceTo(points.front());
+	for (std::size_t i = 0; i < points.size() - 1; ++i) {
+		newLength += points[i].distanceTo(points[i + 1]);
+	}
+
+	const double ratio = totalLength / newLength;
+  for (auto &pt : points) {
+		pt.x *= ratio;	
+		pt.y *= ratio;	
+		pt.z *= ratio;	
+	}
+
+	Vector shift(0.0, 0.0, 0.0);
+  for (const auto &pt : points) {
+		shift.x += pt.x;
+		shift.y += pt.y;
+		shift.z += pt.z;
+	}
+  for (auto &pt : points) {
+		pt.move(shift, - 1.0 / points.size());
+	}
+
+	{
+		counting_lock guard(*this);
+		this->_points.swap(points);
 	}
 
   // Ломаная изменилась, так что все параметры придется пересчитывать.
   // Удаляем старые значения.
   clear_depend();
-
-  // Восстанавливаем старую длину.
-  setLength(oldLen);
 }
 
 }}

@@ -185,7 +185,6 @@ public:
 
 	Snapshot points() const;
 
-	void smooth(std::size_t steps);
 	void decreaseEnergy();
 	void setLength(double);
 	void center();
@@ -199,6 +198,8 @@ public:
 	rapidjson::Document save(const double matrix[3][3]) const;
 
 private:
+	std::vector<Point> normalizedPoints(std::size_t numberOfPoints) const;
+
 	std::size_t next(std::size_t) const;
 	std::size_t prev(std::size_t) const;
 

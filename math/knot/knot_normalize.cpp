@@ -4,41 +4,55 @@
 
 namespace KE { namespace ThreeD {
 
-void Knot::normalize(std::size_t num) {
-	counting_lock guard(*this);
+std::vector<Point> Knot::normalizedPoints(std::size_t newNumberOfPoints) const {
+	const auto points = this->points();
+	std::vector<Vector> edges;
+	edges.reserve(points.size());
+	for (std::size_t i = 0; i < points.size() - 1; ++i) {
+		edges.push_back(Vector(points[i], points[i + 1]));
+	}
+	edges.push_back(Vector(points[points.size() - 1], points[0]));
 
-	const auto len_table = this->len_table();
+	double totalLength = 0.0;
+	for (const auto &edge : edges) {
+		totalLength += edge.length();
+	}
+	const double newEdgeLength = totalLength / newNumberOfPoints;
 
-	double len = this->length->value();
-
-	const auto old_points = this->_points;
-	this->_points.clear();
-
-	len /= num;
+	std::vector<Point> newPoints;
+	newPoints.reserve(newNumberOfPoints);
 
 	{
 		std::size_t v = 0;
-		double part;
-		double llen = len_table[0];
+		double llen = edges[0].length();
 		double rest = llen;
 
-		for (std::size_t i = 0; i < num; i++) {
-			const auto next_v = v == old_points.size() - 1 ? 0 : v + 1;
+		for (std::size_t i = 0; i < newNumberOfPoints; i++) {
+			const auto nextV = v == points.size() - 1 ? 0 : v + 1;
 
-			part = (1 - rest / llen);
-			this->_points.push_back(Point(
-				old_points[v].x + part * (old_points[next_v].x - old_points[v].x),
-				old_points[v].y + part * (old_points[next_v].y - old_points[v].y),
-				old_points[v].z + part * (old_points[next_v].z - old_points[v].z)
-			));
+			const Vector delta(points[v], points[nextV]);
+			Point pt(points[v]);
+			pt.move(delta, 1 - rest / llen);
+			newPoints.push_back(pt);
 
-			rest -= len;
+			rest -= newEdgeLength;
 			while (rest < 0) {
-				v = v == old_points.size() - 1 ? 0 : v + 1;
-				llen = len_table[v];
+				v = v == points.size() - 1 ? 0 : v + 1;
+				llen = edges[v].length();
 				rest += llen;
 			}
 		}
+	}
+
+	return newPoints;
+}
+
+void Knot::normalize(std::size_t newNumberOfPoints) {
+	auto normalized = this->normalizedPoints(newNumberOfPoints);
+
+	{
+		counting_lock guard(*this);
+		this->_points.swap(normalized);
 	}
 
 	clear_depend();

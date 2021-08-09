@@ -133,9 +133,9 @@ void Knot::decreaseEnergy() {
 
 	const double ratio = totalLength / newLength;
   for (auto &pt : points) {
-		pt.x *= ratio;	
-		pt.y *= ratio;	
-		pt.z *= ratio;	
+		pt.x *= ratio;
+		pt.y *= ratio;
+		pt.z *= ratio;
 	}
 
 	Vector shift(0.0, 0.0, 0.0);
@@ -150,6 +150,22 @@ void Knot::decreaseEnergy() {
 
 	{
 		counting_lock guard(*this);
+		if (snapshot.isObsolete()) {
+			const auto newSnapshot = this->points();
+			if (newSnapshot.size() != snapshot.size()) {
+				return;
+			}
+			double newTotalLength = newSnapshot[0].distanceTo(newSnapshot[newSnapshot.size() - 1]);
+			for (std::size_t i = 0; i < newSnapshot.size() - 1; ++i) {
+				newTotalLength += newSnapshot[i].distanceTo(newSnapshot[i + 1]);
+			}
+			const double rat = newTotalLength / totalLength;
+			for (auto &pt : points) {
+				pt.x *= rat;
+				pt.y *= rat;
+				pt.z *= rat;
+			}
+		}
 		this->_points.swap(points);
 	}
 

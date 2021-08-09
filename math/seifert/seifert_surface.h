@@ -17,15 +17,16 @@ class Knot;
 namespace GL {
 
 class SeifertSurface : public Surface {
-  private:
-    const ThreeD::Knot &base;
-    const ThreeD::Point &startPoint;
 
-    void addTriangles(seifert *s);
-    void calculate();
+private:
+	const ThreeD::Knot &base;
+	const ThreeD::Point &startPoint;
 
-  public:
-    SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint);
+	void addTriangles(seifert *s);
+	void calculate();
+
+public:
+	SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint);
 };
 
 }}

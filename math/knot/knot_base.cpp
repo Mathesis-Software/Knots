@@ -7,7 +7,7 @@ Knot::Snapshot::Snapshot(const Knot &knot, const std::vector<Point> &points, std
 
 Knot::Snapshot Knot::points() const {
 	if (this->lockCount > 0 || !this->latest || this->latest->generation != this->generation) {
-		std::lock_guard<std::recursive_mutex> guard(this->mutex);
+		std::lock_guard<std::recursive_mutex> guard(this->dataChangeMutex);
 		this->latest = std::shared_ptr<Snapshot>(new Snapshot(*this, this->_points, this->generation));
 	}
 	return *this->latest;

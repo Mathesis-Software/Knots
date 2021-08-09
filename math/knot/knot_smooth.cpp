@@ -6,6 +6,7 @@ namespace KE { namespace ThreeD {
 // Узел перемещается так, чтобы его центр масс оказался
 // в начале координат.
 void Knot::center() {
+	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
 	counting_lock guard(*this);
 
 	Vector delta(0.0, 0.0, 0.0);
@@ -27,6 +28,7 @@ void Knot::center() {
 
 // Длина ломаной устанавливается равной len.
 void Knot::setLength(double len) {
+	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
 	counting_lock guard(*this);
 
   len /= this->length->value();
@@ -42,6 +44,8 @@ void Knot::setLength(double len) {
 }
 
 void Knot::decreaseEnergy() {
+	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
+
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
 	const auto snapshot = this->points();
 	double totalLength = snapshot[0].distanceTo(snapshot[snapshot.size() - 1]);
@@ -150,22 +154,6 @@ void Knot::decreaseEnergy() {
 
 	{
 		counting_lock guard(*this);
-		if (snapshot.isObsolete()) {
-			const auto newSnapshot = this->points();
-			if (newSnapshot.size() != snapshot.size()) {
-				return;
-			}
-			double newTotalLength = newSnapshot[0].distanceTo(newSnapshot[newSnapshot.size() - 1]);
-			for (std::size_t i = 0; i < newSnapshot.size() - 1; ++i) {
-				newTotalLength += newSnapshot[i].distanceTo(newSnapshot[i + 1]);
-			}
-			const double rat = newTotalLength / totalLength;
-			for (auto &pt : points) {
-				pt.x *= rat;
-				pt.y *= rat;
-				pt.z *= rat;
-			}
-		}
 		this->_points.swap(points);
 	}
 

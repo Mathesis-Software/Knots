@@ -150,13 +150,13 @@ private:
 
 	public:
 		counting_lock(Knot &knot) : knot(knot) {
-			this->knot.mutex.lock();
+			this->knot.dataChangeMutex.lock();
 			this->knot.lockCount += 1;
 		}
 		~counting_lock() {
 			this->knot.lockCount -= 1;
 			this->knot.generation += 1;
-			this->knot.mutex.unlock();
+			this->knot.dataChangeMutex.unlock();
 		}
 	};
 	friend class counting_lock;
@@ -167,7 +167,8 @@ public:
 	std::vector<std::shared_ptr<Computable>> computables;
 
 private:
-	mutable std::recursive_mutex mutex;
+	mutable std::recursive_mutex dataChangeMutex;
+	std::mutex writeMethodMutex;
 	std::vector<Point> _points;
 	volatile std::size_t generation;
 	mutable volatile std::size_t lockCount;

@@ -200,23 +200,10 @@ public:
 private:
 	std::vector<Point> normalizedPoints(std::size_t numberOfPoints) const;
 
-	std::size_t next(std::size_t) const;
-	std::size_t prev(std::size_t) const;
-
 private:
 	Knot(const Knot&) = delete;
 	Knot& operator = (const Knot&) = delete;
 };
-
-/***********************************************************************/
-
-inline std::size_t Knot::next(std::size_t index) const {
-	return index == this->_points.size() - 1 ? 0 : index + 1;
-}
-
-inline std::size_t Knot::prev(std::size_t index) const {
-	return index ? index - 1 : this->_points.size() - 1;
-}
 
 }}
 

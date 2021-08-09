@@ -2,6 +2,11 @@
 
 namespace KE { namespace ThreeD {
 
+Knot::Snapshot Knot::snapshot() const {
+	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+	return Snapshot(this->points);
+}
+
 void Knot::create_depend() {
   this->length = std::make_shared<prmLength>(*this, "Length");
   this->computables.push_back(std::make_shared<prmEnergy>(*this, "Moebius energy"));

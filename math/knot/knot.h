@@ -2,6 +2,7 @@
 #define __KNOT_H__
 
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -32,7 +33,7 @@ public:					\
 /***********************************************************************/
 
 namespace KE {
- 
+
 namespace GL {
 
 class KnotSurface;
@@ -119,6 +120,7 @@ public:
 	std::vector<std::shared_ptr<Computable>> computables;
 
 private:
+	mutable std::recursive_mutex mutex;
 	std::vector<Point> points;
 
 private:
@@ -128,8 +130,30 @@ private:
 	const std::vector<double> len_table() const;
 
 public:
+	class Snapshot {
+
+	private:
+		const std::shared_ptr<std::vector<Point>> points;
+
+	public:
+		Snapshot(const std::vector<Point> &points) : points(new std::vector<Point>(points)) {}
+
+		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
+		std::size_t size() const { return this->points->size(); }
+
+		std::size_t next(std::size_t index) const {
+			return index == this->points->size() - 1 ? 0 : index + 1;
+		}
+		std::size_t prev(std::size_t index) const {
+			return index ? index - 1 : this->points->size() - 1;
+		}
+	};
+
+public:
 	Knot(const rapidjson::Document &doc);
 	Knot(const TwoD::Diagram&, int, int);
+
+	Snapshot snapshot() const;
 
 	bool isEmpty() const;
 	void decreaseEnergy();
@@ -143,8 +167,6 @@ public:
 
 	rapidjson::Document save() const;
 	rapidjson::Document save(const double matrix[3][3]) const;
-
-	friend class GL::KnotSurface;
 
 private:
 	std::size_t next(std::size_t) const;

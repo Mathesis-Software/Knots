@@ -30,9 +30,9 @@ void KnotSurface::setNumberOfPointsOnCircle(std::size_t pointsOnCircle) {
 }
 
 void KnotSurface::calculate() {
-	const auto &points = this->knot.points;
+	const auto points = this->knot.snapshot();
 
-	if (points.empty()) {
+	if (points.size() == 0) {
 		return;
 	}
 
@@ -41,7 +41,7 @@ void KnotSurface::calculate() {
 	std::vector<ThreeD::Vector> normal1, normal2;
 	/* Creating normal vector table */
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		ThreeD::Vector v(points[this->knot.prev(i)], points[this->knot.next(i)]);
+		ThreeD::Vector v(points[points.prev(i)], points[points.next(i)]);
 		v.normalize();
 
 		ThreeD::Vector norm1(0.0, - v.z, v.y);
@@ -62,8 +62,8 @@ void KnotSurface::calculate() {
 		scalars.clear();
 		for (std::size_t rotation = 0; rotation < this->sines.size() - 1; ++rotation) {
 			const ThreeD::Vector no = ThreeD::Vector::linear(
-				normal1[this->knot.next(i)], this->cosines[rotation],
-				normal2[this->knot.next(i)], - this->sines[rotation]
+				normal1[points.next(i)], this->cosines[rotation],
+				normal2[points.next(i)], - this->sines[rotation]
 			);
 			scalars.push_back(normal1[i].scalar_product(no));
 		}

@@ -5,7 +5,8 @@
 namespace KE { namespace ThreeD {
 
 void Knot::normalize(std::size_t num) {
-	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+	counting_lock guard(*this);
+
 	const auto len_table = this->len_table();
 
 	double len = this->length->value();

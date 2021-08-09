@@ -2,9 +2,15 @@
 
 namespace KE { namespace ThreeD {
 
+Knot::Snapshot::Snapshot(const Knot &knot, const std::vector<Point> &points, std::size_t generation) : knot(knot), points(new std::vector<Point>(points)), generation(generation) {
+}
+
 Knot::Snapshot Knot::points() const {
-	std::lock_guard<std::recursive_mutex> guard(this->mutex);
-	return Snapshot(this->_points);
+	if (this->lockCount > 0 || !this->latest || this->latest->generation != this->generation) {
+		std::lock_guard<std::recursive_mutex> guard(this->mutex);
+		this->latest = std::shared_ptr<Snapshot>(new Snapshot(*this, this->_points, this->generation));
+	}
+	return *this->latest;
 }
 
 void Knot::create_depend() {

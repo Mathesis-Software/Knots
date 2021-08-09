@@ -115,28 +115,20 @@ protected:
 	addParameterClassWithOrder(prmExperimental2);
 
 public:
-	std::string caption;
-	std::shared_ptr<Computable> length;
-	std::vector<std::shared_ptr<Computable>> computables;
-
-private:
-	mutable std::recursive_mutex mutex;
-	std::vector<Point> _points;
-
-private:
-	void create_depend();
-	void clear_depend();
-
-	const std::vector<double> len_table() const;
-
-public:
 	class Snapshot {
 
+	friend class Knot;
+
 	private:
+		const Knot &knot;
 		const std::shared_ptr<std::vector<Point>> points;
+		const std::size_t generation;
+
+	private:
+		Snapshot(const Knot &knot, const std::vector<Point> &points, std::size_t generation);
 
 	public:
-		Snapshot(const std::vector<Point> &points) : points(new std::vector<Point>(points)) {}
+		bool isObsolete() const;
 
 		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
 		std::size_t size() const { return this->points->size(); }
@@ -148,6 +140,44 @@ public:
 			return index ? index - 1 : this->points->size() - 1;
 		}
 	};
+	friend class Snapshot;
+
+private:
+	class counting_lock {
+
+	private:
+		Knot &knot;
+
+	public:
+		counting_lock(Knot &knot) : knot(knot) {
+			this->knot.mutex.lock();
+			this->knot.lockCount += 1;
+		}
+		~counting_lock() {
+			this->knot.lockCount -= 1;
+			this->knot.generation += 1;
+			this->knot.mutex.unlock();
+		}
+	};
+	friend class counting_lock;
+
+public:
+	std::string caption;
+	std::shared_ptr<Computable> length;
+	std::vector<std::shared_ptr<Computable>> computables;
+
+private:
+	mutable std::recursive_mutex mutex;
+	std::vector<Point> _points;
+	volatile std::size_t generation;
+	mutable volatile std::size_t lockCount;
+	mutable std::shared_ptr<Snapshot> latest;
+
+private:
+	void create_depend();
+	void clear_depend();
+
+	const std::vector<double> len_table() const;
 
 public:
 	Knot(const rapidjson::Document &doc);

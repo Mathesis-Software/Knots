@@ -6,7 +6,8 @@ namespace KE { namespace ThreeD {
 // Узел перемещается так, чтобы его центр масс оказался
 // в начале координат.
 void Knot::center() {
-	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+	counting_lock guard(*this);
+
 	Vector delta(0.0, 0.0, 0.0);
 
   for (const Point &pt : this->_points) {
@@ -26,7 +27,8 @@ void Knot::center() {
 
 // Длина ломаной устанавливается равной len.
 void Knot::setLength(double len) {
-	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+	counting_lock guard(*this);
+
   len /= this->length->value();
 
   for (Point &pt : this->_points) {
@@ -40,7 +42,8 @@ void Knot::setLength(double len) {
 }
 
 void Knot::smooth(std::size_t steps) {
-	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+	counting_lock guard(*this);
+
   for (std::size_t i = 0; i < steps; ++i) {
     this->decreaseEnergy();
 	}
@@ -48,7 +51,8 @@ void Knot::smooth(std::size_t steps) {
 }
 
 void Knot::decreaseEnergy() {
-	std::lock_guard<std::recursive_mutex> guard(this->mutex);
+	counting_lock guard(*this);
+
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
   double oldLen = this->length->value();
 

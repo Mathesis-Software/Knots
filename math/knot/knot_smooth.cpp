@@ -73,13 +73,13 @@ void Knot::decreaseEnergy() {
     // Создаем вектор градиента для p_i.
     Vector delta_i(0.0, 0.0, 0.0);
     // Вычисляем общие коэффициенты для всех слагаемых в p_i.
-    const double lt = lengths[i] + lengths[prev(i)];
+    const double lt = lengths[i] + lengths[snapshot.prev(i)];
 		const Vector local = Vector::linear(
 			edges[i], - 1 / lengths[i],
-			edges[prev(i)], 1 / lengths[prev(i)]
+			edges[snapshot.prev(i)], 1 / lengths[snapshot.prev(i)]
 		);
 
-    for (std::size_t j = next(i); j != prev(i); j = next(j)) {
+    for (std::size_t j = snapshot.next(i); j != snapshot.prev(i); j = snapshot.next(j)) {
       // Ищем ближайшую к p_i точку на ребре p_jp_{j+1}:
       //   если -xr / r2 < 0, это p_j,
       //   если -xr / r2 > 1 -- p_{j+1},

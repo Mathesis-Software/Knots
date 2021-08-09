@@ -10,9 +10,9 @@ void knotWindow::initMenu() {
   mathMenu->addAction("&View parameters", this, SLOT(math()));
   mathMenu->addSeparator();
   math_decreaseEnergy = mathMenu->addAction("Decrease &energy…", this, SLOT(decreaseEnergy()));
-  math_decreaseEnergy->setEnabled(!smoothing);
+  math_decreaseEnergy->setEnabled(!this->smoothingThread.isRunning());
   math_stop = mathMenu->addAction("&Stop", this, SLOT(stop()));
-  math_stop->setEnabled(smoothing);
+  math_stop->setEnabled(this->smoothingThread.isRunning());
   mathMenu->addSeparator();
   mathMenu->addAction("Number of &points…", this, SLOT(setNumberOfPoints()));
   mathMenu->addAction("&Length…", this, SLOT(setLength()));
@@ -36,11 +36,11 @@ void knotWindow::initMenu() {
   addToolBarSeparator();
 	this->registerAction(
 		addToolbarAction("start.xpm", "Start smoothing", [this] { this->smooth(); }),
-		[this](QAction &action) { action.setVisible(!this->smoothing); }
+		[this](QAction &action) { action.setVisible(!this->smoothingThread.isRunning()); }
 	);
 	this->registerAction(
 		addToolbarAction("stop.xpm", "Interrupt smoothing", [this] { this->stop(); }),
-		[this](QAction &action) { action.setVisible(this->smoothing); }
+		[this](QAction &action) { action.setVisible(this->smoothingThread.isRunning()); }
 	);
   addToolBarSeparator();
   addToolBarButton("math.xpm", "Show parameters", SLOT(math()));

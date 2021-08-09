@@ -6,15 +6,14 @@
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::smooth() {
-  if (!smoothing) {
+  if (!this->smoothingThread.isRunning()) {
     this->startSmooth(0, 4);
 	}
 }
 
 void knotWindow::stop() {
-  if (smoothing) {
-    killTimer(timerId_smooth);
-    smoothing = false;
+  if (this->smoothingThread.isRunning()) {
+		this->smoothingThread.requestInterruption();
     math_decreaseEnergy->setEnabled(true);
     math_stop->setEnabled(false);
     statusBar()->showMessage("Smoothing complete", 3000);
@@ -33,22 +32,43 @@ void knotWindow::doSmooth() {
 
   isSaved = false;
 	this->knot.smooth(redrawAfter);
-  this->knotSurface->destroy(false);
-  this->seifertSurface->destroy(false);
-  repaint3d();
-  if (mth)
-    mth->recompute();
+}
+
+void knotWindow::onKnotChanged() {
+  if (this->knotSurface->destroy(false) || this->seifertSurface->destroy(false)) {
+		this->repaint3d();
+		if (mth) {
+			mth->recompute();
+		}
+	}
 }
 
 void knotWindow::startSmooth(int st, int ra, bool cont) {
   smoothSteps = st;
   redrawAfter = ra;
   continuousSmoothing = cont;
-  smoothing = true;
   math_decreaseEnergy->setEnabled(false);
   math_stop->setEnabled(true);
 
-  timerId_smooth = startTimer(1);
+	this->smoothingThread.start();
   statusBar()->showMessage("Smoothing…");
 	this->updateActions();
+}
+
+SmoothingThread::SmoothingThread(knotWindow &knot) : knot(knot) {
+	connect(this, &SmoothingThread::knotChanged, &knot, &knotWindow::onKnotChanged);
+	connect(this, &SmoothingThread::finished, &knot, &knotWindow::updateActions);
+}
+
+void SmoothingThread::run() {
+	this->setPriority(LowPriority);
+	while (true) {
+		if (this->isInterruptionRequested()) {
+			this->quit();
+			break;
+		}
+		this->msleep(20);
+		knot.doSmooth();
+		emit knotChanged();
+	}
 }

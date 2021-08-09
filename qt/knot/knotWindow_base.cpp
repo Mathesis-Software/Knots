@@ -1,7 +1,8 @@
+#include <QtCore/QTimerEvent>
+#include <QtGui/QCloseEvent>
+#include <QtGui/QPixmap>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
-#include <QtGui/QPixmap>
-#include <QtCore/QTimerEvent>
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
@@ -32,7 +33,6 @@ void knotWindow::init() {
   this->knotSurface->show();
 
   thickness = 1.0;
-  smoothing = false;
   mth = NULL;
 
   initMenu();
@@ -42,29 +42,22 @@ void knotWindow::init() {
   setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
 }
 
-knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4) {
+knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
   this->init();
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram, d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram, d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
   this->init();
 	this->isSaved = false;
 }
 
 knotWindow::~knotWindow() {
-  if (mth)
+  if (mth) {
     delete mth;
+	}
 
   delete mathMenu;
   delete viewMenu;
-}
-
-void knotWindow::timerEvent(QTimerEvent *te) {
-  if (smoothing && (te->timerId() == timerId_smooth)) {
-    doSmooth();
-	} else {
-    GLWindow::timerEvent (te);
-	}
 }
 
 void knotWindow::switchShowKnot() {
@@ -79,8 +72,7 @@ void knotWindow::switchShowKnot() {
   repaint3d ();
 }
 
-void knotWindow::switchShowSeifert ()
-{
+void knotWindow::switchShowSeifert() {
   if (this->seifertSurface->isVisible()) {
     this->seifertSurface->hide ();
     view_showSeifertSurface->setChecked(false);
@@ -90,4 +82,12 @@ void knotWindow::switchShowSeifert ()
   }
 
   repaint3d ();
+}
+
+void knotWindow::closeEvent(QCloseEvent *event) {
+	abstractWindow::closeEvent(event);
+	if (event->isAccepted() && this->smoothingThread.isRunning()) {
+		this->smoothingThread.requestInterruption();
+		this->smoothingThread.wait();
+	}
 }

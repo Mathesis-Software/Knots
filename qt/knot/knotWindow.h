@@ -1,6 +1,8 @@
 #ifndef __KNOTWINDOW_H__
 #define __KNOTWINDOW_H__
 
+#include <QtCore/QThread>
+
 #include "../gl/GLWindow.h"
 #include "../../gl/surface/surface.h"
 #include "../../math/knot/knot.h"
@@ -15,10 +17,30 @@ class SeifertSurface;
 
 class paramWindow;
 class diagramWindow;
+class knotWindow;
+
+class SmoothingThread : public QThread {
+
+Q_OBJECT
+
+private:
+	knotWindow &knot;
+
+public:
+	SmoothingThread(knotWindow &knot);
+
+signals:
+	void knotChanged();
+
+private:
+	void run() override;
+};
 
 class knotWindow : public GLWindow {
 
-  Q_OBJECT
+friend class SmoothingThread;
+
+Q_OBJECT
 
 private:
 	KE::ThreeD::Knot knot;
@@ -27,6 +49,7 @@ private:
 	KE::ThreeD::Point seifertStartPoint;
 	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
   double thickness;
+	SmoothingThread smoothingThread;
 
   QMenu *mathMenu;
   QMenu *viewMenu;
@@ -41,15 +64,13 @@ private:
   void init();
   void initMenu();
 
-  bool smoothing;
   bool continuousSmoothing;
   int smoothSteps;
   int redrawAfter;
   void startSmooth(int, int, bool = true);
 
-  int timerId_smooth;
   void doSmooth();
-  void timerEvent(QTimerEvent*);
+	void onKnotChanged();
 
   bool isEmpty() const override { return this->knot.points().size() == 0; }
 
@@ -79,6 +100,8 @@ public:
   knotWindow(const rapidjson::Document &doc);
   knotWindow(const diagramWindow &diagram);
   ~knotWindow();
+
+	void closeEvent(QCloseEvent *event);
 
   const char *mask() const override {return "*.knt";};
 };

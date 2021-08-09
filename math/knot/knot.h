@@ -140,7 +140,6 @@ public:
 			return index ? index - 1 : this->points->size() - 1;
 		}
 	};
-	friend class Snapshot;
 
 private:
 	class counting_lock {
@@ -159,7 +158,6 @@ private:
 			this->knot.dataChangeMutex.unlock();
 		}
 	};
-	friend class counting_lock;
 
 public:
 	std::string caption;

@@ -30,7 +30,7 @@ void KnotSurface::setNumberOfPointsOnCircle(std::size_t pointsOnCircle) {
 }
 
 void KnotSurface::calculate() {
-	const auto points = this->knot.snapshot();
+	const auto points = this->knot.points();
 
 	if (points.size() == 0) {
 		return;

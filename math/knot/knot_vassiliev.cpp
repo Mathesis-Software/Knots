@@ -3,10 +3,6 @@
 
 #include "knot.h"
 
-#define			points			knot.points
-#define			next			knot.next
-#define			prev			knot.prev
-
 namespace KE { namespace ThreeD {
 
 namespace {
@@ -47,17 +43,18 @@ double Knot::AverageCrossingNumber::compute() {
 	double value = 0.0;
 
 	// tangent vectors
+	const auto points = this->knot.points();
 	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		tangents.push_back(Vector(points[i], points[next(i)]));
+		tangents.push_back(Vector(points[i], points[points.next(i)]));
 	}
 
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		for (std::size_t j = 0; j < i; ++j) {
 			const Vector chord(
-				(points[i].x + points[next(i)].x - points[j].x - points[next(j)].x) / 2,
-				(points[i].y + points[next(i)].y - points[j].y - points[next(j)].y) / 2,
-				(points[i].z + points[next(i)].z - points[j].z - points[next(j)].z) / 2
+				(points[i].x + points[points.next(i)].x - points[j].x - points[points.next(j)].x) / 2,
+				(points[i].y + points[points.next(i)].y - points[j].y - points[points.next(j)].y) / 2,
+				(points[i].z + points[points.next(i)].z - points[j].z - points[points.next(j)].z) / 2
 			);
 			const double chord_len = chord.length();
 			const double summand = det(tangents[i], tangents[j], chord) / (chord_len * chord_len * chord_len);
@@ -80,10 +77,11 @@ Knot::VassilievInvariant::VassilievInvariant(const Knot &knot, int order) :
 double Knot::VassilievInvariant::compute() {
 	double value = 0.0;
 
+	const auto points = this->knot.points();
 	// tangent vectors
 	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		tangents.push_back(Vector(points[i], points[next(i)]));
+		tangents.push_back(Vector(points[i], points[points.next(i)]));
 	}
 
 	// Вычисляем ``гауссовы произведения''.
@@ -94,9 +92,9 @@ double Knot::VassilievInvariant::compute() {
 		gauss[i][i] = 0.0;
 		for (std::size_t j = 0; j < i; j++) {
 			const Vector chord(
-				(points[i].x + points[next(i)].x - points[j].x - points[next(j)].x) / 2,
-				(points[i].y + points[next(i)].y - points[j].y - points[next(j)].y) / 2,
-				(points[i].z + points[next(i)].z - points[j].z - points[next(j)].z) / 2
+				(points[i].x + points[points.next(i)].x - points[j].x - points[points.next(j)].x) / 2,
+				(points[i].y + points[points.next(i)].y - points[j].y - points[points.next(j)].y) / 2,
+				(points[i].z + points[points.next(i)].z - points[j].z - points[points.next(j)].z) / 2
 			);
 			double chord_len = chord.length();
 			gauss[i][j] = det(tangents[i], tangents[j], chord) / (chord_len * chord_len * chord_len);
@@ -107,21 +105,21 @@ double Knot::VassilievInvariant::compute() {
 	// Вычисляем суммы ``гауссовых произведений''.
 
 	// В gauss_sum[i1][i2] находится сумма ``гауссовых произведений''
-	// для всех хорд с началом в i1 и концом от next (i1) до i2.
+	// для всех хорд с началом в i1 и концом от points.next(i1) до i2.
 	double **gauss_sum = new double*[points.size()];
 
 	for (std::size_t i = 0; i < points.size(); i++) {
 		gauss_sum[i] = new double[points.size()];
 		gauss_sum[i][i] = 0.0;
-		for (std::size_t j = next (i); j != i; j = next (j))
-			gauss_sum[i][j] = gauss_sum[i][prev (j)] + gauss[i][j];
+		for (std::size_t j = points.next(i); j != i; j = points.next(j))
+			gauss_sum[i][j] = gauss_sum[i][points.prev(j)] + gauss[i][j];
 	}
 
 	for (std::size_t i = 0; i < points.size(); i++) {
 		double tmp = 0.0;
-		for (std::size_t j = next (next (i)); j != i; j = next (j)) {
-			tmp += gauss_sum[prev (j)][prev (i)] -
-						 gauss_sum[j][prev (prev (j))] + gauss_sum[j][i];
+		for (std::size_t j = points.next(points.next(i)); j != i; j = points.next(j)) {
+			tmp += gauss_sum[points.prev(j)][points.prev(i)] -
+						 gauss_sum[j][points.prev(points.prev(j))] + gauss_sum[j][i];
 			double tmp2 = gauss[i][j];
 			for (int o = 1; o < order; o++) {
 				tmp2 *= tmp / 16;
@@ -151,9 +149,9 @@ double Knot::VassilievInvariant::compute() {
 //	for (i1 = 0; i1 < points.size(); i1++)
 //	{
 //		tangs[i1] = new double[3];
-//		tangs[i1][0] = points[next (i1)].x - points[i1].x;
-//		tangs[i1][1] = points[next (i1)].y - points[i1].y;
-//		tangs[i1][2] = points[next (i1)].z - points[i1].z;
+//		tangs[i1][0] = points[points.next(i1)].x - points[i1].x;
+//		tangs[i1][1] = points[points.next(i1)].y - points[i1].y;
+//		tangs[i1][2] = points[points.next(i1)].z - points[i1].z;
 //	}
 //
 //	// Вычисляем ``гауссовы произведения''.
@@ -174,12 +172,12 @@ double Knot::VassilievInvariant::compute() {
 //
 //		for (i2 = 0; i2 < i1; i2++)
 //		{
-//			chord[i1][i2][0] = ( points[i1].x + points[next (i1)].x -
-//										points[i2].x - points[next (i2)].x ) / 2;
-//			chord[i1][i2][1] = ( points[i1].y + points[next (i1)].y -
-//										points[i2].y - points[next (i2)].y ) / 2;
-//			chord[i1][i2][2] = ( points[i1].z + points[next (i1)].z -
-//										points[i2].z - points[next (i2)].z ) / 2;
+//			chord[i1][i2][0] = ( points[i1].x + points[points.next(i1)].x -
+//										points[i2].x - points[points.next(i2)].x ) / 2;
+//			chord[i1][i2][1] = ( points[i1].y + points[points.next(i1)].y -
+//										points[i2].y - points[points.next(i2)].y ) / 2;
+//			chord[i1][i2][2] = ( points[i1].z + points[points.next(i1)].z -
+//										points[i2].z - points[points.next(i2)].z ) / 2;
 //			chord[i2][i1][0] = - chord[i1][i2][0];
 //			chord[i2][i1][1] = - chord[i1][i2][1];
 //			chord[i2][i1][2] = - chord[i1][i2][2];
@@ -235,13 +233,14 @@ double Knot::VassilievInvariant::compute() {
 double Knot::prmExperimental::compute() {
 	double value = 0.0;
 
+	const auto points = this->knot.points();
 	// Вычисляем заранее касательные векторы.
 	double **tangs = new double*[points.size()];
 	for (std::size_t i1 = 0; i1 < points.size(); i1++) {
 		tangs[i1] = new double[3];
-		tangs[i1][0] = points[next (i1)].x - points[i1].x;
-		tangs[i1][1] = points[next (i1)].y - points[i1].y;
-		tangs[i1][2] = points[next (i1)].z - points[i1].z;
+		tangs[i1][0] = points[points.next(i1)].x - points[i1].x;
+		tangs[i1][1] = points[points.next(i1)].y - points[i1].y;
+		tangs[i1][2] = points[points.next(i1)].z - points[i1].z;
 	}
 
 	// Вычисляем ``гауссовы произведения''.
@@ -260,12 +259,12 @@ double Knot::prmExperimental::compute() {
 		}
 
 		for (std::size_t i2 = 0; i2 < i1; i2++) {
-			chord[i1][i2][0] = ( points[i1].x + points[next (i1)].x -
-										points[i2].x - points[next (i2)].x ) / 2;
-			chord[i1][i2][1] = ( points[i1].y + points[next (i1)].y -
-										points[i2].y - points[next (i2)].y ) / 2;
-			chord[i1][i2][2] = ( points[i1].z + points[next (i1)].z -
-										points[i2].z - points[next (i2)].z ) / 2;
+			chord[i1][i2][0] = ( points[i1].x + points[points.next(i1)].x -
+										points[i2].x - points[points.next(i2)].x ) / 2;
+			chord[i1][i2][1] = ( points[i1].y + points[points.next(i1)].y -
+										points[i2].y - points[points.next(i2)].y ) / 2;
+			chord[i1][i2][2] = ( points[i1].z + points[points.next(i1)].z -
+										points[i2].z - points[points.next(i2)].z ) / 2;
 			chord_len = sqrt (vector_square (chord[i1][i2]));
 			chord[i1][i2][0] /= chord_len;
 			chord[i1][i2][1] /= chord_len;
@@ -288,16 +287,16 @@ double Knot::prmExperimental::compute() {
 		for (int j = 0; j < 3; ++j) {
 			for (std::size_t i1 = 0; i1 < points.size(); i1++) {
 				sum[i1][i1] = 0.0;
-				for (std::size_t i2 = next (i1); i2 != i1; i2 = next (i2)) {
-					sum[i1][i2] = sum[i1][prev (i2)] + chord[i1][i2][i] * vector[i1][i2][j];
+				for (std::size_t i2 = points.next(i1); i2 != i1; i2 = points.next(i2)) {
+					sum[i1][i2] = sum[i1][points.prev(i2)] + chord[i1][i2][i] * vector[i1][i2][j];
 				}
 			}
 
 			for (std::size_t i1 = 0; i1 < points.size(); i1++) {
 				double tmp = 0.0;
 
-				for (std::size_t i2 = next (next (i1)); i2 != i1; i2 = next (i2)) {
-					tmp += sum[prev (i2)][prev (i1)] - sum[prev (i2)][i2] - sum[i2][prev (prev (i2))] + sum[i2][i1];
+				for (std::size_t i2 = points.next(points.next(i1)); i2 != i1; i2 = points.next(i2)) {
+					tmp += sum[points.prev(i2)][points.prev(i1)] - sum[points.prev(i2)][i2] - sum[i2][points.prev(points.prev(i2))] + sum[i2][i1];
 					value += tmp * vector[i2][i1][j] * chord[i2][i1][i];
 				}
 			}
@@ -342,6 +341,7 @@ double Knot::prmSingular::compute() {
 
 	std::size_t i1, i2, i3, i4;
 
+	const auto points = this->knot.points();
 	// Вычисляем заранее хорды.
 	double chord_len;
 	double ***chord = new double**[points.size()];
@@ -367,8 +367,8 @@ double Knot::prmSingular::compute() {
 
 	double curr_cos, min_cos = 1.0;
 	for (i1 = 0; i1 < points.size(); i1++)
-		for (i2 = next (i1); i2 != prev (i1); i2 = next (i2)) {
-			curr_cos = fabs (scalar_product (chord[i1][i2], chord[i1][next (i2)]));
+		for (i2 = points.next(i1); i2 != points.prev(i1); i2 = points.next(i2)) {
+			curr_cos = fabs (scalar_product (chord[i1][i2], chord[i1][points.next(i2)]));
 			if (min_cos > curr_cos)
 				min_cos = curr_cos;
 		}
@@ -382,57 +382,57 @@ double Knot::prmSingular::compute() {
 			continue;
 //					value += 1;
 //		if (intersected (chord[i1][i3],
-//										 chord[i1][next (i3)],
+//										 chord[i1][points.next(i3)],
 //										 chord[i2][i4],
-//				 chord[i2][next (i4)])
+//				 chord[i2][points.next(i4)])
 //						value += 1;
 		if (inside (chord[i1][i3],
-								chord[i1][next (i3)],
-								chord[next (i1)][next (i3)],
-					chord[next (i1)][i3],
+								chord[i1][points.next(i3)],
+								chord[points.next(i1)][points.next(i3)],
+					chord[points.next(i1)][i3],
 								chord[i2][i4]))
 						value += 1;
 		if (inside (chord[i1][i3],
-								chord[i1][next (i3)],
-								chord[next (i1)][next (i3)],
-					chord[next (i1)][i3],
-								chord[i2][next (i4)]))
+								chord[i1][points.next(i3)],
+								chord[points.next(i1)][points.next(i3)],
+					chord[points.next(i1)][i3],
+								chord[i2][points.next(i4)]))
 						value += 1;
 		if (inside (chord[i1][i3],
-								chord[i1][next (i3)],
-								chord[next (i1)][next (i3)],
-					chord[next (i1)][i3],
-								chord[next (i2)][i4]))
+								chord[i1][points.next(i3)],
+								chord[points.next(i1)][points.next(i3)],
+					chord[points.next(i1)][i3],
+								chord[points.next(i2)][i4]))
 						value += 1;
 		if (inside (chord[i1][i3],
-								chord[i1][next (i3)],
-								chord[next (i1)][next (i3)],
-					chord[next (i1)][i3],
-								chord[next (i2)][next (i4)]))
+								chord[i1][points.next(i3)],
+								chord[points.next(i1)][points.next(i3)],
+					chord[points.next(i1)][i3],
+								chord[points.next(i2)][points.next(i4)]))
 						value += 1;
 		if (inside (chord[i2][i4],
-								chord[i2][next (i4)],
-								chord[next (i2)][next (i4)],
-					chord[next (i2)][i4],
+								chord[i2][points.next(i4)],
+								chord[points.next(i2)][points.next(i4)],
+					chord[points.next(i2)][i4],
 								chord[i1][i3]))
 						value += 1;
 		if (inside (chord[i2][i4],
-								chord[i2][next (i4)],
-								chord[next (i2)][next (i4)],
-					chord[next (i2)][i4],
-								chord[i1][next (i3)]))
+								chord[i2][points.next(i4)],
+								chord[points.next(i2)][points.next(i4)],
+					chord[points.next(i2)][i4],
+								chord[i1][points.next(i3)]))
 						value += 1;
 		if (inside (chord[i2][i4],
-								chord[i2][next (i4)],
-								chord[next (i2)][next (i4)],
-					chord[next (i2)][i4],
-								chord[next (i1)][i3]))
+								chord[i2][points.next(i4)],
+								chord[points.next(i2)][points.next(i4)],
+					chord[points.next(i2)][i4],
+								chord[points.next(i1)][i3]))
 						value += 1;
 		if (inside (chord[i2][i4],
-								chord[i2][next (i4)],
-								chord[next (i2)][next (i4)],
-					chord[next (i2)][i4],
-								chord[next (i1)][next (i3)]))
+								chord[i2][points.next(i4)],
+								chord[points.next(i2)][points.next(i4)],
+					chord[points.next(i2)][i4],
+								chord[points.next(i1)][points.next(i3)]))
 						value += 1;
 				}
 
@@ -453,13 +453,14 @@ double Knot::prmExperimental2::compute() {
 	std::size_t i1, i2;
 	int o;
 
+	const auto points = this->knot.points();
 	// Вычисляем заранее касательные векторы.
 	double **tangs = new double*[points.size()];
 	for (i1 = 0; i1 < points.size(); i1++) {
 		tangs[i1] = new double[3];
-		tangs[i1][0] = points[next (i1)].x - points[i1].x;
-		tangs[i1][1] = points[next (i1)].y - points[i1].y;
-		tangs[i1][2] = points[next (i1)].z - points[i1].z;
+		tangs[i1][0] = points[points.next(i1)].x - points[i1].x;
+		tangs[i1][1] = points[points.next(i1)].y - points[i1].y;
+		tangs[i1][2] = points[points.next(i1)].z - points[i1].z;
 	}
 
 	// Вычисляем ``гауссовы произведения''.
@@ -470,12 +471,12 @@ double Knot::prmExperimental2::compute() {
 		gauss[i1] = new double[points.size()];
 		gauss[i1][i1] = 0.0;
 		for (i2 = 0; i2 < i1; i2++) {
-			chord[0] = ( points[i1].x + points[next (i1)].x -
-										points[i2].x - points[next (i2)].x ) / 2;
-			chord[1] = ( points[i1].y + points[next (i1)].y -
-										points[i2].y - points[next (i2)].y ) / 2;
-			chord[2] = ( points[i1].z + points[next (i1)].z -
-										points[i2].z - points[next (i2)].z ) / 2;
+			chord[0] = ( points[i1].x + points[points.next(i1)].x -
+										points[i2].x - points[points.next(i2)].x ) / 2;
+			chord[1] = ( points[i1].y + points[points.next(i1)].y -
+										points[i2].y - points[points.next(i2)].y ) / 2;
+			chord[2] = ( points[i1].z + points[points.next(i1)].z -
+										points[i2].z - points[points.next(i2)].z ) / 2;
 			chord_len = sqrt (vector_square (chord));
 			gauss[i1][i2] = det (tangs[i1], tangs[i2], chord) /
 												(chord_len * chord_len * chord_len);
@@ -486,22 +487,22 @@ double Knot::prmExperimental2::compute() {
 	// Вычисляем суммы ``гауссовых произведений''.
 
 	// В gauss_sum[i1][i2] находится сумма ``гауссовых произведений''
-	// для всех хорд с началом в i1 и концом от next (i1) до i2.
+	// для всех хорд с началом в i1 и концом от points.next(i1) до i2.
 	double **gauss_sum = new double*[points.size()];
 
 	for (i1 = 0; i1 < points.size(); i1++) {
 		gauss_sum[i1] = new double[points.size()];
 		gauss_sum[i1][i1] = 0.0;
-		for (i2 = next (i1); i2 != i1; i2 = next (i2))
-			gauss_sum[i1][i2] = gauss_sum[i1][prev (i2)] + gauss[i1][i2];
+		for (i2 = points.next(i1); i2 != i1; i2 = points.next(i2))
+			gauss_sum[i1][i2] = gauss_sum[i1][points.prev(i2)] + gauss[i1][i2];
 	}
 
 	double tmp, tmp2;
 	for (i1 = 0; i1 < points.size(); i1++) {
 		tmp = 0.0;
-		for (i2 = next (next (i1)); i2 != i1; i2 = next (i2)) {
-			tmp += gauss_sum[prev (i2)][prev (i1)] -
-						 gauss_sum[i2][prev (prev (i2))] + gauss_sum[i2][i1];
+		for (i2 = points.next(points.next(i1)); i2 != i1; i2 = points.next(i2)) {
+			tmp += gauss_sum[points.prev(i2)][points.prev(i1)] -
+						 gauss_sum[i2][points.prev(points.prev(i2))] + gauss_sum[i2][i1];
 			tmp2 = gauss[i1][i2];
 			for (o = 1; o < order; o++)
 				tmp2 *= tmp / 16;

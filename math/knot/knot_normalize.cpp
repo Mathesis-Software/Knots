@@ -10,8 +10,8 @@ void Knot::normalize(std::size_t num) {
 
 	double len = this->length->value();
 
-	const auto old_points = points;
-	points.clear();
+	const auto old_points = this->_points;
+	this->_points.clear();
 
 	len /= num;
 
@@ -25,7 +25,7 @@ void Knot::normalize(std::size_t num) {
 			const auto next_v = v == old_points.size() - 1 ? 0 : v + 1;
 
 			part = (1 - rest / llen);
-			points.push_back(Point(
+			this->_points.push_back(Point(
 				old_points[v].x + part * (old_points[next_v].x - old_points[v].x),
 				old_points[v].y + part * (old_points[next_v].y - old_points[v].y),
 				old_points[v].z + part * (old_points[next_v].z - old_points[v].z)

@@ -2,9 +2,9 @@
 
 namespace KE { namespace ThreeD {
 
-Knot::Snapshot Knot::snapshot() const {
+Knot::Snapshot Knot::points() const {
 	std::lock_guard<std::recursive_mutex> guard(this->mutex);
-	return Snapshot(this->points);
+	return Snapshot(this->_points);
 }
 
 void Knot::create_depend() {

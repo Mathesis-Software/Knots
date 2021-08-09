@@ -30,7 +30,7 @@ Knot::Knot(const rapidjson::Document &doc) {
 		if (!point.IsArray() || point.Size() != 3 || !point[0].IsNumber() || !point[1].IsNumber() || !point[2].IsNumber()) {
 			throw std::runtime_error("Each point must be an array of three integers");
 		}
-		this->points.push_back(Point(point[0].GetDouble(), point[1].GetDouble(), point[2].GetDouble()));
+		this->_points.push_back(Point(point[0].GetDouble(), point[1].GetDouble(), point[2].GetDouble()));
 	}
 
 	this->create_depend();
@@ -51,13 +51,14 @@ rapidjson::Document Knot::save(const double matrix[3][3]) const {
 	doc.AddMember("type", "link", doc.GetAllocator());
 	doc.AddMember("name", rapidjson::StringRef(this->caption.data(), this->caption.size()), doc.GetAllocator());
 	rapidjson::Value first(rapidjson::kArrayType);
-	for (const auto &pt : this->points) {
+	const auto points = this->points();
+	for (std::size_t i = 0; i < points.size(); ++i) {
 		rapidjson::Value point(rapidjson::kArrayType);
-		for (std::size_t i = 0; i < 3; ++i) {
+		for (std::size_t j = 0; j < 3; ++j) {
     	point.PushBack(
-				matrix[0][i] * pt.x +
-				matrix[1][i] * pt.y +
-				matrix[2][i] * pt.z,
+				matrix[0][j] * points[i].x +
+				matrix[1][j] * points[i].y +
+				matrix[2][j] * points[i].z,
 				doc.GetAllocator()
 			);
 		}

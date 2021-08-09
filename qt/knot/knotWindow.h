@@ -51,7 +51,7 @@ private:
   void doSmooth();
   void timerEvent(QTimerEvent*);
 
-  bool isEmpty() const override {return this->knot.isEmpty();};
+  bool isEmpty() const override { return this->knot.points().size() == 0; }
 
   void saveIt(std::ostream&);
 

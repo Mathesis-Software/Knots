@@ -121,7 +121,7 @@ public:
 
 private:
 	mutable std::recursive_mutex mutex;
-	std::vector<Point> points;
+	std::vector<Point> _points;
 
 private:
 	void create_depend();
@@ -153,13 +153,12 @@ public:
 	Knot(const rapidjson::Document &doc);
 	Knot(const TwoD::Diagram&, int, int);
 
-	Snapshot snapshot() const;
+	Snapshot points() const;
 
-	bool isEmpty() const;
 	void decreaseEnergy();
 	void setLength(double);
 	void center();
-	std::size_t numberOfPoints() const { return this->points.size(); }
+	std::size_t numberOfPoints() const { return this->points().size(); }
 	void normalize(std::size_t numberOfPoints);
 
 	Vector seifertGradient(const Point &point) const;
@@ -180,15 +179,11 @@ private:
 /***********************************************************************/
 
 inline std::size_t Knot::next(std::size_t index) const {
-	return index == this->points.size() - 1 ? 0 : index + 1;
+	return index == this->_points.size() - 1 ? 0 : index + 1;
 }
 
 inline std::size_t Knot::prev(std::size_t index) const {
-	return index ? index - 1 : this->points.size() - 1;
-}
-
-inline bool Knot::isEmpty() const {
-	return this->points.empty();
+	return index ? index - 1 : this->_points.size() - 1;
 }
 
 }}

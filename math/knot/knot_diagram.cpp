@@ -20,7 +20,7 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption
 
 	for (const auto &edge : edges) {
 		const auto coords = edge.start->coords();
-		points.push_back(Point(
+		this->_points.push_back(Point(
 			2.4 * coords.x / w - 1.2,
 			1.2 - 2.4 * coords.y / h,
 			0
@@ -32,7 +32,7 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption
 			if (!current) {
 				continue;
 			}
-			points.push_back(Point(
+			this->_points.push_back(Point(
 				2.4 * current->x / w - 1.2,
 				1.2 - 2.4 * current->y / h,
 				crs.up == edge ? 0.2 : -0.2
@@ -42,14 +42,14 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption
 
   create_depend();
 
-	double min = points.front().distanceTo(points.back());
+	double min = this->_points.front().distanceTo(this->_points.back());
 	double total = min;
-	for (std::size_t i = 1; i < points.size(); ++i) {
-		const double dist = points[i - 1].distanceTo(points[i]);
+	for (std::size_t i = 1; i < this->_points.size(); ++i) {
+		const double dist = this->_points[i - 1].distanceTo(this->_points[i]);
 		min = std::min(min, dist);
 		total += dist;
 	}
-  normalize(std::max(5 * this->points.size(), 3 * (std::size_t)std::round(total / min)));
+  normalize(std::max(5 * this->_points.size(), 3 * (std::size_t)std::round(total / min)));
   center();
 }
 

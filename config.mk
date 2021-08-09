@@ -20,7 +20,7 @@ QTINCDIR = /usr/include/x86_64-linux-gnu/qt5
 QTLIBDIR = /usr/lib
 
 INSTPREFIX = /usr/local
-INSTDIR = $(INSTPREFIX)/KnotEditor-$(VERSION)
+INSTDIR = $(INSTPREFIX)/KnotEditor
 
 LIBS = -L$(QTLIBDIR) -lstdc++ -lQt5Core -lQt5Gui -lQt5PrintSupport -lQt5Widgets -lQt5OpenGL -lGL
 

@@ -4,10 +4,11 @@
 
 int main(int argc, char **argv) {
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-  QApplication qa(argc, argv);
-  qa.setFont(QFont("Helvetica", 11));
+	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	QApplication qa(argc, argv);
+	qa.setFont(QFont("Helvetica", 11));
 
-  keManager kem;
-  kem.show();
-  return qa.exec();
+	keManager kem;
+	kem.show();
+	return qa.exec();
 }

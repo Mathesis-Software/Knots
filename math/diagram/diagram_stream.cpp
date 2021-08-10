@@ -39,8 +39,8 @@ Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 		}
 		this->addVertex(point[0].GetInt(), point[1].GetInt());
 	}
-	if (doc.HasMember("isClosed")) {
-		const auto &closed = doc["isClosed"];
+	if (first.HasMember("isClosed")) {
+		const auto &closed = first["isClosed"];
 		if (closed.IsBool() && closed.GetBool()) {
 			this->close();
 		}
@@ -73,7 +73,6 @@ rapidjson::Document Diagram::save() const {
 	rapidjson::Value caption;
 	caption.SetString(this->caption.data(), this->caption.size(), doc.GetAllocator());
 	doc.AddMember("name", caption, doc.GetAllocator());
-	doc.AddMember("isClosed", this->isClosed(), doc.GetAllocator());
 
 	rapidjson::Value vertices(rapidjson::kArrayType);
 	std::map<std::shared_ptr<Vertex>,std::size_t> nums;
@@ -101,6 +100,7 @@ rapidjson::Document Diagram::save() const {
 	rapidjson::Value first(rapidjson::kObjectType);
 	first.AddMember("vertices", vertices, doc.GetAllocator());
 	first.AddMember("crossings", crossings, doc.GetAllocator());
+	first.AddMember("isClosed", this->isClosed(), doc.GetAllocator());
 	components.PushBack(first, doc.GetAllocator());
 	doc.AddMember("components", components, doc.GetAllocator());
 

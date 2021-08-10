@@ -1,5 +1,4 @@
 #include "knot.h"
-#include "computables/length.h"
 
 namespace KE { namespace ThreeD {
 
@@ -32,10 +31,6 @@ const std::vector<double> &Knot::Snapshot::edgeLengths() const {
 		}
 	}
 	return *this->_edgeLengths;
-}
-
-void Knot::create_depend() {
-  this->length = std::make_shared<Computables::Length>(*this);
 }
 
 }}

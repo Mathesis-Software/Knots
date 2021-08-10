@@ -95,9 +95,6 @@ private:
 	mutable volatile std::size_t lockCount;
 	mutable std::shared_ptr<Snapshot> latest;
 
-private:
-	void create_depend();
-
 public:
 	Knot(const rapidjson::Document &doc);
 	Knot(const TwoD::Diagram&, int, int);

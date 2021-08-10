@@ -61,7 +61,6 @@ private:
 
 public:
 	GLWidget(GLWindow*);
-	~GLWidget();
 
 	void multMatrix() {
 		makeCurrent();

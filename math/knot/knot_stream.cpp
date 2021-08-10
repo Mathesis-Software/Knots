@@ -23,11 +23,15 @@ Knot::Knot(const rapidjson::Document &doc) : length(new Computables::Length(*thi
 		throw std::runtime_error("The app does not support multi-component diagrams");
 	}
 	const auto &first = components[0];
-	if (!first.IsArray() || first.Size() < 3) {
-		throw std::runtime_error("Component format is incorrect: expected a list of at least three points");
+	if (!first.IsObject() || !first.HasMember("points")) {
+		throw std::runtime_error("Component format incorrect: expected an object containing points member");
 	}
-	for (rapidjson::SizeType i = 0; i < first.Size(); ++i) {
-		const auto &point = first[i];
+	const auto &points = first["points"];
+	if (!points.IsArray() || points.Size() < 3) {
+		throw std::runtime_error("Points format incorrect: expected a list of at least three elements");
+	}
+	for (rapidjson::SizeType i = 0; i < points.Size(); ++i) {
+		const auto &point = points[i];
 		if (!point.IsArray() || point.Size() != 3 || !point[0].IsNumber() || !point[1].IsNumber() || !point[2].IsNumber()) {
 			throw std::runtime_error("Each point must be an array of three integers");
 		}
@@ -49,22 +53,27 @@ rapidjson::Document Knot::save(const double matrix[3][3]) const {
 	doc.SetObject();
 	doc.AddMember("type", "link", doc.GetAllocator());
 	doc.AddMember("name", rapidjson::StringRef(this->caption.data(), this->caption.size()), doc.GetAllocator());
-	rapidjson::Value first(rapidjson::kArrayType);
-	const auto points = this->points();
-	for (std::size_t i = 0; i < points.size(); ++i) {
+	rapidjson::Value components(rapidjson::kArrayType);
+
+	rapidjson::Value first(rapidjson::kObjectType);
+	rapidjson::Value points(rapidjson::kArrayType);
+	const auto pts = this->points();
+	for (std::size_t i = 0; i < pts.size(); ++i) {
 		rapidjson::Value point(rapidjson::kArrayType);
 		for (std::size_t j = 0; j < 3; ++j) {
     	point.PushBack(
-				matrix[0][j] * points[i].x +
-				matrix[1][j] * points[i].y +
-				matrix[2][j] * points[i].z,
+				matrix[0][j] * pts[i].x +
+				matrix[1][j] * pts[i].y +
+				matrix[2][j] * pts[i].z,
 				doc.GetAllocator()
 			);
 		}
-		first.PushBack(point, doc.GetAllocator());
+		points.PushBack(point, doc.GetAllocator());
 	}
-	rapidjson::Value components(rapidjson::kArrayType);
+	first.AddMember("points", points, doc.GetAllocator());
+
 	components.PushBack(first, doc.GetAllocator());
+
 	doc.AddMember("components", components, doc.GetAllocator());
 
 	return doc;

@@ -42,21 +42,18 @@ void diagramWindow::init(DiagramWidget *widget) {
 	);
 
 	addToolBarSeparator();
-	auto addAction = [this, widget](const QString &icon, const QString &text, DiagramWidget::EditingMode mode) {
+	auto addAction = [this, widget](const QString &icon, const QString &text, DiagramWidget::EditorMode mode) {
 		QAction *action = this->addToolbarAction(icon, text, [this, mode] { this->setMode(mode); });
 		action->setCheckable(true);
 		this->registerAction(action, [widget, mode](QAction &action) {
-			const bool canSet = widget->canSetEditingMode(mode);
-			action.setChecked(canSet && widget->editingMode() == mode);
+			const bool canSet = widget->canSetEditorMode(mode);
+			action.setChecked(canSet && widget->editorMode() == mode);
 			action.setEnabled(canSet);
 		});
 	};
-	addAction("draw_diagram.xpm", "Draw diagram", DiagramWidget::NEW_DIAGRAM);
-	addAction("add_point.xpm", "Add vertex", DiagramWidget::ADD_VERTEX);
-	addAction("move_point.xpm", "Move vertex", DiagramWidget::MOVE_VERTEX);
-	addAction("delete_point.xpm", "Delete vertex", DiagramWidget::REMOVE_VERTEX);
-	addAction("change_crossing.xpm", "Flip crossing", DiagramWidget::FLIP_CROSSING);
-	addAction("move_diagram.xpm", "Move diagram", DiagramWidget::MOVE_DIAGRAM);
+	addAction("diagram_mode_quick_drawing.svg", "Quick drawing", DiagramWidget::QUICK_DRAWING);
+	addAction("diagram_mode_editing.svg", "Editing", DiagramWidget::EDITING);
+	addAction("diagram_mode_moving.svg", "Moving diagram", DiagramWidget::MOVING);
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 
@@ -69,8 +66,8 @@ diagramWindow::~diagramWindow() {
 	delete actionsMenu;
 }
 
-void diagramWindow::setMode(DiagramWidget::EditingMode mode) {
-	this->diagramWidget()->setEditingMode(mode);
+void diagramWindow::setMode(DiagramWidget::EditorMode mode) {
+	this->diagramWidget()->setEditorMode(mode);
 	this->updateActions();
 }
 

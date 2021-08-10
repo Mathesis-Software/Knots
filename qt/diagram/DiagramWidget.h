@@ -10,13 +10,10 @@ class diagramWindow;
 class DiagramWidget : public QWidget {
 
 public:
-	enum EditingMode {
-		NEW_DIAGRAM = 0,
-		ADD_VERTEX = 1,
-		MOVE_VERTEX = 2,
-		REMOVE_VERTEX = 3,
-		FLIP_CROSSING = 4,
-		MOVE_DIAGRAM = 5
+	enum EditorMode {
+		QUICK_DRAWING = 0,
+		EDITING = 1,
+		MOVING = 2
 	};
 
 public:
@@ -24,7 +21,7 @@ public:
 
 private:
 	diagramWindow *Parent;
-	DiagramWidget::EditingMode _editingMode;
+	DiagramWidget::EditorMode _editorMode;
 
 	QPoint capturedPoint;
 	std::shared_ptr<KE::TwoD::Diagram::Vertex> fakeVertex;
@@ -59,9 +56,9 @@ public:
 
 	void drawIt(QPainter &painter);
 
-	EditingMode editingMode() const { return this->_editingMode; }
-	bool canSetEditingMode(DiagramWidget::EditingMode mode) const;
-	bool setEditingMode(DiagramWidget::EditingMode mode);
+	EditorMode editorMode() const { return this->_editorMode; }
+	bool canSetEditorMode(DiagramWidget::EditorMode mode) const;
+	bool setEditorMode(DiagramWidget::EditorMode mode);
 
 	void clear();
 };

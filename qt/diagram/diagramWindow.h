@@ -18,7 +18,7 @@ private:
 	void printIt(QPrinter*);
 	void saveIt(std::ostream&);
 
-	void setMode(DiagramWidget::EditingMode mode);
+	void setMode(DiagramWidget::EditorMode mode);
 	
 	void convert();
 	void clear();

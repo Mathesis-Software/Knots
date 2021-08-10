@@ -19,11 +19,11 @@ double VassilievInvariant::compute() {
 	}
 
 	// Вычисляем ``гауссовы произведения''.
-	double **gauss = new double*[points.size()];
-
+	std::vector<std::vector<double>> gauss(points.size());
+	for (auto &v : gauss) {
+		v.insert(v.end(), points.size(), 0.0);
+	}
 	for (std::size_t i = 0; i < points.size(); ++i) {
-		gauss[i] = new double[points.size()];
-		gauss[i][i] = 0.0;
 		for (std::size_t j = 0; j < i; j++) {
 			const Vector chord(
 				(points[i].x + points[points.next(i)].x - points[j].x - points[points.next(j)].x) / 2,
@@ -40,11 +40,11 @@ double VassilievInvariant::compute() {
 
 	// В gauss_sum[i1][i2] находится сумма ``гауссовых произведений''
 	// для всех хорд с началом в i1 и концом от points.next(i1) до i2.
-	double **gauss_sum = new double*[points.size()];
-
+	std::vector<std::vector<double>> gauss_sum(points.size());
+	for (auto &v : gauss_sum) {
+		v.insert(v.end(), points.size(), 0.0);
+	}
 	for (std::size_t i = 0; i < points.size(); i++) {
-		gauss_sum[i] = new double[points.size()];
-		gauss_sum[i][i] = 0.0;
 		for (std::size_t j = points.next(i); j != i; j = points.next(j))
 			gauss_sum[i][j] = gauss_sum[i][points.prev(j)] + gauss[i][j];
 	}
@@ -61,14 +61,6 @@ double VassilievInvariant::compute() {
 			value += tmp2;
 		}
 	}
-
-	// Удаляем заранее вычисленные вспомогательные значения.
-	for (std::size_t i = 0; i < points.size(); i++) {
-		delete[] gauss[i];
-		delete[] gauss_sum[i];
-	}
-	delete[] gauss;
-	delete[] gauss_sum;
 
 	return value / (4 * M_PI * M_PI);
 }

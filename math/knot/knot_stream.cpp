@@ -52,7 +52,9 @@ rapidjson::Document Knot::save(const double matrix[3][3]) const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "link", doc.GetAllocator());
-	doc.AddMember("name", rapidjson::StringRef(this->caption.data(), this->caption.size()), doc.GetAllocator());
+	rapidjson::Value caption;
+	caption.SetString(this->caption.data(), this->caption.size(), doc.GetAllocator());
+	doc.AddMember("name", caption, doc.GetAllocator());
 	rapidjson::Value components(rapidjson::kArrayType);
 
 	rapidjson::Value first(rapidjson::kObjectType);
@@ -61,7 +63,7 @@ rapidjson::Document Knot::save(const double matrix[3][3]) const {
 	for (std::size_t i = 0; i < pts.size(); ++i) {
 		rapidjson::Value point(rapidjson::kArrayType);
 		for (std::size_t j = 0; j < 3; ++j) {
-    	point.PushBack(
+			point.PushBack(
 				matrix[0][j] * pts[i].x +
 				matrix[1][j] * pts[i].y +
 				matrix[2][j] * pts[i].z,

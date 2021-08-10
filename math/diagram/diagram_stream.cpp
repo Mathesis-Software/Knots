@@ -58,7 +58,7 @@ Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 			throw std::runtime_error("Each crossing an index pair");
 		}
 		const std::size_t x = point[0].GetInt();
-	 	const std::size_t y = point[1].GetInt();
+		const std::size_t y = point[1].GetInt();
 		if (x >= edges.size() || y >= edges.size()) {
 			throw std::runtime_error("Vertex index in crossings is out of range");
 		}
@@ -70,7 +70,9 @@ rapidjson::Document Diagram::save() const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "diagram", doc.GetAllocator());
-	doc.AddMember("name", rapidjson::StringRef(this->caption.data(), this->caption.size()), doc.GetAllocator());
+	rapidjson::Value caption;
+	caption.SetString(this->caption.data(), this->caption.size(), doc.GetAllocator());
+	doc.AddMember("name", caption, doc.GetAllocator());
 	doc.AddMember("isClosed", this->isClosed(), doc.GetAllocator());
 
 	rapidjson::Value vertices(rapidjson::kArrayType);
@@ -80,8 +82,8 @@ rapidjson::Document Diagram::save() const {
 		nums[vertex] = index;
 		index += 1;
 		rapidjson::Value point(rapidjson::kArrayType);
-	 	point.PushBack(vertex->x(), doc.GetAllocator());
-	 	point.PushBack(vertex->y(), doc.GetAllocator());
+		point.PushBack(vertex->x(), doc.GetAllocator());
+		point.PushBack(vertex->y(), doc.GetAllocator());
 		vertices.PushBack(point, doc.GetAllocator());
 	}
 

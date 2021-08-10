@@ -118,7 +118,7 @@ public:
 	rapidjson::Document save(const double matrix[3][3]) const;
 
 private:
-	std::vector<Point> normalizedPoints(std::size_t numberOfPoints) const;
+	std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints) const;
 
 private:
 	Knot(const Knot&) = delete;

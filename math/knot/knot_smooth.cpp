@@ -1,4 +1,5 @@
 #include <cmath>
+#include <numeric>
 
 #include "computables/length.h"
 #include "knot.h"
@@ -47,13 +48,11 @@ void Knot::decreaseEnergy() {
 
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
 	const auto snapshot = this->points();
-	double totalLength = snapshot[0].distanceTo(snapshot[snapshot.size() - 1]);
-	for (std::size_t i = 0; i < snapshot.size() - 1; ++i) {
-		totalLength += snapshot[i].distanceTo(snapshot[i + 1]);
-	}
+	const auto &edgeLengths = snapshot.edgeLengths();
+	const double totalLength = std::accumulate(edgeLengths.begin(), edgeLengths.end(), 0.0);
 
   // Расставляем точки на кривой равномерно.
-  auto points = this->normalizedPoints(snapshot.size());
+  auto points = this->normalizedPoints(snapshot, snapshot.size());
 
 	std::vector<Vector> edges;
 	edges.reserve(points.size());

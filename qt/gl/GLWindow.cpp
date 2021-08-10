@@ -1,8 +1,6 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QPainter>
 #include <QtWidgets/QToolBar>
-#include <QtWidgets/QToolButton>
-#include <QtWidgets/QButtonGroup>
 
 #include "GLWindow.h"
 
@@ -22,15 +20,12 @@ GLWindow::GLWindow() : currentMatrix(new double[16]), currentSpeedMatrix(new dou
 	}
 	isInertia = false;
 
-	QButtonGroup *grp = new QButtonGroup;
 	for (int i = 0; i < 6; i++) {
-		QToolButton *button = addToolBarButton(QString("rotate%1.xpm").arg(i), "Rotate", 0);
-		grp->addButton(button);
-		this->connect(button, &QToolButton::pressed, [this, i] { this->rotate(i); });
+		this->addToolbarAction(QString("rotate%1.xpm").arg(i), "Rotate", [this, i] { this->rotate(i); });
 	}
 
 	addToolBarSeparator();
-	addToolBarButton("inertia.xpm", "Inertia", SLOT(inertia()))->setCheckable(true);
+	addToolbarAction("inertia.xpm", "Inertia", [this] { this->inertia(); })->setCheckable(true);
 }
 
 void GLWindow::printIt(QPrinter *prn) {

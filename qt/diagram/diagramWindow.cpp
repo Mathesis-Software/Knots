@@ -1,4 +1,3 @@
-#include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
 #include <QtGui/QPainter>

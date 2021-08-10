@@ -10,7 +10,6 @@
 #include "../../gl/surface/surface.h"
 
 class GLWindow : public abstractWindow {
-	Q_OBJECT
 
 private:
 	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
@@ -28,7 +27,6 @@ private:
 	void changeSpeed(int, int);
 	void doRotate();
 
-private slots:
 	void inertia();
 	void rotate(int);
 
@@ -48,7 +46,7 @@ protected:
 public:
 	GLWindow();
 
-	friend class GLWidget;
+friend class GLWidget;
 };
 
 class GLWidget : public QOpenGLWidget {

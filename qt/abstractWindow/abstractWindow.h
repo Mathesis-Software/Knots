@@ -6,7 +6,6 @@
 
 #include <QtPrintSupport/QPrinter>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QToolButton>
 
 class abstractWindow : public QMainWindow {
 
@@ -27,7 +26,6 @@ protected:
   int askForSave(void);
 
   QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
-  QToolButton *addToolBarButton(const QString&, const char*, const char*);
   void addToolBarSeparator(void);
   void complete();
 

@@ -7,7 +7,6 @@
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
-#include <QtWidgets/QToolButton>
 #include <QtWidgets/QWhatsThis>
 
 #include "abstractWindow.h"
@@ -116,20 +115,6 @@ bool abstractWindow::closeAllWindows() {
 QAction *abstractWindow::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {
 	const QIcon icon((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + iconFilename);
 	return this->toolbar->addAction(icon, text, functor);
-}
-
-QToolButton *abstractWindow::addToolBarButton(const QString &filename, const char *label, const char *slot) {
-	QToolButton *qtb = new QToolButton(nullptr);
-	QPixmap pm((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + filename);
-	qtb->setIcon(pm);
-	qtb->setText(label);
-	if (slot) {
-		this->connect(qtb, SIGNAL(pressed()), slot);
-	}
-	//qtb->setUsesBigPixmap (true);
-	qtb->setFixedSize(pm.width () + 6, 30);
-	this->toolbar->addWidget(qtb);
-	return qtb;
 }
 
 void abstractWindow::addToolBarSeparator() {

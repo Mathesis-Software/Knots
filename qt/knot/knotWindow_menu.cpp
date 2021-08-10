@@ -43,10 +43,10 @@ void knotWindow::initMenu() {
 		[this](QAction &action) { action.setVisible(this->smoothingThread.isRunning()); }
 	);
   addToolBarSeparator();
-  addToolBarButton("math.xpm", "Show parameters", SLOT(math()));
+  addToolbarAction("math.xpm", "Show parameters", [this] { this->math(); });
   addToolBarSeparator();
-  addToolBarButton("plus.xpm", "Shift Seifert surface along gradient", SLOT(bp_plus()));
-  addToolBarButton("minus.xpm", "Shift Seifert surface along gradient", SLOT(bp_minus()));
+  addToolbarAction("plus.xpm", "Shift Seifert surface along gradient", [this] { this->bp_plus(); });
+  addToolbarAction("minus.xpm", "Shift Seifert surface along gradient", [this] { this->bp_minus(); });
 
 	this->updateActions();
 }

@@ -1,5 +1,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
+#include <QtWidgets/QStatusBar>
 
 #include "diagramWindow.h"
 
@@ -32,7 +33,7 @@ bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 bool DiagramWidget::setEditingMode(DiagramWidget::EditingMode mode) {
 	if (mode != this->_editingMode && this->canSetEditingMode(mode)) {
 		this->_editingMode = mode;
-		this->fakeVertex = nullptr;
+		this->setFakeVertex(nullptr);
 		this->setCapturedVertex(nullptr);
 		this->setCapturedEdge(nullptr);
 		this->setCapturedCrossing(nullptr);
@@ -169,7 +170,7 @@ void DiagramWidget::paintEvent(QPaintEvent*) {
 
 void DiagramWidget::leaveEvent(QEvent *event) {
 	if (this->fakeVertex) {
-		this->fakeVertex = nullptr;
+		this->setFakeVertex(nullptr);
 		this->repaint();
 	}
 }
@@ -179,12 +180,12 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 		case NEW_DIAGRAM:
 		{
 			if (this->diagram.isClosed()) {
-				this->fakeVertex = nullptr;
+				this->setFakeVertex(nullptr);
 				break;
 			}
 			auto fakeVertex = this->fakeVertex;
 			if (fakeVertex) {
-				this->fakeVertex = nullptr;
+				this->setFakeVertex(nullptr);
 				this->setCapturedVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()));
 				if (event->button() == 0x02) {
 					this->diagram.close();
@@ -265,14 +266,14 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			case NEW_DIAGRAM:
 			{
 				if (this->diagram.isClosed()) {
-					this->fakeVertex = nullptr;
+					this->setFakeVertex(nullptr);
 					break;
 				}
 				auto fakeVertex = this->fakeVertex;
 				if (fakeVertex) {
 					fakeVertex->moveTo(event->x(), event->y());
 				} else {
-					this->fakeVertex = std::make_shared<KE::TwoD::Diagram::Vertex>(event->x(), event->y());
+					this->setFakeVertex(std::make_shared<KE::TwoD::Diagram::Vertex>(event->x(), event->y()));
 				}
 				this->repaint();
 				break;
@@ -310,6 +311,19 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			default:
 				return;
 		}
+	}
+}
+
+void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
+	this->fakeVertex = vertex;
+	if (vertex) {
+		if (this->diagram.vertices().size() <= 1) {
+			this->Parent->statusBar()->showMessage("Mouse click adds point");
+		} else {
+			this->Parent->statusBar()->showMessage("Mouse click adds point; right button click closes the diagram");
+		}
+	} else {
+		this->Parent->statusBar()->clearMessage();
 	}
 }
 

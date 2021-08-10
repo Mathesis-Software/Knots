@@ -80,7 +80,7 @@ void abstractWindow::save_as() {
 
 	saveIt(os);
 	os.close();
-	statusBar()->showMessage("File saved.", 3000);
+	statusBar()->showMessage("File saved", 3000);
 	isSaved = true;
 }
 
@@ -123,7 +123,7 @@ void abstractWindow::addToolBarSeparator() {
 
 void abstractWindow::complete() {
 	this->toolbar->show();
-	statusBar()->isVisible();
+	statusBar()->setVisible(true);
 	resize(508, 594);
 }
 

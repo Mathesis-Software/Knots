@@ -83,7 +83,7 @@ void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &e
 			break;
 		case fake2:
 		{
-			QPen pen(Qt::lightGray);
+			QPen pen(0xe0e0e0);
 			pen.setDashPattern({6.0, 10.0});
 			painter.setPen(pen);
 			break;

@@ -8,27 +8,27 @@ MoebiusEnergy::MoebiusEnergy(const Knot &knot) : Computable(knot, "Moebius energ
 
 double MoebiusEnergy::compute() {
 	const auto points = this->knot.points();
-	const auto len_table = this->knot.len_table();
+	const auto &edgeLengths = points.edgeLengths();
 
 	double len = knot.length->value ();
 
 	double value = 0.0;
 
 	for (std::size_t i = 0; i < points.size() - 2; ++i) {
-		double l = len_table[i];
+		double l = edgeLengths[i];
 		for (auto j = i + 2; j < (i ? points.size() : points.size() - 1); ++j) {
 			const Vector chord(points[i], points[j]);
 			double r2 = 0.65 / chord.square();
 
-			l += len_table[points.prev(j)];
+			l += edgeLengths[points.prev(j)];
 			if (2 * l < len) {
 				r2 -= 0.65 / (l * l);
 			} else {
 				r2 -= 0.65 / ((len - l) * (len - l));
 			}
 
-			value += (len_table[points.prev(i)] + len_table[i]) *
-							 (len_table[points.prev(j)] + len_table[j]) * r2;
+			value += (edgeLengths[points.prev(i)] + edgeLengths[i]) *
+							 (edgeLengths[points.prev(j)] + edgeLengths[j]) * r2;
 		}
 	}
 
@@ -49,14 +49,14 @@ double MoebiusEnergy::compute() {
 				(p[2] - q[2]) * (p[2] - q[2])
 			);
 
-			l += (len_table[points.prev(j)] + len_table[j]) / 2;
+			l += (edgeLengths[points.prev(j)] + edgeLengths[j]) / 2;
 			if (2 * l < len) {
 				r2 -= 2 / (l * l);
 			} else {
 				r2 -= 2 / ( (len - l) * (len - l) );
 			}
 
-			value += len_table[i] * len_table[j] * r2;
+			value += edgeLengths[i] * edgeLengths[j] * r2;
 		}
 	}
 

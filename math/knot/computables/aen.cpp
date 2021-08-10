@@ -9,6 +9,7 @@ AverageExtremumNumber::AverageExtremumNumber(const Knot &knot) :
 
 double AverageExtremumNumber::compute() {
 	const auto points = this->knot.points();
+	const auto &edgeLengths = points.edgeLengths();
 
 	std::vector<Vector> edges;
 	edges.reserve(points.size());
@@ -17,18 +18,12 @@ double AverageExtremumNumber::compute() {
 	}
 	edges.push_back(Vector(points[points.size() - 1], points[0]));
 
-	std::vector<double> lengths;
-	lengths.reserve(edges.size());
-	for (const auto &edge : edges) {
-		lengths.push_back(edge.length());
-	}
-
 	double value = 0;
 
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		const auto &forward = edges[i];
 		const auto &back = edges[points.prev(i)];
-		double angle_cos = - forward.scalar_product(back) / (lengths[points.prev(i)] * lengths[i]);
+		double angle_cos = - forward.scalar_product(back) / (edgeLengths[points.prev(i)] * edgeLengths[i]);
 
 		if (angle_cos < -1) {
 			value -= M_PI;

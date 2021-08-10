@@ -43,6 +43,7 @@ public:
 	private:
 		const Knot &knot;
 		const std::shared_ptr<std::vector<Point>> points;
+		const std::shared_ptr<std::vector<double>> _edgeLengths;
 		const std::size_t generation;
 
 	private:
@@ -60,6 +61,8 @@ public:
 		std::size_t prev(std::size_t index) const {
 			return index ? index - 1 : this->points->size() - 1;
 		}
+
+		const std::vector<double> &edgeLengths() const;
 	};
 
 private:
@@ -94,9 +97,6 @@ private:
 
 private:
 	void create_depend();
-
-public:
-	const std::vector<double> len_table() const;
 
 public:
 	Knot(const rapidjson::Document &doc);

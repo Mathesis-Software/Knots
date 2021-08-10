@@ -32,22 +32,21 @@ double MoebiusEnergy::compute() {
 		}
 	}
 
-	double p[3], q[3];
+	std::vector<Point> middles;
+	middles.reserve(points.size());
+	for (std::size_t i = 0; i < points.size(); i++) {
+		middles.push_back(Point(
+			(points[i].x + points[points.next(i)].x) / 2,
+			(points[i].y + points[points.next(i)].y) / 2,
+			(points[i].z + points[points.next(i)].z) / 2
+		));
+	}
+
 	for (std::size_t i = 0; i < points.size(); i++) {
 		double l = 0;
-		p[0] = (points[i].x + points[points.next(i)].x) / 2;
-		p[1] = (points[i].y + points[points.next(i)].y) / 2;
-		p[2] = (points[i].z + points[points.next(i)].z) / 2;
-
 		for (std::size_t j = i + 1; j < points.size(); j++) {
-			q[0] = (points[j].x + points[points.next(j)].x) / 2;
-			q[1] = (points[j].y + points[points.next(j)].y) / 2;
-			q[2] = (points[j].z + points[points.next(j)].z) / 2;
-			double r2 = 2 / (
-				(p[0] - q[0]) * (p[0] - q[0]) +
-				(p[1] - q[1]) * (p[1] - q[1]) +
-				(p[2] - q[2]) * (p[2] - q[2])
-			);
+			const Vector r(middles[i], middles[j]);
+			double r2 = 2 / r.square();
 
 			l += (edgeLengths[points.prev(j)] + edgeLengths[j]) / 2;
 			if (2 * l < len) {

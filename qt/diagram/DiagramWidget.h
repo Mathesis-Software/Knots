@@ -27,6 +27,7 @@ private:
 	DiagramWidget::EditingMode _editingMode;
 
 	QPoint capturedPoint;
+	std::shared_ptr<KE::TwoD::Diagram::Vertex> fakeVertex;
 	std::shared_ptr<KE::TwoD::Diagram::Vertex> capturedVertex;
 	std::shared_ptr<KE::TwoD::Diagram::Edge> capturedEdge;
 	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;
@@ -36,10 +37,17 @@ private:
 	void setCapturedCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
 
 	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex, bool highlight);
-	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge, bool highlight);
+	enum EdgeMode {
+		normal,
+		highlighted,
+		fake,
+		fake2
+	};
+	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge, EdgeMode mode);
 	void highlightCrossing(QPainter &painter, const KE::TwoD::Diagram::Crossing &crossing);
 
 	void paintEvent(QPaintEvent*) override;
+	void leaveEvent(QEvent*) override;
 	void mousePressEvent(QMouseEvent*) override;
 	void mouseReleaseEvent(QMouseEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;

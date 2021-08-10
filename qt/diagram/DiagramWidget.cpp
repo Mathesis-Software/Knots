@@ -32,6 +32,7 @@ bool DiagramWidget::canSetEditingMode(DiagramWidget::EditingMode mode) const {
 bool DiagramWidget::setEditingMode(DiagramWidget::EditingMode mode) {
 	if (mode != this->_editingMode && this->canSetEditingMode(mode)) {
 		this->_editingMode = mode;
+		this->fakeVertex = nullptr;
 		this->setCapturedVertex(nullptr);
 		this->setCapturedEdge(nullptr);
 		this->setCapturedCrossing(nullptr);
@@ -70,11 +71,22 @@ void DiagramWidget::drawVertex(QPainter &painter, const KE::TwoD::Diagram::Verte
 	painter.drawEllipse(QPointF(coords.x, coords.y), 4.5, 4.5);
 }
 
-void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge, bool highlight) {
-	if (highlight) {
-		painter.setPen(Qt::lightGray);
-	} else {
-		painter.setPen(Qt::black);
+void DiagramWidget::drawEdge(QPainter &painter, const KE::TwoD::Diagram::Edge &edge, EdgeMode mode) {
+	switch (mode) {
+		case normal:
+			painter.setPen(Qt::black);
+			break;
+		case highlighted:
+		case fake:
+			painter.setPen(Qt::lightGray);
+			break;
+		case fake2:
+		{
+			QPen pen(Qt::lightGray);
+			pen.setDashPattern({6.0, 10.0});
+			painter.setPen(pen);
+			break;
+		}
 	}
 
 	float deltaX = edge.end->x() - edge.start->x();
@@ -117,15 +129,28 @@ void DiagramWidget::drawIt(QPainter &painter) {
 		if (this->capturedCrossing) {
 			this->highlightCrossing(painter, *this->capturedCrossing);
 		}
-		for (const auto &edge : this->diagram.edges()) {
-			drawEdge(painter, edge, this->capturedEdge && edge == *this->capturedEdge);
+		const auto vertices = this->diagram.vertices();
+		auto fakeVertex = this->fakeVertex;
+		if (fakeVertex && !vertices.empty()) {
+			const KE::TwoD::Diagram::Edge edge(fakeVertex, vertices.back());
+			drawEdge(painter, edge, EdgeMode::fake);
+			if (vertices.size() > 1) {
+				const KE::TwoD::Diagram::Edge edge2(fakeVertex, vertices.front());
+				drawEdge(painter, edge2, EdgeMode::fake2);
+			}
 		}
-		for (const auto &vertex : this->diagram.vertices()) {
+		for (const auto &edge : this->diagram.edges()) {
+			drawEdge(painter, edge, this->capturedEdge && edge == *this->capturedEdge ? EdgeMode::highlighted : EdgeMode::normal);
+		}
+		for (const auto &vertex : vertices) {
 			drawVertex(painter, *vertex, vertex == this->capturedVertex);
+		}
+		if (fakeVertex) {
+			drawVertex(painter, *fakeVertex, true);
 		}
 	} else {
 		for (const auto &edge : this->diagram.edges()) {
-			drawEdge(painter, edge, true);
+			drawEdge(painter, edge, EdgeMode::highlighted);
 		}
 		for (const auto &vertex : this->diagram.vertices()) {
 			drawVertex(painter, *vertex, true);
@@ -142,27 +167,39 @@ void DiagramWidget::paintEvent(QPaintEvent*) {
 	pnt.end();
 }
 
-void DiagramWidget::mousePressEvent(QMouseEvent *m) {
+void DiagramWidget::leaveEvent(QEvent *event) {
+	if (this->fakeVertex) {
+		this->fakeVertex = nullptr;
+		this->repaint();
+	}
+}
+
+void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 	switch (this->_editingMode) {
 		case NEW_DIAGRAM:
+		{
 			if (this->diagram.isClosed()) {
+				this->fakeVertex = nullptr;
 				break;
 			}
-			this->setCapturedVertex(this->diagram.addVertex(m->x(), m->y()));
-			if (m->button() == 0x02) {
-				this->diagram.close();
-			}
-			Parent->isSaved = false;
-			break;
-		case ADD_VERTEX:
-		{
-			if (this->capturedEdge) {
-				this->setCapturedVertex(this->diagram.addVertex(*this->capturedEdge, m->x(), m->y()));
-				this->setCapturedEdge(nullptr);
+			auto fakeVertex = this->fakeVertex;
+			if (fakeVertex) {
+				this->fakeVertex = nullptr;
+				this->setCapturedVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()));
+				if (event->button() == 0x02) {
+					this->diagram.close();
+				}
 				Parent->isSaved = false;
 			}
 			break;
 		}
+		case ADD_VERTEX:
+			if (this->capturedEdge) {
+				this->setCapturedVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()));
+				this->setCapturedEdge(nullptr);
+				Parent->isSaved = false;
+			}
+			break;
 		case MOVE_VERTEX:
 			if (this->capturedVertex) {
 				Parent->isSaved = false;
@@ -188,7 +225,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 			break;
 		}
 		case MOVE_DIAGRAM:
-			this->capturedPoint = m->pos();
+			this->capturedPoint = event->pos();
 			Parent->isSaved = false;
 			break;
 		default:
@@ -197,20 +234,20 @@ void DiagramWidget::mousePressEvent(QMouseEvent *m) {
 	this->Parent->updateActions();
 }
 
-void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
+void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 	switch (this->_editingMode) {
 		case ADD_VERTEX:
 		case MOVE_VERTEX:
 		case NEW_DIAGRAM:
 			if (this->capturedVertex) {
-				this->diagram.moveVertex(this->capturedVertex, m->x(), m->y());
+				this->diagram.moveVertex(this->capturedVertex, event->x(), event->y());
 				this->setCapturedVertex(nullptr);
 				repaint();
 			}
 			break;
 		case MOVE_DIAGRAM:
 			if (!this->capturedPoint.isNull()) {
-				this->diagram.shift(m->x() - this->capturedPoint.x(), m->y() - this->capturedPoint.y());
+				this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y());
 				this->capturedPoint = QPoint();
 				repaint();
 			}
@@ -222,43 +259,57 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *m) {
 	this->Parent->updateActions();
 }
 
-void DiagramWidget::mouseMoveEvent(QMouseEvent *m) {
-	if (m->buttons() == 0) {
+void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
+	if (event->buttons() == 0) {
 		switch (this->_editingMode) {
+			case NEW_DIAGRAM:
+			{
+				if (this->diagram.isClosed()) {
+					this->fakeVertex = nullptr;
+					break;
+				}
+				auto fakeVertex = this->fakeVertex;
+				if (fakeVertex) {
+					fakeVertex->moveTo(event->x(), event->y());
+				} else {
+					this->fakeVertex = std::make_shared<KE::TwoD::Diagram::Vertex>(event->x(), event->y());
+				}
+				this->repaint();
+				break;
+			}
 			case MOVE_VERTEX:
 			case REMOVE_VERTEX:
-				this->setCapturedVertex(this->diagram.findVertex(KE::TwoD::FloatPoint(m->x(), m->y()), 17));
+				this->setCapturedVertex(this->diagram.findVertex(KE::TwoD::FloatPoint(event->x(), event->y()), 17));
 				break;
 			case ADD_VERTEX:
-				this->setCapturedEdge(this->diagram.findEdge(KE::TwoD::FloatPoint(m->x(), m->y()), 5));
+				this->setCapturedEdge(this->diagram.findEdge(KE::TwoD::FloatPoint(event->x(), event->y()), 5));
 				break;
 			case FLIP_CROSSING:
-				this->setCapturedCrossing(this->diagram.findCrossing(KE::TwoD::FloatPoint(m->x(), m->y()), 17));
+				this->setCapturedCrossing(this->diagram.findCrossing(KE::TwoD::FloatPoint(event->x(), event->y()), 17));
 				break;
 			default:
 				break;
 		}
-		return;
-	}
-
-	switch (this->_editingMode) {
-		case ADD_VERTEX:
-		case MOVE_VERTEX:
-		case NEW_DIAGRAM:
-			if (this->capturedVertex) {
-				this->diagram.moveVertex(this->capturedVertex, m->x(), m->y());
-				repaint();
-			}
-			return;
-		case MOVE_DIAGRAM:
-			if (!this->capturedPoint.isNull()) {
-				this->diagram.shift(m->x() - this->capturedPoint.x(), m->y() - this->capturedPoint.y());
-				this->capturedPoint = m->pos();
-				repaint();
-			}
-			return;
-		default:
-			return;
+	} else {
+		switch (this->_editingMode) {
+			case ADD_VERTEX:
+			case MOVE_VERTEX:
+			case NEW_DIAGRAM:
+				if (this->capturedVertex) {
+					this->diagram.moveVertex(this->capturedVertex, event->x(), event->y());
+					repaint();
+				}
+				return;
+			case MOVE_DIAGRAM:
+				if (!this->capturedPoint.isNull()) {
+					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y());
+					this->capturedPoint = event->pos();
+					repaint();
+				}
+				return;
+			default:
+				return;
+		}
 	}
 }
 

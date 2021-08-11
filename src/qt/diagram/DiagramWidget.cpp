@@ -260,6 +260,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 	}
 
 	this->Parent->updateActions();
+	this->diagram.savePoint();
 }
 
 void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {

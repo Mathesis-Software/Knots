@@ -7,19 +7,34 @@ namespace KE { namespace TwoD {
 
 class DiagramEditor {
 
+public:
+	struct Command {
+		virtual ~Command() {}
+		virtual void play(Diagram &diagram) = 0;
+	};
+
 private:
 	Diagram initialDiagram;
 	std::shared_ptr<Diagram> currentDiagram;
 
-public:
-	DiagramEditor() : currentDiagram(new Diagram) {}
-	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)) {}
+	std::vector<std::shared_ptr<Command>> log;
+	std::size_t indexInLog;
 
+public:
+	DiagramEditor() : currentDiagram(new Diagram), indexInLog(0) {}
+	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)), indexInLog(0) {}
+
+	void savePoint();
 	bool canUndo() const;
 	bool canRedo() const;
 	void undo();
 	void redo();
 
+private:
+	void trimLog();
+	void addCommand(const std::shared_ptr<Command> &command, bool savePoint);
+
+public:
 	const Diagram &diagram() const { return *this->currentDiagram; }
 	const std::string &caption() const { return this->currentDiagram->caption; }
 

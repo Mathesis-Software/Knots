@@ -112,6 +112,7 @@ public:
 		void removeVertex(const std::shared_ptr<Vertex> &vertex);
 		void moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
 
+		std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
 		std::shared_ptr<Crossing> flipCrossing(Crossing &crossing);
 
 		void shift(int dx, int dy);
@@ -124,7 +125,6 @@ public:
 	private:
 		std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
 		void removeCrossing(const Edge &edge1, const Edge &edge2);
-		std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
 		void order();
 
 private:

@@ -1,11 +1,11 @@
 ROOTDIR = .
 
-include config.mk
+include src/config.mk
 
 all:
-	make -C math all
-	make -C gl all
-	make -C qt all
+	make -C src/math all
+	make -C src/gl all
+	make -C src/qt all
 
 install: install_bin install_data install_pixmaps
 
@@ -15,7 +15,7 @@ install_bin: all
 	chmod 755 $(INSTPREFIX)/bin/knoted
 	$(INSTALL) -d $(INSTDIR)
 	$(INSTALL) -d $(INSTDIR)/bin
-	$(INSTALL) -s qt/manager/KnotEditor $(INSTDIR)/bin
+	$(INSTALL) -s src/qt/manager/KnotEditor $(INSTDIR)/bin
 	
 install_data:
 	$(INSTALL) -d $(INSTDIR)/data
@@ -39,10 +39,10 @@ archive:
 	$(RM) -r KnotEditor-$(VERSION) .ls
 
 clean:
-	@make -C math clean
-	@make -C gl clean
-	@make -C qt clean
-	@make -C other clean
+	@make -C src/math clean
+	@make -C src/gl clean
+	@make -C src/qt clean
+	@make -C src/other clean
 	@make .clean
 	@$(RM) *.tar.gz
 

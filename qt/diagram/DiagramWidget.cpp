@@ -193,6 +193,8 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 		case EDITING:
 			if (this->capturedVertex) {
 				switch (event->button()) {
+					default:
+						break;
 					case Qt::LeftButton:
 						this->Parent->isSaved = false;
 						break;
@@ -213,6 +215,8 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 				Parent->isSaved = false;
 			} else if (this->capturedEdge) {
 				switch (event->button()) {
+					default:
+						break;
 					case Qt::LeftButton:
 						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()), true);
 						this->captureEdge(nullptr);

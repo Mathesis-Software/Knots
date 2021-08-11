@@ -14,8 +14,8 @@ std::shared_ptr<DiagramEditor::Command> savePointCommand(new SavePointCommand())
 }
 
 void DiagramEditor::savePoint() {
-	this->trimLog();
-	if (!this->log.empty() && this->log.back() != savePointCommand) {
+	if (this->indexInLog > 0 && this->log[this->indexInLog - 1] != savePointCommand) {
+		this->trimLog();
 		this->log.push_back(savePointCommand);
 		this->indexInLog += 1;
 	}

@@ -174,12 +174,13 @@ struct MoveVertexCommand : public DiagramEditor::Command {
 
 }
 
-void DiagramEditor::moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y) {
-	// TODO: optimize: combine with previous MoveVertexCommand
-	this->addCommand(
-		std::make_shared<MoveVertexCommand>(indexOf(vertex, this->currentDiagram->vertices()), x, y),
-		false
-	);
+void DiagramEditor::moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y, bool storeCommand) {
+	if (storeCommand) {
+		this->addCommand(
+			std::make_shared<MoveVertexCommand>(indexOf(vertex, this->currentDiagram->vertices()), x, y),
+			false
+		);
+	}
 	this->currentDiagram->moveVertex(vertex, x, y);
 }
 
@@ -226,9 +227,10 @@ struct MoveDiagramCommand : public DiagramEditor::Command {
 
 }
 
-void DiagramEditor::shift(int dx, int dy) {
-	// TODO: optimize: combine with previous MoveDiagramCommand
-	this->addCommand(std::make_shared<MoveDiagramCommand>(dx, dy), false);
+void DiagramEditor::shift(int dx, int dy, bool storeCommand) {
+	if (storeCommand) {
+		this->addCommand(std::make_shared<MoveDiagramCommand>(dx, dy), false);
+	}
 	this->currentDiagram->shift(dx, dy);
 }
 

@@ -243,14 +243,14 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 		case QUICK_DRAWING:
 		case EDITING:
 			if (this->capturedVertex) {
-				this->diagram.moveVertex(this->capturedVertex, event->x(), event->y());
+				this->diagram.moveVertex(this->capturedVertex, event->x(), event->y(), true);
 				this->captureVertex(nullptr);
 				repaint();
 			}
 			break;
 		case MOVING:
 			if (!this->capturedPoint.isNull()) {
-				this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y());
+				this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), true);
 				this->capturedPoint = QPoint();
 				repaint();
 			}
@@ -312,13 +312,13 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			case QUICK_DRAWING:
 			case EDITING:
 				if (this->capturedVertex) {
-					this->diagram.moveVertex(this->capturedVertex, event->x(), event->y());
+					this->diagram.moveVertex(this->capturedVertex, event->x(), event->y(), false);
 					repaint();
 				}
 				break;
 			case MOVING:
 				if (!this->capturedPoint.isNull()) {
-					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y());
+					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), false);
 					this->capturedPoint = event->pos();
 					repaint();
 				}

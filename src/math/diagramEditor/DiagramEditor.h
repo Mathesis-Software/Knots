@@ -58,10 +58,10 @@ public:
 	std::shared_ptr<Diagram::Vertex> addVertex(int x, int y);
 	std::shared_ptr<Diagram::Vertex> addVertex(const Diagram::Edge &edge, int x, int y);
 	void removeVertex(const std::shared_ptr<Diagram::Vertex> &vertex);
-	void moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y);
+	void moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y, bool storeCommand);
 	std::shared_ptr<Diagram::Crossing> flipCrossing(Diagram::Crossing &crossing);
 
-	void shift(int dx, int dy);
+	void shift(int dx, int dy, bool storeCommand);
 	void close();
 	void clear();
 	bool simplify();

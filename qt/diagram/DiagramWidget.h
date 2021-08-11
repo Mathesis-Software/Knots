@@ -30,9 +30,9 @@ private:
 	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;
 
 	void setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
-	void setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
-	void setCapturedEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
-	void setCapturedCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
+	void captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
+	void captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
+	void captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
 
 	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex, bool highlight);
 	enum EdgeMode {

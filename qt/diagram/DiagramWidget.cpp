@@ -29,9 +29,9 @@ bool DiagramWidget::setEditorMode(DiagramWidget::EditorMode mode) {
 	if (mode != this->_editorMode && this->canSetEditorMode(mode)) {
 		this->_editorMode = mode;
 		this->setFakeVertex(nullptr);
-		this->setCapturedVertex(nullptr);
-		this->setCapturedEdge(nullptr);
-		this->setCapturedCrossing(nullptr);
+		this->captureVertex(nullptr);
+		this->captureEdge(nullptr);
+		this->captureCrossing(nullptr);
 		return true;
 	} else {
 		return false;
@@ -181,7 +181,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			auto fakeVertex = this->fakeVertex;
 			if (fakeVertex) {
 				this->setFakeVertex(nullptr);
-				this->setCapturedVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()));
+				this->captureVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()));
 				if (event->button() == Qt::RightButton) {
 					this->diagram.close();
 					this->setEditorMode(EDITING);
@@ -198,7 +198,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						break;
 					case Qt::RightButton:
 						this->diagram.removeVertex(this->capturedVertex);
-						this->setCapturedVertex(nullptr);
+						this->captureVertex(nullptr);
 						if (this->diagram.vertices().empty()) {
 							this->setEditorMode(QUICK_DRAWING);
 						}
@@ -207,13 +207,13 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						break;
 				}
 			} else if (this->capturedCrossing) {
-				this->setCapturedCrossing(this->diagram.flipCrossing(*this->capturedCrossing));
+				this->captureCrossing(this->diagram.flipCrossing(*this->capturedCrossing));
 				Parent->isSaved = false;
 			} else if (this->capturedEdge) {
 				switch (event->button()) {
 					case Qt::LeftButton:
-						this->setCapturedVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()));
-						this->setCapturedEdge(nullptr);
+						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()));
+						this->captureEdge(nullptr);
 						Parent->isSaved = false;
 						break;
 					case Qt::RightButton:
@@ -238,7 +238,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 		case EDITING:
 			if (this->capturedVertex) {
 				this->diagram.moveVertex(this->capturedVertex, event->x(), event->y());
-				this->setCapturedVertex(nullptr);
+				this->captureVertex(nullptr);
 				repaint();
 			}
 			break;
@@ -278,23 +278,23 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			{
 				auto vertex = this->diagram.findVertex(KE::TwoD::FloatPoint(event->x(), event->y()), 17);
 				if (vertex) {
-					this->setCapturedEdge(nullptr);
-					this->setCapturedCrossing(nullptr);
-					this->setCapturedVertex(vertex);
+					this->captureEdge(nullptr);
+					this->captureCrossing(nullptr);
+					this->captureVertex(vertex);
 					break;
 				}
 
 				auto crossing = this->diagram.findCrossing(KE::TwoD::FloatPoint(event->x(), event->y()), 17);
 				if (crossing) {
-					this->setCapturedVertex(nullptr);
-					this->setCapturedEdge(nullptr);
-					this->setCapturedCrossing(crossing);
+					this->captureVertex(nullptr);
+					this->captureEdge(nullptr);
+					this->captureCrossing(crossing);
 					break;
 				}
 
-				this->setCapturedVertex(nullptr);
-				this->setCapturedCrossing(nullptr);
-				this->setCapturedEdge(this->diagram.findEdge(KE::TwoD::FloatPoint(event->x(), event->y()), 5));
+				this->captureVertex(nullptr);
+				this->captureCrossing(nullptr);
+				this->captureEdge(this->diagram.findEdge(KE::TwoD::FloatPoint(event->x(), event->y()), 5));
 				break;
 			}
 			default:
@@ -333,7 +333,7 @@ void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 	}
 }
 
-void DiagramWidget::setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
+void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
 	auto old = this->capturedVertex;
 	this->capturedVertex = vertex;
 	if (old != this->capturedVertex) {
@@ -341,7 +341,7 @@ void DiagramWidget::setCapturedVertex(const std::shared_ptr<KE::TwoD::Diagram::V
 	}
 }
 
-void DiagramWidget::setCapturedEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge) {
+void DiagramWidget::captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge) {
 	auto old = this->capturedEdge;
 	this->capturedEdge = edge;
 	if (old != this->capturedEdge) {
@@ -349,7 +349,7 @@ void DiagramWidget::setCapturedEdge(const std::shared_ptr<KE::TwoD::Diagram::Edg
 	}
 }
 
-void DiagramWidget::setCapturedCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossings) {
+void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossings) {
 	auto old = this->capturedCrossing;
 	this->capturedCrossing = crossings;
 	if (old != this->capturedCrossing) {

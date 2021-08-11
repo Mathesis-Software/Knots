@@ -333,7 +333,7 @@ void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 		if (this->diagram.vertices().size() <= 1) {
 			this->Parent->statusBar()->showMessage("Mouse click adds point");
 		} else {
-			this->Parent->statusBar()->showMessage("Mouse click adds point; right button click closes the diagram");
+			this->Parent->statusBar()->showMessage("Left-click adds point; right-click closes the diagram");
 		}
 	} else {
 		this->Parent->statusBar()->clearMessage();
@@ -349,9 +349,9 @@ void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 
 	if (vertex && !active) {
 		if (this->diagram.isClosed() && this->diagram.vertices().size() <= 3) {
-			this->Parent->statusBar()->showMessage("Left button click starts the point moving");
+			this->Parent->statusBar()->showMessage("Mouse click starts the point moving");
 		} else {
-			this->Parent->statusBar()->showMessage("Left button click starts the point moving; right button click deletes the point");
+			this->Parent->statusBar()->showMessage("Left-click starts the point moving; right-click deletes the point");
 		}
 	} else {
 		this->Parent->statusBar()->clearMessage();

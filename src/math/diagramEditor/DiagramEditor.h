@@ -57,6 +57,7 @@ public:
 
 	std::shared_ptr<Diagram::Vertex> addVertex(int x, int y);
 	std::shared_ptr<Diagram::Vertex> addVertex(const Diagram::Edge &edge, int x, int y);
+	bool canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &vertex) const;
 	void removeVertex(const std::shared_ptr<Diagram::Vertex> &vertex);
 	void moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y, bool storeCommand);
 	std::shared_ptr<Diagram::Crossing> flipCrossing(Diagram::Crossing &crossing);

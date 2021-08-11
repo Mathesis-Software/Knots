@@ -199,7 +199,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						this->Parent->isSaved = false;
 						break;
 					case Qt::RightButton:
-						if (!this->diagram.isClosed() || this->diagram.vertices().size() > 3) {
+						if (this->diagram.canRemoveVertex(this->capturedVertex)) {
 							this->diagram.removeVertex(this->capturedVertex);
 							this->captureVertex(nullptr);
 							if (this->diagram.vertices().empty()) {
@@ -349,7 +349,7 @@ void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 	}
 
 	if (vertex && !active) {
-		if (this->diagram.isClosed() && this->diagram.vertices().size() <= 3) {
+		if (!this->diagram.canRemoveVertex(vertex)) {
 			this->Parent->statusBar()->showMessage("Mouse click starts the point moving");
 		} else {
 			this->Parent->statusBar()->showMessage("Left-click starts the point moving; right-click deletes the point");

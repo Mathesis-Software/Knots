@@ -151,6 +151,10 @@ struct RemoveVertexCommand : public DiagramEditor::Command {
 
 }
 
+bool DiagramEditor::canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &vertex) const {
+	return !this->currentDiagram->isClosed() || this->currentDiagram->vertices().size() > 3;
+}
+
 void DiagramEditor::removeVertex(const std::shared_ptr<Diagram::Vertex> &vertex) {
 	this->addCommand(
 		std::make_shared<RemoveVertexCommand>(indexOf(vertex, this->currentDiagram->vertices())),

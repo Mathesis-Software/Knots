@@ -15,4 +15,4 @@ An app for
 
 Requirements: Linux, Qt5, OpenGL. Tested on Ubuntu 20.04.
 
-![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-08-04.png?raw=true)
+![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-08-11.png?raw=true)

@@ -1,15 +1,18 @@
 # KnotEditor
-Very-very old code from 199x. One of my first programming projects.
+
+Originally written in 199x. One of my first programming projects.
+
+Partially refurbished in July-August 2021. Hopefully, the work is still in progress.
 
 An app for
+
 * drawing knot diagrams
 * converting them to 3d knots
 * smoothing the knots
 * computing and showing Seifert surfaces
+* computing some knot invariants
 * etc.
 
-In July 2021, I found it and made it compilable, installable, and runnable on Ubuntu 20.04 with OpenGL and qt5. Still quite buggy, and I'm not sure I fix it. :)
-
-It even contains some docs (in Russian).
+Requirements: Linux, Qt5, OpenGL. Tested on Ubuntu 20.04.
 
 ![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-08-04.png?raw=true)

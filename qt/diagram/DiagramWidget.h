@@ -30,7 +30,7 @@ private:
 	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;
 
 	void setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
-	void captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
+	void captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex, bool active = false);
 	void captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
 	void captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
 

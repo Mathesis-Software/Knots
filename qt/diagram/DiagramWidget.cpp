@@ -181,7 +181,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			auto fakeVertex = this->fakeVertex;
 			if (fakeVertex) {
 				this->setFakeVertex(nullptr);
-				this->captureVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()));
+				this->captureVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()), true);
 				if (event->button() == Qt::RightButton) {
 					this->diagram.close();
 					this->setEditorMode(EDITING);
@@ -197,13 +197,15 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						this->Parent->isSaved = false;
 						break;
 					case Qt::RightButton:
-						this->diagram.removeVertex(this->capturedVertex);
-						this->captureVertex(nullptr);
-						if (this->diagram.vertices().empty()) {
-							this->setEditorMode(QUICK_DRAWING);
+						if (!this->diagram.isClosed() || this->diagram.vertices().size() > 3) {
+							this->diagram.removeVertex(this->capturedVertex);
+							this->captureVertex(nullptr);
+							if (this->diagram.vertices().empty()) {
+								this->setEditorMode(QUICK_DRAWING);
+							}
+							this->repaint();
+							this->Parent->isSaved = false;
 						}
-						this->repaint();
-						this->Parent->isSaved = false;
 						break;
 				}
 			} else if (this->capturedCrossing) {
@@ -212,7 +214,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			} else if (this->capturedEdge) {
 				switch (event->button()) {
 					case Qt::LeftButton:
-						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()));
+						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()), true);
 						this->captureEdge(nullptr);
 						Parent->isSaved = false;
 						break;
@@ -280,7 +282,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 				if (vertex) {
 					this->captureEdge(nullptr);
 					this->captureCrossing(nullptr);
-					this->captureVertex(vertex);
+					this->captureVertex(vertex, false);
 					break;
 				}
 
@@ -322,6 +324,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 
 void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
 	this->fakeVertex = vertex;
+
 	if (vertex) {
 		if (this->diagram.vertices().size() <= 1) {
 			this->Parent->statusBar()->showMessage("Mouse click adds point");
@@ -333,11 +336,21 @@ void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 	}
 }
 
-void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
+void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex, bool active) {
 	auto old = this->capturedVertex;
 	this->capturedVertex = vertex;
 	if (old != this->capturedVertex) {
 		this->repaint();
+	}
+
+	if (vertex && !active) {
+		if (this->diagram.isClosed() && this->diagram.vertices().size() <= 3) {
+			this->Parent->statusBar()->showMessage("Left button click starts the point moving");
+		} else {
+			this->Parent->statusBar()->showMessage("Left button click starts the point moving; right button click deletes the point");
+		}
+	} else {
+		this->Parent->statusBar()->clearMessage();
 	}
 }
 
@@ -347,12 +360,24 @@ void DiagramWidget::captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &
 	if (old != this->capturedEdge) {
 		this->repaint();
 	}
+
+	if (edge) {
+		this->Parent->statusBar()->showMessage("Mouse click creates point on the edge");
+	} else {
+		this->Parent->statusBar()->clearMessage();
+	}
 }
 
-void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossings) {
+void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing) {
 	auto old = this->capturedCrossing;
-	this->capturedCrossing = crossings;
+	this->capturedCrossing = crossing;
 	if (old != this->capturedCrossing) {
 		this->repaint();
+	}
+
+	if (crossing) {
+		this->Parent->statusBar()->showMessage("Mouse click flips the crossing");
+	} else {
+		this->Parent->statusBar()->clearMessage();
 	}
 }

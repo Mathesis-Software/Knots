@@ -34,13 +34,12 @@ protected:
 private slots:
   void save_as();
   void print();
-  void rename();
 
 public:
   abstractWindow();
   virtual ~abstractWindow();
 
-	void updateActions();
+	virtual void updateActions();
 
   virtual bool isEmpty() const = 0;
 
@@ -48,6 +47,9 @@ public:
 
   static std::list<abstractWindow*> AWRegister;
   static bool closeAllWindows();
+
+protected:
+  virtual void rename();
 };
 
 #endif /* __ABSTRACTWINDOW_H__ */

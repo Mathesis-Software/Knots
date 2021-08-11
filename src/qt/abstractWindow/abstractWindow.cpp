@@ -25,7 +25,7 @@ abstractWindow::abstractWindow() {
 	fileMenu->addAction("&Save as…", this, SLOT(save_as()));
 	fileMenu->addAction("&Print…", this, SLOT(print()));
 	fileMenu->addSeparator();
-	fileMenu->addAction("&Rename…", this, SLOT(rename()));
+	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();
 	fileMenu->addAction("&Close", this, SLOT(close()));
 

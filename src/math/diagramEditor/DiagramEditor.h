@@ -37,6 +37,7 @@ private:
 public:
 	const Diagram &diagram() const { return *this->currentDiagram; }
 	const std::string &caption() const { return this->currentDiagram->caption; }
+	void setCaption(const std::string &caption);
 
 	const std::list<std::shared_ptr<Diagram::Vertex>> &vertices() const { return this->currentDiagram->vertices(); }
 	std::list<Diagram::Edge> edges() const { return this->currentDiagram->edges(); }

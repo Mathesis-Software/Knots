@@ -1,7 +1,8 @@
-#include <QtWidgets/QMenuBar>
-#include <QtWidgets/QMessageBox>
 #include <QtGui/QPainter>
 #include <QtGui/QPixmap>
+#include <QtWidgets/QInputDialog>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QMessageBox>
 
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
@@ -20,7 +21,6 @@ diagramWindow::diagramWindow() {
 void diagramWindow::init(DiagramWidget *widget) {
 	setCentralWidget(widget);
 	const auto &diagram = widget->diagram;
-	setWindowTitle(diagram.caption().c_str());
 
 	actionsMenu = this->menuBar()->addMenu("Actions");
 	this->registerAction(
@@ -135,3 +135,26 @@ void diagramWindow::printIt(QPrinter *prn) {
 	this->diagramWidget()->drawIt(pnt);
 	pnt.end();
 }
+
+void diagramWindow::updateActions() {
+	const auto widget = this->diagramWidget();
+	if (widget) {
+		setWindowTitle(widget->diagram.caption().c_str());
+	}
+	abstractWindow::updateActions();
+}
+
+void diagramWindow::rename() {
+	auto &diagram = this->diagramWidget()->diagram;
+
+	bool ok;
+	QString text = QInputDialog::getText(
+		this, "Rename diagram", "New diagram name:", QLineEdit::Normal, diagram.caption().c_str(), &ok
+	);
+  if (ok) {
+		diagram.setCaption(text.toStdString());
+		this->isSaved = false;
+		this->updateActions();
+	}
+}
+

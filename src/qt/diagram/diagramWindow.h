@@ -24,6 +24,8 @@ private:
 	void clear();
 	void simplify();
 
+	void rename() override;
+
 public:
 	diagramWindow(const rapidjson::Document &doc);
 	diagramWindow();
@@ -31,6 +33,8 @@ public:
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
 	bool isEmpty() const override;
+
+	void updateActions() override;
 
 	friend class DiagramWidget;
 };

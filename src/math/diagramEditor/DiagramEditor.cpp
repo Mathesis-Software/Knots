@@ -319,4 +319,24 @@ bool DiagramEditor::simplify() {
 	return false;
 }
 
+namespace {
+
+struct CaptionCommand : public DiagramEditor::Command {
+	const std::string caption;
+
+	CaptionCommand(const std::string &caption) : caption(caption) {}
+
+	void play(Diagram &diagram) override {
+		diagram.caption = caption;
+	}
+};
+
+}
+void DiagramEditor::setCaption(const std::string &caption) {
+	if (caption != this->currentDiagram->caption) {
+		this->addCommand(std::make_shared<CaptionCommand>(caption), true);
+		this->currentDiagram->caption = caption;
+	}
+}
+
 }}

@@ -1,1 +1,1 @@
-{"type":"diagram","name":"Almost minimal diagram for trefoil","components":[{"vertices":[[166,338],[253,76],[308,338],[71,402],[248,188],[415,409]],"crossings":[[0,3],[2,5],[4,1]],"isClosed":true}]}
+{"type":"diagram","name":"Almost minimal diagram for trefoil","components":[{"vertices":[[166,338],[253,76],[308,338],[71,402],[248,188],[415,409]],"crossings":[{"down":0,"up":3},{"down":2,"up":5},{"down":4,"up":1}],"isClosed":true}]}

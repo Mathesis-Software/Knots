@@ -1,1 +1,1 @@
-{"type":"diagram","name":"Minimal diagram for trefoil","components":[{"vertices":[[40,460],[460,460],[40,40],[250,400],[460,40]],"crossings":[[1,3],[2,4],[4,1]],"isClosed":true}]}
+{"type":"diagram","name":"Minimal diagram for trefoil","components":[{"vertices":[[40,460],[460,460],[40,40],[250,400],[460,40]],"crossings":[{"down":1,"up":3},{"down":2,"up":4},{"down":4,"up":1}],"isClosed":true}]}

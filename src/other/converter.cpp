@@ -6,9 +6,9 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "util/rapidjson.h"
-#include "math/diagram/diagram.h"
-#include "math/knot/knot.h"
+#include "../util/rapidjson.h"
+#include "../math/diagram/Diagram.h"
+#include "../math/knot/Knot.h"
 
 int main(int argc, const char **argv) {
 	rapidjson::Document doc;
@@ -19,7 +19,7 @@ int main(int argc, const char **argv) {
 		is.close();
 	}
 
-	const std::string type = Util::rapidjson::get_string(doc, "type");
+	const std::string type = KE::Util::rapidjson::get_string(doc, "type");
 	if (type == "link") {
 		KE::ThreeD::Knot knot(doc);
 		doc = knot.save();

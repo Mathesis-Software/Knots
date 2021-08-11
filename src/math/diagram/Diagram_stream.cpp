@@ -50,19 +50,27 @@ Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 	const std::vector<Edge> edges(std::begin(list), std::end(list));
 	const auto &crossings = first["crossings"];
 	if (!crossings.IsArray()) {
-		throw std::runtime_error("Crossings must be a list of index pairs");
+		throw std::runtime_error("Crossings must be a list of objects");
 	}
 	for (rapidjson::SizeType i = 0; i < crossings.Size(); ++i) {
 		const auto &point = crossings[i];
-		if (!point.IsArray() || point.Size() != 2 || !point[0].IsInt() || !point[1].IsInt()) {
-			throw std::runtime_error("Each crossing an index pair");
+		if (!point.IsObject() || !point.HasMember("up") || !point.HasMember("down")) {
+			throw std::runtime_error("Each crossing must have up and down fields");
 		}
-		const std::size_t x = point[0].GetInt();
-		const std::size_t y = point[1].GetInt();
-		if (x >= edges.size() || y >= edges.size()) {
+		const auto &up = point["up"];
+		if (!up.IsInt()) {
+			throw std::runtime_error("Crossing up must be an integer");
+		}
+		const auto &down = point["down"];
+		if (!down.IsInt()) {
+			throw std::runtime_error("Crossing down must be an integer");
+		}
+		const std::size_t up_int = up.GetInt();
+		const std::size_t down_int = down.GetInt();
+		if (up_int >= edges.size() || down_int >= edges.size()) {
 			throw std::runtime_error("Vertex index in crossings is out of range");
 		}
-		this->addCrossing(edges[y], edges[x]);
+		this->addCrossing(edges[up_int], edges[down_int]);
 	}
 }
 
@@ -89,9 +97,9 @@ rapidjson::Document Diagram::save() const {
 	rapidjson::Value crossings(rapidjson::kArrayType);
 	for (const auto &edge : this->edges()) {
 		for (const auto &crs : this->crossings(edge)) {
-			rapidjson::Value c(rapidjson::kArrayType);
-			c.PushBack(nums[edge.start], doc.GetAllocator());
-			c.PushBack(nums[crs.up.start], doc.GetAllocator());
+			rapidjson::Value c(rapidjson::kObjectType);
+			c.AddMember("down", nums[edge.start], doc.GetAllocator());
+			c.AddMember("up", nums[crs.up.start], doc.GetAllocator());
 			crossings.PushBack(c, doc.GetAllocator());
 		}
 	}

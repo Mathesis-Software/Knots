@@ -1,3 +1,5 @@
+#include <numeric>
+
 #include "Knot.h"
 
 namespace KE { namespace ThreeD {
@@ -31,6 +33,11 @@ const std::vector<double> &Knot::Snapshot::edgeLengths() const {
 		}
 	}
 	return *this->_edgeLengths;
+}
+
+double Knot::Snapshot::knotLength() const {
+	const auto &edgeLengths = this->edgeLengths();
+	return std::accumulate(edgeLengths.begin(), edgeLengths.end(), 0.0);
 }
 
 }}

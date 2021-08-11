@@ -9,8 +9,7 @@ MoebiusEnergy::MoebiusEnergy(const Knot &knot) : Computable(knot, "Moebius energ
 double MoebiusEnergy::compute() {
 	const auto points = this->knot.points();
 	const auto &edgeLengths = points.edgeLengths();
-
-	double len = knot.length->value ();
+	const double len = points.knotLength();
 
 	double value = 0.0;
 

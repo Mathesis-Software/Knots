@@ -1,16 +1,16 @@
-#include <stdio.h>
+#include <cstdio>
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
 #include "knotWindow_param.h"
 #include "../setValue/setValue.h"
-#include "../../math/knot/computables/length.h"
 #include "../../math/knot/KnotSurface.h"
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::setLength() {
-  double d = setDouble ("Knot length", this->knot.length->value(), 1.0, 1000.0);
-  if (d != this->knot.length->value()) {
+	const auto snapshot = this->knot.points();
+  double d = setDouble ("Knot length", snapshot.knotLength(), 1.0, 1000.0);
+  if (d != snapshot.knotLength()) {
     this->knot.setLength(d);
     this->knot.center();
     this->knotSurface->destroy(false);

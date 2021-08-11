@@ -27,12 +27,6 @@ class Diagram;
 
 namespace ThreeD {
 
-namespace Computables {
-
-class Computable;
-
-}
-
 class Knot {
 
 public:
@@ -63,6 +57,7 @@ public:
 		}
 
 		const std::vector<double> &edgeLengths() const;
+		double knotLength() const;
 	};
 
 private:
@@ -85,7 +80,6 @@ private:
 
 public:
 	std::string caption;
-	std::shared_ptr<Computables::Computable> length;
 
 private:
 	mutable std::recursive_mutex dataChangeMutex;

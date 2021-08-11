@@ -1,12 +1,10 @@
-#include <numeric>
-
 #include "Knot.h"
 
 namespace KE { namespace ThreeD {
 
 std::vector<Point> Knot::normalizedPoints(const Snapshot &snapshot, std::size_t newNumberOfPoints) const {
 	const auto &edgeLengths = snapshot.edgeLengths();
-	const double totalLength = std::accumulate(edgeLengths.begin(), edgeLengths.end(), 0.0);
+	const double totalLength = snapshot.knotLength();
 	const double newEdgeLength = totalLength / newNumberOfPoints;
 
 	std::vector<Point> newPoints;

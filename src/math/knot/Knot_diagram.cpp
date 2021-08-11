@@ -3,11 +3,10 @@
 
 #include "Knot.h"
 #include "../diagram/Diagram.h"
-#include "computables/length.h"
 
 namespace KE { namespace ThreeD {
 
-Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption + " (from diagram)"), length(new Computables::Length(*this)), _generation(1), lockCount(0) {
+Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption + " (from diagram)"), _generation(1), lockCount(0) {
 	const auto edges = diagram.edges();
 	std::map<std::shared_ptr<TwoD::Diagram::Vertex>,std::list<TwoD::Diagram::Crossing>> all_crossings;
 	for (const auto &edge : edges) {

@@ -6,6 +6,7 @@
 #include <QtWidgets/QDialog>
 
 #include "knotWindow.h"
+#include "../../math/knot/computables/computable.h"
 
 class paramWindow : public QDialog {
 

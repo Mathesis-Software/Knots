@@ -1,7 +1,5 @@
 #include <cmath>
-#include <numeric>
 
-#include "computables/length.h"
 #include "Knot.h"
 
 namespace KE { namespace ThreeD {
@@ -32,14 +30,13 @@ void Knot::center() {
 // Длина ломаной устанавливается равной len.
 void Knot::setLength(double len) {
 	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
+	double ratio = len / this->points().knotLength();
+
 	counting_lock guard(*this);
-
-  len /= this->length->value();
-
   for (Point &pt : this->_points) {
-    pt.x *= len;
-    pt.y *= len;
-    pt.z *= len;
+    pt.x *= ratio;
+    pt.y *= ratio;
+    pt.z *= ratio;
 	}
 }
 
@@ -48,8 +45,7 @@ void Knot::decreaseEnergy() {
 
   // Сохраняем длину кривой, чтобы в конце восстановить ее.
 	const auto snapshot = this->points();
-	const auto &edgeLengths = snapshot.edgeLengths();
-	const double totalLength = std::accumulate(edgeLengths.begin(), edgeLengths.end(), 0.0);
+	const double totalLength = snapshot.knotLength();
 
   // Расставляем точки на кривой равномерно.
   auto points = this->normalizedPoints(snapshot, snapshot.size());

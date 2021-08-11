@@ -1,10 +1,9 @@
 #include "../../util/rapidjson.h"
 #include "Knot.h"
-#include "computables/length.h"
 
 namespace KE { namespace ThreeD {
 
-Knot::Knot(const rapidjson::Document &doc) : length(new Computables::Length(*this)), _generation(1), lockCount(0) {
+Knot::Knot(const rapidjson::Document &doc) : _generation(1), lockCount(0) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}

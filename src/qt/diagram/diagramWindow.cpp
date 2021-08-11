@@ -37,7 +37,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	);
 	
 	this->registerAction(
-		this->addToolbarAction("mini_trefoil.xpm", "Convert to knot", [this] { this->convert(); }),
+		this->addToolbarAction("trefoil.svg", "Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 

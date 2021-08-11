@@ -1,6 +1,5 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
-#include <QtWidgets/QStatusBar>
 
 #include "diagramWindow.h"
 
@@ -241,7 +240,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 		default:
 			break;
 	}
-	this->Parent->updateActions();
+	emit actionsUpdated();
 }
 
 void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
@@ -265,7 +264,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 			break;
 	}
 
-	this->Parent->updateActions();
+	emit actionsUpdated();
 	this->diagram.savePoint();
 }
 
@@ -338,12 +337,12 @@ void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 
 	if (vertex) {
 		if (this->diagram.vertices().size() <= 1) {
-			this->Parent->statusBar()->showMessage("Mouse click adds point");
+			emit setActionTip("Mouse click adds point");
 		} else {
-			this->Parent->statusBar()->showMessage("Left-click adds point; right-click closes the diagram");
+			emit setActionTip("Left-click adds point; right-click closes the diagram");
 		}
 	} else {
-		this->Parent->statusBar()->clearMessage();
+		emit setActionTip(QString::null);
 	}
 }
 
@@ -356,12 +355,12 @@ void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 
 	if (vertex && !active) {
 		if (!this->diagram.canRemoveVertex(vertex)) {
-			this->Parent->statusBar()->showMessage("Mouse click starts the point moving");
+			emit setActionTip("Mouse click starts the point moving");
 		} else {
-			this->Parent->statusBar()->showMessage("Left-click starts the point moving; right-click deletes the point");
+			emit setActionTip("Left-click starts the point moving; right-click deletes the point");
 		}
 	} else {
-		this->Parent->statusBar()->clearMessage();
+		emit setActionTip(QString::null);
 	}
 }
 
@@ -374,12 +373,12 @@ void DiagramWidget::captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &
 
 	if (edge) {
 		if (this->diagram.canRemoveEdge(edge)) {
-			this->Parent->statusBar()->showMessage("Left-click creates point on the edge; right-click deletes the edge");
+			emit setActionTip("Left-click creates point on the edge; right-click deletes the edge");
 		} else {
-			this->Parent->statusBar()->showMessage("Mouse click creates point on the edge");
+			emit setActionTip("Mouse click creates point on the edge");
 		}
 	} else {
-		this->Parent->statusBar()->clearMessage();
+		emit setActionTip(QString::null);
 	}
 }
 
@@ -391,8 +390,8 @@ void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Cro
 	}
 
 	if (crossing) {
-		this->Parent->statusBar()->showMessage("Mouse click flips the crossing");
+		emit setActionTip("Mouse click flips the crossing");
 	} else {
-		this->Parent->statusBar()->clearMessage();
+		emit setActionTip(QString::null);
 	}
 }

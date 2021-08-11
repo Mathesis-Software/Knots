@@ -9,6 +9,8 @@ class diagramWindow;
 
 class DiagramWidget : public QWidget {
 
+Q_OBJECT
+
 public:
 	enum EditorMode {
 		QUICK_DRAWING = 0,
@@ -61,6 +63,10 @@ public:
 	bool setEditorMode(DiagramWidget::EditorMode mode);
 
 	void clear();
+
+signals:
+	void setActionTip(const QString &tip);
+	void actionsUpdated();
 };
 
 #endif /* __DIAGRAMWIDGET_H__ */

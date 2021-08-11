@@ -3,6 +3,7 @@
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QStatusBar>
 
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
@@ -21,6 +22,15 @@ diagramWindow::diagramWindow() {
 void diagramWindow::init(DiagramWidget *widget) {
 	setCentralWidget(widget);
 	const auto &diagram = widget->diagram;
+
+	this->connect(widget, &DiagramWidget::setActionTip, [this](const QString &text) {
+		if (text != QString::null) {
+			this->statusBar()->showMessage(text);
+		} else {
+			this->statusBar()->clearMessage();
+		}
+	});
+	this->connect(widget, &DiagramWidget::actionsUpdated, this, &diagramWindow::updateActions);
 
 	actionsMenu = this->menuBar()->addMenu("Actions");
 	this->registerAction(

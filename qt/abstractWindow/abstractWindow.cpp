@@ -117,7 +117,7 @@ QAction *abstractWindow::addToolbarAction(const QString &iconFilename, const QSt
 	return this->toolbar->addAction(icon, text, functor);
 }
 
-void abstractWindow::addToolBarSeparator() {
+void abstractWindow::addToolbarSeparator() {
 	this->toolbar->addSeparator();
 }
 

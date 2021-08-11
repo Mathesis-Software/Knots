@@ -26,7 +26,7 @@ protected:
   int askForSave(void);
 
   QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
-  void addToolBarSeparator(void);
+  void addToolbarSeparator();
   void complete();
 
 	void registerAction(QAction *action, std::function<void(QAction&)> controller);

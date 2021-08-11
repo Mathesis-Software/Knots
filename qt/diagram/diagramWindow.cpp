@@ -41,7 +41,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 
-	addToolBarSeparator();
+	addToolbarSeparator();
 	auto addAction = [this, widget](const QString &icon, const QString &text, DiagramWidget::EditorMode mode) {
 		QAction *action = this->addToolbarAction(icon, text, [this, mode] { this->setMode(mode); });
 		action->setCheckable(true);
@@ -55,7 +55,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	addAction("diagram_mode_editing.svg", "Editing", DiagramWidget::EDITING);
 	addAction("diagram_mode_moving.svg", "Moving diagram", DiagramWidget::MOVING);
 
-	addToolBarSeparator();
+	addToolbarSeparator();
 	addToolbarAction("undo.svg", "Undo", [] {});
 	addToolbarAction("redo.svg", "Redo", [] {});
 

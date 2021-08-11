@@ -24,7 +24,7 @@ GLWindow::GLWindow() : currentMatrix(new double[16]), currentSpeedMatrix(new dou
 		this->addToolbarAction(QString("rotate%1.xpm").arg(i), "Rotate", [this, i] { this->rotate(i); });
 	}
 
-	addToolBarSeparator();
+	addToolbarSeparator();
 	addToolbarAction("inertia.xpm", "Inertia", [this] { this->inertia(); })->setCheckable(true);
 }
 

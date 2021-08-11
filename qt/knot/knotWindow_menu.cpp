@@ -33,7 +33,7 @@ void knotWindow::initMenu() {
   optionsMenu->addAction("Seifert surface &front color…", this, SLOT(setSeifertFrontColor()));
   optionsMenu->addAction("Seifert surface &back color…", this, SLOT(setSeifertBackColor()));
 
-  addToolBarSeparator();
+  addToolbarSeparator();
 	this->registerAction(
 		addToolbarAction("start.xpm", "Start smoothing", [this] { this->smooth(); }),
 		[this](QAction &action) { action.setVisible(!this->smoothingThread.isRunning()); }
@@ -42,9 +42,9 @@ void knotWindow::initMenu() {
 		addToolbarAction("stop.xpm", "Interrupt smoothing", [this] { this->stop(); }),
 		[this](QAction &action) { action.setVisible(this->smoothingThread.isRunning()); }
 	);
-  addToolBarSeparator();
+  addToolbarSeparator();
   addToolbarAction("math.xpm", "Show parameters", [this] { this->math(); });
-  addToolBarSeparator();
+  addToolbarSeparator();
   addToolbarAction("plus.xpm", "Shift Seifert surface along gradient", [this] { this->bp_plus(); });
   addToolbarAction("minus.xpm", "Shift Seifert surface along gradient", [this] { this->bp_minus(); });
 

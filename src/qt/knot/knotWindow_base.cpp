@@ -46,7 +46,7 @@ knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStart
   this->init();
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram, d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
   this->init();
 	this->isSaved = false;
 }

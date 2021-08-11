@@ -20,7 +20,7 @@ diagramWindow::diagramWindow() {
 void diagramWindow::init(DiagramWidget *widget) {
 	setCentralWidget(widget);
 	const auto &diagram = widget->diagram;
-	setWindowTitle(diagram.caption.c_str());
+	setWindowTitle(diagram.caption().c_str());
 
 	actionsMenu = this->menuBar()->addMenu("Actions");
 	this->registerAction(
@@ -109,7 +109,7 @@ bool diagramWindow::isEmpty() const {
 }
 
 void diagramWindow::simplify() {
-	if (this->diagramWidget()->diagram.simplify(2)) {
+	if (this->diagramWidget()->diagram.simplify()) {
 		this->isSaved = false;
 		this->centralWidget()->repaint();
 	}

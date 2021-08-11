@@ -8,10 +8,6 @@ namespace KE { namespace TwoD {
 Diagram::Diagram() : caption("New Diagram"), _isClosed(false) {
 }
 
-Diagram::~Diagram() {
-	this->clear();
-}
-
 void Diagram::clear() {
 	this->_vertices.clear();
 	this->_isClosed = false;

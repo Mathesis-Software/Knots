@@ -1,11 +1,7 @@
+SUBDIRS = diagram diagramEditor knot knot/computables seifert
+
 all:
-	@make -C knot all
-	@make -C knot/computables all
-	@make -C diagram all
-	@make -C seifert all
+	@for dir in $(SUBDIRS); do make -C $$dir all; done
 
 clean:
-	@make -C knot .clean
-	@make -C knot/computables .clean
-	@make -C diagram .clean
-	@make -C seifert .clean
+	@for dir in $(SUBDIRS); do make -C $$dir .clean; done

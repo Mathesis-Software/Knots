@@ -95,7 +95,6 @@ public:
 	public:
 		Diagram();
 		Diagram(const rapidjson::Document &doc);
-		~Diagram();
 
 		rapidjson::Document save() const;
 
@@ -115,7 +114,7 @@ public:
 
 		std::shared_ptr<Crossing> flipCrossing(Crossing &crossing);
 
-		void shift(int x, int y);
+		void shift(int dx, int dy);
 		bool simplify(std::size_t depth);
 
 		std::shared_ptr<Vertex> findVertex(const FloatPoint &pt, float maxDistance) const;

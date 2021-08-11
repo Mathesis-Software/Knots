@@ -3,7 +3,7 @@
 
 #include <QtWidgets/QWidget>
 
-#include "../../math/diagram/Diagram.h"
+#include "../../math/diagramEditor/DiagramEditor.h"
 
 class diagramWindow;
 
@@ -17,7 +17,7 @@ public:
 	};
 
 public:
-	KE::TwoD::Diagram diagram;
+	KE::TwoD::DiagramEditor diagram;
 
 private:
 	diagramWindow *Parent;

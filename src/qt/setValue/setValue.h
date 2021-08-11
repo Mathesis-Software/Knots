@@ -5,30 +5,8 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 
-char *setString (const char*, char*, const int);
 int setInt (const char*, int, int, int);
 double setDouble (const char*, double, double, double);
-
-class setupString : public QDialog {
-
-Q_OBJECT
-  
-private:
-
-  setupString (char*, const int);
-  ~setupString (void);
-
-  QLineEdit *label;
-  QPushButton *okButton, *cancelButton;
-
-  char *orig;
-
-private slots:
-
-  void accept ();
-  
-  friend char *setString (const char*, char*, const int);
-};
 
 class setupInt : public QDialog {
 

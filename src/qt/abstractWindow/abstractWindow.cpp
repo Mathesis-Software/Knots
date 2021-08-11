@@ -2,6 +2,7 @@
 
 #include <QtGui/QCloseEvent>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QMenu>
@@ -92,14 +93,14 @@ void abstractWindow::print() {
 }
 
 void abstractWindow::rename() {
-	char *capt = new char [256];
-	strcpy(capt, windowTitle().toStdString().c_str());
-	setString("Rename", capt, 256);
-	if (strcmp(capt, windowTitle().toStdString().c_str())) {
-		setWindowTitle(capt);
+	bool ok;
+	QString text = QInputDialog::getText(
+		this, "Rename", "New name:", QLineEdit::Normal, this->windowTitle(), &ok
+	);
+  if (ok && !text.isEmpty()) {
+		setWindowTitle(text);
 		isSaved = false;
 	}
-	delete[] capt;
 }
 
 bool abstractWindow::closeAllWindows() {

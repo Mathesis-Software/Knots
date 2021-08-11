@@ -275,7 +275,6 @@ struct CloseCommand : public DiagramEditor::Command {
 		diagram.close();
 	}
 };
-
 std::shared_ptr<DiagramEditor::Command> closeCommand(new CloseCommand());
 
 }
@@ -292,7 +291,6 @@ struct ClearCommand : public DiagramEditor::Command {
 		diagram.clear();
 	}
 };
-
 std::shared_ptr<DiagramEditor::Command> clearCommand(new ClearCommand());
 
 }
@@ -309,14 +307,16 @@ struct SimplifyCommand : public DiagramEditor::Command {
 		diagram.simplify(2);
 	}
 };
-
 std::shared_ptr<DiagramEditor::Command> simplifyCommand(new SimplifyCommand());
 
 }
 
 bool DiagramEditor::simplify() {
-	this->addCommand(simplifyCommand, true);
-	return this->currentDiagram->simplify(2);
+	if (this->currentDiagram->simplify(2)) {
+		this->addCommand(simplifyCommand, true);
+		return true;
+	}
+	return false;
 }
 
 }}

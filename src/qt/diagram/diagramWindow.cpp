@@ -22,17 +22,17 @@ void diagramWindow::init(DiagramWidget *widget) {
 	const auto &diagram = widget->diagram;
 	setWindowTitle(diagram.caption.c_str());
 
-	actionsMenu = this->menuBar()->addMenu("&Actions");
+	actionsMenu = this->menuBar()->addMenu("Actions");
 	this->registerAction(
-		actionsMenu->addAction("&Convert", [this] { this->convert(); }),
+		actionsMenu->addAction("Convert", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("&Simplify", [this] { this->simplify(); }),
+		actionsMenu->addAction("Simplify", [this] { this->simplify(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("C&lear", [this] { this->clear(); }),
+		actionsMenu->addAction("Clear", [this] { this->clear(); }),
 		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
 	);
 	
@@ -56,8 +56,8 @@ void diagramWindow::init(DiagramWidget *widget) {
 	addAction("diagram_mode_moving.svg", "Moving diagram", DiagramWidget::MOVING);
 
 	addToolbarSeparator();
-	addToolbarAction("undo.svg", "Undo", [] {});
-	addToolbarAction("redo.svg", "Redo", [] {});
+	addToolbarAction("undo.svg", "Undo", [] {})->setEnabled(false);
+	addToolbarAction("redo.svg", "Redo", [] {})->setEnabled(false);
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 

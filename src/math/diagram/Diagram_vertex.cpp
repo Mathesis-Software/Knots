@@ -161,4 +161,41 @@ void Diagram::close() {
 	this->_isClosed = true;
 }
 
+void Diagram::removeEdge(const Edge &edge) {
+	const auto edges = this->edges();
+	if (edges.empty()) {
+		return;
+	}
+
+	if (this->isClosed()) {
+		const auto loc = std::find(edges.begin(), edges.end(), edge);
+		if (loc == edges.end()) {
+			return;
+		}
+		std::list<std::shared_ptr<Vertex>> new_list;
+		for (auto it = loc; it != edges.end(); ++it) {
+			new_list.push_back(it->end);
+		}
+		for (auto it = edges.begin(); it != loc; ++it) {
+			new_list.push_back(it->end);
+		}
+		// TODO: remove crossings
+		new_list.back()->crossings.clear();
+		for (const auto &vertex : new_list) {
+			vertex->crossings.remove_if([edge](const Crossing &crossing) { return crossing.up == edge; });
+		}
+		this->_vertices.swap(new_list);
+		this->_isClosed = false;
+	} else {
+		if (edge == edges.front()) {
+			this->removeVertex(edge.start);
+			if (edges.size() == 1) {
+				this->removeVertex(edge.end);
+			}
+		} else if (edge == edges.back()) {
+			this->removeVertex(edge.end);
+		}
+	}
+}
+
 }}

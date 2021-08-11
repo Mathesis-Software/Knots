@@ -151,7 +151,7 @@ struct RemoveVertexCommand : public DiagramEditor::Command {
 
 }
 
-bool DiagramEditor::canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &vertex) const {
+bool DiagramEditor::canRemoveVertex(const std::shared_ptr<Diagram::Vertex>&) const {
 	return !this->currentDiagram->isClosed() || this->currentDiagram->vertices().size() > 3;
 }
 
@@ -161,6 +161,36 @@ void DiagramEditor::removeVertex(const std::shared_ptr<Diagram::Vertex> &vertex)
 		true
 	);
 	this->currentDiagram->removeVertex(vertex);
+}
+
+namespace {
+
+struct RemoveEdgeCommand : public DiagramEditor::Command {
+	const std::size_t indexOfEdge;
+
+	RemoveEdgeCommand(std::size_t indexOfEdge) : indexOfEdge(indexOfEdge) {}
+
+	void play(Diagram &diagram) override {
+		diagram.removeEdge(elementAt(this->indexOfEdge, diagram.edges()));
+	}
+};
+
+}
+
+bool DiagramEditor::canRemoveEdge(const std::shared_ptr<Diagram::Edge> &edge) const {
+	if (this->currentDiagram->isClosed()) {
+	 	return true;
+	}
+	const auto edges = this->currentDiagram->edges();
+	return *edge == edges.front() || *edge == edges.back();
+}
+
+void DiagramEditor::removeEdge(const std::shared_ptr<Diagram::Edge> &edge) {
+	this->addCommand(
+		std::make_shared<RemoveEdgeCommand>(indexOf(*edge, this->currentDiagram->edges())),
+		true
+	);
+	this->currentDiagram->removeEdge(*edge);
 }
 
 namespace {

@@ -205,7 +205,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 							if (this->diagram.vertices().empty()) {
 								this->setEditorMode(QUICK_DRAWING);
 							}
-							this->repaint();
 							this->Parent->isSaved = false;
 						}
 						break;
@@ -223,7 +222,14 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						Parent->isSaved = false;
 						break;
 					case Qt::RightButton:
-						// TODO: delete edge
+						if (this->diagram.canRemoveEdge(this->capturedEdge)) {
+							this->diagram.removeEdge(this->capturedEdge);
+							this->captureEdge(nullptr);
+							if (this->diagram.vertices().empty()) {
+								this->setEditorMode(QUICK_DRAWING);
+							}
+							Parent->isSaved = false;
+						}
 						break;
 				}
 			}
@@ -367,7 +373,11 @@ void DiagramWidget::captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &
 	}
 
 	if (edge) {
-		this->Parent->statusBar()->showMessage("Mouse click creates point on the edge");
+		if (this->diagram.canRemoveEdge(edge)) {
+			this->Parent->statusBar()->showMessage("Left-click creates point on the edge; right-click deletes the edge");
+		} else {
+			this->Parent->statusBar()->showMessage("Mouse click creates point on the edge");
+		}
 	} else {
 		this->Parent->statusBar()->clearMessage();
 	}

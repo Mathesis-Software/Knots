@@ -60,6 +60,8 @@ public:
 	bool canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &vertex) const;
 	void removeVertex(const std::shared_ptr<Diagram::Vertex> &vertex);
 	void moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y, bool storeCommand);
+	bool canRemoveEdge(const std::shared_ptr<Diagram::Edge> &edge) const;
+	void removeEdge(const std::shared_ptr<Diagram::Edge> &edge);
 	std::shared_ptr<Diagram::Crossing> flipCrossing(Diagram::Crossing &crossing);
 
 	void shift(int dx, int dy, bool storeCommand);

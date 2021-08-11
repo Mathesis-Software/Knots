@@ -55,6 +55,10 @@ void diagramWindow::init(DiagramWidget *widget) {
 	addAction("diagram_mode_editing.svg", "Editing", DiagramWidget::EDITING);
 	addAction("diagram_mode_moving.svg", "Moving diagram", DiagramWidget::MOVING);
 
+	addToolBarSeparator();
+	addToolbarAction("undo.svg", "Undo", [] {});
+	addToolbarAction("redo.svg", "Redo", [] {});
+
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 
 	complete();

@@ -56,8 +56,22 @@ void diagramWindow::init(DiagramWidget *widget) {
 	addAction("diagram_mode_moving.svg", "Moving diagram", DiagramWidget::MOVING);
 
 	addToolbarSeparator();
-	addToolbarAction("undo.svg", "Undo", [] {})->setEnabled(false);
-	addToolbarAction("redo.svg", "Redo", [] {})->setEnabled(false);
+	this->registerAction(
+		this->addToolbarAction("undo.svg", "Undo", [this, widget] {
+			widget->diagram.undo();
+			widget->repaint();
+			this->updateActions();
+		}),
+		[widget](QAction &action) { action.setEnabled(widget->diagram.canUndo()); }
+	);
+	this->registerAction(
+		this->addToolbarAction("redo.svg", "Redo", [this, widget] {
+			widget->diagram.redo();
+			widget->repaint();
+			this->updateActions();
+		}),
+		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }
+	);
 
 	setWindowIcon(QPixmap((QString) getenv("KNOTEDITOR_PIXMAPS") + "/diagram.xpm"));
 

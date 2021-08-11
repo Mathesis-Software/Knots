@@ -2,40 +2,56 @@
 
 namespace KE { namespace TwoD {
 
+bool DiagramEditor::canUndo() const {
+	return true;
+}
+
+bool DiagramEditor::canRedo() const {
+	return false;
+}
+
+void DiagramEditor::undo() {
+	auto replacement = std::make_shared<Diagram>(this->initialDiagram.save());
+	this->currentDiagram = replacement;
+}
+
+void DiagramEditor::redo() {
+}
+
 std::shared_ptr<Diagram::Vertex> DiagramEditor::addVertex(int x, int y) {
-	return this->_diagram.addVertex(x, y);
+	return this->currentDiagram->addVertex(x, y);
 }
 
 std::shared_ptr<Diagram::Vertex> DiagramEditor::addVertex(const Diagram::Edge &edge, int x, int y) {
-	return this->_diagram.addVertex(edge, x, y);
+	return this->currentDiagram->addVertex(edge, x, y);
 }
 
 void DiagramEditor::removeVertex(const std::shared_ptr<Diagram::Vertex> &vertex) {
-	this->_diagram.removeVertex(vertex);
+	this->currentDiagram->removeVertex(vertex);
 }
 
 void DiagramEditor::moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y) {
-	this->_diagram.moveVertex(vertex, x, y);
+	this->currentDiagram->moveVertex(vertex, x, y);
 }
 
 std::shared_ptr<Diagram::Crossing> DiagramEditor::flipCrossing(Diagram::Crossing &crossing) {
-	return this->_diagram.flipCrossing(crossing);
+	return this->currentDiagram->flipCrossing(crossing);
 }
 
 void DiagramEditor::shift(int dx, int dy) {
-	this->_diagram.shift(dx, dy);
+	this->currentDiagram->shift(dx, dy);
 }
 
 void DiagramEditor::close() {
-	return this->_diagram.close();
+	return this->currentDiagram->close();
 }
 
 void DiagramEditor::clear() {
-	return this->_diagram.clear();
+	return this->currentDiagram->clear();
 }
 
 bool DiagramEditor::simplify() {
-	return this->_diagram.simplify(2);
+	return this->currentDiagram->simplify(2);
 }
 
 }}

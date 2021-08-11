@@ -8,31 +8,37 @@ namespace KE { namespace TwoD {
 class DiagramEditor {
 
 private:
-	Diagram _diagram;
+	Diagram initialDiagram;
+	std::shared_ptr<Diagram> currentDiagram;
 
 public:
-	DiagramEditor() {}
-	DiagramEditor(const rapidjson::Document &doc) : _diagram(doc) {}
+	DiagramEditor() : currentDiagram(new Diagram) {}
+	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)) {}
 
-	const Diagram &diagram() const { return this->_diagram; }
-	const std::string &caption() const { return this->_diagram.caption; }
+	bool canUndo() const;
+	bool canRedo() const;
+	void undo();
+	void redo();
 
-	const std::list<std::shared_ptr<Diagram::Vertex>> &vertices() const { return this->_diagram.vertices(); }
-	std::list<Diagram::Edge> edges() const { return this->_diagram.edges(); }
-	const std::list<Diagram::Crossing> &crossings(const Diagram::Edge &edge) const { return this->_diagram.crossings(edge); }
-	bool isClosed() const { return this->_diagram.isClosed(); }
+	const Diagram &diagram() const { return *this->currentDiagram; }
+	const std::string &caption() const { return this->currentDiagram->caption; }
+
+	const std::list<std::shared_ptr<Diagram::Vertex>> &vertices() const { return this->currentDiagram->vertices(); }
+	std::list<Diagram::Edge> edges() const { return this->currentDiagram->edges(); }
+	const std::list<Diagram::Crossing> &crossings(const Diagram::Edge &edge) const { return this->currentDiagram->crossings(edge); }
+	bool isClosed() const { return this->currentDiagram->isClosed(); }
 
 	std::shared_ptr<Diagram::Vertex> findVertex(const FloatPoint &pt, float maxDistance) const {
-		return this->_diagram.findVertex(pt, maxDistance);
+		return this->currentDiagram->findVertex(pt, maxDistance);
 	}
 	std::shared_ptr<Diagram::Edge> findEdge(const FloatPoint &pt, float maxDistance) const {
-		return this->_diagram.findEdge(pt, maxDistance);
+		return this->currentDiagram->findEdge(pt, maxDistance);
 	}
 	std::shared_ptr<Diagram::Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const {
-		return this->_diagram.findCrossing(pt, maxDistance);
+		return this->currentDiagram->findCrossing(pt, maxDistance);
 	}
 
-	rapidjson::Document save() const { return this->_diagram.save(); }
+	rapidjson::Document save() const { return this->currentDiagram->save(); }
 
 	std::shared_ptr<Diagram::Vertex> addVertex(int x, int y);
 	std::shared_ptr<Diagram::Vertex> addVertex(const Diagram::Edge &edge, int x, int y);

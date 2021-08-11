@@ -148,7 +148,7 @@ void diagramWindow::rename() {
 	auto &diagram = this->diagramWidget()->diagram;
 
 	bool ok;
-	QString text = QInputDialog::getText(
+	const QString text = QInputDialog::getText(
 		this, "Rename diagram", "New diagram name:", QLineEdit::Normal, diagram.caption().c_str(), &ok
 	);
   if (ok) {

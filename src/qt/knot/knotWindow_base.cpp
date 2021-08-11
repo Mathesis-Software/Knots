@@ -1,6 +1,7 @@
 #include <QtCore/QTimerEvent>
 #include <QtGui/QCloseEvent>
 #include <QtGui/QPixmap>
+#include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
 
@@ -38,8 +39,8 @@ void knotWindow::init() {
   initMenu();
   complete();
 
-  setWindowTitle(this->knot.caption.c_str());
   setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_PIXMAPS") + "/trefoil.xpm"));
+	this->updateActions();
 }
 
 knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
@@ -89,5 +90,22 @@ void knotWindow::closeEvent(QCloseEvent *event) {
 	if (event->isAccepted() && this->smoothingThread.isRunning()) {
 		this->smoothingThread.requestInterruption();
 		this->smoothingThread.wait();
+	}
+}
+
+void knotWindow::updateActions() {
+  setWindowTitle(this->knot.caption.c_str());
+	abstractWindow::updateActions();
+}
+
+void knotWindow::rename() {
+	bool ok;
+	const QString text = QInputDialog::getText(
+		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knot.caption.c_str(), &ok
+	);
+  if (ok) {
+		this->knot.caption = text.toStdString();
+		this->isSaved = false;
+		this->updateActions();
 	}
 }

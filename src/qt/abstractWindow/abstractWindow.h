@@ -49,7 +49,7 @@ public:
   static bool closeAllWindows();
 
 protected:
-  virtual void rename();
+  virtual void rename() = 0;
 };
 
 #endif /* __ABSTRACTWINDOW_H__ */

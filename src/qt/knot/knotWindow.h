@@ -103,7 +103,10 @@ public:
 
 	void closeEvent(QCloseEvent *event);
 
+private:
   const char *mask() const override {return "*.knt";};
+	void updateActions() override;
+	void rename() override;
 };
 
 #endif /* __KNOTWINDOW_H__ */

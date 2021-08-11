@@ -92,17 +92,6 @@ void abstractWindow::print() {
 	//}
 }
 
-void abstractWindow::rename() {
-	bool ok;
-	QString text = QInputDialog::getText(
-		this, "Rename", "New name:", QLineEdit::Normal, this->windowTitle(), &ok
-	);
-  if (ok && !text.isEmpty()) {
-		setWindowTitle(text);
-		isSaved = false;
-	}
-}
-
 bool abstractWindow::closeAllWindows() {
 	while (!abstractWindow::AWRegister.empty()) {
 		abstractWindow *av = abstractWindow::AWRegister.back();

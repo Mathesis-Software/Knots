@@ -6,7 +6,7 @@
 #include "about.h"
 
 AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
-	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 	this->setAttribute(Qt::WA_DeleteOnClose);
 	this->setWindowModality(Qt::ApplicationModal);
 	setFixedSize(380, 180);
@@ -65,6 +65,11 @@ TrefoilWidget::TrefoilWidget(QWidget *parent) : QOpenGLWidget(parent), surface(n
 	x = 1.0;
 	y = 0.0;
 	z = 0.0;
+}
+
+void TrefoilWidget::initializeGL() {
+	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 }
 
 void TrefoilWidget::resizeGL(int w, int h) {

@@ -40,6 +40,7 @@ private:
 	std::unique_ptr<TrefoilSurface> surface;
 	float x, y, z;
 
+	void initializeGL();
 	void resizeGL(int, int);
 	void paintGL();
 };

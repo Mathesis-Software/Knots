@@ -10,8 +10,8 @@ keFileIconProvider *keFileIconProvider::instance() {
 }
 
 keFileIconProvider::keFileIconProvider() :
-  diagramIcon((QString)getenv("KNOTEDITOR_PIXMAPS") + "/file_diagram.xpm"),
-  knotIcon((QString)getenv("KNOTEDITOR_PIXMAPS") + "/file_knot.xpm"),
+  diagramIcon((QString)getenv("KNOTEDITOR_ROOT") + "/icons/file_diagram.xpm"),
+  knotIcon((QString)getenv("KNOTEDITOR_ROOT") + "/icons/file_knot.xpm"),
   emptyIcon() {
 }
 

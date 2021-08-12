@@ -96,7 +96,7 @@ bool abstractWindow::closeAllWindows() {
 }
 
 QAction *abstractWindow::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {
-	const QIcon icon((QString)getenv ("KNOTEDITOR_PIXMAPS") + "/" + iconFilename);
+	const QIcon icon((QString)getenv("KNOTEDITOR_ROOT") + "/icons/" + iconFilename);
 	return this->toolbar->addAction(icon, text, functor);
 }
 

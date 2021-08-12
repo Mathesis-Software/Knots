@@ -9,10 +9,11 @@
 
 #include "../../gl/surface/surface.h"
 
-class aboutWindow : public QWidget {
+class AboutWindow : public QWidget {
 
 public:
-	aboutWindow(QWidget*);
+	AboutWindow(QWidget*);
+	void showMe();
 
 private:
 	class TrefoilWidget *trefoil;

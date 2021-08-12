@@ -1,13 +1,15 @@
 #include <QtCore/QFile>
 #include <QtCore/QTextStream>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QDesktopWidget>
 
 #include "about.h"
 
-aboutWindow::aboutWindow(QWidget *parent) : QWidget(parent) {
+AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
+	this->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 	this->setAttribute(Qt::WA_DeleteOnClose);
 	this->setWindowModality(Qt::ApplicationModal);
-	setFixedSize(300, 120);
-	setWindowTitle("About Knot Editor");
+	setFixedSize(380, 180);
 	QPalette pal = this->palette();
 	pal.setColor(QPalette::Background, Qt::white);
 	this->setAutoFillBackground(true);
@@ -15,18 +17,26 @@ aboutWindow::aboutWindow(QWidget *parent) : QWidget(parent) {
 	this->timerId = this->startTimer(100);
 
 	this->trefoil = new TrefoilWidget(this);
-	this->trefoil->setGeometry(10, 0, 120, 120);
+	this->trefoil->setGeometry(40, 30, 120, 120);
 	this->trefoil->update();
 
 	auto text = new QLabel(this);
-	text->setGeometry(130, 0, 150, 120);
+	text->setGeometry(180, 30, 150, 120);
 	QFont fnt("Helvetica", 14);
 	text->setFont(fnt);
 	text->setAlignment(Qt::AlignCenter);
 	text->setText(QString("Knot Editor\nversion ") + VERSION);
 }
 
-void aboutWindow::timerEvent(QTimerEvent*) {
+void AboutWindow::showMe() {
+	const QRect screenGeometry = QApplication::desktop()->screenGeometry();
+	const int x = (screenGeometry.width() - 380) / 2;
+	const int y = (screenGeometry.height() - 180) / 2;
+	this->move(x, y);
+	this->show();
+}
+
+void AboutWindow::timerEvent(QTimerEvent*) {
 	this->trefoil->update();
 }
 

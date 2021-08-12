@@ -1,4 +1,4 @@
-* GL: smoothing with number of steps does not work
+* GL: smoothing with number of steps updates status line from wrong thread
 
 ** Поверхность Зайферта иногда рисуется ``многолистно''. Это связано
 с тем, что разные куски поверхности не стыкуются из-за неточностей

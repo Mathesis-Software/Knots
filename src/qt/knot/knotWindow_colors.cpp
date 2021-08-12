@@ -28,10 +28,10 @@ void knotWindow::runColorDialog(const QString &title, std::function<QColor()> ge
 void knotWindow::setBgColor() {
 	this->runColorDialog(
 		"Background Color",
-		[this] { return fromRGB(this->getBackgroundRGB()); },
+		[this] { return fromRGB(this->glWidget()->getBackgroundRGB()); },
 		[this] (const QColor &color) {
 			const float rgb[3] = { color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f };
-			this->setBackgroundRGB(rgb);
+			this->glWidget()->setBackgroundRGB(rgb);
 			this->repaint3d();
 		}
 	);

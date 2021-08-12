@@ -6,8 +6,8 @@
 
 const double STEP = 0.02;
 
-#define		M(x,y)		currentMatrix[4*x+y]
-#define		S(x,y)		currentSpeedMatrix[3*x+y]
+#define		M(x,y)		this->glWidget()->currentMatrix[4*x+y]
+#define		S(x,y)		this->glWidget()->currentSpeedMatrix[3*x+y]
 
 void GLWindow::inertia() {
   if (isInertia) {

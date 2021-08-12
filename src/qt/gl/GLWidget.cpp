@@ -1,7 +1,16 @@
 #include "GLWindow.h"
 
-GLWidget::GLWidget(GLWindow *p) : QOpenGLWidget(p) {
-  Parent = p;
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]), currentSpeedMatrix(new double[9]) {
+	this->backgroundRGB[0] = 1.0;
+	this->backgroundRGB[1] = 1.0;
+	this->backgroundRGB[2] = 1.0;
+
+	for (int i = 0; i < 16; ++i) {
+		this->currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
+	}
+	for (int i = 0; i < 9; ++i) {
+		this->currentSpeedMatrix[i] = (i % 4) ? 0.0 : 1.0;
+	}
 }
 
 void GLWidget::resizeGL(int w, int h) {
@@ -23,7 +32,7 @@ void GLWidget::resizeGL(int w, int h) {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
   glTranslatef(0.0, 0.0, -10.0);
-  glMultMatrixd(Parent->currentMatrix.get());
+  glMultMatrixd(this->currentMatrix.get());
 }
 
 void GLWidget::initializeGL() {
@@ -32,12 +41,10 @@ void GLWidget::initializeGL() {
 }
 
 void GLWidget::paintGL() {
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glClearColor(Parent->backgroundRGB[0], Parent->backgroundRGB[1], Parent->backgroundRGB[2], 1.0);
+  glClearColor(this->backgroundRGB[0], this->backgroundRGB[1], this->backgroundRGB[2], 1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  for (auto surface : Parent->surfaces) {
+  for (auto surface : this->surfaces) {
     surface->paint();
 	}
 

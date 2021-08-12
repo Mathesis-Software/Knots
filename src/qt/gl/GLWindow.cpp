@@ -4,20 +4,9 @@
 
 #include "GLWindow.h"
 
-GLWindow::GLWindow() : currentMatrix(new double[16]), currentSpeedMatrix(new double[9]) {
+GLWindow::GLWindow() {
 	setCentralWidget(new GLWidget(this));
 
-	backgroundRGB[0] = 1.0;
-	backgroundRGB[1] = 1.0;
-	backgroundRGB[2] = 1.0;
-
-	{
-		int i;
-		for (i = 0; i < 16; i++)
-			currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
-		for (i = 0; i < 9; i++)
-			currentSpeedMatrix[i] = (i % 4) ? 0.0 : 1.0;
-	}
 	isInertia = false;
 
 	for (int i = 0; i < 6; i++) {

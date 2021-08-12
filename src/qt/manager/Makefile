@@ -8,5 +8,5 @@ OTHERS = ../diagram/diagram.a ../knot/knot.a ../gl/gl.a ../abstractWindow/abstra
 
 KnotEditor: $(OBJECTS) $(OTHERS)
 	@echo -n 'Linking $@ ...'
-	$(CC) $(DEBUGOPT) -o $@ $(OBJECTS) $(OTHERS) $(LIBS)
+	@$(CC) $(DEBUGOPT) -o $@ $^ $(LIBS)
 	@echo ' OK'

@@ -1,4 +1,3 @@
-#include <QtCore/QTimerEvent>
 #include <QtGui/QCloseEvent>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>

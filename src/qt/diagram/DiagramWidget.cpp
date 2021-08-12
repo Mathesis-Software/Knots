@@ -1,15 +1,13 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
 
-#include "diagramWindow.h"
+#include "DiagramWidget.h"
 
-DiagramWidget::DiagramWidget(diagramWindow *p) : QWidget(p), _editorMode(QUICK_DRAWING) {
-	Parent = p;
+DiagramWidget::DiagramWidget(QWidget *parent) : QWidget(parent), _editorMode(QUICK_DRAWING) {
 	this->setMouseTracking(true);
 }
 
-DiagramWidget::DiagramWidget(diagramWindow *p, const rapidjson::Document &doc) : QWidget(p), diagram(doc), _editorMode(EDITING) {
-	Parent = p;
+DiagramWidget::DiagramWidget(QWidget *parent, const rapidjson::Document &doc) : QWidget(parent), diagram(doc), _editorMode(EDITING) {
 	this->setMouseTracking(true);
 }
 

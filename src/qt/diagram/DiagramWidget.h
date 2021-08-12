@@ -5,8 +5,6 @@
 
 #include "../../math/diagramEditor/DiagramEditor.h"
 
-class diagramWindow;
-
 class DiagramWidget : public QWidget {
 
 Q_OBJECT
@@ -22,7 +20,6 @@ public:
 	KE::TwoD::DiagramEditor diagram;
 
 private:
-	diagramWindow *Parent;
 	DiagramWidget::EditorMode _editorMode;
 
 	QPoint capturedPoint;
@@ -53,8 +50,8 @@ private:
 	void mouseMoveEvent(QMouseEvent*) override;
 
 public:
-	DiagramWidget(diagramWindow *p, const rapidjson::Document &doc);
-	DiagramWidget(diagramWindow *p);
+	DiagramWidget(QWidget *parent, const rapidjson::Document &doc);
+	DiagramWidget(QWidget *parent);
 
 	void drawIt(QPainter &painter);
 

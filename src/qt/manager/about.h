@@ -15,7 +15,7 @@ public:
 
 private:
 	class pictureWidget *picture;
-	class textWidget *text;
+	QLabel *text;
 
 	void timerEvent(QTimerEvent*);
 	void mousePressEvent(QMouseEvent*) { delete this; }
@@ -42,16 +42,6 @@ private:
 
 	void resizeGL(int, int);
 	void paintGL();
-	void mousePressEvent(QMouseEvent*) { delete parent(); }
-};
-
-class textWidget : public QLabel {
-
-public:
-	textWidget(QWidget*);
-	~textWidget() {}
-
-private:
 	void mousePressEvent(QMouseEvent*) { delete parent(); }
 };
 

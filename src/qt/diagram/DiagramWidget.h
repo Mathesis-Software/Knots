@@ -22,16 +22,17 @@ public:
 private:
 	DiagramWidget::EditorMode _editorMode;
 
-	QPoint capturedPoint;
 	std::shared_ptr<KE::TwoD::Diagram::Vertex> fakeVertex;
 	std::shared_ptr<KE::TwoD::Diagram::Vertex> capturedVertex;
 	std::shared_ptr<KE::TwoD::Diagram::Edge> capturedEdge;
 	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;
+	QPoint capturedPoint;
 
 	void setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
 	void captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex, bool active = false);
 	void captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
 	void captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
+	void capturePoint(const QPoint &point);
 
 	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex, bool highlight);
 	enum EdgeMode {
@@ -48,6 +49,8 @@ private:
 	void mousePressEvent(QMouseEvent*) override;
 	void mouseReleaseEvent(QMouseEvent*) override;
 	void mouseMoveEvent(QMouseEvent*) override;
+
+	void selectMouseCursor();
 
 public:
 	DiagramWidget(QWidget *parent, const rapidjson::Document &doc);

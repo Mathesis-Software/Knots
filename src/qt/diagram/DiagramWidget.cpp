@@ -1,5 +1,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtGui/QPainter>
+#include <QtWidgets/QApplication>
 
 #include "DiagramWidget.h"
 
@@ -232,12 +233,13 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			}
 			break;
 		case MOVING:
-			this->capturedPoint = event->pos();
+			this->capturePoint(event->pos());
 			break;
 		default:
 			break;
 	}
 	emit actionsUpdated();
+	this->selectMouseCursor();
 }
 
 void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
@@ -253,7 +255,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 		case MOVING:
 			if (!this->capturedPoint.isNull()) {
 				this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), true);
-				this->capturedPoint = QPoint();
+				this->capturePoint(QPoint());
 				repaint();
 			}
 			break;
@@ -263,6 +265,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 
 	emit actionsUpdated();
 	this->diagram.savePoint();
+	this->selectMouseCursor();
 }
 
 void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
@@ -321,7 +324,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			case MOVING:
 				if (!this->capturedPoint.isNull()) {
 					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), false);
-					this->capturedPoint = event->pos();
+					this->capturePoint(event->pos());
 					repaint();
 				}
 				break;
@@ -330,7 +333,10 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 }
 
 void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex) {
-	this->fakeVertex = vertex;
+	if (vertex != this->fakeVertex) {
+		this->fakeVertex = vertex;
+		this->selectMouseCursor();
+	}
 
 	if (vertex) {
 		if (this->diagram.vertices().size() <= 1) {
@@ -347,6 +353,7 @@ void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 	auto old = this->capturedVertex;
 	this->capturedVertex = vertex;
 	if (old != this->capturedVertex) {
+		this->selectMouseCursor();
 		this->repaint();
 	}
 
@@ -365,6 +372,7 @@ void DiagramWidget::captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &
 	auto old = this->capturedEdge;
 	this->capturedEdge = edge;
 	if (old != this->capturedEdge) {
+		this->selectMouseCursor();
 		this->repaint();
 	}
 
@@ -383,6 +391,7 @@ void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Cro
 	auto old = this->capturedCrossing;
 	this->capturedCrossing = crossing;
 	if (old != this->capturedCrossing) {
+		this->selectMouseCursor();
 		this->repaint();
 	}
 
@@ -390,5 +399,26 @@ void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Cro
 		emit setActionTip("Mouse click flips the crossing");
 	} else {
 		emit setActionTip(QString::null);
+	}
+}
+
+void DiagramWidget::capturePoint(const QPoint &point) {
+	this->capturedPoint = point;
+	this->selectMouseCursor();
+}
+
+void DiagramWidget::selectMouseCursor() {
+	if (this->capturedVertex || this->capturedEdge || this->fakeVertex) {
+		if (QApplication::mouseButtons() == Qt::NoButton) {
+			this->setCursor(Qt::PointingHandCursor);
+		} else {
+			this->setCursor(Qt::DragMoveCursor);
+		}
+	} else if (this->capturedCrossing) {
+		this->setCursor(Qt::PointingHandCursor);
+	} else if (!this->capturedPoint.isNull()) {
+		this->setCursor(Qt::DragMoveCursor);
+	} else {
+		this->unsetCursor();
 	}
 }

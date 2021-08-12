@@ -1,4 +1,4 @@
-#include "GLWindow.h"
+#include "GLWidget.h"
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
 	this->backgroundRGB[0] = 1.0;

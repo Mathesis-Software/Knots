@@ -39,8 +39,6 @@ void GLWindow::rotate(int num) {
     changeSpeed(axis1, axis2);
   else
     rotate(axis1, axis2);
-
-  isSaved = false;
 }
 
 void GLWindow::changeSpeed(int axis1, int axis2) {

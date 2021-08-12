@@ -18,16 +18,14 @@ std::list<abstractWindow*> abstractWindow::AWRegister;
 abstractWindow::abstractWindow() {
 	this->setAttribute(Qt::WA_DeleteOnClose);
 
-	isSaved = true;
-
 	QMenu *fileMenu = this->menuBar()->addMenu("&File");
 
-	fileMenu->addAction("&Save as…", this, SLOT(save_as()));
-	fileMenu->addAction("&Print…", this, SLOT(print()));
+	fileMenu->addAction("&Save as…", [this] { this->save(); });
+	fileMenu->addAction("&Print…", [this] { this->print(); });
 	fileMenu->addSeparator();
 	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("&Close", this, SLOT(close()));
+	fileMenu->addAction("Close", [this] { this->close(); });
 
 	this->toolbar = new QToolBar(this);
 	addToolBar(this->toolbar);
@@ -42,7 +40,7 @@ abstractWindow::~abstractWindow() {
 int abstractWindow::askForSave() {
 	show();
 	raise();
-	while (!isSaved) {
+	while (!this->isSaved()) {
 		QString q = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
 		int answer = QMessageBox::warning(
 			this, "Close", q.toStdString().c_str(), "&Yes", "&No", "&Cancel"
@@ -50,13 +48,13 @@ int abstractWindow::askForSave() {
 		if (answer)
 			return answer - 1;
 
-		save_as();
+		this->save();
 	}
 	return 0;
 }
 
 void abstractWindow::closeEvent(QCloseEvent *event) {
-	if (!isSaved && askForSave()) {
+	if (!this->isSaved() && this->askForSave()) {
 		event->ignore();
 		return;
 	}
@@ -64,25 +62,20 @@ void abstractWindow::closeEvent(QCloseEvent *event) {
 	AWRegister.remove(this);
 }
 
-void abstractWindow::save_as() {
-	if (isEmpty()) {
+void abstractWindow::save() {
+	QString filename = QFileDialog::getSaveFileName(nullptr, "Save", getenv("KNOTEDITOR_DATA"), mask());
+	if (filename.isEmpty()) {
 		return;
 	}
 
-	QString filename = QFileDialog::getSaveFileName(nullptr, "Save", getenv("KNOTEDITOR_DATA"), mask());
-	if (filename.isEmpty())
-		return;
-
 	std::ofstream os(filename.toStdString());
 	if (!os) {
-		QMessageBox::critical(this, "Error", "\nCouldn't open file \"" + filename + "\"\n");
+		QMessageBox::critical(this, "Error", "\nCouldn't open file \"" + filename + "\" for writing\n");
 		return;
 	}
 
 	saveIt(os);
 	os.close();
-	statusBar()->showMessage("File saved", 3000);
-	isSaved = true;
 }
 
 void abstractWindow::print() {

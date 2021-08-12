@@ -44,6 +44,7 @@ Q_OBJECT
 
 private:
 	KE::ThreeD::Knot knot;
+	bool _isSaved;
 
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
 	KE::ThreeD::Point seifertStartPoint;
@@ -72,9 +73,11 @@ private:
   void doSmooth();
 	void onKnotChanged();
 
+	bool isSaved() const override { return this->_isSaved; }
   bool isEmpty() const override { return this->knot.points().size() == 0; }
 
   void saveIt(std::ostream&);
+	void rotate(int direction) override;
 
 private:
 	void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter);

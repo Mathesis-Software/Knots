@@ -101,8 +101,6 @@ void diagramWindow::setMode(DiagramWidget::EditorMode mode) {
 
 void diagramWindow::clear() {
 	this->diagramWidget()->clear();
-
-	isSaved = true;
 	this->updateActions();
 }
 
@@ -134,7 +132,6 @@ bool diagramWindow::isEmpty() const {
 
 void diagramWindow::simplify() {
 	if (this->diagramWidget()->diagram.simplify()) {
-		this->isSaved = false;
 		this->centralWidget()->repaint();
 	}
 }
@@ -163,8 +160,11 @@ void diagramWindow::rename() {
 	);
   if (ok) {
 		diagram.setCaption(text.toStdString());
-		this->isSaved = false;
 		this->updateActions();
 	}
 }
 
+bool diagramWindow::isSaved() const {
+	const auto widget = this->diagramWidget();
+	return !widget || widget->diagram.isSaved();
+}

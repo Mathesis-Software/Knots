@@ -15,4 +15,5 @@ void knotWindow::saveIt(std::ostream &os) {
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	writer.SetMaxDecimalPlaces(5);
 	doc.Accept(writer);
+	this->_isSaved = true;
 }

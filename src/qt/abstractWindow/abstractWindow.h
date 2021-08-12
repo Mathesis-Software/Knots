@@ -9,20 +9,19 @@
 
 class abstractWindow : public QMainWindow {
 
-  Q_OBJECT
-
 private:
   QToolBar *toolbar;
 	std::map<QAction*,std::function<void(QAction&)>> actionsMap;
 
 protected:
-  bool isSaved;
-
   void closeEvent(QCloseEvent*);
 
   virtual void printIt(QPrinter*) = 0;
-  virtual void saveIt(std::ostream&) = 0;
+  void print();
 
+  void save();
+  virtual void saveIt(std::ostream&) = 0;
+  virtual bool isSaved() const = 0;
   int askForSave(void);
 
   QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
@@ -30,10 +29,6 @@ protected:
   void complete();
 
 	void registerAction(QAction *action, std::function<void(QAction&)> controller);
-
-private slots:
-  void save_as();
-  void print();
 
 public:
   abstractWindow();

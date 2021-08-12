@@ -16,13 +16,18 @@ public:
 private:
 	Diagram initialDiagram;
 	std::shared_ptr<Diagram> currentDiagram;
+	std::string saveCheckpoint;
 
 	std::vector<std::shared_ptr<Command>> log;
 	std::size_t indexInLog;
 
 public:
-	DiagramEditor() : currentDiagram(new Diagram), indexInLog(0) {}
-	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)), indexInLog(0) {}
+	DiagramEditor() : currentDiagram(new Diagram), indexInLog(0) {
+		this->save();
+	}
+	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)), indexInLog(0) {
+		this->save();
+	}
 
 	void savePoint();
 	bool canUndo() const;
@@ -54,7 +59,8 @@ public:
 		return this->currentDiagram->findCrossing(pt, maxDistance);
 	}
 
-	rapidjson::Document save() const { return this->currentDiagram->save(); }
+	bool isSaved() const;
+	rapidjson::Document save();
 
 	std::shared_ptr<Diagram::Vertex> addVertex(int x, int y);
 	std::shared_ptr<Diagram::Vertex> addVertex(const Diagram::Edge &edge, int x, int y);

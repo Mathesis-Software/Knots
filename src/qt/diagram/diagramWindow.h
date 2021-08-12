@@ -15,8 +15,7 @@ private:
 
 	const char *mask() const override {return "*.dgr";};
 
-	void printIt(QPrinter*);
-	void saveIt(std::ostream&);
+	void printIt(QPrinter*) override;
 
 	void setMode(DiagramWidget::EditorMode mode);
 	
@@ -32,6 +31,10 @@ public:
 	~diagramWindow();
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
+
+	void saveIt(std::ostream&) override;
+	bool isSaved() const override;
+
 	bool isEmpty() const override;
 
 	void updateActions() override;

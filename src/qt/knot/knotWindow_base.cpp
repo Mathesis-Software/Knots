@@ -43,13 +43,12 @@ void knotWindow::init() {
 	this->updateActions();
 }
 
-knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
+knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), _isSaved(true), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
   this->init();
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()), _isSaved(false), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
   this->init();
-	this->isSaved = false;
 }
 
 knotWindow::~knotWindow() {
@@ -105,7 +104,12 @@ void knotWindow::rename() {
 	);
   if (ok) {
 		this->knot.caption = text.toStdString();
-		this->isSaved = false;
+		this->_isSaved = false;
 		this->updateActions();
 	}
+}
+
+void knotWindow::rotate(int direction) {
+	GLWindow::rotate(direction);
+	this->_isSaved = false;
 }

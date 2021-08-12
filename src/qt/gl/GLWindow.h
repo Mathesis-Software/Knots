@@ -28,13 +28,13 @@ private:
 	void doRotate();
 
 	void inertia();
-	void rotate(int);
 
 protected:
 	void timerEvent(QTimerEvent*);
 	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
 	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
 	void repaint3d();
+	virtual void rotate(int direction);
 
 	const float *getBackgroundRGB() { return this->backgroundRGB; }
 	void setBackgroundRGB(const float rgb[3]) {

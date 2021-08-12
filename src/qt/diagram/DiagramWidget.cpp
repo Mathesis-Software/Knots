@@ -185,7 +185,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 					this->diagram.close();
 					this->setEditorMode(EDITING);
 				}
-				Parent->isSaved = false;
 			}
 			break;
 		}
@@ -195,7 +194,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 					default:
 						break;
 					case Qt::LeftButton:
-						this->Parent->isSaved = false;
 						break;
 					case Qt::RightButton:
 						if (this->diagram.canRemoveVertex(this->capturedVertex)) {
@@ -204,13 +202,11 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 							if (this->diagram.vertices().empty()) {
 								this->setEditorMode(QUICK_DRAWING);
 							}
-							this->Parent->isSaved = false;
 						}
 						break;
 				}
 			} else if (this->capturedCrossing) {
 				this->captureCrossing(this->diagram.flipCrossing(*this->capturedCrossing));
-				Parent->isSaved = false;
 			} else if (this->capturedEdge) {
 				switch (event->button()) {
 					default:
@@ -218,7 +214,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 					case Qt::LeftButton:
 						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()), true);
 						this->captureEdge(nullptr);
-						Parent->isSaved = false;
 						break;
 					case Qt::RightButton:
 						if (this->diagram.canRemoveEdge(this->capturedEdge)) {
@@ -227,7 +222,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 							if (this->diagram.vertices().empty()) {
 								this->setEditorMode(QUICK_DRAWING);
 							}
-							Parent->isSaved = false;
 						}
 						break;
 				}
@@ -235,7 +229,6 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			break;
 		case MOVING:
 			this->capturedPoint = event->pos();
-			Parent->isSaved = false;
 			break;
 		default:
 			break;

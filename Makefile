@@ -23,7 +23,7 @@ install_data:
 	$(INSTALL) -d $(INSTDIR)/data/300
 	$(INSTALL) -m 644 data/*.* $(INSTDIR)/data
 	$(INSTALL) -m 644 data/trefoil/*.* $(INSTDIR)/data/trefoil
-	$(INSTALL) -m 644 data/trefoil/*.* $(INSTDIR)/data/300
+	$(INSTALL) -m 644 data/300/*.* $(INSTDIR)/data/300
 
 install_pixmaps:
 	$(INSTALL) -d $(INSTDIR)/pixmaps

@@ -6,8 +6,9 @@
 
 const double STEP = 0.02;
 
-#define		M(x,y)		this->glWidget()->currentMatrix[4*x+y]
-#define		S(x,y)		this->glWidget()->currentSpeedMatrix[3*x+y]
+#define		M(x,y)		this->currentMatrix[4*x+y]
+#define		S(x,y)		this->currentSpeedMatrix[3*x+y]
+#define		SW(x,y)		this->glWidget()->currentSpeedMatrix[3*x+y]
 
 void GLWindow::inertia() {
   if (isInertia) {
@@ -15,7 +16,7 @@ void GLWindow::inertia() {
     isInertia = false;
     for (int i = 0; i < 3; i++)
       for (int j = 0; j < 3; j++)
-        S(i, j) = (i == j) ? 1.0 : 0.0;
+        SW(i, j) = (i == j) ? 1.0 : 0.0;
   } else {
     timerId_rotate = startTimer(1);
     isInertia = true;
@@ -35,13 +36,14 @@ void GLWindow::rotate(int num) {
     case 5: axis1 = 1; axis2 = 2; break;
   }
 
-  if (isInertia)
-    changeSpeed(axis1, axis2);
-  else
-    rotate(axis1, axis2);
+  if (isInertia) {
+    this->glWidget()->changeSpeed(axis1, axis2);
+	} else {
+    this->glWidget()->rotate(axis1, axis2);
+	}
 }
 
-void GLWindow::changeSpeed(int axis1, int axis2) {
+void GLWidget::changeSpeed(int axis1, int axis2) {
   double tmp;
 
   for (int i = 0; i < 3; i++) {
@@ -51,14 +53,14 @@ void GLWindow::changeSpeed(int axis1, int axis2) {
   }
 }
 
-void GLWindow::rotate(int axis1, int axis2) {
+void GLWidget::rotate(int axis1, int axis2) {
   double tmp;
   int i;
 
   tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
   tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
   tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
-  ((GLWidget*)centralWidget())->multMatrix();
+  this->multMatrix();
   tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
   tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
   tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
@@ -69,17 +71,19 @@ void GLWindow::rotate(int axis1, int axis2) {
     M(i, axis2) = tmp;
   }
 
-  ((GLWidget*)centralWidget())->multMatrix();
-  repaint3d();
+  this->multMatrix();
+	if (this->isVisible()) {
+		this->update();
+	}
 }
 
-void GLWindow::doRotate() {
+void GLWidget::doRotate() {
   {
     double tmp;
     tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
     tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
     tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
-    ((GLWidget*)centralWidget())->multMatrix();
+    this->multMatrix();
     tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
     tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
     tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
@@ -95,11 +99,14 @@ void GLWindow::doRotate() {
     }
   }
 
-  ((GLWidget*)centralWidget())->multMatrix();
-  repaint3d();
+  this->multMatrix();
+	if (this->isVisible()) {
+		this->update();
+	}
 }
 
 void GLWindow::timerEvent(QTimerEvent *te) {
-  if (isInertia && (te->timerId() == timerId_rotate))
-    doRotate();
+  if (isInertia && (te->timerId() == timerId_rotate)) {
+    this->glWidget()->doRotate();
+	}
 }

@@ -25,6 +25,8 @@ private:
 	void resizeGL(int, int) override;
 	void paintGL();
 
+	void doRotate();
+
 public:
 	GLWidget(QWidget *parent);
 	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
@@ -35,6 +37,9 @@ public:
 		this->backgroundRGB[1] = rgb[1];
 		this->backgroundRGB[2] = rgb[2];
 	}
+
+	void rotate(int, int);
+	void changeSpeed(int, int);
 
 	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
 	void multMatrix() {
@@ -50,10 +55,6 @@ private:
 	int timerId_rotate;
 
 	void printIt(QPrinter*);
-
-	void rotate(int, int);
-	void changeSpeed(int, int);
-	void doRotate();
 
 	void inertia();
 

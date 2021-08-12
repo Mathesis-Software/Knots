@@ -1,3 +1,5 @@
+#include <QtGui/QMouseEvent>
+
 #include "GLWidget.h"
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
@@ -46,4 +48,32 @@ void GLWidget::paintGL() {
 	}
 
   glFlush();
+}
+
+void GLWidget::mousePressEvent(QMouseEvent *event) {
+	this->capturedPoint = event->pos();
+	this->selectMouseCursor();
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent *event) {
+	if (!this->capturedPoint.isNull()) {
+		this->rotate(this->capturedPoint, event->pos());
+		this->capturedPoint = event->pos();
+	}
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
+	if (!this->capturedPoint.isNull()) {
+		this->rotate(this->capturedPoint, event->pos());
+	}
+	this->capturedPoint = QPoint();
+	this->selectMouseCursor();
+}
+
+void GLWidget::selectMouseCursor() {
+	if (!this->capturedPoint.isNull()) {
+		this->setCursor(Qt::DragMoveCursor);
+	} else {
+		this->unsetCursor();
+	}
 }

@@ -77,7 +77,6 @@ private:
   bool isEmpty() const override { return this->knot.points().size() == 0; }
 
   void saveIt(std::ostream&);
-	void rotate(int direction) override;
 
 private:
 	void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter);

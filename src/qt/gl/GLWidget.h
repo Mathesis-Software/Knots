@@ -16,10 +16,19 @@ private:
 	float backgroundRGB[3];
 	std::unique_ptr<double[]> currentMatrix;
 
+	QPoint capturedPoint;
+
 private:
 	void initializeGL() override;
 	void resizeGL(int, int) override;
 	void paintGL();
+
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
+
+	void rotate(const QPoint &start, const QPoint &end);
+	void selectMouseCursor();
 
 public:
 	GLWidget(QWidget *parent);
@@ -35,10 +44,6 @@ public:
 	void rotate(int, int);
 
 	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
-	void multMatrix() {
-		makeCurrent();
-		glMultMatrixd(this->currentMatrix.get());
-	}
 };
 
 #endif /* __GLWIDGET_H__ */

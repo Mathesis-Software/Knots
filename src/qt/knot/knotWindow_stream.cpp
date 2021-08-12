@@ -1,6 +1,7 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
+#include "../gl/GLWidget.h"
 #include "knotWindow.h"
 
 void knotWindow::saveIt(std::ostream &os) {

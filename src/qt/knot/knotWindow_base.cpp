@@ -7,6 +7,7 @@
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
+#include "../gl/GLWidget.h"
 #include "../diagram/diagramWindow.h"
 #include "../../math/knot/KnotSurface.h"
 #include "../../math/seifert/seifert_surface.h"
@@ -107,9 +108,4 @@ void knotWindow::rename() {
 		this->_isSaved = false;
 		this->updateActions();
 	}
-}
-
-void knotWindow::rotate(int direction) {
-	GLWindow::rotate(direction);
-	this->_isSaved = false;
 }

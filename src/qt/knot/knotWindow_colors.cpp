@@ -2,6 +2,7 @@
 
 #include <QtWidgets/QColorDialog>
 
+#include "../gl/GLWidget.h"
 #include "knotWindow.h"
 
 #include "../../math/knot/KnotSurface.h"

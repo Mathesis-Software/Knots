@@ -1,15 +1,14 @@
-#include <QtGui/QPixmap>
 #include <QtGui/QPainter>
-#include <QtWidgets/QToolBar>
 
+#include "GLWidget.h"
 #include "GLWindow.h"
 
 GLWindow::GLWindow() {
 	setCentralWidget(new GLWidget(this));
+}
 
-	for (int i = 0; i < 6; i++) {
-		this->addToolbarAction(QString("rotate%1.xpm").arg(i), "Rotate", [this, i] { this->rotate(i); });
-	}
+GLWidget *GLWindow::glWidget() {
+	return (GLWidget*)this->centralWidget();
 }
 
 void GLWindow::printIt(QPrinter *prn) {

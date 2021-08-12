@@ -33,7 +33,6 @@ void knotWindow::initMenu() {
   optionsMenu->addAction("Seifert surface &front color…", this, SLOT(setSeifertFrontColor()));
   optionsMenu->addAction("Seifert surface &back color…", this, SLOT(setSeifertBackColor()));
 
-  addToolbarSeparator();
 	this->registerAction(
 		addToolbarAction("start.xpm", "Start smoothing", [this] { this->smooth(); }),
 		[this](QAction &action) { action.setVisible(!this->smoothingThread.isRunning()); }

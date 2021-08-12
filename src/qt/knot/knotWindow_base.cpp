@@ -40,7 +40,7 @@ void knotWindow::init() {
   initMenu();
   complete();
 
-  setWindowIcon(QPixmap(":images/trefoil.xpm"));
+  setWindowIcon(QPixmap(":images/trefoil.png"));
 	this->updateActions();
 }
 

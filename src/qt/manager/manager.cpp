@@ -27,7 +27,7 @@ keManager::keManager() {
 	aboutMenu->addAction("About &Qt", [this] { this->about_qt(); });
 
 	setWindowTitle("Knot Editor");
-	setWindowIcon(QPixmap(":images/trefoil.xpm"));
+	setWindowIcon(QPixmap(":images/trefoil.png"));
 	setFixedSize(300, height());
 }
 

@@ -1,4 +1,5 @@
 * GL: smoothing with number of steps updates status line from wrong thread
+* iSaved() for knot does not respect rotation matrix
 
 ** Поверхность Зайферта иногда рисуется ``многолистно''. Это связано
 с тем, что разные куски поверхности не стыкуются из-за неточностей

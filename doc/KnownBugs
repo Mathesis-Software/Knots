@@ -1,3 +1,6 @@
+* GL: window resizing moves the light
+* GL: smoothing with number of steps does not work
+
 ** Поверхность Зайферта иногда рисуется ``многолистно''. Это связано
 с тем, что разные куски поверхности не стыкуются из-за неточностей
 в вычисленях.

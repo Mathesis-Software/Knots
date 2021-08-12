@@ -14,19 +14,13 @@ GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new d
 
 void GLWidget::resizeGL(int w, int h) {
   glViewport(0, 0, w, h);
-
-  float pos[] = {5.0, 5.0, 10.0, 1.0};
-  glLightfv(GL_LIGHT0, GL_POSITION, pos);
-  glEnable(GL_LIGHT0);
-
-  glEnable(GL_LIGHTING);
   
   glShadeModel(GL_SMOOTH);
   glEnable(GL_DEPTH_TEST);
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum(-w/800.0, w/800.0, -h/800.0, h/800.0, 5, 25);
+  glFrustum(-w / 800.0, w / 800.0, -h / 800.0, h / 800.0, 5, 25);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -37,6 +31,11 @@ void GLWidget::resizeGL(int w, int h) {
 void GLWidget::initializeGL() {
 	glEnable(GL_LINE_SMOOTH);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+
+  float pos[] = {5.0, 5.0, 10.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_POSITION, pos);
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHTING);
 }
 
 void GLWidget::paintGL() {

@@ -27,6 +27,10 @@ int main(int argc, char **argv) {
 	qa.setFont(QFont("Helvetica", 10));
 	qa.setStyle(new ProxyStyle);
 
+	QPixmap pixmap(":images/trefoil.png");
+	pixmap.setDevicePixelRatio(qa.devicePixelRatio());
+	qa.setWindowIcon(pixmap);
+
 	keManager kem;
 	kem.show();
 	return qa.exec();

@@ -15,11 +15,11 @@ AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
 	this->setPalette(pal);
 
 	auto icon = new QLabel(this);
-	icon->setGeometry(38, 28, 125, 125);
+	icon->setGeometry(36, 26, 128, 128);
 	QPixmap pixmap(":images/trefoil.png");
 	const auto dpr = this->devicePixelRatio();
 	pixmap.setDevicePixelRatio(dpr);
-	icon->setPixmap(pixmap.scaled(125 * dpr, 125 * dpr, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	icon->setPixmap(pixmap.scaled(128 * dpr, 128 * dpr, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
 	auto text = new QLabel(this);
 	text->setGeometry(180, 30, 150, 120);

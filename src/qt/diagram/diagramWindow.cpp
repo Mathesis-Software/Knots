@@ -1,5 +1,4 @@
 #include <QtGui/QPainter>
-#include <QtGui/QPixmap>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
@@ -107,8 +106,6 @@ void diagramWindow::init(DiagramWidget *widget) {
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }
 	);
-
-	setWindowIcon(QPixmap(":images/diagram.xpm"));
 
 	complete();
 

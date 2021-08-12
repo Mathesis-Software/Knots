@@ -1,6 +1,5 @@
 #include <QtCore/QTimerEvent>
 #include <QtGui/QCloseEvent>
-#include <QtGui/QPixmap>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
@@ -40,7 +39,6 @@ void knotWindow::init() {
   initMenu();
   complete();
 
-  setWindowIcon(QPixmap(":images/trefoil.png"));
 	this->updateActions();
 }
 

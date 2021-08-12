@@ -1,6 +1,5 @@
 #include <fstream>
 
-#include <QtGui/QPixmap>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -27,7 +26,6 @@ keManager::keManager() {
 	aboutMenu->addAction("About &Qt", [this] { this->about_qt(); });
 
 	setWindowTitle("Knot Editor");
-	setWindowIcon(QPixmap(":images/trefoil.png"));
 	setFixedSize(300, height());
 }
 

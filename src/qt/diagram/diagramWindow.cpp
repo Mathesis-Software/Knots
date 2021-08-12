@@ -108,7 +108,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }
 	);
 
-	setWindowIcon(QPixmap((QString)getenv("KNOTEDITOR_ROOT") + "/icons/diagram.xpm"));
+	setWindowIcon(QPixmap(":images/diagram.xpm"));
 
 	complete();
 

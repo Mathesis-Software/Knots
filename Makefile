@@ -7,7 +7,7 @@ all:
 	make -C src/gl all
 	make -C src/qt all
 
-install: install_bin install_data install_icons
+install: install_bin install_data
 
 install_bin: all
 	$(INSTALL) -d $(INSTPREFIX)/bin
@@ -24,10 +24,6 @@ install_data:
 	$(INSTALL) -m 644 data/*.* $(INSTDIR)/data
 	$(INSTALL) -m 644 data/trefoil/*.* $(INSTDIR)/data/trefoil
 	$(INSTALL) -m 644 data/300/*.* $(INSTDIR)/data/300
-
-install_icons:
-	$(INSTALL) -d $(INSTDIR)/icons
-	$(INSTALL) -m 644 icons/* $(INSTDIR)/icons
 
 archive:
 	ls > .ls

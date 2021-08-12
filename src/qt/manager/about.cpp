@@ -63,7 +63,7 @@ aboutSurface::aboutSurface(const char *filename) : Surface(true, false) {
 pictureWidget::pictureWidget (QWidget *parent) : QOpenGLWidget (parent) {
   //setBackgroundColor (white);
 
-  aboutSurf = new aboutSurface((std::string(getenv("KNOTEDITOR_ROOT")) + "/icons/about.srf").c_str());
+  aboutSurf = new aboutSurface(":images/about.srf");
 
   srandom (time (NULL));
   x = 1.0;

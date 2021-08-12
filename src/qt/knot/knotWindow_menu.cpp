@@ -34,11 +34,11 @@ void knotWindow::initMenu() {
   optionsMenu->addAction("Seifert surface &back color…", this, SLOT(setSeifertBackColor()));
 
 	this->registerAction(
-		addToolbarAction("start.xpm", "Start smoothing", [this] { this->smooth(); }),
+		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->smooth(); }),
 		[this](QAction &action) { action.setVisible(!this->smoothingThread.isRunning()); }
 	);
 	this->registerAction(
-		addToolbarAction("stop.xpm", "Interrupt smoothing", [this] { this->stop(); }),
+		addToolbarAction("stop.svg", "Interrupt smoothing", [this] { this->stop(); }),
 		[this](QAction &action) { action.setVisible(this->smoothingThread.isRunning()); }
 	);
   addToolbarSeparator();

@@ -48,22 +48,45 @@ void diagramWindow::init(DiagramWidget *widget) {
 	
 	this->registerAction(
 		this->addToolbarAction("trefoil.svg", "Convert to knot", [this] { this->convert(); }),
-		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
+		[&diagram](QAction &action) {
+			const bool enabled = diagram.isClosed();
+			action.setEnabled(enabled);
+			action.setToolTip(enabled ? "Converting to 3D knot" : "Converting to knot disabled until the diagram is closed.");
+		}
 	);
 
 	addToolbarSeparator();
-	auto addAction = [this, widget](const QString &icon, const QString &text, DiagramWidget::EditorMode mode) {
+	auto addAction = [this, widget](const QString &icon, const QString &text, const QString &tooltip, const QString &disabledTooltip, DiagramWidget::EditorMode mode) {
 		QAction *action = this->addToolbarAction(icon, text, [this, mode] { this->setMode(mode); });
 		action->setCheckable(true);
-		this->registerAction(action, [widget, mode](QAction &action) {
+		this->registerAction(action, [widget, mode, tooltip, disabledTooltip](QAction &action) {
 			const bool canSet = widget->canSetEditorMode(mode);
 			action.setChecked(canSet && widget->editorMode() == mode);
 			action.setEnabled(canSet);
+			action.setToolTip(canSet ? tooltip : disabledTooltip);
 		});
 	};
-	addAction("diagram_mode_quick_drawing.svg", "Quick drawing", DiagramWidget::QUICK_DRAWING);
-	addAction("diagram_mode_editing.svg", "Editing", DiagramWidget::EDITING);
-	addAction("diagram_mode_moving.svg", "Moving diagram", DiagramWidget::MOVING);
+	addAction(
+		"diagram_mode_quick_drawing.svg",
+		"Quick drawing",
+		"Quick drawing: move the mouse and click to set a new point. Right-click to close the diagram.",
+		"Quick drawing disabled for closed diagram.",
+		DiagramWidget::QUICK_DRAWING
+	);
+	addAction(
+		"diagram_mode_editing.svg",
+		"Editing",
+		"Editing: choose point/edge/crossing and click to change it. Read status at the bottom of the window if unsure.",
+		"Editing disabled for empty diagram.",
+		DiagramWidget::EDITING
+	);
+	addAction(
+		"diagram_mode_moving.svg",
+		"Moving diagram",
+		"Moving: click anywhere and move the diagram.",
+		"Moving disabled for empty diagram.",
+		DiagramWidget::MOVING
+	);
 
 	addToolbarSeparator();
 	this->registerAction(

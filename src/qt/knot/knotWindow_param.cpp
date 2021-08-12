@@ -26,8 +26,10 @@ void knotWindow::setLength() {
 void knotWindow::setNumberOfPoints() {
 	const std::size_t numberOfPoints = setInt ("Set number of points", this->knot.numberOfPoints(), 10, 30000);
   if (numberOfPoints != this->knot.numberOfPoints()) {
+		const double length = this->knot.points().knotLength();
     this->knot.normalize(numberOfPoints);
     this->knot.center();
+		this->knot.setLength(length);
     this->knotSurface->destroy(false);
     repaint3d();
     this->_isSaved = false;

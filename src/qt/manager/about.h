@@ -1,6 +1,8 @@
 #ifndef __ABOUT_H__
 #define __ABOUT_H__
 
+#include <memory>
+
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QOpenGLWidget>
 #include <QtWidgets/QWidget>
@@ -11,38 +13,34 @@ class aboutWindow : public QWidget {
 
 public:
 	aboutWindow(QWidget*);
-	~aboutWindow();
 
 private:
-	class pictureWidget *picture;
-	QLabel *text;
+	class TrefoilWidget *trefoil;
+	int timerId;
 
-	void timerEvent(QTimerEvent*);
-	void mousePressEvent(QMouseEvent*) { delete this; }
-
-	int timer_id;
+	void timerEvent(QTimerEvent*) override;
+	void mousePressEvent(QMouseEvent*) override { this->close(); }
+	void closeEvent(QCloseEvent*) override { this->killTimer(this->timerId); }
 };
 
-class aboutSurface : public KE::GL::Surface {
+class TrefoilSurface : public KE::GL::Surface {
 
 public:
-	aboutSurface(const char*);
+	TrefoilSurface();
 	void calculate() {}
 };
 
-class pictureWidget : public QOpenGLWidget {
+class TrefoilWidget : public QOpenGLWidget {
 
 public:
-	pictureWidget(QWidget*);
-	~pictureWidget();
+	TrefoilWidget(QWidget*);
 
 private:
-	aboutSurface *aboutSurf;
+	std::unique_ptr<TrefoilSurface> surface;
 	float x, y, z;
 
 	void resizeGL(int, int);
 	void paintGL();
-	void mousePressEvent(QMouseEvent*) { delete parent(); }
 };
 
 #endif /* __ABOUT_H__ */

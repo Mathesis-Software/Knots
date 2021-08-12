@@ -61,6 +61,7 @@ public:
 	EditorMode editorMode() const { return this->_editorMode; }
 	bool canSetEditorMode(DiagramWidget::EditorMode mode) const;
 	bool setEditorMode(DiagramWidget::EditorMode mode);
+	void updateEditorMode();
 
 	void clear();
 

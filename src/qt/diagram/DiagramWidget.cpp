@@ -37,10 +37,20 @@ bool DiagramWidget::setEditorMode(DiagramWidget::EditorMode mode) {
 	}
 }
 
+void DiagramWidget::updateEditorMode() {
+	if (this->canSetEditorMode(this->_editorMode)) {
+		return;
+	}
+
+	if (this->setEditorMode(QUICK_DRAWING) || this->setEditorMode(EDITING)) {
+		emit actionsUpdated();
+	}
+}
+
 void DiagramWidget::clear() {
 	this->diagram.clear();
 	this->repaint();
-	this->setEditorMode(QUICK_DRAWING);
+	this->updateEditorMode();
 }
 
 void DiagramWidget::highlightCrossing(QPainter &painter, const KE::TwoD::Diagram::Crossing &crossing) {
@@ -183,7 +193,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 				this->captureVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()), true);
 				if (event->button() == Qt::RightButton) {
 					this->diagram.close();
-					this->setEditorMode(EDITING);
+					this->updateEditorMode();
 				}
 			}
 			break;
@@ -199,9 +209,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						if (this->diagram.canRemoveVertex(this->capturedVertex)) {
 							this->diagram.removeVertex(this->capturedVertex);
 							this->captureVertex(nullptr);
-							if (this->diagram.vertices().empty()) {
-								this->setEditorMode(QUICK_DRAWING);
-							}
+							this->updateEditorMode();
 						}
 						break;
 				}
@@ -219,9 +227,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 						if (this->diagram.canRemoveEdge(this->capturedEdge)) {
 							this->diagram.removeEdge(this->capturedEdge);
 							this->captureEdge(nullptr);
-							if (this->diagram.vertices().empty()) {
-								this->setEditorMode(QUICK_DRAWING);
-							}
+							this->updateEditorMode();
 						}
 						break;
 				}

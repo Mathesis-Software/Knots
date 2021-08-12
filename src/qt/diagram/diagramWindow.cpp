@@ -70,6 +70,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 		this->addToolbarAction("undo.svg", "Undo", [this, widget] {
 			widget->diagram.undo();
 			widget->repaint();
+			widget->updateEditorMode();
 			this->updateActions();
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canUndo()); }
@@ -78,6 +79,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 		this->addToolbarAction("redo.svg", "Redo", [this, widget] {
 			widget->diagram.redo();
 			widget->repaint();
+			widget->updateEditorMode();
 			this->updateActions();
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }

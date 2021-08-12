@@ -1,15 +1,12 @@
 #include "GLWindow.h"
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]), currentSpeedMatrix(new double[9]) {
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
 	this->backgroundRGB[0] = 1.0;
 	this->backgroundRGB[1] = 1.0;
 	this->backgroundRGB[2] = 1.0;
 
 	for (int i = 0; i < 16; ++i) {
 		this->currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
-	}
-	for (int i = 0; i < 9; ++i) {
-		this->currentSpeedMatrix[i] = (i % 4) ? 0.0 : 1.0;
 	}
 }
 

@@ -11,21 +11,16 @@
 
 class GLWidget : public QOpenGLWidget {
 
-friend class GLWindow;
-
 private:
 	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
 
 	float backgroundRGB[3];
 	std::unique_ptr<double[]> currentMatrix;
-	std::unique_ptr<double[]> currentSpeedMatrix;
 
 private:
 	void initializeGL() override;
 	void resizeGL(int, int) override;
 	void paintGL();
-
-	void doRotate();
 
 public:
 	GLWidget(QWidget *parent);
@@ -39,7 +34,6 @@ public:
 	}
 
 	void rotate(int, int);
-	void changeSpeed(int, int);
 
 	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
 	void multMatrix() {
@@ -51,15 +45,9 @@ public:
 class GLWindow : public abstractWindow {
 
 private:
-	bool isInertia;
-	int timerId_rotate;
-
 	void printIt(QPrinter*);
 
-	void inertia();
-
 protected:
-	void timerEvent(QTimerEvent*);
 	void repaint3d();
 	virtual void rotate(int direction);
 

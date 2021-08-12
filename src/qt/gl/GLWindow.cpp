@@ -7,14 +7,9 @@
 GLWindow::GLWindow() {
 	setCentralWidget(new GLWidget(this));
 
-	isInertia = false;
-
 	for (int i = 0; i < 6; i++) {
 		this->addToolbarAction(QString("rotate%1.xpm").arg(i), "Rotate", [this, i] { this->rotate(i); });
 	}
-
-	addToolbarSeparator();
-	addToolbarAction("inertia.xpm", "Inertia", [this] { this->inertia(); })->setCheckable(true);
 }
 
 void GLWindow::printIt(QPrinter *prn) {

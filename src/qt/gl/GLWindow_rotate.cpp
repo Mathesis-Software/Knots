@@ -7,21 +7,6 @@
 const double STEP = 0.02;
 
 #define		M(x,y)		this->currentMatrix[4*x+y]
-#define		S(x,y)		this->currentSpeedMatrix[3*x+y]
-#define		SW(x,y)		this->glWidget()->currentSpeedMatrix[3*x+y]
-
-void GLWindow::inertia() {
-  if (isInertia) {
-    killTimer(timerId_rotate);
-    isInertia = false;
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-        SW(i, j) = (i == j) ? 1.0 : 0.0;
-  } else {
-    timerId_rotate = startTimer(1);
-    isInertia = true;
-  }
-}
 
 void GLWindow::rotate(int num) {
   int axis1, axis2;
@@ -36,21 +21,7 @@ void GLWindow::rotate(int num) {
     case 5: axis1 = 1; axis2 = 2; break;
   }
 
-  if (isInertia) {
-    this->glWidget()->changeSpeed(axis1, axis2);
-	} else {
-    this->glWidget()->rotate(axis1, axis2);
-	}
-}
-
-void GLWidget::changeSpeed(int axis1, int axis2) {
-  double tmp;
-
-  for (int i = 0; i < 3; i++) {
-    tmp = S(i, axis1) * sin(STEP) + S(i, axis2) * cos(STEP);
-    S(i, axis1) = S(i, axis1) * cos(STEP) - S(i, axis2) * sin(STEP);
-    S(i, axis2) = tmp;
-  }
+	this->glWidget()->rotate(axis1, axis2);
 }
 
 void GLWidget::rotate(int axis1, int axis2) {
@@ -74,39 +45,5 @@ void GLWidget::rotate(int axis1, int axis2) {
   this->multMatrix();
 	if (this->isVisible()) {
 		this->update();
-	}
-}
-
-void GLWidget::doRotate() {
-  {
-    double tmp;
-    tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
-    tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
-    tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
-    this->multMatrix();
-    tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
-    tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
-    tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
-  }
-
-  {
-    double tmp[3];
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++)
-        tmp[j] = M(i, 0) * S(0, j) + M(i, 1) * S(1, j) + M(i, 2) * S(2, j);
-      for (int j = 0; j < 3; j++)
-        M(i, j) = tmp[j];
-    }
-  }
-
-  this->multMatrix();
-	if (this->isVisible()) {
-		this->update();
-	}
-}
-
-void GLWindow::timerEvent(QTimerEvent *te) {
-  if (isInertia && (te->timerId() == timerId_rotate)) {
-    this->glWidget()->doRotate();
 	}
 }

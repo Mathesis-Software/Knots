@@ -46,6 +46,12 @@ QString getOpenFileNameEx() {
 	QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setIconProvider(KE::Qt::FileIconProvider::instance());
+	dialog.setNameFilters({
+		"Knot Editor files (*.knt *.dgr)",
+		"Knot files only (*.knt)",
+		"Diagram files only (*.dgr)",
+		"Any files (*)"
+	});
 	if (dialog.exec() == QDialog::Accepted) {
 		return dialog.selectedUrls().value(0).toLocalFile();
 	}

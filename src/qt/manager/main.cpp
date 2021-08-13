@@ -23,6 +23,7 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 int main(int argc, char **argv) {
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 	QApplication qa(argc, argv);
 	qa.setFont(QFont("Helvetica", 10));
 	qa.setStyle(new ProxyStyle);

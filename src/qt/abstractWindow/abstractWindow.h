@@ -38,7 +38,7 @@ public:
 
   virtual bool isEmpty() const = 0;
 
-  virtual const char *mask() const = 0;
+  virtual QString fileFilter() const = 0;
 
   static std::list<abstractWindow*> AWRegister;
   static bool closeAllWindows();

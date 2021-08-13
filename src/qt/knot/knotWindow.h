@@ -105,7 +105,7 @@ public:
 	void closeEvent(QCloseEvent *event);
 
 private:
-  const char *mask() const override {return "*.knt";};
+	QString fileFilter() const override { return "Knot files (*.knt)"; }
 	void updateActions() override;
 	void rename() override;
 };

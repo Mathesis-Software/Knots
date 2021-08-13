@@ -12,6 +12,7 @@
 
 #include "abstractWindow.h"
 #include "../setValue/setValue.h"
+#include "../manager/iconProvider.h"
 
 std::list<abstractWindow*> abstractWindow::AWRegister;
 
@@ -62,8 +63,27 @@ void abstractWindow::closeEvent(QCloseEvent *event) {
 	AWRegister.remove(this);
 }
 
+namespace {
+
+QString getSaveFileNameEx(const QString &fileFilter) {
+	QFileDialog dialog(nullptr, "Save file", getenv("KNOTEDITOR_DATA"));
+	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
+	dialog.setAcceptMode(QFileDialog::AcceptSave);
+	dialog.setIconProvider(KE::Qt::FileIconProvider::instance());
+	dialog.setNameFilters({
+		fileFilter,
+		"Any files (*)"
+	});
+	if (dialog.exec() == QDialog::Accepted) {
+		return dialog.selectedUrls().value(0).toLocalFile();
+	}
+	return QString();
+}
+
+}
+
 void abstractWindow::save() {
-	QString filename = QFileDialog::getSaveFileName(nullptr, "Save", getenv("KNOTEDITOR_DATA"), mask());
+	QString filename = getSaveFileNameEx(this->fileFilter());
 	if (filename.isEmpty()) {
 		return;
 	}

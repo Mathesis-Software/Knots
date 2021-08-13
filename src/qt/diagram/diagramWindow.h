@@ -13,7 +13,7 @@ private:
 
 	void init(DiagramWidget *widget);
 
-	const char *mask() const override {return "*.dgr";};
+	QString fileFilter() const override { return "Diagram files (*.dgr)"; }
 
 	void printIt(QPrinter*) override;
 

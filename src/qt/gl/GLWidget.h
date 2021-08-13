@@ -34,12 +34,8 @@ public:
 	GLWidget(QWidget *parent);
 	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
 
-	const float *getBackgroundRGB() { return this->backgroundRGB; }
-	void setBackgroundRGB(const float rgb[3]) {
-		this->backgroundRGB[0] = rgb[0];
-		this->backgroundRGB[1] = rgb[1];
-		this->backgroundRGB[2] = rgb[2];
-	}
+	const float *getBackgroundRGB() const;
+	void setBackgroundRGB(const float rgb[3]);
 
 	void rotate(int, int);
 

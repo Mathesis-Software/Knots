@@ -3,13 +3,22 @@
 #include "GLWidget.h"
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
-	this->backgroundRGB[0] = 1.0;
-	this->backgroundRGB[1] = 1.0;
-	this->backgroundRGB[2] = 1.0;
+	const float rgb[3] = {1.0, 1.0, 1.0};
+	setBackgroundRGB(rgb);
 
 	for (int i = 0; i < 16; ++i) {
 		this->currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
 	}
+}
+
+const float *GLWidget::getBackgroundRGB() const {
+	return this->backgroundRGB;
+}
+
+void GLWidget::setBackgroundRGB(const float rgb[3]) {
+	this->backgroundRGB[0] = rgb[0];
+	this->backgroundRGB[1] = rgb[1];
+	this->backgroundRGB[2] = rgb[2];
 }
 
 void GLWidget::resizeGL(int w, int h) {

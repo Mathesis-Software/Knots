@@ -56,8 +56,6 @@ private:
   QMenu *viewMenu;
   QAction *math_decreaseEnergy;
   QAction *math_stop;
-  QAction *view_showKnot;
-  QAction *view_showSeifertSurface;
 
   friend class paramWindow;
   paramWindow *mth;
@@ -81,6 +79,9 @@ private:
 private:
 	void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter);
 
+  void toggleKnotVisibility();
+  void toggleSeifertSurfaceVisibility();
+
 private slots:
   void stop();
   void math();
@@ -88,8 +89,6 @@ private slots:
   void setLength();
   void setNumberOfPoints();
   void decreaseEnergy();
-  void switchShowKnot();
-  void switchShowSeifert();
   void setThickness();
   void setBgColor();
   void setKnotColor();

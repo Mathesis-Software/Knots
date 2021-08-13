@@ -17,13 +17,21 @@ void knotWindow::initMenu() {
   mathMenu->addAction("Number of &points…", this, SLOT(setNumberOfPoints()));
   mathMenu->addAction("&Length…", this, SLOT(setLength()));
   
-  viewMenu = menuBar()->addMenu("&View");
-  view_showKnot = viewMenu->addAction("Show &knot", this, SLOT(switchShowKnot()));
-  view_showKnot->setCheckable(true);
-  view_showKnot->setChecked(this->knotSurface->isVisible());  
-  view_showSeifertSurface = viewMenu->addAction("Show &Seifert surface", this, SLOT(switchShowSeifert()));
-  view_showSeifertSurface->setCheckable(true);
-  view_showSeifertSurface->setChecked(this->seifertSurface->isVisible());  
+  viewMenu = menuBar()->addMenu("View");
+	this->registerAction(
+		viewMenu->addAction("Show knot", this, &knotWindow::toggleKnotVisibility),
+		[this](QAction &action) {
+			action.setCheckable(true);
+			action.setChecked(this->knotSurface->isVisible());  
+		}
+	);
+	this->registerAction(
+		viewMenu->addAction("Show Seifert surface", this, &knotWindow::toggleSeifertSurfaceVisibility),
+		[this](QAction &action) {
+			action.setCheckable(true);
+			action.setChecked(this->seifertSurface->isVisible());  
+		}
+	);
   
   QMenu *optionsMenu = menuBar()->addMenu("&Options");
   optionsMenu->addAction("&Thickness…", this, SLOT(setThickness()));
@@ -44,8 +52,14 @@ void knotWindow::initMenu() {
   addToolbarSeparator();
   addToolbarAction("math.svg", "Show parameters", [this] { this->math(); });
   addToolbarSeparator();
-  addToolbarAction("plus.xpm", "Shift Seifert surface along gradient", [this] { this->bp_plus(); });
-  addToolbarAction("minus.xpm", "Shift Seifert surface along gradient", [this] { this->bp_minus(); });
+  this->registerAction(
+		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->bp_plus(); }),
+		[this](QAction &action) { action.setEnabled(this->seifertSurface->isVisible()); }
+	);
+  this->registerAction(
+  	addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->bp_minus(); }),
+		[this](QAction &action) { action.setEnabled(this->seifertSurface->isVisible()); }
+	);
 
 	this->updateActions();
 }

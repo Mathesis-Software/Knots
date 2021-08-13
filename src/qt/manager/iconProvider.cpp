@@ -12,7 +12,7 @@ FileIconProvider *FileIconProvider::instance() {
 }
 
 FileIconProvider::FileIconProvider() :
-	diagramIcon(":images/file_diagram.xpm"),
+	diagramIcon(":images/diagram_mode_quick_drawing.svg"),
 	knotIcon(":images/trefoil.png") {
 }
 

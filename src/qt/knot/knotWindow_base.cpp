@@ -58,28 +58,26 @@ knotWindow::~knotWindow() {
   delete viewMenu;
 }
 
-void knotWindow::switchShowKnot() {
+void knotWindow::toggleKnotVisibility() {
   if (this->knotSurface->isVisible()) {
     this->knotSurface->hide();
-    view_showKnot->setChecked(false);
   } else {
     this->knotSurface->show();
-    view_showKnot->setChecked(true);
   }
 
-  repaint3d ();
+  this->glWidget()->update();
+	this->updateActions();
 }
 
-void knotWindow::switchShowSeifert() {
+void knotWindow::toggleSeifertSurfaceVisibility() {
   if (this->seifertSurface->isVisible()) {
-    this->seifertSurface->hide ();
-    view_showSeifertSurface->setChecked(false);
+    this->seifertSurface->hide();
   } else {
-    this->seifertSurface->show ();
-    view_showSeifertSurface->setChecked(true);
+    this->seifertSurface->show();
   }
 
-  repaint3d ();
+  this->glWidget()->update();
+	this->updateActions();
 }
 
 void knotWindow::closeEvent(QCloseEvent *event) {

@@ -44,7 +44,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 		actionsMenu->addAction("Clear", [this] { this->clear(); }),
 		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
 	);
-	
+
 	this->registerAction(
 		this->addToolbarAction("trefoil.png", "Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) {
@@ -180,7 +180,7 @@ void diagramWindow::rename() {
 	const QString text = QInputDialog::getText(
 		this, "Rename diagram", "New diagram name:", QLineEdit::Normal, diagram.caption().c_str(), &ok
 	);
-  if (ok) {
+	if (ok) {
 		diagram.setCaption(text.toStdString());
 		this->updateActions();
 	}

@@ -121,7 +121,7 @@ namespace {
 }
 
 bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
-	const int ori = orientation(*this->start, *edge.start, *this->end); 
+	const int ori = orientation(*this->start, *edge.start, *this->end);
 	return
 		ori != 0 &&
 		ori == orientation(*edge.start, *this->end, *edge.end) &&

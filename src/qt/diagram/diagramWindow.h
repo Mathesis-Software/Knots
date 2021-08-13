@@ -18,7 +18,7 @@ private:
 	void printIt(QPrinter*) override;
 
 	void setMode(DiagramWidget::EditorMode mode);
-	
+
 	void convert();
 	void clear();
 	void simplify();

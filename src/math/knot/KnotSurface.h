@@ -12,16 +12,16 @@ class KnotSurface : public Surface {
 
 private:
 	const ThreeD::Knot &knot;
-  double thickness;
+	double thickness;
 	std::vector<double> sines;
 	std::vector<double> cosines;
 	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 public:
-  KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle);
-  void calculate() override;
-  bool destroy(bool force);
-  void setThickness(double thickness);
+	KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle);
+	void calculate() override;
+	bool destroy(bool force);
+	void setThickness(double thickness);
 	void setNumberOfPointsOnCircle(std::size_t pointsOnCircle);
 
 private:

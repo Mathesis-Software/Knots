@@ -6,7 +6,7 @@ FileIconProvider *FileIconProvider::_instance = 0;
 
 FileIconProvider *FileIconProvider::instance() {
 	if (_instance == 0) {
-	  _instance = new FileIconProvider();
+		_instance = new FileIconProvider();
 	}
 	return _instance;
 }
@@ -18,9 +18,9 @@ FileIconProvider::FileIconProvider() :
 
 QIcon FileIconProvider::icon(const QFileInfo &finfo) const {
 	if (finfo.suffix() == "knt") {
-	  return knotIcon;
+		return knotIcon;
 	} else if (finfo.suffix() == "dgr") {
-	  return diagramIcon;
+		return diagramIcon;
 	}
 
 	return QFileIconProvider::icon(finfo);

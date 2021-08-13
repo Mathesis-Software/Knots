@@ -8,20 +8,20 @@ namespace KE { namespace Qt {
 class FileIconProvider : public QFileIconProvider {
 
 public:
-  static FileIconProvider *instance();
+	static FileIconProvider *instance();
 
 private:
 	static FileIconProvider *_instance;
 
 private:
-  FileIconProvider();
+	FileIconProvider();
 
 public:
-  QIcon icon(const QFileInfo&) const override;
+	QIcon icon(const QFileInfo&) const override;
 
 private:
-  const QIcon diagramIcon;
-  const QIcon knotIcon;
+	const QIcon diagramIcon;
+	const QIcon knotIcon;
 };
 
 }}

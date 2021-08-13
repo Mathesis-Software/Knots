@@ -10,9 +10,9 @@ namespace KE { namespace GL {
 class Surface {
 
 private:
-  struct SurfacePoint {
-    float vertex[3];
-    float normal[3];
+	struct SurfacePoint {
+		float vertex[3];
+		float normal[3];
 
 		SurfacePoint(float v0, float v1, float v2, float n0, float n1, float n2) {
 			vertex[0] = v0;
@@ -22,34 +22,34 @@ private:
 			normal[1] = n1;
 			normal[2] = n2;
 		}
-  };
+	};
 
-  const bool stripped;
-  const bool showBackSide;
-  bool visible;
+	const bool stripped;
+	const bool showBackSide;
+	bool visible;
 
 	std::vector<SurfacePoint> points;
-  float frontRGB[3], backRGB[3];
+	float frontRGB[3], backRGB[3];
 
 protected:
-  void destroy();
-  virtual void calculate() = 0;
-  void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
-  
+	void destroy();
+	virtual void calculate() = 0;
+	void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
+
 public:
-  Surface(bool stripped, bool showBackSide);
-  virtual ~Surface();
+	Surface(bool stripped, bool showBackSide);
+	virtual ~Surface();
 
-  bool isVisible() { return this->visible; }
-  void show() { this->visible = true; }
-  void hide() { this->visible = false; }
+	bool isVisible() { return this->visible; }
+	void show() { this->visible = true; }
+	void hide() { this->visible = false; }
 
-  void paint();
+	void paint();
 
-  const float *getFrontRGB() const { return this->frontRGB; }
-  const float *getBackRGB() const { return this->backRGB; }
-  void setFrontRGB(const float rgb[3]);
-  void setBackRGB(const float rgb[3]);
+	const float *getFrontRGB() const { return this->frontRGB; }
+	const float *getBackRGB() const { return this->backRGB; }
+	void setFrontRGB(const float rgb[3]);
+	void setBackRGB(const float rgb[3]);
 
 private:
 	Surface(const Surface&) = delete;

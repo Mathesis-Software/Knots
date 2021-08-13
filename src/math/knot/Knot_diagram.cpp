@@ -47,8 +47,8 @@ Knot::Knot(const TwoD::Diagram &diagram, int w, int h) : caption(diagram.caption
 		min = std::min(min, dist);
 		total += dist;
 	}
-  normalize(std::max(5 * this->_points.size(), 3 * (std::size_t)std::round(total / min)));
-  center();
+	normalize(std::max(5 * this->_points.size(), 3 * (std::size_t)std::round(total / min)));
+	center();
 }
 
 }}

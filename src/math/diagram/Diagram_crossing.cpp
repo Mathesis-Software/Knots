@@ -8,11 +8,11 @@ std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
 	const int d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
 
 	if (d0 == 0) {
-	  return nullptr;
+		return nullptr;
 	}
-	
+
 	const int d1 =
-	  	(this->down.start->y() - this->up.start->y()) * this->down.dx()
+			(this->down.start->y() - this->up.start->y()) * this->down.dx()
 		-	(this->down.start->x() - this->up.start->x()) * this->down.dy();
 
 	return std::make_shared<FloatPoint>(
@@ -70,14 +70,14 @@ std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const
 
 void Diagram::Edge::orderCrossings(std::list<Crossing> &crossings) const {
 	std::function<bool(const Crossing&,const Crossing&)> comparator;
-  if (abs(this->dx()) > abs(this->dy())) {
-    if (this->dx() > 0) {
+	if (abs(this->dx()) > abs(this->dy())) {
+		if (this->dx() > 0) {
 			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->x < c1.coords()->x; };
 		} else {
 			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->x > c1.coords()->x; };
 		}
 	} else {
-    if (this->dy() > 0) {
+		if (this->dy() > 0) {
 			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->y < c1.coords()->y; };
 		} else {
 			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->y > c1.coords()->y; };

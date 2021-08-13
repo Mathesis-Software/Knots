@@ -38,7 +38,7 @@ void seifert_list::insert_after(seifert *s) {
 
 void seifert_list::insert(seifert *s) {
   // Процедура добавления нового соседа с поиском правильного места для него.
-  
+
   // Если в окрестности не было ничего, все просто.
   if (value == nullptr) {
     value = s;

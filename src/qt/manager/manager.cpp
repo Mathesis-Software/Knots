@@ -88,7 +88,7 @@ void keManager::open() {
 		} else {
 			throw std::runtime_error("The file does not represent a knot nor a diagram");
 		}
-		
+
 		if (aw->isEmpty()) {
 			aw->close();
 		} else {

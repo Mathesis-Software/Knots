@@ -26,15 +26,15 @@ void GLWidget::rotate(const QPoint &start, const QPoint &end) {
 
 	this->makeCurrent();
 
-  double tmp;
-  tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
-  tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
-  tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
+	double tmp;
+	tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
+	tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
+	tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
 	glMultMatrixd(this->currentMatrix.get());
 
-  tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
-  tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
-  tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
+	tmp = M(0, 1); M(0, 1) = M(1, 0); M(1, 0) = tmp;
+	tmp = M(0, 2); M(0, 2) = M(2, 0); M(2, 0) = tmp;
+	tmp = M(2, 1); M(2, 1) = M(1, 2); M(1, 2) = tmp;
 
 	if (dx != 0) {
 		for (int i = 0; i < 3; ++i) {

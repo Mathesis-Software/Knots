@@ -22,40 +22,40 @@ void GLWidget::setBackgroundRGB(const float rgb[3]) {
 }
 
 void GLWidget::resizeGL(int w, int h) {
-  glViewport(0, 0, w, h);
-  
-  glShadeModel(GL_SMOOTH);
-  glEnable(GL_DEPTH_TEST);
+	glViewport(0, 0, w, h);
 
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glFrustum(-w / 800.0, w / 800.0, -h / 800.0, h / 800.0, 5, 25);
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_DEPTH_TEST);
 
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  glTranslatef(0.0, 0.0, -10.0);
-  glMultMatrixd(this->currentMatrix.get());
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(-w / 800.0, w / 800.0, -h / 800.0, h / 800.0, 5, 25);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -10.0);
+	glMultMatrixd(this->currentMatrix.get());
 }
 
 void GLWidget::initializeGL() {
 	glEnable(GL_LINE_SMOOTH);
 	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
 
-  float pos[] = {5.0, 5.0, 10.0, 1.0};
-  glLightfv(GL_LIGHT0, GL_POSITION, pos);
-  glEnable(GL_LIGHT0);
-  glEnable(GL_LIGHTING);
+	float pos[] = {5.0, 5.0, 10.0, 1.0};
+	glLightfv(GL_LIGHT0, GL_POSITION, pos);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
 }
 
 void GLWidget::paintGL() {
-  glClearColor(this->backgroundRGB[0], this->backgroundRGB[1], this->backgroundRGB[2], 1.0);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClearColor(this->backgroundRGB[0], this->backgroundRGB[1], this->backgroundRGB[2], 1.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  for (auto surface : this->surfaces) {
-    surface->paint();
+	for (auto surface : this->surfaces) {
+		surface->paint();
 	}
 
-  glFlush();
+	glFlush();
 }
 
 void GLWidget::mousePressEvent(QMouseEvent *event) {

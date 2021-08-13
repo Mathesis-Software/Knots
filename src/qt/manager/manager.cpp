@@ -106,7 +106,7 @@ void keManager::new_diagram() {
 }
 
 void keManager::about() {
-	AboutWindow *aw = new AboutWindow(0);
+	auto aw = new KE::Qt::AboutWindow(0);
 	aw->showMe();
 }
 

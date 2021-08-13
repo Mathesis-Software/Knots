@@ -3,6 +3,8 @@
 
 #include <QtWidgets/QWidget>
 
+namespace KE { namespace Qt {
+
 class AboutWindow : public QWidget {
 
 public:
@@ -12,5 +14,7 @@ public:
 private:
 	void mousePressEvent(QMouseEvent*) override;
 };
+
+}}
 
 #endif /* __ABOUT_H__ */

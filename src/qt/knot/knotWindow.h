@@ -54,8 +54,6 @@ private:
 
   QMenu *mathMenu;
   QMenu *viewMenu;
-  QAction *math_decreaseEnergy;
-  QAction *math_stop;
 
   friend class paramWindow;
   paramWindow *mth;

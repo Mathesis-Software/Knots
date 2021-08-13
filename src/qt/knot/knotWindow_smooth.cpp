@@ -14,8 +14,6 @@ void knotWindow::smooth() {
 void knotWindow::stop() {
   if (this->smoothingThread.isRunning()) {
 		this->smoothingThread.requestInterruption();
-    math_decreaseEnergy->setEnabled(true);
-    math_stop->setEnabled(false);
     statusBar()->showMessage("Smoothing complete", 3000);
 		this->updateActions();
   }
@@ -49,8 +47,6 @@ void knotWindow::startSmooth(int st, int ra, bool cont) {
   smoothSteps = st;
   redrawAfter = ra;
   continuousSmoothing = cont;
-  math_decreaseEnergy->setEnabled(false);
-  math_stop->setEnabled(true);
 
 	this->smoothingThread.start();
   statusBar()->showMessage("Smoothing…");

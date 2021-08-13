@@ -9,10 +9,14 @@ void knotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("&Math");
   mathMenu->addAction("&View parameters", this, SLOT(math()));
   mathMenu->addSeparator();
-  math_decreaseEnergy = mathMenu->addAction("Decrease &energy…", this, SLOT(decreaseEnergy()));
-  math_decreaseEnergy->setEnabled(!this->smoothingThread.isRunning());
-  math_stop = mathMenu->addAction("&Stop", this, SLOT(stop()));
-  math_stop->setEnabled(this->smoothingThread.isRunning());
+	this->registerAction(
+  	mathMenu->addAction("Start smoothing…", this, SLOT(decreaseEnergy())),
+		[this](QAction &action) { action.setEnabled(!this->smoothingThread.isRunning()); }
+	);
+	this->registerAction(
+  	mathMenu->addAction("Stop smoothing", this, SLOT(stop())),
+		[this](QAction &action) { action.setEnabled(this->smoothingThread.isRunning()); }
+	);
   mathMenu->addSeparator();
   mathMenu->addAction("Number of &points…", this, SLOT(setNumberOfPoints()));
   mathMenu->addAction("&Length…", this, SLOT(setLength()));

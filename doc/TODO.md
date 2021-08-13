@@ -24,6 +24,7 @@
 * printing: drop or re-implement (currently it is disabled)
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
+* pass diagram/knot files to open as parameters of command line
 
 ### Technical feature improvements
 
@@ -39,6 +40,7 @@
 ### Data
 
 * drop the zoo (e.g., the folder "300"), provide good single version for each knot
+* (?) put data inside the executable, to be sure we need no special installation
 
 ### Possible future development
 

@@ -3,16 +3,18 @@
 
 #include <QtWidgets/QFileIconProvider>
 
-class keFileIconProvider : public QFileIconProvider {
+namespace KE { namespace Qt {
+
+class FileIconProvider : public QFileIconProvider {
 
 public:
-  static keFileIconProvider *instance();
+  static FileIconProvider *instance();
 
 private:
-	static keFileIconProvider *_instance;
+	static FileIconProvider *_instance;
 
 private:
-  keFileIconProvider();
+  FileIconProvider();
 
 public:
   QIcon icon(const QFileInfo&) const override;
@@ -20,7 +22,8 @@ public:
 private:
   const QIcon diagramIcon;
   const QIcon knotIcon;
-  const QIcon emptyIcon;
 };
+
+}}
 
 #endif /* __ICON_PROVIDER_H__ */

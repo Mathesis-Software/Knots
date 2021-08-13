@@ -46,7 +46,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	);
 	
 	this->registerAction(
-		this->addToolbarAction("trefoil.svg", "Convert to knot", [this] { this->convert(); }),
+		this->addToolbarAction("trefoil.png", "Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) {
 			const bool enabled = diagram.isClosed();
 			action.setEnabled(enabled);

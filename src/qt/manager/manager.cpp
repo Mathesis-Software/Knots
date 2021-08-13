@@ -9,7 +9,7 @@
 #include "../../util/rapidjson.h"
 #include "manager.h"
 #include "about.h"
-#include "icon_provider.h"
+#include "iconProvider.h"
 #include "../knot/knotWindow.h"
 #include "../diagram/diagramWindow.h"
 
@@ -45,7 +45,7 @@ namespace {
 QString getOpenFileNameEx() {
 	QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
-	dialog.setIconProvider(keFileIconProvider::instance());
+	dialog.setIconProvider(KE::Qt::FileIconProvider::instance());
 	if (dialog.exec() == QDialog::Accepted) {
 		return dialog.selectedUrls().value(0).toLocalFile();
 	}

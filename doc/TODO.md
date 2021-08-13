@@ -9,6 +9,7 @@
 * move everything into namespaces
 * consistent file names
 * drop "qt/setValue" code
+* implement KnotEditor for knots like we have DiagramEditor for diagrams; no undo/redo here (?), but maybe it makes sense to store here visual features like colours and rotation matrix?
 
 ### User interface
 
@@ -19,7 +20,10 @@
 * create default settings storage and settings dialogue (all the same parameters as in previous item + maybe something els)
 * "save file dialogue": do not use non-writeable directory by default
 * save "visual" features like colours, knot thickness, window size, etc.
+* save rotation matrix (currently knot is saved "rotated", with new points coordinates)
 * printing: drop or re-implement (currently it is disabled)
+* re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
+* disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
 
 ### Technical feature improvements
 

@@ -28,7 +28,8 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Create new diagram");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::pressed, [this] {
-			newDiagram();
+			auto window = newDiagram();
+			window->setGeometry(this->geometry());
 			this->close();
 		});
 		layout->addWidget(button, 0, 0);
@@ -37,7 +38,9 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Open existing file");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::pressed, [this] {
-			if (openFile()) {
+			auto window = openFile();
+			if (window) {
+				window->setGeometry(this->geometry());
 				this->close();
 			}
 		});
@@ -46,7 +49,7 @@ ManagerWindow::ManagerWindow() {
 	this->setCentralWidget(center);
 
 	setWindowTitle("Knot Editor");
-	setFixedSize(500, 200);
+	this->resize(508, 594);
 }
 
 ManagerWindow::~ManagerWindow() {
@@ -73,18 +76,18 @@ QString getOpenFileNameEx() {
 
 }
 
-void ManagerWindow::newDiagram() {
-	(new diagramWindow())->show();
+QWidget *ManagerWindow::newDiagram() {
+	auto window = new diagramWindow();
+	window->show();
+	return window;
 }
 
-bool ManagerWindow::openFile() {
+QWidget *ManagerWindow::openFile() {
 	QString filename = getOpenFileNameEx();
 
 	if (filename.isEmpty()) {
-		return false;
+		return nullptr;
 	}
-
-	abstractWindow *aw = nullptr;
 
 	try {
 		std::ifstream is(filename.toStdString());
@@ -96,26 +99,23 @@ bool ManagerWindow::openFile() {
 		doc.ParseStream(wrapper);
 		is.close();
 
+		abstractWindow *window = nullptr;
 		if (doc.IsNull()) {
 			throw std::runtime_error("The file is not in JSON format");
 		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "diagram") {
-			aw = new diagramWindow(doc);
+			window = new diagramWindow(doc);
 		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "link") {
-			aw = new knotWindow(doc);
+			window = new knotWindow(doc);
 		} else {
 			throw std::runtime_error("The file does not represent a knot nor a diagram");
 		}
 
-		if (aw->isEmpty()) {
-			aw->close();
-		} else {
-			aw->show();
-		}
-		return true;
+		window->show();
+		return window;
 	} catch (const std::runtime_error &e) {
 		abstractWindow::AWRegister.pop_back();
 		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
-		return false;
+		return nullptr;
 	}
 }
 

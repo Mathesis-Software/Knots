@@ -10,8 +10,8 @@ namespace KE { namespace Qt {
 class ManagerWindow : public QMainWindow {
 
 public:
-  static void newDiagram();
-  static bool openFile();
+  static QWidget *newDiagram();
+  static QWidget *openFile();
 
 private:
 	QMenu *fileMenu;

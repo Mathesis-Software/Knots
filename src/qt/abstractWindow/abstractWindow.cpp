@@ -142,7 +142,7 @@ void abstractWindow::addToolbarSeparator() {
 void abstractWindow::complete() {
 	this->toolbar->show();
 	statusBar()->setVisible(true);
-	resize(508, 594);
+	this->resize(508, 594);
 }
 
 void abstractWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {

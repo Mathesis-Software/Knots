@@ -10,7 +10,7 @@
 * consistent file names
 * drop "qt/setValue" code
 * implement KnotEditor for knots like we have DiagramEditor for diagrams; no undo/redo here (?), but maybe it makes sense to store here visual features like colours and rotation matrix?
-* merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
+* (?) merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
 
 ### User interface
 

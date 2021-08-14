@@ -323,7 +323,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 				break;
 			case MOVING:
 				if (!this->capturedPoint.isNull()) {
-					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), false);
+					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), true);
 					this->capturePoint(event->pos());
 					repaint();
 				}

@@ -6,8 +6,8 @@
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::initMenu() {
-  mathMenu = menuBar()->addMenu("&Math");
-  mathMenu->addAction("&View parameters", this, SLOT(math()));
+  mathMenu = menuBar()->addMenu("Math");
+  mathMenu->addAction("View parameters", this, SLOT(math()));
   mathMenu->addSeparator();
 	this->registerAction(
   	mathMenu->addAction("Start smoothing…", this, SLOT(decreaseEnergy())),
@@ -18,8 +18,8 @@ void knotWindow::initMenu() {
 		[this](QAction &action) { action.setEnabled(this->smoothingThread.isRunning()); }
 	);
   mathMenu->addSeparator();
-  mathMenu->addAction("Number of &points…", this, SLOT(setNumberOfPoints()));
-  mathMenu->addAction("&Length…", this, SLOT(setLength()));
+  mathMenu->addAction("Number of points…", this, SLOT(setNumberOfPoints()));
+  mathMenu->addAction("Length…", this, SLOT(setLength()));
   
   viewMenu = menuBar()->addMenu("View");
 	this->registerAction(
@@ -37,13 +37,13 @@ void knotWindow::initMenu() {
 		}
 	);
   
-  QMenu *optionsMenu = menuBar()->addMenu("&Options");
-  optionsMenu->addAction("&Thickness…", this, SLOT(setThickness()));
+  QMenu *optionsMenu = menuBar()->addMenu("Options");
+  optionsMenu->addAction("Thickness…", this, SLOT(setThickness()));
   optionsMenu->addSeparator();
-  optionsMenu->addAction("Back&ground color…", this, SLOT(setBgColor()));
-  optionsMenu->addAction("&Knot color…", this, SLOT(setKnotColor()));
-  optionsMenu->addAction("Seifert surface &front color…", this, SLOT(setSeifertFrontColor()));
-  optionsMenu->addAction("Seifert surface &back color…", this, SLOT(setSeifertBackColor()));
+  optionsMenu->addAction("Background color…", this, SLOT(setBgColor()));
+  optionsMenu->addAction("Knot color…", this, SLOT(setKnotColor()));
+  optionsMenu->addAction("Seifert surface front color…", this, SLOT(setSeifertFrontColor()));
+  optionsMenu->addAction("Seifert surface back color…", this, SLOT(setSeifertBackColor()));
 
 	this->registerAction(
 		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->smooth(); }),

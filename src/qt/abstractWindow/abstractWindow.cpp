@@ -22,20 +22,25 @@ std::list<abstractWindow*> abstractWindow::AWRegister;
 abstractWindow::abstractWindow() {
 	this->setAttribute(Qt::WA_DeleteOnClose);
 
-	QMenu *fileMenu = this->menuBar()->addMenu("&File");
+	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	fileMenu->addAction("New diagram", [this] { KE::Qt::ManagerWindow::newDiagram(); });
-	fileMenu->addAction("Open…", [this] { KE::Qt::ManagerWindow::openFile(); });
+	auto newd = fileMenu->addAction("New diagram", [this] { KE::Qt::ManagerWindow::newDiagram(); });
+	newd->setShortcut(QKeySequence("Ctrl+N"));
+	auto open = fileMenu->addAction("Open…", [this] { KE::Qt::ManagerWindow::openFile(); });
+	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
-	fileMenu->addAction("&Save as…", [this] { this->save(); });
+	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
+	save->setShortcut(QKeySequence("Ctrl+S"));
 	fileMenu->addAction("Print…", [this] { this->print(); })->setEnabled(false);
 	fileMenu->addSeparator();
 	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();
 	fileMenu->addAction("About", [] { KE::Qt::AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("Close", [this] { this->close(); });
-	fileMenu->addAction("Quit", [this] { this->exit(); });
+	auto close = fileMenu->addAction("Close", [this] { this->close(); });
+	close->setShortcut(QKeySequence("Ctrl+W"));
+	auto quit = fileMenu->addAction("Quit", [this] { this->exit(); });
+	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	this->toolbar = new QToolBar(this);
 	addToolBar(this->toolbar);

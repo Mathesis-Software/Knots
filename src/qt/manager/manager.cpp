@@ -20,14 +20,15 @@ ManagerWindow::ManagerWindow() {
 	fileMenu = this->menuBar()->addMenu("File");
 	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("Quit", [this] { this->exit(); });
+	auto quit = fileMenu->addAction("Quit", [this] { this->exit(); });
+	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	auto center = new QWidget;
 	auto layout = new QGridLayout(center);
 	{
 		auto button = new QPushButton("Create new diagram");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		button->connect(button, &QPushButton::pressed, [this] {
+		button->connect(button, &QPushButton::clicked, [this] {
 			auto window = newDiagram();
 			window->setGeometry(this->geometry());
 			this->close();
@@ -37,7 +38,7 @@ ManagerWindow::ManagerWindow() {
 	{
 		auto button = new QPushButton("Open existing file");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		button->connect(button, &QPushButton::pressed, [this] {
+		button->connect(button, &QPushButton::clicked, [this] {
 			auto window = openFile();
 			if (window) {
 				window->setGeometry(this->geometry());

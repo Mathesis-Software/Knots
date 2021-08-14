@@ -107,6 +107,10 @@ void diagramWindow::init(DiagramWidget *widget) {
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }
 	);
 
+	QPixmap pixmap(":images/diagram.svg");
+	pixmap.setDevicePixelRatio(this->devicePixelRatio());
+	this->setWindowIcon(pixmap);
+
 	complete();
 
 	this->updateActions();

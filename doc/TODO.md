@@ -16,6 +16,7 @@
 
 * save list of opened windows between runs; reopen them
 * recent documents list in the menu
+* open windows list
 * knot window: combine tunable parameters (colours, thickness, length, number of points) into a single dialogue
 * create default settings storage and settings dialogue (all the same parameters as in previous item + maybe something els)
 * "save file dialogue": do not use non-writeable directory by default

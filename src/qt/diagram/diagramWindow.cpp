@@ -88,7 +88,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	);
 
 	addToolbarSeparator();
-	this->registerAction(
+	auto undo = this->registerAction(
 		this->addToolbarAction("undo.svg", "Undo", [this, widget] {
 			widget->diagram.undo();
 			widget->repaint();
@@ -97,7 +97,8 @@ void diagramWindow::init(DiagramWidget *widget) {
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canUndo()); }
 	);
-	this->registerAction(
+	undo->setShortcut(QKeySequence("Ctrl+Z"));
+	auto redo = this->registerAction(
 		this->addToolbarAction("redo.svg", "Redo", [this, widget] {
 			widget->diagram.redo();
 			widget->repaint();
@@ -106,6 +107,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }
 	);
+	redo->setShortcut(QKeySequence("Ctrl+Shift+Z"));
 
 	QPixmap pixmap(":images/diagram.svg");
 	pixmap.setDevicePixelRatio(this->devicePixelRatio());

@@ -29,7 +29,7 @@ protected:
   void addToolbarSeparator();
   void complete();
 
-	void registerAction(QAction *action, std::function<void(QAction&)> controller);
+	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
 
 public:
   abstractWindow();

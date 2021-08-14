@@ -150,8 +150,9 @@ void abstractWindow::complete() {
 	this->resize(508, 594);
 }
 
-void abstractWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {
+QAction *abstractWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {
 	this->actionsMap[action] = controller;
+	return action;
 }
 
 void abstractWindow::updateActions() {

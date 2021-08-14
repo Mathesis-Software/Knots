@@ -186,7 +186,7 @@ struct MoveDiagramCommand : public DiagramEditor::Command {
 	MoveDiagramCommand(int dx, int dy) : dx(dx), dy(dy) {}
 
 	void play(Diagram &diagram) override {
-		diagram.shift(dx, dy);
+		diagram.shift(this->dx, this->dy);
 	}
 };
 

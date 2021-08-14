@@ -6,6 +6,10 @@
 
 namespace KE { namespace Qt {
 
+void AboutWindow::showAboutDialog() {
+	(new AboutWindow(nullptr))->showMe();
+}
+
 AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
 	this->setWindowFlags(::Qt::Window | ::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
 	this->setAttribute(::Qt::WA_DeleteOnClose);

@@ -13,14 +13,8 @@ private:
 	QMenu *fileMenu;
 
 private:
-  void closeEvent(QCloseEvent*);
-
-  void new_diagram();
-  void open();
-  void close_all_windows();
+  bool open();
   void exit();
-
-  void about();
 
 public:
   ManagerWindow();

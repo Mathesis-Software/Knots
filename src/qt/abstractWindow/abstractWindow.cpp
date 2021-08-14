@@ -1,6 +1,7 @@
 #include <cstdlib>
 
 #include <QtGui/QCloseEvent>
+#include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
@@ -12,6 +13,7 @@
 
 #include "abstractWindow.h"
 #include "../setValue/setValue.h"
+#include "../manager/about.h"
 #include "../manager/iconProvider.h"
 
 std::list<abstractWindow*> abstractWindow::AWRegister;
@@ -22,11 +24,14 @@ abstractWindow::abstractWindow() {
 	QMenu *fileMenu = this->menuBar()->addMenu("&File");
 
 	fileMenu->addAction("&Save as…", [this] { this->save(); });
-	fileMenu->addAction("&Print…", [this] { this->print(); });
+	fileMenu->addAction("Print…", [this] { this->print(); })->setEnabled(false);
 	fileMenu->addSeparator();
 	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();
+	fileMenu->addAction("About", [] { KE::Qt::AboutWindow::showAboutDialog(); });
+	fileMenu->addSeparator();
 	fileMenu->addAction("Close", [this] { this->close(); });
+	fileMenu->addAction("Quit", [this] { this->exit(); });
 
 	this->toolbar = new QToolBar(this);
 	addToolBar(this->toolbar);
@@ -103,6 +108,12 @@ void abstractWindow::print() {
 	//if (prn.setup(this)) {
 	//	printIt(&prn);
 	//}
+}
+
+void abstractWindow::exit() {
+	if (closeAllWindows()) {
+		qApp->quit();
+	}
 }
 
 bool abstractWindow::closeAllWindows() {

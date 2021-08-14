@@ -8,6 +8,9 @@ namespace KE { namespace Qt {
 class AboutWindow : public QWidget {
 
 public:
+	static void showAboutDialog();
+
+public:
 	AboutWindow(QWidget*);
 	void showMe();
 

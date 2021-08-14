@@ -14,6 +14,7 @@ private:
 	std::map<QAction*,std::function<void(QAction&)>> actionsMap;
 
 protected:
+	void exit();
   void closeEvent(QCloseEvent*);
 
   virtual void printIt(QPrinter*) = 0;

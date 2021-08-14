@@ -18,9 +18,8 @@ namespace KE { namespace Qt {
 
 ManagerWindow::ManagerWindow() {
 	fileMenu = this->menuBar()->addMenu("File");
-	fileMenu->addAction("About", [this] { this->about(); });
+	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("Close all windows", [this] { this->close_all_windows(); });
 	fileMenu->addAction("Quit", [this] { this->exit(); });
 
 	auto center = new QWidget;
@@ -28,13 +27,20 @@ ManagerWindow::ManagerWindow() {
 	{
 		auto button = new QPushButton("Create new diagram");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		button->connect(button, &QPushButton::pressed, [this] { this->new_diagram(); });
+		button->connect(button, &QPushButton::pressed, [this] {
+			(new diagramWindow())->show();
+			this->close();
+		});
 		layout->addWidget(button, 0, 0);
 	}
 	{
 		auto button = new QPushButton("Open existing file");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		button->connect(button, &QPushButton::pressed, [this] { this->open(); });
+		button->connect(button, &QPushButton::pressed, [this] {
+			if (this->open()) {
+				this->close();
+			}
+		});
 		layout->addWidget(button, 0, 1);
 	}
 	this->setCentralWidget(center);
@@ -45,12 +51,6 @@ ManagerWindow::ManagerWindow() {
 
 ManagerWindow::~ManagerWindow() {
 	delete fileMenu;
-}
-
-void ManagerWindow::closeEvent(QCloseEvent*) {
-	if (abstractWindow::closeAllWindows()) {
-		qApp->quit();
-	}
 }
 
 namespace {
@@ -73,11 +73,11 @@ QString getOpenFileNameEx() {
 
 }
 
-void ManagerWindow::open() {
+bool ManagerWindow::open() {
 	QString filename = getOpenFileNameEx();
 
 	if (filename.isEmpty()) {
-		return;
+		return false;
 	}
 
 	abstractWindow *aw = nullptr;
@@ -107,28 +107,18 @@ void ManagerWindow::open() {
 		} else {
 			aw->show();
 		}
+		return true;
 	} catch (const std::runtime_error &e) {
 		abstractWindow::AWRegister.pop_back();
 		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
+		return false;
 	}
 }
 
-void ManagerWindow::new_diagram() {
-	abstractWindow *aw = new diagramWindow();
-	aw->show();
-}
-
-void ManagerWindow::about() {
-	auto aw = new AboutWindow(0);
-	aw->showMe();
-}
-
 void ManagerWindow::exit() {
-	QWidget::close();
-}
-
-void ManagerWindow::close_all_windows() {
-	abstractWindow::closeAllWindows();
+	if (abstractWindow::closeAllWindows()) {
+		qApp->quit();
+	}
 }
 
 }}

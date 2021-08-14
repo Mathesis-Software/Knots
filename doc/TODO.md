@@ -22,6 +22,7 @@
 * save "visual" features like colours, knot thickness, window size, etc.
 * save rotation matrix (currently knot is saved "rotated", with new points coordinates)
 * printing: drop or re-implement (currently it is disabled)
+* add exporting images to PNG
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
 * pass diagram/knot files to open as parameters of command line

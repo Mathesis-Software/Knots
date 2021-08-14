@@ -1,12 +1,16 @@
 #ifndef __MANAGER_H__
 #define __MANAGER_H__
 
-#include <QtWidgets/QMenuBar>
+#include <memory>
 
-class keManager : public QMenuBar {
+#include <QtWidgets/QMainWindow>
+
+namespace KE { namespace Qt {
+
+class ManagerWindow : public QMainWindow {
 
 private:
-  QMenu *fileMenu, *aboutMenu;
+	QMenu *fileMenu;
 
 private:
   void closeEvent(QCloseEvent*);
@@ -17,11 +21,12 @@ private:
   void exit();
 
   void about();
-  void about_qt();
 
 public:
-  keManager();
-  ~keManager();
+  ManagerWindow();
+  ~ManagerWindow();
 };
+
+}}
 
 #endif /* __MANAGER_H__ */

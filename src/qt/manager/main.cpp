@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
 	pixmap.setDevicePixelRatio(qa.devicePixelRatio());
 	qa.setWindowIcon(pixmap);
 
-	keManager kem;
-	kem.show();
+	KE::Qt::ManagerWindow manager;
+	manager.show();
 	return qa.exec();
 }

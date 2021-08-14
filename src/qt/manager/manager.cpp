@@ -1,8 +1,9 @@
-#include <fstream>
-
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QPushButton>
 
 #include <rapidjson/istreamwrapper.h>
 
@@ -13,28 +14,40 @@
 #include "../knot/knotWindow.h"
 #include "../diagram/diagramWindow.h"
 
-keManager::keManager() {
-	fileMenu = this->addMenu("&File");
-	fileMenu->addAction("&New diagram", [this] { this->new_diagram(); });
-	fileMenu->addAction("&Open…", [this] { this->open(); });
+namespace KE { namespace Qt {
+
+ManagerWindow::ManagerWindow() {
+	fileMenu = this->menuBar()->addMenu("File");
+	fileMenu->addAction("About", [this] { this->about(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("&Close all windows", [this] { this->close_all_windows(); });
-	fileMenu->addAction("E&xit", [this] { this->exit(); });
-	addSeparator();
-	aboutMenu = this->addMenu("&About");
-	aboutMenu->addAction("About &Knot Editor", [this] { this->about(); });
-	aboutMenu->addAction("About &Qt", [this] { this->about_qt(); });
+	fileMenu->addAction("Close all windows", [this] { this->close_all_windows(); });
+	fileMenu->addAction("Quit", [this] { this->exit(); });
+
+	auto center = new QWidget;
+	auto layout = new QGridLayout(center);
+	{
+		auto button = new QPushButton("Create new diagram");
+		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+		button->connect(button, &QPushButton::pressed, [this] { this->new_diagram(); });
+		layout->addWidget(button, 0, 0);
+	}
+	{
+		auto button = new QPushButton("Open existing file");
+		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+		button->connect(button, &QPushButton::pressed, [this] { this->open(); });
+		layout->addWidget(button, 0, 1);
+	}
+	this->setCentralWidget(center);
 
 	setWindowTitle("Knot Editor");
-	setFixedSize(300, height());
+	setFixedSize(500, 200);
 }
 
-keManager::~keManager() {
+ManagerWindow::~ManagerWindow() {
 	delete fileMenu;
-	delete aboutMenu;
 }
 
-void keManager::closeEvent(QCloseEvent*) {
+void ManagerWindow::closeEvent(QCloseEvent*) {
 	if (abstractWindow::closeAllWindows()) {
 		qApp->quit();
 	}
@@ -45,7 +58,7 @@ namespace {
 QString getOpenFileNameEx() {
 	QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
-	dialog.setIconProvider(KE::Qt::FileIconProvider::instance());
+	dialog.setIconProvider(FileIconProvider::instance());
 	dialog.setNameFilters({
 		"Knot Editor files (*.knt *.dgr)",
 		"Knot files only (*.knt)",
@@ -60,7 +73,7 @@ QString getOpenFileNameEx() {
 
 }
 
-void keManager::open() {
+void ManagerWindow::open() {
 	QString filename = getOpenFileNameEx();
 
 	if (filename.isEmpty()) {
@@ -81,9 +94,9 @@ void keManager::open() {
 
 		if (doc.IsNull()) {
 			throw std::runtime_error("The file is not in JSON format");
-		} else if (doc.IsObject() && KE::Util::rapidjson::get_string(doc, "type") == "diagram") {
+		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "diagram") {
 			aw = new diagramWindow(doc);
-		} else if (doc.IsObject() && KE::Util::rapidjson::get_string(doc, "type") == "link") {
+		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "link") {
 			aw = new knotWindow(doc);
 		} else {
 			throw std::runtime_error("The file does not represent a knot nor a diagram");
@@ -100,24 +113,22 @@ void keManager::open() {
 	}
 }
 
-void keManager::new_diagram() {
+void ManagerWindow::new_diagram() {
 	abstractWindow *aw = new diagramWindow();
 	aw->show();
 }
 
-void keManager::about() {
-	auto aw = new KE::Qt::AboutWindow(0);
+void ManagerWindow::about() {
+	auto aw = new AboutWindow(0);
 	aw->showMe();
 }
 
-void keManager::about_qt() {
-	QMessageBox::aboutQt(0);
-}
-
-void keManager::exit() {
+void ManagerWindow::exit() {
 	QWidget::close();
 }
 
-void keManager::close_all_windows() {
+void ManagerWindow::close_all_windows() {
 	abstractWindow::closeAllWindows();
 }
+
+}}

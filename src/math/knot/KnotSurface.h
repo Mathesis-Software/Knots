@@ -18,11 +18,11 @@ private:
 	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 public:
-	KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle);
+	KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t numberOfPointsOnMeridian);
 	void calculate() override;
 	bool destroy(bool force);
 	void setThickness(double thickness);
-	void setNumberOfPointsOnCircle(std::size_t pointsOnCircle);
+	void setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian);
 
 private:
 	KnotSurface(const KnotSurface&) = delete;

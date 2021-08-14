@@ -4,9 +4,9 @@
 
 namespace KE { namespace GL {
 
-KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t pointsOnCircle) : Surface(true, false), knot(knot) {
+KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t numberOfPointsOnMeridian) : Surface(true, false), knot(knot) {
 	this->setThickness(thickness);
-	this->setNumberOfPointsOnCircle(pointsOnCircle);
+	this->setNumberOfPointsOnMeridian(numberOfPointsOnMeridian);
 }
 
 void KnotSurface::setThickness(double thickness) {
@@ -16,16 +16,16 @@ void KnotSurface::setThickness(double thickness) {
 	}
 }
 
-void KnotSurface::setNumberOfPointsOnCircle(std::size_t pointsOnCircle) {
-	if (this->sines.size() == pointsOnCircle + 1) {
+void KnotSurface::setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian) {
+	if (this->sines.size() == numberOfPointsOnMeridian + 1) {
 		return;
 	}
 
 	this->sines.clear();
 	this->cosines.clear();
-	for (std::size_t i = 0; i <= pointsOnCircle; ++i) {
-		this->sines.push_back(sin(2 * M_PI / pointsOnCircle * i));
-		this->cosines.push_back(cos(2 * M_PI / pointsOnCircle * i));
+	for (std::size_t i = 0; i <= numberOfPointsOnMeridian; ++i) {
+		this->sines.push_back(sin(2 * M_PI / numberOfPointsOnMeridian * i));
+		this->cosines.push_back(cos(2 * M_PI / numberOfPointsOnMeridian * i));
 	}
 	this->destroy(true);
 }

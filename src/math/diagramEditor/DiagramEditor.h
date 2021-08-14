@@ -1,6 +1,8 @@
 #ifndef __DIAGRAM_EDITOR_H__
 #define __DIAGRAM_EDITOR_H__
 
+#include <vector>
+
 #include "../diagram/Diagram.h"
 
 namespace KE { namespace TwoD {

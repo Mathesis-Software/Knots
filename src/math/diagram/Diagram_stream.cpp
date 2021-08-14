@@ -98,8 +98,8 @@ rapidjson::Document Diagram::save() const {
 	for (const auto &edge : this->edges()) {
 		for (const auto &crs : this->crossings(edge)) {
 			rapidjson::Value c(rapidjson::kObjectType);
-			c.AddMember("down", nums[edge.start], doc.GetAllocator());
-			c.AddMember("up", nums[crs.up.start], doc.GetAllocator());
+			c.AddMember("down", (int)nums[edge.start], doc.GetAllocator());
+			c.AddMember("up", (int)nums[crs.up.start], doc.GetAllocator());
 			crossings.PushBack(c, doc.GetAllocator());
 		}
 	}

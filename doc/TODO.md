@@ -10,11 +10,11 @@
 * consistent file names
 * drop "qt/setValue" code
 * implement KnotEditor for knots like we have DiagramEditor for diagrams; no undo/redo here (?), but maybe it makes sense to store here visual features like colours and rotation matrix?
+* merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
 
 ### User interface
 
 * save list of opened windows between runs; reopen them
-* replace current "manager" with a normal window with two BIG buttons: "create new diagram" and "open existing diagram/knot file"; only show it if there are no other windows
 * implement few useful hotkeys (e.g., Ctrl/Meta-Q for exiting the app), drop most of existing shortcuts
 * knot window: combine tunable parameters (colours, thickness, length, number of points) into a single dialogue
 * create default settings storage and settings dialogue (all the same parameters as in previous item + maybe something els)

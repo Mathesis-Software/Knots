@@ -28,7 +28,7 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Create new diagram");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::pressed, [this] {
-			(new diagramWindow())->show();
+			newDiagram();
 			this->close();
 		});
 		layout->addWidget(button, 0, 0);
@@ -37,7 +37,7 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Open existing file");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::pressed, [this] {
-			if (this->open()) {
+			if (openFile()) {
 				this->close();
 			}
 		});
@@ -73,7 +73,11 @@ QString getOpenFileNameEx() {
 
 }
 
-bool ManagerWindow::open() {
+void ManagerWindow::newDiagram() {
+	(new diagramWindow())->show();
+}
+
+bool ManagerWindow::openFile() {
 	QString filename = getOpenFileNameEx();
 
 	if (filename.isEmpty()) {

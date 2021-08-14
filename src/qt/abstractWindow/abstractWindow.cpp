@@ -15,6 +15,7 @@
 #include "../setValue/setValue.h"
 #include "../manager/about.h"
 #include "../manager/iconProvider.h"
+#include "../manager/manager.h"
 
 std::list<abstractWindow*> abstractWindow::AWRegister;
 
@@ -23,6 +24,9 @@ abstractWindow::abstractWindow() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("&File");
 
+	fileMenu->addAction("New diagram", [this] { KE::Qt::ManagerWindow::newDiagram(); });
+	fileMenu->addAction("Open…", [this] { KE::Qt::ManagerWindow::openFile(); });
+	fileMenu->addSeparator();
 	fileMenu->addAction("&Save as…", [this] { this->save(); });
 	fileMenu->addAction("Print…", [this] { this->print(); })->setEnabled(false);
 	fileMenu->addSeparator();

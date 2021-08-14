@@ -9,11 +9,14 @@ namespace KE { namespace Qt {
 
 class ManagerWindow : public QMainWindow {
 
+public:
+  static void newDiagram();
+  static bool openFile();
+
 private:
 	QMenu *fileMenu;
 
 private:
-  bool open();
   void exit();
 
 public:

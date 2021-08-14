@@ -38,7 +38,7 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(const Edge &edge, int x, int
 		auto removed_crossing = this->getCrossing(edge, e);
 		this->removeCrossing(edge, e);
 
-		for (const Edge new_edge : {new1, new2}) {
+		for (const Edge &new_edge : {new1, new2}) {
 			if (e.intersects(new_edge)) {
 				if (removed_crossing && removed_crossing->up == e) {
 					this->addCrossing(e, new_edge);

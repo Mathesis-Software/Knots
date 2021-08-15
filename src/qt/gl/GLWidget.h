@@ -6,7 +6,7 @@
 
 #include <QtWidgets/QOpenGLWidget>
 
-#include "../../gl/surface/surface.h"
+#include "../../gl/surface/Surface.h"
 
 class GLWidget : public QOpenGLWidget {
 

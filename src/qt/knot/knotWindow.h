@@ -4,7 +4,7 @@
 #include <QtCore/QThread>
 
 #include "../gl/GLWindow.h"
-#include "../../gl/surface/surface.h"
+#include "../../gl/surface/Surface.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 #include "../../math/seifert/seifert.h"
 

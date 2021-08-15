@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "../knotWrapper/KnotWrapper.h"
-#include "../../gl/surface/surface.h"
+#include "../../gl/surface/Surface.h"
 
 namespace KE { namespace GL {
 

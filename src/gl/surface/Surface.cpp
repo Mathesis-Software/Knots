@@ -1,4 +1,4 @@
-#include "surface.h"
+#include "Surface.h"
 
 namespace KE { namespace GL {
 

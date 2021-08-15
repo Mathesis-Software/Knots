@@ -1,6 +1,6 @@
 #include <GL/gl.h>
 
-#include "surface.h"
+#include "Surface.h"
 
 void KE::GL::Surface::paint() {
 	// Поверхность перерисовывается, если она видима.

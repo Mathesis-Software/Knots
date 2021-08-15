@@ -2,7 +2,7 @@
 #define __SEIFERT_SURFACE_H__
 
 #include "../knotWrapper/KnotWrapper.h"
-#include "../../gl/surface/surface.h"
+#include "../../gl/surface/Surface.h"
 
 class seifert;
 

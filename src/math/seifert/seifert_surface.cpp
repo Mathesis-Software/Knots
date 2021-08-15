@@ -70,7 +70,7 @@ bool SeifertSurface::destroy(bool force) {
 	if (!force && this->stored && !this->stored->isObsolete()) {
 		return false;
 	}
-	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(this->base.points());
+	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(this->base.snapshot());
 	Surface::destroy();
 	return true;
 }

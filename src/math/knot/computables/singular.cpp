@@ -40,7 +40,7 @@ double Singular::compute() {
 
 	std::size_t i1, i2, i3, i4;
 
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	// Вычисляем заранее хорды.
 	double chord_len;
 	double ***chord = new double**[points.size()];

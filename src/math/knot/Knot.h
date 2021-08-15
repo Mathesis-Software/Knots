@@ -93,13 +93,13 @@ public:
 	Knot(const rapidjson::Document &doc);
 	Knot(const TwoD::Diagram&, std::size_t width, std::size_t height);
 
-	Snapshot points() const;
+	Snapshot snapshot() const;
 	std::size_t generation() const { return this->_generation; }
 
 	void decreaseEnergy();
 	void setLength(double);
 	void center();
-	std::size_t numberOfPoints() const { return this->points().size(); }
+	std::size_t numberOfPoints() const { return this->snapshot().size(); }
 	void normalize(std::size_t numberOfPoints);
 
 	Vector seifertGradient(const Point &point) const;

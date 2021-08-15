@@ -15,6 +15,7 @@ public:
 	KnotEditor(const rapidjson::Document &doc) : _knot(doc) {}
 
 	const Knot &knot() const { return this->_knot; }
+	Knot::Snapshot snapshot() const { return this->_knot.snapshot(); }
 
 	void decreaseEnergy() { this->_knot.decreaseEnergy(); }
 	void setCaption(const std::string &caption) { this->_knot.caption = caption; } 

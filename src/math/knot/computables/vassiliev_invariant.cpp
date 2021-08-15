@@ -11,7 +11,7 @@ VassilievInvariant::VassilievInvariant(const Knot &knot, int order) :
 double VassilievInvariant::compute() {
 	double value = 0.0;
 
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	// tangent vectors
 	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {

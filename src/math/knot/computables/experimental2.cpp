@@ -24,7 +24,7 @@ double Experimental2::compute() {
 	std::size_t i1, i2;
 	int o;
 
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	// Вычисляем заранее касательные векторы.
 	double **tangs = new double*[points.size()];
 	for (i1 = 0; i1 < points.size(); i1++) {

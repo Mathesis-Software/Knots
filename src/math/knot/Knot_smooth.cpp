@@ -30,7 +30,7 @@ void Knot::center() {
 // Длина ломаной устанавливается равной len.
 void Knot::setLength(double len) {
 	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
-	double ratio = len / this->points().knotLength();
+	double ratio = len / this->snapshot().knotLength();
 
 	counting_lock guard(*this);
 	for (Point &pt : this->_points) {
@@ -44,7 +44,7 @@ void Knot::decreaseEnergy() {
 	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
 
 	// Сохраняем длину кривой, чтобы в конце восстановить ее.
-	const auto snapshot = this->points();
+	const auto snapshot = this->snapshot();
 	const double totalLength = snapshot.knotLength();
 
 	// Расставляем точки на кривой равномерно.

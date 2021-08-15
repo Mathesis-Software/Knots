@@ -7,7 +7,7 @@ namespace KE { namespace ThreeD {
 double Knot::minDist(const Point &point) const {
 	double md2 = 10000.0;
 
-	const auto points = this->points();
+	const auto points = this->snapshot();
 	for (std::size_t i = 0; i < points.size(); i++) {
 		const Vector x(point, points[i]);
 		const Vector r(points[i], points[points.next(i)]);
@@ -41,7 +41,7 @@ double Knot::minDist(const Point &point) const {
 Vector Knot::seifertGradient(const Point &point) const {
 	Vector gradient(0.0, 0.0, 0.0);
 
-	const auto points = this->points();
+	const auto points = this->snapshot();
 	for (std::size_t i = 0; i < points.size(); i++) {
 		const Vector x(point, points[i]);
 		const Vector r(points[i], points[points.next(i)]);

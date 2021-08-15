@@ -114,7 +114,7 @@ Experimental::Experimental(const Knot &knot) : Computable(knot, "Experimental") 
 double Experimental::compute() {
 	double value = 0.0;
 
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	// Вычисляем заранее касательные векторы.
 	double **tangs = new double*[points.size()];
 	for (std::size_t i1 = 0; i1 < points.size(); i1++) {

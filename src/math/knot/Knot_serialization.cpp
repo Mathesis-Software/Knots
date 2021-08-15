@@ -58,7 +58,7 @@ rapidjson::Document Knot::serialize(const double matrix[3][3]) const {
 
 	rapidjson::Value first(rapidjson::kObjectType);
 	rapidjson::Value points(rapidjson::kArrayType);
-	const auto pts = this->points();
+	const auto pts = this->snapshot();
 	for (std::size_t i = 0; i < pts.size(); ++i) {
 		rapidjson::Value point(rapidjson::kArrayType);
 		for (std::size_t j = 0; j < 3; ++j) {

@@ -12,7 +12,7 @@ double AverageCrossingNumber::compute() {
 	double value = 0.0;
 
 	// tangent vectors
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	std::vector<Vector> tangents;
 	for (std::size_t i = 0; i < points.size(); ++i) {
 		tangents.push_back(Vector(points[i], points[points.next(i)]));

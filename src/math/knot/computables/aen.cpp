@@ -8,7 +8,7 @@ AverageExtremumNumber::AverageExtremumNumber(const Knot &knot) :
 }
 
 double AverageExtremumNumber::compute() {
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	const auto &edgeLengths = points.edgeLengths();
 
 	std::vector<Vector> edges;

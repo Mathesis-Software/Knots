@@ -35,7 +35,7 @@ std::vector<Point> Knot::normalizedPoints(const Snapshot &snapshot, std::size_t 
 
 void Knot::normalize(std::size_t newNumberOfPoints) {
 	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
-	const auto snapshot = this->points();
+	const auto snapshot = this->snapshot();
 	auto normalized = this->normalizedPoints(snapshot, newNumberOfPoints);
 
 	counting_lock guard(*this);

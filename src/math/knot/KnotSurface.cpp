@@ -39,7 +39,7 @@ bool KnotSurface::destroy(bool force) {
 }
 
 void KnotSurface::calculate() {
-	const auto points = this->knot.points();
+	const auto points = this->knot.snapshot();
 	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(points);
 
 	if (points.size() == 0) {

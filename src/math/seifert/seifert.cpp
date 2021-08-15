@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "seifert.h"
-#include "../knot/Knot.h"
+#include "seifert_surface.h"
 
 const int MAX_ITERATION_NUMBER = 20; // Максимальное число итераций при
 																		 // добавлении новой точки в заданном
@@ -24,6 +24,40 @@ const double TIMES = 2.0;						// Значение допустимого сдв
 
 static int counter = 0;
 
+namespace {
+
+/*
+ * The square of the distance from point to the segment [pt0; pt1]
+ */
+double distance2(const KE::ThreeD::Point &point, const KE::ThreeD::Point &pt0, const KE::ThreeD::Point &pt1) {
+	const KE::ThreeD::Vector x(point, pt0);
+	const KE::ThreeD::Vector r(pt0, pt1);
+	const double xr = x.scalar_product(r);
+	const double x2 = x.square();
+	const double r2 = r.square();
+	const double tau = - xr / r2;
+
+	if (tau < 0.0) {
+		return x2;
+	} else if (tau > 1.0) {
+		return x2 + r2 + 2 * xr;
+	} else {
+		return x2 + tau * xr;
+	}
+}
+
+double distance(const KE::ThreeD::Point &point, const KE::ThreeD::Knot::Snapshot &snapshot) {
+	double d2 = std::numeric_limits<float>::max();
+
+	for (std::size_t i = 0; i < snapshot.size(); i++) {
+		d2 = std::min(d2, distance2(point, snapshot[i], snapshot[snapshot.next(i)]));
+	}
+
+	return sqrt(d2);
+}
+
+}
+
 void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 	// mutable version of direction
 	KE::ThreeD::Vector dir(direction);
@@ -42,7 +76,7 @@ void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 
 		// Считаем сумму градиентов в начальной точке и
 		// в приближении новой точки.
-		KE::ThreeD::Vector gradient2 = this->base.seifertGradient(appr);
+		KE::ThreeD::Vector gradient2 = KE::GL::SeifertSurface::gradient(appr, this->base.snapshot());
 		gradient2.add(this->gradient);
 
 		// Подправляем направление, чтобы оно стало перпендикулярно
@@ -216,11 +250,11 @@ void seifert::correction() {
 	}
 }
 
-seifert::seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert *neighbor) : base(base), point(point), gradient(base.seifertGradient(point)) {
+seifert::seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert *neighbor) : base(base), point(point), gradient(KE::GL::SeifertSurface::gradient(point, base.snapshot())) {
 	counter ++;
 //	cerr << "Point " << counter << '\n';
 
-	localEps = std::min(this->base.minDist(this->point) / TIMES, MAX_EPS);
+	localEps = std::min(distance(this->point, this->base.snapshot()) / TIMES, MAX_EPS);
 
 	if (neighbor)
 		sord = neighbor->sord->insert(this);

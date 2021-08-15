@@ -17,6 +17,29 @@ double det(const ThreeD::Point &pt0, const ThreeD::Point &pt1, const ThreeD::Poi
 
 }
 
+ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot) {
+	ThreeD::Vector gradient(0.0, 0.0, 0.0);
+
+	for (std::size_t i = 0; i < snapshot.size(); i++) {
+		const ThreeD::Vector x(point, snapshot[i]);
+		const ThreeD::Vector r(snapshot[i], snapshot[snapshot.next(i)]);
+
+		const double xr = x.scalar_product(r);
+		const double x2 = x.square();
+		const double r2 = r.square();
+		const double tau = - xr / r2;
+		const double a2 = x2 + tau * xr;
+		const double coeff = ((tau - 1) / sqrt (x2 + r2 + xr + xr) - tau / sqrt(x2)) / a2;
+
+		gradient.x += (r.y * x.z - r.z * x.y) * coeff;
+		gradient.y += (r.z * x.x - r.x * x.z) * coeff;
+		gradient.z += (r.x * x.y - r.y * x.x) * coeff;
+	}
+
+	gradient.normalize();
+	return gradient;
+}
+
 SeifertSurface::SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
 }
 

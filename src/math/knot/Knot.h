@@ -102,9 +102,6 @@ public:
 	std::size_t numberOfPoints() const { return this->snapshot().size(); }
 	void normalize(std::size_t numberOfPoints);
 
-	Vector seifertGradient(const Point &point) const;
-	double minDist(const Point &point) const;
-
 	rapidjson::Document serialize() const;
 	rapidjson::Document serialize(const double matrix[3][3]) const;
 

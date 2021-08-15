@@ -10,6 +10,9 @@ namespace KE { namespace GL {
 
 class SeifertSurface : public Surface {
 
+public:
+	static ThreeD::Vector gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot);
+
 private:
 	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 

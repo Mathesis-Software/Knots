@@ -89,14 +89,14 @@ void knotWindow::closeEvent(QCloseEvent *event) {
 }
 
 void knotWindow::updateActions() {
-  setWindowTitle(this->knot.knot().caption.c_str());
+  setWindowTitle(this->knot.caption().c_str());
 	abstractWindow::updateActions();
 }
 
 void knotWindow::rename() {
 	bool ok;
 	const QString text = QInputDialog::getText(
-		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knot.knot().caption.c_str(), &ok
+		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knot.caption().c_str(), &ok
 	);
   if (ok) {
 		this->knot.setCaption(text.toStdString());

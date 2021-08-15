@@ -18,6 +18,7 @@ public:
 	Knot::Snapshot snapshot() const { return this->_knot.snapshot(); }
 
 	void decreaseEnergy() { this->_knot.decreaseEnergy(); }
+	const std::string &caption() const { return this->_knot.caption; }
 	void setCaption(const std::string &caption) { this->_knot.caption = caption; } 
 	void setLength(double length) { this->_knot.setLength(length); }
 	void center() { this->_knot.center(); }

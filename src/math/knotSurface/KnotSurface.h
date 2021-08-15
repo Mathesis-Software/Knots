@@ -24,6 +24,9 @@ public:
 	void setThickness(double thickness);
 	void setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian);
 
+	const Color &getFrontColor() const override;
+	const Color &getBackColor() const override;
+
 private:
 	KnotSurface(const KnotSurface&) = delete;
 	KnotSurface& operator = (const KnotSurface&) = delete;

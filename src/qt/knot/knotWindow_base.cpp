@@ -16,20 +16,6 @@ void knotWindow::init() {
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
   this->glWidget()->addSurface(this->seifertSurface);
 
-  float rgb[3];
-  rgb[0] = 1.0;
-  rgb[1] = 1.0;
-  rgb[2] = 1.0;
-  this->knotSurface->setFrontRGB(rgb);
-  rgb[0] = 1.0;
-  rgb[1] = 1.0;
-  rgb[2] = 1.0;
-  this->seifertSurface->setFrontRGB(rgb);
-  rgb[0] = 0.5;
-  rgb[1] = 0.5;
-  rgb[2] = 0.5;
-  this->seifertSurface->setBackRGB(rgb);
-
   this->knotSurface->show();
 
   thickness = 1.0;

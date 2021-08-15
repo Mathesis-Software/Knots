@@ -2,6 +2,7 @@
 #define __KNOTEDITOR_H__
 
 #include "../knot/Knot.h"
+#include "../../gl/surface/Surface.h"
 
 namespace KE { namespace ThreeD {
 
@@ -10,6 +11,12 @@ class KnotWrapper {
 private:
 	Knot knot;
 	std::string saveCheckpoint;
+
+public:
+	std::shared_ptr<GL::Color> backgroundColor;
+	std::shared_ptr<GL::Color> knotColor;
+	std::shared_ptr<GL::Color> seifertFrontColor;
+	std::shared_ptr<GL::Color> seifertBackColor;
 
 public:
 	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);

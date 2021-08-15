@@ -7,6 +7,12 @@
 
 namespace KE { namespace GL {
 
+struct Color {
+	float rgb[3];
+
+	Color(int red, int green, int blue) : rgb {red / 255.0f, green / 255.0f, blue / 255.0f} {}
+};
+
 class Surface {
 
 private:
@@ -29,7 +35,6 @@ private:
 	bool visible;
 
 	std::vector<SurfacePoint> points;
-	float frontRGB[3], backRGB[3];
 
 protected:
 	void destroy();
@@ -46,10 +51,8 @@ public:
 
 	void paint();
 
-	const float *getFrontRGB() const { return this->frontRGB; }
-	const float *getBackRGB() const { return this->backRGB; }
-	void setFrontRGB(const float rgb[3]);
-	void setBackRGB(const float rgb[3]);
+	virtual const Color &getFrontColor() const = 0;
+	virtual const Color &getBackColor() const = 0;
 
 private:
 	Surface(const Surface&) = delete;

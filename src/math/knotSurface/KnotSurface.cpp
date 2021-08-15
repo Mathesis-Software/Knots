@@ -9,6 +9,21 @@ KnotSurface::KnotSurface(const ThreeD::KnotWrapper &knot, double thickness, std:
 	this->setNumberOfPointsOnMeridian(numberOfPointsOnMeridian);
 }
 
+namespace {
+
+const Color white(255, 255, 255);
+
+}
+
+const Color &KnotSurface::getFrontColor() const {
+	const auto saved = this->knot.knotColor;
+	return saved ? *saved : white;
+}
+
+const Color &KnotSurface::getBackColor() const {
+	return white;
+}
+
 void KnotSurface::setThickness(double thickness) {
 	if (thickness != this->thickness) {
 		this->thickness = thickness;

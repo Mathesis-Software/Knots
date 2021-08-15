@@ -11,8 +11,8 @@ void KE::GL::Surface::paint() {
 		}
 
 		// Устанавливаем цвета обеих сторон поверхности.
-		glMaterialfv(GL_FRONT, GL_DIFFUSE, frontRGB);
-		glMaterialfv(GL_BACK, GL_DIFFUSE, backRGB);
+		glMaterialfv(GL_FRONT, GL_DIFFUSE, getFrontColor().rgb);
+		glMaterialfv(GL_BACK, GL_DIFFUSE, getBackColor().rgb);
 
 		// Двусторонняя ли поверхность?
 		glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, this->showBackSide);

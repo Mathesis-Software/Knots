@@ -13,6 +13,9 @@ namespace {
 QColor fromRGB(const float *rgb) {
 	return QColor((int)round(rgb[0] * 255), (int)round(rgb[1] * 255), (int)round(rgb[2] * 255));
 }
+QColor fromRGB(const KE::GL::Color &color) {
+	return QColor((int)round(color.rgb[0] * 255), (int)round(color.rgb[1] * 255), (int)round(color.rgb[2] * 255));
+}
 
 }
 
@@ -33,7 +36,7 @@ void knotWindow::setBgColor() {
 		[this] (const QColor &color) {
 			const float rgb[3] = { color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f };
 			this->glWidget()->setBackgroundRGB(rgb);
-			this->repaint3d();
+			this->glWidget()->update();
 		}
 	);
 }
@@ -41,11 +44,10 @@ void knotWindow::setBgColor() {
 void knotWindow::setKnotColor() {
 	this->runColorDialog(
 		"Knot Color",
-		[this] { return fromRGB(this->knotSurface->getFrontRGB()); },
+		[this] { return fromRGB(this->knotSurface->getFrontColor()); },
 		[this] (const QColor &color) {
-			const float rgb[3] = { color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f };
-			this->knotSurface->setFrontRGB(rgb);
-			this->repaint3d();
+			this->knot.knotColor = std::make_shared<KE::GL::Color>(color.red(), color.green(), color.blue());
+			this->glWidget()->update();
 		}
 	);
 }
@@ -53,11 +55,10 @@ void knotWindow::setKnotColor() {
 void knotWindow::setSeifertFrontColor() {
 	this->runColorDialog(
 		"Seifert Surface Color",
-		[this] { return fromRGB(this->seifertSurface->getFrontRGB()); },
+		[this] { return fromRGB(this->seifertSurface->getFrontColor()); },
 		[this] (const QColor &color) {
-			const float rgb[3] = { color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f };
-			this->seifertSurface->setFrontRGB(rgb);
-			this->repaint3d();
+			this->knot.seifertFrontColor = std::make_shared<KE::GL::Color>(color.red(), color.green(), color.blue());
+			this->glWidget()->update();
 		}
 	);
 }
@@ -65,11 +66,10 @@ void knotWindow::setSeifertFrontColor() {
 void knotWindow::setSeifertBackColor() {
 	this->runColorDialog(
 		"Seifert Surface Back Side Color",
-		[this] { return fromRGB(this->seifertSurface->getBackRGB()); },
+		[this] { return fromRGB(this->seifertSurface->getBackColor()); },
 		[this] (const QColor &color) {
-			const float rgb[3] = { color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f };
-			this->seifertSurface->setBackRGB(rgb);
-			this->repaint3d();
+			this->knot.seifertBackColor = std::make_shared<KE::GL::Color>(color.red(), color.green(), color.blue());
+			this->glWidget()->update();
 		}
 	);
 }

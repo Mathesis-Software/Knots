@@ -43,6 +43,22 @@ ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD
 SeifertSurface::SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
 }
 
+namespace {
+
+const Color white(255, 255, 255);
+
+}
+
+const Color &SeifertSurface::getFrontColor() const {
+	const auto saved = this->base.seifertFrontColor;
+	return saved ? *saved : white;
+}
+
+const Color &SeifertSurface::getBackColor() const {
+	const auto saved = this->base.seifertBackColor;
+	return saved ? *saved : white;
+}
+
 void SeifertSurface::addTriangles(seifert *s) {
   // Это оч. убогая версия создания поверхности из графа.
   // Просто в каждой вершине для любых двух ``соседних соседей''

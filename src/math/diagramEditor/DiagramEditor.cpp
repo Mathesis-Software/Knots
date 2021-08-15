@@ -181,22 +181,24 @@ std::shared_ptr<Diagram::Crossing> DiagramEditor::flipCrossing(Diagram::Crossing
 namespace {
 
 struct MoveDiagramCommand : public DiagramEditor::Command {
-	const int dx, dy;
+	const int x, y;
 
-	MoveDiagramCommand(int dx, int dy) : dx(dx), dy(dy) {}
+	MoveDiagramCommand(int x, int y) : x(x), y(y) {}
 
 	void play(Diagram &diagram) override {
-		diagram.shift(this->dx, this->dy);
+		const auto &first = diagram.vertices().front();
+		diagram.shift(x - first->x(), y - first->y());
 	}
 };
 
 }
 
 void DiagramEditor::shift(int dx, int dy, bool storeCommand) {
-	if (storeCommand) {
-		this->addCommand(std::make_shared<MoveDiagramCommand>(dx, dy), false);
-	}
 	this->currentDiagram->shift(dx, dy);
+	if (storeCommand && !this->currentDiagram->vertices().empty()) {
+		const auto &first = this->currentDiagram->vertices().front();
+		this->addCommand(std::make_shared<MoveDiagramCommand>(first->x(), first->y()), false);
+	}
 }
 
 namespace {

@@ -5,14 +5,14 @@
 
 namespace KE { namespace ThreeD {
 
-class KnotEditor {
+class KnotWrapper {
 
 private:
 	Knot _knot;
 
 public:
-	KnotEditor(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : _knot(diagram, width, height) {}
-	KnotEditor(const rapidjson::Document &doc) : _knot(doc) {}
+	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : _knot(diagram, width, height) {}
+	KnotWrapper(const rapidjson::Document &doc) : _knot(doc) {}
 
 	const Knot &knot() const { return this->_knot; }
 	Knot::Snapshot snapshot() const { return this->_knot.snapshot(); }

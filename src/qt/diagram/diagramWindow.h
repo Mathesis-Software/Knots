@@ -36,8 +36,6 @@ public:
 	bool isSaved() const override;
 
 	void updateActions() override;
-
-	friend class DiagramWidget;
 };
 
 #endif /* __DIAGRAMWINDOW_H__ */

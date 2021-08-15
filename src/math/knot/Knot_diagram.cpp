@@ -6,7 +6,7 @@
 
 namespace KE { namespace ThreeD {
 
-Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : caption(diagram.caption + " (from diagram)"), _generation(1), lockCount(0) {
+Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : caption(diagram.caption + " (from diagram)"), generation(1), lockCount(0) {
 	const auto edges = diagram.edges();
 	std::map<std::shared_ptr<TwoD::Diagram::Vertex>,std::list<TwoD::Diagram::Crossing>> all_crossings;
 	for (const auto &edge : edges) {

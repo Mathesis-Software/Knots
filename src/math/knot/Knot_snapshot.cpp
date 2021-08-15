@@ -11,14 +11,14 @@ std::mutex snapshotMutex;
 }
 
 Knot::Snapshot Knot::snapshot() const {
-	if (this->lockCount > 0 || !this->latest || this->latest->generation != this->generation()) {
+	if (this->lockCount > 0 || !this->latest || this->latest->generation != this->generation) {
 		std::lock_guard<std::recursive_mutex> guard(this->dataChangeMutex);
 		this->latest = std::shared_ptr<Snapshot>(new Snapshot(*this, this->_points));
 	}
 	return *this->latest;
 }
 
-Knot::Snapshot::Snapshot(const Knot &knot, const std::vector<Point> &points) : knot(knot), points(new std::vector<Point>(points)), _edgeLengths(new std::vector<double>), generation(knot.generation()) {
+Knot::Snapshot::Snapshot(const Knot &knot, const std::vector<Point> &points) : knot(knot), points(new std::vector<Point>(points)), _edgeLengths(new std::vector<double>), generation(knot.generation) {
 }
 
 const std::vector<double> &Knot::Snapshot::edgeLengths() const {

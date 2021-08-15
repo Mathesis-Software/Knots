@@ -43,7 +43,7 @@ public:
 		Snapshot(const Knot &knot, const std::vector<Point> &points);
 
 	public:
-		bool isObsolete() const { return this->generation < this->knot.generation(); }
+		bool isObsolete() const { return this->generation < this->knot.generation; }
 
 		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
 		std::size_t size() const { return this->points->size(); }
@@ -72,7 +72,7 @@ private:
 		}
 		~counting_lock() {
 			this->knot.lockCount -= 1;
-			this->knot._generation += 1;
+			this->knot.generation += 1;
 			this->knot.dataChangeMutex.unlock();
 		}
 	};
@@ -84,7 +84,7 @@ private:
 	mutable std::recursive_mutex dataChangeMutex;
 	std::mutex writeMethodMutex;
 	std::vector<Point> _points;
-	volatile std::size_t _generation;
+	volatile std::size_t generation;
 	mutable volatile std::size_t lockCount;
 	mutable std::shared_ptr<Snapshot> latest;
 
@@ -93,7 +93,6 @@ public:
 	Knot(const TwoD::Diagram&, std::size_t width, std::size_t height);
 
 	Snapshot snapshot() const;
-	std::size_t generation() const { return this->_generation; }
 
 	void decreaseEnergy();
 	void setLength(double);

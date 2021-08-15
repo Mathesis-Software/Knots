@@ -1,29 +1,28 @@
 #include "computables.h"
-#include "../knot/Knot.h"
+#include "../knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace ThreeD { namespace Computables {
 
-AverageExtremumNumber::AverageExtremumNumber(const Knot &knot) :
+AverageExtremumNumber::AverageExtremumNumber(const KnotWrapper &knot) :
 	Computable(knot, "Average extremum number") {
 }
 
-double AverageExtremumNumber::compute() {
-	const auto points = this->knot.snapshot();
-	const auto &edgeLengths = points.edgeLengths();
+double AverageExtremumNumber::compute(const Knot::Snapshot &snapshot) {
+	const auto &edgeLengths = snapshot.edgeLengths();
 
 	std::vector<Vector> edges;
-	edges.reserve(points.size());
-	for (std::size_t i = 0; i < points.size() - 1; ++i) {
-		edges.push_back(Vector(points[i], points[i + 1]));
+	edges.reserve(snapshot.size());
+	for (std::size_t i = 0; i < snapshot.size() - 1; ++i) {
+		edges.push_back(Vector(snapshot[i], snapshot[i + 1]));
 	}
-	edges.push_back(Vector(points[points.size() - 1], points[0]));
+	edges.push_back(Vector(snapshot[snapshot.size() - 1], snapshot[0]));
 
 	double value = 0;
 
-	for (std::size_t i = 0; i < points.size(); ++i) {
+	for (std::size_t i = 0; i < snapshot.size(); ++i) {
 		const auto &forward = edges[i];
-		const auto &back = edges[points.prev(i)];
-		double angle_cos = - forward.scalar_product(back) / (edgeLengths[points.prev(i)] * edgeLengths[i]);
+		const auto &back = edges[snapshot.prev(i)];
+		double angle_cos = - forward.scalar_product(back) / (edgeLengths[snapshot.prev(i)] * edgeLengths[i]);
 
 		if (angle_cos < -1) {
 			value -= M_PI;
@@ -32,7 +31,7 @@ double AverageExtremumNumber::compute() {
 		}
 	}
 
-	return value / M_PI + points.size();
+	return value / M_PI + snapshot.size();
 }
 
 }}}

@@ -1,5 +1,5 @@
 #include "experimental.h"
-#include "../knot/Knot.h"
+#include "../knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace ThreeD { namespace Computables {
 
@@ -17,35 +17,35 @@ void vector_product(const double *v1, const double *v2, double *m) {
 
 }
 
-Experimental::Experimental(const Knot &knot) : Computable(knot, "Experimental") {
+Experimental::Experimental(const KnotWrapper &knot) : Computable(knot, "Experimental") {
 }
 
-//double Experimental::compute() {
+//double Experimental::compute(const Knot::Snapshot &snapshot) {
 //	double value = 0.0;
 //
 //	std::size_t i1, i2, i3, i4;
 //
 //	// Вычисляем заранее касательные векторы.
-//	double **tangs = new double*[points.size()];
-//	for (i1 = 0; i1 < points.size(); i1++)
+//	double **tangs = new double*[snapshot.size()];
+//	for (i1 = 0; i1 < snapshot.size(); i1++)
 //	{
 //		tangs[i1] = new double[3];
-//		tangs[i1][0] = points[points.next(i1)].x - points[i1].x;
-//		tangs[i1][1] = points[points.next(i1)].y - points[i1].y;
-//		tangs[i1][2] = points[points.next(i1)].z - points[i1].z;
+//		tangs[i1][0] = snapshot[snapshot.next(i1)].x - snapshot[i1].x;
+//		tangs[i1][1] = snapshot[snapshot.next(i1)].y - snapshot[i1].y;
+//		tangs[i1][2] = snapshot[snapshot.next(i1)].z - snapshot[i1].z;
 //	}
 //
 //	// Вычисляем ``гауссовы произведения''.
 //	double chord_len;
-//	double ***chord = new double**[points.size()];
-//	double ***chord2 = new double**[points.size()];
+//	double ***chord = new double**[snapshot.size()];
+//	double ***chord2 = new double**[snapshot.size()];
 //	double tmp[3], tmp2[3];
 //
-//	for (i1 = 0; i1 < points.size(); i1++)
+//	for (i1 = 0; i1 < snapshot.size(); i1++)
 //	{
-//		chord[i1] = new double*[points.size()];
-//		chord2[i1] = new double*[points.size()];
-//		for (i2 = 0; i2 < points.size(); i2++)
+//		chord[i1] = new double*[snapshot.size()];
+//		chord2[i1] = new double*[snapshot.size()];
+//		for (i2 = 0; i2 < snapshot.size(); i2++)
 //		{
 //			chord[i1][i2] = new double[3];
 //			chord2[i1][i2] = new double[3];
@@ -53,12 +53,12 @@ Experimental::Experimental(const Knot &knot) : Computable(knot, "Experimental") 
 //
 //		for (i2 = 0; i2 < i1; i2++)
 //		{
-//			chord[i1][i2][0] = ( points[i1].x + points[points.next(i1)].x -
-//										points[i2].x - points[points.next(i2)].x ) / 2;
-//			chord[i1][i2][1] = ( points[i1].y + points[points.next(i1)].y -
-//										points[i2].y - points[points.next(i2)].y ) / 2;
-//			chord[i1][i2][2] = ( points[i1].z + points[points.next(i1)].z -
-//										points[i2].z - points[points.next(i2)].z ) / 2;
+//			chord[i1][i2][0] = ( snapshot[i1].x + snapshot[snapshot.next(i1)].x -
+//										snapshot[i2].x - snapshot[snapshot.next(i2)].x ) / 2;
+//			chord[i1][i2][1] = ( snapshot[i1].y + snapshot[snapshot.next(i1)].y -
+//										snapshot[i2].y - snapshot[snapshot.next(i2)].y ) / 2;
+//			chord[i1][i2][2] = ( snapshot[i1].z + snapshot[snapshot.next(i1)].z -
+//										snapshot[i2].z - snapshot[snapshot.next(i2)].z ) / 2;
 //			chord[i2][i1][0] = - chord[i1][i2][0];
 //			chord[i2][i1][1] = - chord[i1][i2][1];
 //			chord[i2][i1][2] = - chord[i1][i2][2];
@@ -78,10 +78,10 @@ Experimental::Experimental(const Knot &knot) : Computable(knot, "Experimental") 
 //
 //	double normal[3];
 //
-//	for (i1 = 0; i1 < points.size(); i1++)
-//		for (i2 = i1 + 1; i2 < points.size(); i2++)
-//			for (i3 = i2 + 1; i3 < points.size(); i3++)
-//				for (i4 = i3 + 1; i4 < points.size(); i4++)
+//	for (i1 = 0; i1 < snapshot.size(); i1++)
+//		for (i2 = i1 + 1; i2 < snapshot.size(); i2++)
+//			for (i3 = i2 + 1; i3 < snapshot.size(); i3++)
+//				for (i4 = i3 + 1; i4 < snapshot.size(); i4++)
 //	{
 //					vector_product (chord[i1][i3], chord[i2][i4], normal);
 //
@@ -92,9 +92,9 @@ Experimental::Experimental(const Knot &knot) : Computable(knot, "Experimental") 
 //				}
 //
 //	// Удаляем заранее вычисленные вспомогательные значения.
-//	for (i1 = 0; i1 < points.size(); i1++)
+//	for (i1 = 0; i1 < snapshot.size(); i1++)
 //	{
-//		for (i2 = 0; i2 < points.size(); i2++)
+//		for (i2 = 0; i2 < snapshot.size(); i2++)
 //		{
 //			delete[] chord[i1][i2];
 //			delete[] chord2[i1][i2];
@@ -111,41 +111,40 @@ Experimental::Experimental(const Knot &knot) : Computable(knot, "Experimental") 
 //	return value / (4 * M_PI * M_PI);
 //}
 
-double Experimental::compute() {
+double Experimental::compute(const Knot::Snapshot &snapshot) {
 	double value = 0.0;
 
-	const auto points = this->knot.snapshot();
 	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[points.size()];
-	for (std::size_t i1 = 0; i1 < points.size(); i1++) {
+	double **tangs = new double*[snapshot.size()];
+	for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
 		tangs[i1] = new double[3];
-		tangs[i1][0] = points[points.next(i1)].x - points[i1].x;
-		tangs[i1][1] = points[points.next(i1)].y - points[i1].y;
-		tangs[i1][2] = points[points.next(i1)].z - points[i1].z;
+		tangs[i1][0] = snapshot[snapshot.next(i1)].x - snapshot[i1].x;
+		tangs[i1][1] = snapshot[snapshot.next(i1)].y - snapshot[i1].y;
+		tangs[i1][2] = snapshot[snapshot.next(i1)].z - snapshot[i1].z;
 	}
 
 	// Вычисляем ``гауссовы произведения''.
 	double chord_len;
-	double ***chord = new double**[points.size()];
-	double ***vector = new double**[points.size()];
-	double **sum = new double*[points.size()];
+	double ***chord = new double**[snapshot.size()];
+	double ***vector = new double**[snapshot.size()];
+	double **sum = new double*[snapshot.size()];
 
-	for (std::size_t i1 = 0; i1 < points.size(); i1++) {
-		chord[i1] = new double*[points.size()];
-		vector[i1] = new double*[points.size()];
-		sum[i1] = new double[points.size()];
-		for (std::size_t i2 = 0; i2 < points.size(); i2++) {
+	for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
+		chord[i1] = new double*[snapshot.size()];
+		vector[i1] = new double*[snapshot.size()];
+		sum[i1] = new double[snapshot.size()];
+		for (std::size_t i2 = 0; i2 < snapshot.size(); i2++) {
 			chord[i1][i2] = new double[3];
 			vector[i1][i2] = new double[3];
 		}
 
 		for (std::size_t i2 = 0; i2 < i1; i2++) {
-			chord[i1][i2][0] = ( points[i1].x + points[points.next(i1)].x -
-										points[i2].x - points[points.next(i2)].x ) / 2;
-			chord[i1][i2][1] = ( points[i1].y + points[points.next(i1)].y -
-										points[i2].y - points[points.next(i2)].y ) / 2;
-			chord[i1][i2][2] = ( points[i1].z + points[points.next(i1)].z -
-										points[i2].z - points[points.next(i2)].z ) / 2;
+			chord[i1][i2][0] = ( snapshot[i1].x + snapshot[snapshot.next(i1)].x -
+										snapshot[i2].x - snapshot[snapshot.next(i2)].x ) / 2;
+			chord[i1][i2][1] = ( snapshot[i1].y + snapshot[snapshot.next(i1)].y -
+										snapshot[i2].y - snapshot[snapshot.next(i2)].y ) / 2;
+			chord[i1][i2][2] = ( snapshot[i1].z + snapshot[snapshot.next(i1)].z -
+										snapshot[i2].z - snapshot[snapshot.next(i2)].z ) / 2;
 			chord_len = sqrt (vector_square (chord[i1][i2]));
 			chord[i1][i2][0] /= chord_len;
 			chord[i1][i2][1] /= chord_len;
@@ -166,18 +165,18 @@ double Experimental::compute() {
 
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {
-			for (std::size_t i1 = 0; i1 < points.size(); i1++) {
+			for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
 				sum[i1][i1] = 0.0;
-				for (std::size_t i2 = points.next(i1); i2 != i1; i2 = points.next(i2)) {
-					sum[i1][i2] = sum[i1][points.prev(i2)] + chord[i1][i2][i] * vector[i1][i2][j];
+				for (std::size_t i2 = snapshot.next(i1); i2 != i1; i2 = snapshot.next(i2)) {
+					sum[i1][i2] = sum[i1][snapshot.prev(i2)] + chord[i1][i2][i] * vector[i1][i2][j];
 				}
 			}
 
-			for (std::size_t i1 = 0; i1 < points.size(); i1++) {
+			for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
 				double tmp = 0.0;
 
-				for (std::size_t i2 = points.next(points.next(i1)); i2 != i1; i2 = points.next(i2)) {
-					tmp += sum[points.prev(i2)][points.prev(i1)] - sum[points.prev(i2)][i2] - sum[i2][points.prev(points.prev(i2))] + sum[i2][i1];
+				for (std::size_t i2 = snapshot.next(snapshot.next(i1)); i2 != i1; i2 = snapshot.next(i2)) {
+					tmp += sum[snapshot.prev(i2)][snapshot.prev(i1)] - sum[snapshot.prev(i2)][i2] - sum[i2][snapshot.prev(snapshot.prev(i2))] + sum[i2][i1];
 					value += tmp * vector[i2][i1][j] * chord[i2][i1][i];
 				}
 			}
@@ -185,8 +184,8 @@ double Experimental::compute() {
 	}
 
 	// Удаляем заранее вычисленные вспомогательные значения.
-	for (std::size_t i1 = 0; i1 < points.size(); i1++) {
-		for (std::size_t i2 = 0; i2 < points.size(); i2++) {
+	for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
+		for (std::size_t i2 = 0; i2 < snapshot.size(); i2++) {
 			delete[] chord[i1][i2];
 			delete[] vector[i1][i2];
 		}

@@ -1,53 +1,52 @@
 #include "computables.h"
-#include "../knot/Knot.h"
+#include "../knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace ThreeD { namespace Computables {
 
-MoebiusEnergy::MoebiusEnergy(const Knot &knot) : Computable(knot, "Moebius energy") {
+MoebiusEnergy::MoebiusEnergy(const KnotWrapper &knot) : Computable(knot, "Moebius energy") {
 }
 
-double MoebiusEnergy::compute() {
-	const auto points = this->knot.snapshot();
-	const auto &edgeLengths = points.edgeLengths();
-	const double len = points.knotLength();
+double MoebiusEnergy::compute(const Knot::Snapshot &snapshot) {
+	const auto &edgeLengths = snapshot.edgeLengths();
+	const double len = snapshot.knotLength();
 
 	double value = 0.0;
 
-	for (std::size_t i = 0; i < points.size() - 2; ++i) {
+	for (std::size_t i = 0; i < snapshot.size() - 2; ++i) {
 		double l = edgeLengths[i];
-		for (auto j = i + 2; j < (i ? points.size() : points.size() - 1); ++j) {
-			const Vector chord(points[i], points[j]);
+		for (auto j = i + 2; j < (i ? snapshot.size() : snapshot.size() - 1); ++j) {
+			const Vector chord(snapshot[i], snapshot[j]);
 			double r2 = 0.65 / chord.square();
 
-			l += edgeLengths[points.prev(j)];
+			l += edgeLengths[snapshot.prev(j)];
 			if (2 * l < len) {
 				r2 -= 0.65 / (l * l);
 			} else {
 				r2 -= 0.65 / ((len - l) * (len - l));
 			}
 
-			value += (edgeLengths[points.prev(i)] + edgeLengths[i]) *
-							 (edgeLengths[points.prev(j)] + edgeLengths[j]) * r2;
+			value += (edgeLengths[snapshot.prev(i)] + edgeLengths[i]) *
+							 (edgeLengths[snapshot.prev(j)] + edgeLengths[j]) * r2;
 		}
 	}
 
 	std::vector<Point> middles;
-	middles.reserve(points.size());
-	for (std::size_t i = 0; i < points.size(); i++) {
+	middles.reserve(snapshot.size());
+	for (std::size_t i = 0; i < snapshot.size(); i++) {
 		middles.push_back(Point(
-			(points[i].x + points[points.next(i)].x) / 2,
-			(points[i].y + points[points.next(i)].y) / 2,
-			(points[i].z + points[points.next(i)].z) / 2
+			(snapshot[i].x + snapshot[snapshot.next(i)].x) / 2,
+			(snapshot[i].y + snapshot[snapshot.next(i)].y) / 2,
+			(snapshot[i].z + snapshot[snapshot.next(i)].z) / 2
 		));
 	}
 
-	for (std::size_t i = 0; i < points.size(); i++) {
+	for (std::size_t i = 0; i < snapshot.size(); i++) {
 		double l = 0;
-		for (std::size_t j = i + 1; j < points.size(); j++) {
+		for (std::size_t j = i + 1; j < snapshot.size(); j++) {
 			const Vector r(middles[i], middles[j]);
 			double r2 = 2 / r.square();
 
-			l += (edgeLengths[points.prev(j)] + edgeLengths[j]) / 2;
+			l += (edgeLengths[snapshot.prev(j)] + edgeLengths[j]) / 2;
 			if (2 * l < len) {
 				r2 -= 2 / (l * l);
 			} else {

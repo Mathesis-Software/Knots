@@ -1,16 +1,15 @@
 #include "computable.h"
-#include "../knot/Knot.h"
+#include "../knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace ThreeD { namespace Computables {
 
 double Computable::value() {
-	const std::size_t gen = this->knot.generation();
-	if (this->generation < gen) {
-		this->internalValue = this->compute();
-		this->generation = gen;
+	if (!this->snapshot || this->snapshot->isObsolete()) {
+		this->snapshot = std::make_shared<Knot::Snapshot>(this->knot.snapshot());
+		this->_value = this->compute(*this->snapshot);
 	}
 
-	return this->internalValue;
+	return this->_value;
 }
 
 }}}

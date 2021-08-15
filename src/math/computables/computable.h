@@ -1,29 +1,29 @@
 #ifndef __COMPUTABLE_H__
 #define __COMPUTABLE_H__
 
-#include <string>
+#include "../knot/Knot.h"
 
 namespace KE { namespace ThreeD {
 
-class Knot;
+class KnotWrapper;
 
 namespace Computables {
 
 class Computable {
 
 public:
-	const Knot &knot;
 	const std::string name;
 
 private:
-	std::size_t generation;
-	double internalValue;
+	const KnotWrapper &knot;
+	std::shared_ptr<Knot::Snapshot> snapshot;
+	double _value;
 
 protected:
-	virtual double compute() = 0;
+	virtual double compute(const Knot::Snapshot &snapshot) = 0;
 
 public:
-	Computable(const Knot &knot, const std::string &name) : knot(knot), name(name), generation(0) {}
+	Computable(const KnotWrapper &knot, const std::string &name) : name(name), knot(knot) {}
 	virtual ~Computable() {}
 
 	double value();

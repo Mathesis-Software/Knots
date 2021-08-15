@@ -15,28 +15,28 @@ public:
 	const bool withSign;
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	AverageCrossingNumber(const Knot &knot, bool withSign);
+	AverageCrossingNumber(const KnotWrapper &knot, bool withSign);
 };
 
 class AverageExtremumNumber : public Computable {
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	AverageExtremumNumber(const Knot &knot);
+	AverageExtremumNumber(const KnotWrapper &knot);
 };
 
 class MoebiusEnergy : public Computable {
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	MoebiusEnergy(const Knot &knot);
+	MoebiusEnergy(const KnotWrapper &knot);
 };
 
 class VassilievInvariant : public Computable {
@@ -45,10 +45,10 @@ public:
 	const int order;
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	VassilievInvariant(const Knot &knot, int order);
+	VassilievInvariant(const KnotWrapper &knot, int order);
 };
 
 }}}

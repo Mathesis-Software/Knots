@@ -1,5 +1,5 @@
 #include "experimental.h"
-#include "../knot/Knot.h"
+#include "../knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace ThreeD { namespace Computables {
 
@@ -18,36 +18,35 @@ double vector_square(const double *v) {
 
 }
 
-double Experimental2::compute() {
+double Experimental2::compute(const Knot::Snapshot &snapshot) {
 	double value = 0.0;
 
 	std::size_t i1, i2;
 	int o;
 
-	const auto points = this->knot.snapshot();
 	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[points.size()];
-	for (i1 = 0; i1 < points.size(); i1++) {
+	double **tangs = new double*[snapshot.size()];
+	for (i1 = 0; i1 < snapshot.size(); i1++) {
 		tangs[i1] = new double[3];
-		tangs[i1][0] = points[points.next(i1)].x - points[i1].x;
-		tangs[i1][1] = points[points.next(i1)].y - points[i1].y;
-		tangs[i1][2] = points[points.next(i1)].z - points[i1].z;
+		tangs[i1][0] = snapshot[snapshot.next(i1)].x - snapshot[i1].x;
+		tangs[i1][1] = snapshot[snapshot.next(i1)].y - snapshot[i1].y;
+		tangs[i1][2] = snapshot[snapshot.next(i1)].z - snapshot[i1].z;
 	}
 
 	// Вычисляем ``гауссовы произведения''.
 	double chord[3], chord_len;
-	double **gauss = new double*[points.size()];
+	double **gauss = new double*[snapshot.size()];
 
-	for (i1 = 0; i1 < points.size(); i1++) {
-		gauss[i1] = new double[points.size()];
+	for (i1 = 0; i1 < snapshot.size(); i1++) {
+		gauss[i1] = new double[snapshot.size()];
 		gauss[i1][i1] = 0.0;
 		for (i2 = 0; i2 < i1; i2++) {
-			chord[0] = ( points[i1].x + points[points.next(i1)].x -
-										points[i2].x - points[points.next(i2)].x ) / 2;
-			chord[1] = ( points[i1].y + points[points.next(i1)].y -
-										points[i2].y - points[points.next(i2)].y ) / 2;
-			chord[2] = ( points[i1].z + points[points.next(i1)].z -
-										points[i2].z - points[points.next(i2)].z ) / 2;
+			chord[0] = ( snapshot[i1].x + snapshot[snapshot.next(i1)].x -
+										snapshot[i2].x - snapshot[snapshot.next(i2)].x ) / 2;
+			chord[1] = ( snapshot[i1].y + snapshot[snapshot.next(i1)].y -
+										snapshot[i2].y - snapshot[snapshot.next(i2)].y ) / 2;
+			chord[2] = ( snapshot[i1].z + snapshot[snapshot.next(i1)].z -
+										snapshot[i2].z - snapshot[snapshot.next(i2)].z ) / 2;
 			chord_len = sqrt (vector_square (chord));
 			gauss[i1][i2] = det (tangs[i1], tangs[i2], chord) /
 												(chord_len * chord_len * chord_len);
@@ -58,22 +57,22 @@ double Experimental2::compute() {
 	// Вычисляем суммы ``гауссовых произведений''.
 
 	// В gauss_sum[i1][i2] находится сумма ``гауссовых произведений''
-	// для всех хорд с началом в i1 и концом от points.next(i1) до i2.
-	double **gauss_sum = new double*[points.size()];
+	// для всех хорд с началом в i1 и концом от snapshot.next(i1) до i2.
+	double **gauss_sum = new double*[snapshot.size()];
 
-	for (i1 = 0; i1 < points.size(); i1++) {
-		gauss_sum[i1] = new double[points.size()];
+	for (i1 = 0; i1 < snapshot.size(); i1++) {
+		gauss_sum[i1] = new double[snapshot.size()];
 		gauss_sum[i1][i1] = 0.0;
-		for (i2 = points.next(i1); i2 != i1; i2 = points.next(i2))
-			gauss_sum[i1][i2] = gauss_sum[i1][points.prev(i2)] + gauss[i1][i2];
+		for (i2 = snapshot.next(i1); i2 != i1; i2 = snapshot.next(i2))
+			gauss_sum[i1][i2] = gauss_sum[i1][snapshot.prev(i2)] + gauss[i1][i2];
 	}
 
 	double tmp, tmp2;
-	for (i1 = 0; i1 < points.size(); i1++) {
+	for (i1 = 0; i1 < snapshot.size(); i1++) {
 		tmp = 0.0;
-		for (i2 = points.next(points.next(i1)); i2 != i1; i2 = points.next(i2)) {
-			tmp += gauss_sum[points.prev(i2)][points.prev(i1)] -
-						 gauss_sum[i2][points.prev(points.prev(i2))] + gauss_sum[i2][i1];
+		for (i2 = snapshot.next(snapshot.next(i1)); i2 != i1; i2 = snapshot.next(i2)) {
+			tmp += gauss_sum[snapshot.prev(i2)][snapshot.prev(i1)] -
+						 gauss_sum[i2][snapshot.prev(snapshot.prev(i2))] + gauss_sum[i2][i1];
 			tmp2 = gauss[i1][i2];
 			for (o = 1; o < order; o++)
 				tmp2 *= tmp / 16;
@@ -82,7 +81,7 @@ double Experimental2::compute() {
 	}
 
 	// Удаляем заранее вычисленные вспомогательные значения.
-	for (i1 = 0; i1 < points.size(); i1++) {
+	for (i1 = 0; i1 < snapshot.size(); i1++) {
 		delete[] tangs[i1];
 		delete[] gauss[i1];
 		delete[] gauss_sum[i1];

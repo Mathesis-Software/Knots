@@ -12,19 +12,19 @@ namespace Computables {
 class Experimental : public Computable {
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	Experimental(const Knot &knot);
+	Experimental(const KnotWrapper &knot);
 };
 
 class Singular : public Computable {
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	Singular(const Knot &knot);
+	Singular(const KnotWrapper &knot);
 };
 
 class Experimental2 : public Computable {
@@ -33,10 +33,10 @@ public:
 	const int order;
 
 private:
-	double compute() override;
+	double compute(const Knot::Snapshot &snapshot) override;
 
 public:
-	Experimental2(const Knot &knot, int order);
+	Experimental2(const KnotWrapper &knot, int order);
 };
 
 }}}

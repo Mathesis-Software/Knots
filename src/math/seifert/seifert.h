@@ -1,23 +1,15 @@
 #ifndef __SEIFERT_H__
 #define __SEIFERT_H__
 
-#include "../knot/primitives.h"
+#include "../knot/Knot.h"
 
 class seifert;
 class seifert_list;
 class seifert_ord;
 
-namespace KE {
-
-namespace GL {
+namespace KE { namespace GL {
 
 class SeifertSurface;
-
-}
-
-namespace ThreeD {
-
-class Knot;
 
 }}
 
@@ -56,7 +48,7 @@ private:
 class seifert {
 
 private:
-	const KE::ThreeD::Knot &base;
+	const KE::ThreeD::Knot::Snapshot snapshot;
 	const KE::ThreeD::Point point;
 	const KE::ThreeD::Vector gradient;
 
@@ -74,7 +66,7 @@ private:
 	void correction();
 
 public:
-	seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert* = nullptr);
+	seifert(const KE::ThreeD::Knot::Snapshot &snapshot, const KE::ThreeD::Point &point, seifert* = nullptr);
 	~seifert();
 
 	friend class seifert_ord;

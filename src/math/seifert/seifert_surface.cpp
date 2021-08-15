@@ -100,7 +100,7 @@ bool SeifertSurface::destroy(bool force) {
 
 void SeifertSurface::calculate() {
   // Создаем граф поверхности.
-  seifert *s = new seifert(this->base, this->startPoint);
+  seifert *s = new seifert(this->base.snapshot(), this->startPoint);
   s->correction();
 
   // Создаем поверхность.

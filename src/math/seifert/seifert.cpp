@@ -76,7 +76,7 @@ void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 
 		// Считаем сумму градиентов в начальной точке и
 		// в приближении новой точки.
-		KE::ThreeD::Vector gradient2 = KE::GL::SeifertSurface::gradient(appr, this->base.snapshot());
+		KE::ThreeD::Vector gradient2 = KE::GL::SeifertSurface::gradient(appr, this->snapshot);
 		gradient2.add(this->gradient);
 
 		// Подправляем направление, чтобы оно стало перпендикулярно
@@ -89,7 +89,7 @@ void seifert::addPoint(const KE::ThreeD::Vector &direction) {
 	// Считаем последнее приближение и добавляем точку.
 	KE::ThreeD::Point new_point(point);
 	new_point.move(dir, localEps);
-	new seifert(base, new_point, this);
+	new seifert(this->snapshot, new_point, this);
 }
 
 void seifert::addPoint60(const KE::ThreeD::Vector &direction) {
@@ -250,11 +250,11 @@ void seifert::correction() {
 	}
 }
 
-seifert::seifert(const KE::ThreeD::Knot &base, const KE::ThreeD::Point &point, seifert *neighbor) : base(base), point(point), gradient(KE::GL::SeifertSurface::gradient(point, base.snapshot())) {
+seifert::seifert(const KE::ThreeD::Knot::Snapshot &snapshot, const KE::ThreeD::Point &point, seifert *neighbor) : snapshot(snapshot), point(point), gradient(KE::GL::SeifertSurface::gradient(point, snapshot)) {
 	counter ++;
 //	cerr << "Point " << counter << '\n';
 
-	localEps = std::min(distance(this->point, this->base.snapshot()) / TIMES, MAX_EPS);
+	localEps = std::min(distance(this->point, this->snapshot) / TIMES, MAX_EPS);
 
 	if (neighbor)
 		sord = neighbor->sord->insert(this);

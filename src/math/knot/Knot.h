@@ -9,7 +9,6 @@
 #include <rapidjson/document.h>
 
 #include "primitives.h"
-#include "../seifert/seifert.h"
 
 namespace KE {
 

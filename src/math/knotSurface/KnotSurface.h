@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Knot.h"
+#include "../knot/Knot.h"
 #include "../../gl/surface/surface.h"
 
 namespace KE { namespace GL {

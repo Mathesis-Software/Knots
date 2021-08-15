@@ -2,7 +2,7 @@
 
 #include "knotWindow.h"
 
-#include "../../math/knot/KnotSurface.h"
+#include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::initMenu() {

@@ -7,7 +7,7 @@
 #include "knotWindow_math.h"
 #include "../gl/GLWidget.h"
 #include "../diagram/diagramWindow.h"
-#include "../../math/knot/KnotSurface.h"
+#include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::init() {

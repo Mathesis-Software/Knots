@@ -12,12 +12,6 @@
 
 namespace KE {
 
-namespace GL {
-
-class KnotSurface;
-
-}
-
 namespace TwoD {
 
 class Diagram;

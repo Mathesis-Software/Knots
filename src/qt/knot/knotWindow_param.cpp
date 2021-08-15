@@ -24,8 +24,8 @@ void knotWindow::setLength() {
 }
 
 void knotWindow::setNumberOfPoints() {
-	const std::size_t numberOfPoints = setInt ("Set number of points", this->knot.knot().numberOfPoints(), 10, 30000);
-  if (numberOfPoints != this->knot.knot().numberOfPoints()) {
+	const std::size_t numberOfPoints = setInt("Set number of points", this->knot.snapshot().size(), 10, 30000);
+  if (numberOfPoints != this->knot.snapshot().size()) {
 		const double length = this->knot.snapshot().knotLength();
     this->knot.normalize(numberOfPoints);
     this->knot.center();

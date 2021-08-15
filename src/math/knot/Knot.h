@@ -98,14 +98,13 @@ public:
 	void decreaseEnergy();
 	void setLength(double);
 	void center();
-	std::size_t numberOfPoints() const { return this->snapshot().size(); }
 	void normalize(std::size_t numberOfPoints);
 
 	rapidjson::Document serialize() const;
 	rapidjson::Document serialize(const double matrix[3][3]) const;
 
 private:
-	std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints) const;
+	static std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints);
 
 private:
 	Knot(const Knot&) = delete;

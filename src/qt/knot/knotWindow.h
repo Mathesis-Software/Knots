@@ -5,7 +5,7 @@
 
 #include "../gl/GLWindow.h"
 #include "../../gl/surface/surface.h"
-#include "../../math/knot/Knot.h"
+#include "../../math/knotEditor/KnotEditor.h"
 #include "../../math/seifert/seifert.h"
 
 namespace KE { namespace GL {
@@ -43,7 +43,7 @@ friend class SmoothingThread;
 Q_OBJECT
 
 private:
-	KE::ThreeD::Knot knot;
+	KE::ThreeD::KnotEditor knot;
 	bool _isSaved;
 
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;

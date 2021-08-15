@@ -91,7 +91,7 @@ private:
 
 public:
 	Knot(const rapidjson::Document &doc);
-	Knot(const TwoD::Diagram&, int, int);
+	Knot(const TwoD::Diagram&, std::size_t width, std::size_t height);
 
 	Snapshot points() const;
 	std::size_t generation() const { return this->_generation; }

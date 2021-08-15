@@ -8,7 +8,7 @@
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::setLength() {
-	const auto snapshot = this->knot.points();
+	const auto snapshot = this->knot.knot().points();
   double d = setDouble ("Knot length", snapshot.knotLength(), 1.0, 1000.0);
   if (d != snapshot.knotLength()) {
     this->knot.setLength(d);
@@ -24,9 +24,9 @@ void knotWindow::setLength() {
 }
 
 void knotWindow::setNumberOfPoints() {
-	const std::size_t numberOfPoints = setInt ("Set number of points", this->knot.numberOfPoints(), 10, 30000);
-  if (numberOfPoints != this->knot.numberOfPoints()) {
-		const double length = this->knot.points().knotLength();
+	const std::size_t numberOfPoints = setInt ("Set number of points", this->knot.knot().numberOfPoints(), 10, 30000);
+  if (numberOfPoints != this->knot.knot().numberOfPoints()) {
+		const double length = this->knot.knot().points().knotLength();
     this->knot.normalize(numberOfPoints);
     this->knot.center();
 		this->knot.setLength(length);

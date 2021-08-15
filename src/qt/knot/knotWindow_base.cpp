@@ -11,9 +11,9 @@
 #include "../../math/seifert/seifert_surface.h"
 
 void knotWindow::init() {
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 0.05, 28);
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot.knot(), 0.05, 28);
   this->glWidget()->addSurface(this->knotSurface);
-  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
+  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot.knot(), this->seifertStartPoint);
   this->glWidget()->addSurface(this->seifertSurface);
 
   float rgb[3];
@@ -89,17 +89,17 @@ void knotWindow::closeEvent(QCloseEvent *event) {
 }
 
 void knotWindow::updateActions() {
-  setWindowTitle(this->knot.caption.c_str());
+  setWindowTitle(this->knot.knot().caption.c_str());
 	abstractWindow::updateActions();
 }
 
 void knotWindow::rename() {
 	bool ok;
 	const QString text = QInputDialog::getText(
-		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knot.caption.c_str(), &ok
+		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knot.knot().caption.c_str(), &ok
 	);
   if (ok) {
-		this->knot.caption = text.toStdString();
+		this->knot.setCaption(text.toStdString());
 		this->_isSaved = false;
 		this->updateActions();
 	}

@@ -11,7 +11,7 @@ void knotWindow::saveIt(std::ostream &os) {
 			matrix[i][j] = this->glWidget()->currMatr(i, j);
 		}
 	}
-	const rapidjson::Document doc = this->knot.save(matrix);
+	const rapidjson::Document doc = this->knot.knot().save(matrix);
 	rapidjson::OStreamWrapper wrapper(os);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	writer.SetMaxDecimalPlaces(5);

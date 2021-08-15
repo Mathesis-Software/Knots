@@ -18,19 +18,19 @@ paramWindow::paramWindow (knotWindow *p) {
 	Parent = p;
 
 	std::vector<std::shared_ptr<KE::ThreeD::Computables::Computable>> computables = {
-		std::make_shared<KE::ThreeD::Computables::MoebiusEnergy>(p->knot),
-		std::make_shared<KE::ThreeD::Computables::AverageCrossingNumber>(p->knot, false),
-		std::make_shared<KE::ThreeD::Computables::AverageCrossingNumber>(p->knot, true),
-		std::make_shared<KE::ThreeD::Computables::AverageExtremumNumber>(p->knot),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot, 2),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot, 3),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot, 4),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot, 5),
-		std::make_shared<KE::ThreeD::Computables::Experimental>(p->knot)
-//		std::make_shared<KE::ThreeD::Computables::Singular>(p->knot),
-//		std::make_shared<KE::ThreeD::Computables::Experimental2>(p->knot, 2, "Experimental 2"),
-//		std::make_shared<KE::ThreeD::Computables::Experimental2>(p->knot, 3, "Experimental 3"),
-//		std::make_shared<KE::ThreeD::Computables::Experimental2>(p->knot, 4, "Experimental 4"),
+		std::make_shared<KE::ThreeD::Computables::MoebiusEnergy>(p->knot.knot()),
+		std::make_shared<KE::ThreeD::Computables::AverageCrossingNumber>(p->knot.knot(), false),
+		std::make_shared<KE::ThreeD::Computables::AverageCrossingNumber>(p->knot.knot(), true),
+		std::make_shared<KE::ThreeD::Computables::AverageExtremumNumber>(p->knot.knot()),
+		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot.knot(), 2),
+		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot.knot(), 3),
+		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot.knot(), 4),
+		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(p->knot.knot(), 5),
+		std::make_shared<KE::ThreeD::Computables::Experimental>(p->knot.knot())
+//		std::make_shared<KE::ThreeD::Computables::Singular>(p->knot.knot()),
+//		std::make_shared<KE::ThreeD::Computables::Experimental2>(p->knot.knot(), 2, "Experimental 2"),
+//		std::make_shared<KE::ThreeD::Computables::Experimental2>(p->knot.knot(), 3, "Experimental 3"),
+//		std::make_shared<KE::ThreeD::Computables::Experimental2>(p->knot.knot(), 4, "Experimental 4"),
 	};
 	nLabels = computables.size();
 	pLabels = new parameterLabel*[nLabels];

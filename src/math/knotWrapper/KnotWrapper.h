@@ -9,10 +9,11 @@ class KnotWrapper {
 
 private:
 	Knot knot;
+	std::string saveCheckpoint;
 
 public:
-	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {}
-	KnotWrapper(const rapidjson::Document &doc) : knot(doc) {}
+	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
+	KnotWrapper(const rapidjson::Document &doc);
 
 	Knot::Snapshot snapshot() const { return this->knot.snapshot(); }
 	const std::string &caption() const { return this->knot.caption; }

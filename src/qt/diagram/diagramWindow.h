@@ -35,8 +35,6 @@ public:
 	void saveIt(std::ostream&) override;
 	bool isSaved() const override;
 
-	bool isEmpty() const override;
-
 	void updateActions() override;
 
 	friend class DiagramWidget;

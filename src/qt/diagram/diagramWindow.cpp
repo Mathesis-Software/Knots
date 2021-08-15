@@ -153,11 +153,6 @@ void diagramWindow::saveIt(std::ostream &os) {
 	doc.Accept(writer);
 }
 
-bool diagramWindow::isEmpty() const {
-	const auto widget = this->diagramWidget();
-	return widget == nullptr || widget->diagram.vertices().empty();
-}
-
 void diagramWindow::simplify() {
 	if (this->diagramWidget()->diagram.simplify()) {
 		this->centralWidget()->repaint();

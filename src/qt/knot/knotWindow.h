@@ -70,7 +70,6 @@ private:
 	void onKnotChanged();
 
 	bool isSaved() const override { return this->_isSaved; }
-  bool isEmpty() const override { return this->knot.points().size() == 0; }
 
   void saveIt(std::ostream&);
 

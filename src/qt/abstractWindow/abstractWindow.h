@@ -37,8 +37,6 @@ public:
 
 	virtual void updateActions();
 
-  virtual bool isEmpty() const = 0;
-
   virtual QString fileFilter() const = 0;
 
   static std::list<abstractWindow*> AWRegister;

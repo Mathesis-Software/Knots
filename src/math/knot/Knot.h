@@ -105,8 +105,8 @@ public:
 	Vector seifertGradient(const Point &point) const;
 	double minDist(const Point &point) const;
 
-	rapidjson::Document save() const;
-	rapidjson::Document save(const double matrix[3][3]) const;
+	rapidjson::Document serialize() const;
+	rapidjson::Document serialize(const double matrix[3][3]) const;
 
 private:
 	std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints) const;

@@ -20,14 +20,14 @@ std::string docToString(const rapidjson::Document &doc) {
 
 }
 
-rapidjson::Document DiagramEditor::save() {
-	auto doc = this->currentDiagram->save();
+rapidjson::Document DiagramEditor::serialize() {
+	auto doc = this->currentDiagram->serialize();
 	this->saveCheckpoint = docToString(doc);
 	return doc;
 }
 
 bool DiagramEditor::isSaved() const {
-	auto doc = this->currentDiagram->save();
+	auto doc = this->currentDiagram->serialize();
 	return this->saveCheckpoint == docToString(doc);
 }
 

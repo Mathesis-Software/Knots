@@ -147,7 +147,7 @@ void diagramWindow::convert() {
 }
 
 void diagramWindow::saveIt(std::ostream &os) {
-	const rapidjson::Document doc = this->diagramWidget()->diagram.save();
+	const rapidjson::Document doc = this->diagramWidget()->diagram.serialize();
 	rapidjson::OStreamWrapper wrapper(os);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	doc.Accept(writer);

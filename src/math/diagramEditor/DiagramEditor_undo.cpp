@@ -53,7 +53,7 @@ void DiagramEditor::undo() {
 			break;
 		}
 	}
-	auto replacement = std::make_shared<Diagram>(this->initialDiagram.save());
+	auto replacement = std::make_shared<Diagram>(this->initialDiagram.serialize());
 	for (std::size_t index = 0; index < this->indexInLog; index += 1) {
 		this->log[index]->play(*replacement);
 	}

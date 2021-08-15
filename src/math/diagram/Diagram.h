@@ -96,7 +96,7 @@ public:
 		Diagram();
 		Diagram(const rapidjson::Document &doc);
 
-		rapidjson::Document save() const;
+		rapidjson::Document serialize() const;
 
 		void clear();
 		void close();

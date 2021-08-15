@@ -22,10 +22,10 @@ int main(int argc, const char **argv) {
 	const std::string type = KE::Util::rapidjson::get_string(doc, "type");
 	if (type == "link") {
 		KE::ThreeD::Knot knot(doc);
-		doc = knot.save();
+		doc = knot.serialize();
 	} else if (type == "diagram") {
 		KE::TwoD::Diagram diagram(doc);
-		doc = diagram.save();
+		doc = diagram.serialize();
 	} else {
 		throw std::runtime_error("Unknown file type");
 	}

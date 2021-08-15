@@ -74,7 +74,7 @@ Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 	}
 }
 
-rapidjson::Document Diagram::save() const {
+rapidjson::Document Diagram::serialize() const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "diagram", doc.GetAllocator());

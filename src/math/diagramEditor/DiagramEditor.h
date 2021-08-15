@@ -25,10 +25,10 @@ private:
 
 public:
 	DiagramEditor() : currentDiagram(new Diagram), indexInLog(0) {
-		this->save();
+		this->serialize();
 	}
 	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)), indexInLog(0) {
-		this->save();
+		this->serialize();
 	}
 
 	void savePoint();
@@ -62,7 +62,7 @@ public:
 	}
 
 	bool isSaved() const;
-	rapidjson::Document save();
+	rapidjson::Document serialize();
 
 	std::shared_ptr<Diagram::Vertex> addVertex(int x, int y);
 	std::shared_ptr<Diagram::Vertex> addVertex(const Diagram::Edge &edge, int x, int y);

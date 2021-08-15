@@ -38,16 +38,16 @@ Knot::Knot(const rapidjson::Document &doc) : _generation(1), lockCount(0) {
 	}
 }
 
-rapidjson::Document Knot::save() const {
+rapidjson::Document Knot::serialize() const {
 	double matrix[3][3] = {
 		{1.0, 0.0, 0.0},
 		{0.0, 1.0, 0.0},
 		{0.0, 0.0, 1.0}
 	};
-	return this->save(matrix);
+	return this->serialize(matrix);
 }
 
-rapidjson::Document Knot::save(const double matrix[3][3]) const {
+rapidjson::Document Knot::serialize(const double matrix[3][3]) const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "link", doc.GetAllocator());

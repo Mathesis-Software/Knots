@@ -33,6 +33,10 @@ public:
 
 	rapidjson::Document serialize(const double matrix[3][3]);
 	bool isSaved(const double matrix[3][3]) const;
+
+private:
+	void saveUiOptions(rapidjson::Document &doc) const;
+	void readUiOptions(const rapidjson::Document &doc);
 };
 
 }}

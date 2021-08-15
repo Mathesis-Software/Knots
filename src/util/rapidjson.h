@@ -10,7 +10,7 @@
 
 namespace KE { namespace Util { namespace rapidjson {
 
-inline std::string getString(const ::rapidjson::Document &doc, const std::string &key) {
+inline std::string getString(const ::rapidjson::Value &doc, const std::string &key) {
 	if (doc.HasMember(key.c_str())) {
 		const auto &obj = doc[key.c_str()];
 		if (obj.IsString()) {

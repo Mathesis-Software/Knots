@@ -1,5 +1,5 @@
-#include "../../math/knot/computables/computables.h"
-#include "../../math/knot/computables/experimental.h"
+#include "../../math/computables/computables.h"
+#include "../../math/computables/experimental.h"
 #include "knotWindow_math.h"
 
 void knotWindow::math() {

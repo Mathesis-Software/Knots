@@ -1,5 +1,5 @@
 #include "experimental.h"
-#include "../Knot.h"
+#include "../knot/Knot.h"
 
 namespace KE { namespace ThreeD { namespace Computables {
 

@@ -1,10 +1,10 @@
-ROOTDIR = ../../..
+ROOTDIR = ../..
 
-all: knot_computables.a
+all: computables.a
 
 include $(ROOTDIR)/config.mk
 
-knot_computables.a: $(OBJECTS)
+computables.a: $(OBJECTS)
 	@echo -n 'Linking $@ ...'
 	@$(RM) $@
 	@$(AR) $@ $^

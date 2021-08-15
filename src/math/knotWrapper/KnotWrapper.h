@@ -8,21 +8,21 @@ namespace KE { namespace ThreeD {
 class KnotWrapper {
 
 private:
-	Knot _knot;
+	Knot knot;
 
 public:
-	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : _knot(diagram, width, height) {}
-	KnotWrapper(const rapidjson::Document &doc) : _knot(doc) {}
+	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {}
+	KnotWrapper(const rapidjson::Document &doc) : knot(doc) {}
 
-	const Knot &knot() const { return this->_knot; }
-	Knot::Snapshot snapshot() const { return this->_knot.snapshot(); }
+	Knot::Snapshot snapshot() const { return this->knot.snapshot(); }
+	const std::string &caption() const { return this->knot.caption; }
 
-	void decreaseEnergy() { this->_knot.decreaseEnergy(); }
-	const std::string &caption() const { return this->_knot.caption; }
-	void setCaption(const std::string &caption) { this->_knot.caption = caption; } 
-	void setLength(double length) { this->_knot.setLength(length); }
-	void center() { this->_knot.center(); }
-	void normalize(std::size_t numberOfPoints) { this->_knot.normalize(numberOfPoints); }
+	void decreaseEnergy() { this->knot.decreaseEnergy(); }
+	void setCaption(const std::string &caption) { this->knot.caption = caption; } 
+	void setLength(double length) { this->knot.setLength(length); }
+	void center() { this->knot.center(); }
+	void normalize(std::size_t numberOfPoints) { this->knot.normalize(numberOfPoints); }
+	rapidjson::Document serialize(const double matrix[3][3]) const { return this->knot.serialize(matrix); }
 };
 
 }}

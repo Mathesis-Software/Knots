@@ -7,10 +7,10 @@ Knot::Knot(const rapidjson::Document &doc) : generation(1), lockCount(0) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}
-	if (!doc.IsObject() || Util::rapidjson::get_string(doc, "type") != "link") {
+	if (!doc.IsObject() || Util::rapidjson::getString(doc, "type") != "link") {
 		throw std::runtime_error("The file does not represent a knot");
 	}
-	this->caption = Util::rapidjson::get_string(doc, "name");
+	this->caption = Util::rapidjson::getString(doc, "name");
 	if (!doc.HasMember("components")) {
 		throw std::runtime_error("The file contains no diagram components");
 	}

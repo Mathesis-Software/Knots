@@ -23,7 +23,9 @@ public:
 	void setLength(double length) { this->knot.setLength(length); }
 	void center() { this->knot.center(); }
 	void normalize(std::size_t numberOfPoints) { this->knot.normalize(numberOfPoints); }
-	rapidjson::Document serialize(const double matrix[3][3]) const { return this->knot.serialize(matrix); }
+
+	rapidjson::Document serialize(const double matrix[3][3]);
+	bool isSaved(const double matrix[3][3]) const;
 };
 
 }}

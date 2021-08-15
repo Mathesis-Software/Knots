@@ -44,7 +44,6 @@ Q_OBJECT
 
 private:
 	KE::ThreeD::KnotWrapper knot;
-	bool _isSaved;
 
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
 	KE::ThreeD::Point seifertStartPoint;
@@ -69,7 +68,7 @@ private:
   void doSmooth();
 	void onKnotChanged();
 
-	bool isSaved() const override { return this->_isSaved; }
+	bool isSaved() const override;
 
   void saveIt(std::ostream&);
 

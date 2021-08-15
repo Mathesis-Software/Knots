@@ -1,7 +1,6 @@
 ### Bug fixing
 
 * GL: smoothing with number of steps updates status line from wrong thread
-* isSaved() for knot does not respect the rotation matrix
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 
 ### Code structure
@@ -9,7 +8,7 @@
 * move everything into namespaces
 * consistent file names
 * drop "qt/setValue" code
-* implement KnotEditor for knots like we have DiagramEditor for diagrams; no undo/redo here (?), but maybe it makes sense to store here visual features like colours and rotation matrix?
+* use KnotWrapper to store here visual features like colours, thickness, etc.
 * (?) merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
 
 ### User interface

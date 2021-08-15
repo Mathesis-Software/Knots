@@ -103,9 +103,9 @@ QWidget *ManagerWindow::openFile() {
 		abstractWindow *window = nullptr;
 		if (doc.IsNull()) {
 			throw std::runtime_error("The file is not in JSON format");
-		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "diagram") {
+		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
 			window = new diagramWindow(doc);
-		} else if (doc.IsObject() && Util::rapidjson::get_string(doc, "type") == "link") {
+		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
 			window = new knotWindow(doc);
 		} else {
 			throw std::runtime_error("The file does not represent a knot nor a diagram");

@@ -15,7 +15,7 @@ protected:
 
 public:
 	GLWindow();
-	GLWidget *glWidget();
+	GLWidget *glWidget() const;
 };
 
 #endif /* __GLWINDOW_H__ */

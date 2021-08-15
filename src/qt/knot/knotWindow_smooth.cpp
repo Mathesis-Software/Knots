@@ -28,7 +28,6 @@ void knotWindow::doSmooth() {
       stop();
   }
 
-  this->_isSaved = false;
 	for (int i = 0; i < redrawAfter; ++i) {
 		this->knot.decreaseEnergy();
 	}

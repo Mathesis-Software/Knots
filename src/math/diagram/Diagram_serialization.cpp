@@ -10,10 +10,10 @@ Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}
-	if (!doc.IsObject() || Util::rapidjson::get_string(doc, "type") != "diagram") {
+	if (!doc.IsObject() || Util::rapidjson::getString(doc, "type") != "diagram") {
 		throw std::runtime_error("The file does not represent a diagram");
 	}
-	this->caption = Util::rapidjson::get_string(doc, "name");
+	this->caption = Util::rapidjson::getString(doc, "name");
 	if (!doc.HasMember("components")) {
 		throw std::runtime_error("The file contains no diagram components");
 	}

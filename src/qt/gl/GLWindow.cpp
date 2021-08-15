@@ -7,7 +7,7 @@ GLWindow::GLWindow() {
 	setCentralWidget(new GLWidget(this));
 }
 
-GLWidget *GLWindow::glWidget() {
+GLWidget *GLWindow::glWidget() const {
 	return (GLWidget*)this->centralWidget();
 }
 

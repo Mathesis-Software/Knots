@@ -3,7 +3,7 @@
 
 #include "knotWindow_math.h"
 #include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/seifert_surface.h"
+#include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::smooth() {
   if (!this->smoothingThread.isRunning()) {

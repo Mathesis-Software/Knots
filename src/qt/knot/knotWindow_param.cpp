@@ -5,7 +5,7 @@
 #include "knotWindow_param.h"
 #include "../setValue/setValue.h"
 #include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/seifert_surface.h"
+#include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::setLength() {
 	const auto snapshot = this->knot.snapshot();

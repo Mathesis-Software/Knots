@@ -6,7 +6,7 @@
 #include "knotWindow.h"
 
 #include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/seifert_surface.h"
+#include "../../math/seifert/SeifertSurface.h"
 
 namespace {
 

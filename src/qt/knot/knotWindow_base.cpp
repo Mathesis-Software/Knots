@@ -8,12 +8,12 @@
 #include "../gl/GLWidget.h"
 #include "../diagram/diagramWindow.h"
 #include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/seifert_surface.h"
+#include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::init() {
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot.knot(), 0.05, 28);
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 0.05, 28);
   this->glWidget()->addSurface(this->knotSurface);
-  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot.knot(), this->seifertStartPoint);
+  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
   this->glWidget()->addSurface(this->seifertSurface);
 
   float rgb[3];

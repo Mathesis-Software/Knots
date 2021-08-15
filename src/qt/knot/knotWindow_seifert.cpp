@@ -1,5 +1,5 @@
 #include "knotWindow.h"
-#include "../../math/seifert/seifert_surface.h"
+#include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::bp_plus() {
 	this->seifertStartPoint.move(

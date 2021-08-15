@@ -1,5 +1,5 @@
 #include "seifert.h"
-#include "seifert_surface.h"
+#include "SeifertSurface.h"
 
 namespace KE { namespace GL {
 
@@ -40,7 +40,7 @@ ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD
 	return gradient;
 }
 
-SeifertSurface::SeifertSurface(const ThreeD::Knot &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
+SeifertSurface::SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
 }
 
 void SeifertSurface::addTriangles(seifert *s) {

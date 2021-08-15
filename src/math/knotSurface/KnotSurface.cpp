@@ -4,7 +4,7 @@
 
 namespace KE { namespace GL {
 
-KnotSurface::KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t numberOfPointsOnMeridian) : Surface(true, false), knot(knot) {
+KnotSurface::KnotSurface(const ThreeD::KnotWrapper &knot, double thickness, std::size_t numberOfPointsOnMeridian) : Surface(true, false), knot(knot) {
 	this->setThickness(thickness);
 	this->setNumberOfPointsOnMeridian(numberOfPointsOnMeridian);
 }

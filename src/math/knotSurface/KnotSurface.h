@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "../knot/Knot.h"
+#include "../knotWrapper/KnotWrapper.h"
 #include "../../gl/surface/surface.h"
 
 namespace KE { namespace GL {
@@ -11,14 +11,14 @@ namespace KE { namespace GL {
 class KnotSurface : public Surface {
 
 private:
-	const ThreeD::Knot &knot;
+	const ThreeD::KnotWrapper &knot;
 	double thickness;
 	std::vector<double> sines;
 	std::vector<double> cosines;
 	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 public:
-	KnotSurface(const ThreeD::Knot &knot, double thickness, std::size_t numberOfPointsOnMeridian);
+	KnotSurface(const ThreeD::KnotWrapper &knot, double thickness, std::size_t numberOfPointsOnMeridian);
 	void calculate() override;
 	bool destroy(bool force);
 	void setThickness(double thickness);

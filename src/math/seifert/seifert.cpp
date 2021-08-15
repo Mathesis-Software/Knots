@@ -1,7 +1,7 @@
 #include <cmath>
 
 #include "seifert.h"
-#include "seifert_surface.h"
+#include "SeifertSurface.h"
 
 const int MAX_ITERATION_NUMBER = 20; // Максимальное число итераций при
 																		 // добавлении новой точки в заданном

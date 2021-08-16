@@ -41,16 +41,37 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 		componentUi.AddMember("thickness", *this->knotThickness, doc.GetAllocator());
 	}
 	doc["components"][0].AddMember("ui", componentUi, doc.GetAllocator());
+
+	rapidjson::Value globalUi(rapidjson::kObjectType);
+	if (this->seifertFrontColor) {
+		const std::string sv = this->seifertFrontColor->stringValue();
+		rapidjson::Value color;
+		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
+		globalUi.AddMember("seifertFrontColor", color, doc.GetAllocator());
+	}
+	if (this->seifertBackColor) {
+		const std::string sv = this->seifertBackColor->stringValue();
+		rapidjson::Value color;
+		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
+		globalUi.AddMember("seifertBackColor", color, doc.GetAllocator());
+	}
+	doc.AddMember("ui", globalUi, doc.GetAllocator());
 }
 
 void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
-	const auto &componentRoot = doc["components"][0];
-	if (componentRoot.HasMember("ui") && componentRoot["ui"].IsObject()) {
-		const auto &componentUi = componentRoot["ui"];
-		this->knotColor = GL::Color::parse(Util::rapidjson::getString(componentUi, "color"));
-		if (componentUi.HasMember("thickness") && componentUi["thickness"].IsNumber()) {
-			this->knotThickness = std::make_shared<double>(componentUi["thickness"].GetDouble());
+	const auto &component = doc["components"][0];
+	if (component.HasMember("ui") && component["ui"].IsObject()) {
+		const auto &ui = component["ui"];
+		this->knotColor = GL::Color::parse(Util::rapidjson::getString(ui, "color"));
+		if (ui.HasMember("thickness") && ui["thickness"].IsNumber()) {
+			this->knotThickness = std::make_shared<double>(ui["thickness"].GetDouble());
 		}
+	}
+
+	if (doc.HasMember("ui") && doc["ui"].IsObject()) {
+		const auto &ui = doc["ui"];
+		this->seifertFrontColor = GL::Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
+		this->seifertBackColor = GL::Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));
 	}
 }
 

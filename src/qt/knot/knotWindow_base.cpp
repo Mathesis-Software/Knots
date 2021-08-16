@@ -30,9 +30,9 @@ public:
 void knotWindow::init() {
 	this->setCentralWidget(new KnotWidget(this, this->knot));
   this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
-  this->glWidget()->addSurface(this->knotSurface);
+  this->knotWidget()->addSurface(this->knotSurface);
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
-  this->glWidget()->addSurface(this->seifertSurface);
+  this->knotWidget()->addSurface(this->seifertSurface);
 
   mth = NULL;
 
@@ -101,4 +101,8 @@ void knotWindow::moveSeifertBasePoint(double distance) {
 	);
 	this->seifertSurface->destroy(true);
 	this->centralWidget()->update();
+}
+
+GLWidget *knotWindow::knotWidget() const {
+	return (GLWidget*)this->centralWidget();
 }

@@ -12,7 +12,6 @@ private:
 
 public:
 	GLWindow();
-	GLWidget *glWidget() const;
 };
 
 #endif /* __GLWINDOW_H__ */

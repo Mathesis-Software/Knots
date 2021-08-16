@@ -1,13 +1,8 @@
 #include <QtGui/QPainter>
 
-#include "GLWidget.h"
 #include "GLWindow.h"
 
 GLWindow::GLWindow() {
-}
-
-GLWidget *GLWindow::glWidget() const {
-	return (GLWidget*)this->centralWidget();
 }
 
 void GLWindow::printIt(QPrinter *prn) {

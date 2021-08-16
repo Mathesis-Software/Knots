@@ -43,6 +43,11 @@ ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD
 SeifertSurface::SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
 }
 
+bool SeifertSurface::isVisible() const {
+	const auto ref = this->base.isSeifertSurfaceVisible;
+	return ref && *ref;
+}
+
 namespace {
 
 const Color white(255, 255, 255);
@@ -106,16 +111,13 @@ void SeifertSurface::addTriangles(seifert *s) {
 }
 
 bool SeifertSurface::destroy(bool force) {
-	if (!force && this->stored && !this->stored->isObsolete()) {
-		return false;
-	}
-	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(this->base.snapshot());
-	Surface::destroy();
-	return true;
+	return Surface::destroy(force || !this->stored || this->stored->isObsolete());
 }
 
 void SeifertSurface::calculate() {
   // Создаем граф поверхности.
+	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(this->base.snapshot());
+
   seifert *s = new seifert(this->base.snapshot(), this->startPoint);
   s->correction();
 

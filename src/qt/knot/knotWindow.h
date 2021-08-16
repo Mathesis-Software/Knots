@@ -74,7 +74,6 @@ private:
 private:
 	void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter);
 
-  void toggleKnotVisibility();
   void toggleSeifertSurfaceVisibility();
 
 private slots:

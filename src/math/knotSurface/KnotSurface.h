@@ -18,13 +18,17 @@ private:
 
 public:
 	KnotSurface(const ThreeD::KnotWrapper &knot, std::size_t numberOfPointsOnMeridian);
-	void calculate() override;
-	bool destroy(bool force);
 	void setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian);
 
 	double thickness() const;
 	const Color &frontColor() const override;
 	const Color &backColor() const override;
+
+	bool destroy(bool force) override;
+	bool isVisible() const override;
+
+private:
+	void calculate() override;
 
 private:
 	KnotSurface(const KnotSurface&) = delete;

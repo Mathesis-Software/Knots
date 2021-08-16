@@ -43,6 +43,9 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 	doc["components"][0].AddMember("ui", componentUi, doc.GetAllocator());
 
 	rapidjson::Value globalUi(rapidjson::kObjectType);
+	if (this->isSeifertSurfaceVisible) {
+		globalUi.AddMember("isSeifertSurfaceVisible", *this->isSeifertSurfaceVisible, doc.GetAllocator());
+	}
 	if (this->seifertFrontColor) {
 		const std::string sv = this->seifertFrontColor->stringValue();
 		rapidjson::Value color;
@@ -72,6 +75,9 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 		const auto &ui = doc["ui"];
 		this->seifertFrontColor = GL::Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
 		this->seifertBackColor = GL::Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));
+		if (ui.HasMember("isSeifertSurfaceVisible") && ui["isSeifertSurfaceVisible"].IsBool()) {
+			this->isSeifertSurfaceVisible = std::make_shared<bool>(ui["isSeifertSurfaceVisible"].GetBool());
+		}
 	}
 }
 

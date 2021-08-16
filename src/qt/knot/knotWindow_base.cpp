@@ -16,8 +16,6 @@ void knotWindow::init() {
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
   this->glWidget()->addSurface(this->seifertSurface);
 
-  this->knotSurface->show();
-
   mth = NULL;
 
   initMenu();
@@ -43,23 +41,13 @@ knotWindow::~knotWindow() {
   delete viewMenu;
 }
 
-void knotWindow::toggleKnotVisibility() {
-  if (this->knotSurface->isVisible()) {
-    this->knotSurface->hide();
-  } else {
-    this->knotSurface->show();
-  }
-
-  this->centralWidget()->update();
-	this->updateActions();
-}
-
 void knotWindow::toggleSeifertSurfaceVisibility() {
   if (this->seifertSurface->isVisible()) {
-    this->seifertSurface->hide();
+    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(false);
   } else {
-    this->seifertSurface->show();
+    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
   }
+	this->seifertSurface->destroy(true);
 
   this->centralWidget()->update();
 	this->updateActions();

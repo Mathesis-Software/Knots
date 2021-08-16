@@ -22,13 +22,6 @@ void knotWindow::initMenu() {
   mathMenu->addAction("Length…", this, SLOT(setLength()));
   
   viewMenu = menuBar()->addMenu("View");
-	auto toggleKnot = this->registerAction(
-		viewMenu->addAction("Show knot", this, &knotWindow::toggleKnotVisibility),
-		[this](QAction &action) {
-			action.setChecked(this->knotSurface->isVisible());  
-		}
-	);
-	toggleKnot->setCheckable(true);
 	auto toggleSeifert = this->registerAction(
 		viewMenu->addAction("Show Seifert surface", this, &knotWindow::toggleSeifertSurfaceVisibility),
 		[this](QAction &action) {

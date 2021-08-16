@@ -29,7 +29,8 @@ public:
 	const Color &frontColor() const override;
 	const Color &backColor() const override;
 
-	bool destroy(bool force);
+	bool destroy(bool force) override;
+	bool isVisible() const override;
 };
 
 }}

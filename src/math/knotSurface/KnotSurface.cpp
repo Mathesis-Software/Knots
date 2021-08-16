@@ -8,6 +8,10 @@ KnotSurface::KnotSurface(const ThreeD::KnotWrapper &knot, std::size_t numberOfPo
 	this->setNumberOfPointsOnMeridian(numberOfPointsOnMeridian);
 }
 
+bool KnotSurface::isVisible() const {
+	return true;
+}
+
 namespace {
 
 const Color white(255, 255, 255);
@@ -43,11 +47,7 @@ void KnotSurface::setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridi
 }
 
 bool KnotSurface::destroy(bool force) {
-	if (!force && this->stored && !this->stored->isObsolete()) {
-		return false;
-	}
-	Surface::destroy();
-	return true;
+	return Surface::destroy(force || !this->stored || this->stored->isObsolete());
 }
 
 void KnotSurface::calculate() {

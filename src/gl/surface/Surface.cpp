@@ -5,15 +5,16 @@
 
 namespace KE { namespace GL {
 
-Surface::Surface(bool stripped, bool showBackSide) : stripped(stripped), showBackSide(showBackSide) {
-	visible = 0;
-}
+Surface::Surface(bool stripped, bool showBackSide) : stripped(stripped), showBackSide(showBackSide) {}
 
 Surface::~Surface() {
 }
 
-void Surface::destroy() {
-	this->points.clear();
+bool Surface::destroy(bool force) {
+	if (force) {
+		this->points.clear();
+	}
+	return force;
 }
 
 void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) {

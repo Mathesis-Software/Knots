@@ -37,12 +37,10 @@ private:
 
 	const bool stripped;
 	const bool showBackSide;
-	bool visible;
 
 	std::vector<SurfacePoint> points;
 
 protected:
-	void destroy();
 	virtual void calculate() = 0;
 	void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
 
@@ -50,14 +48,13 @@ public:
 	Surface(bool stripped, bool showBackSide);
 	virtual ~Surface();
 
-	bool isVisible() { return this->visible; }
-	void show() { this->visible = true; }
-	void hide() { this->visible = false; }
-
 	void paint();
 
+	virtual bool isVisible() const = 0;
 	virtual const Color &frontColor() const = 0;
 	virtual const Color &backColor() const = 0;
+
+	virtual bool destroy(bool force);
 
 private:
 	Surface(const Surface&) = delete;

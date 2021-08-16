@@ -10,6 +10,8 @@
 * drop "qt/setValue" code
 * (?) merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
 * (?) save rotation matrix (currently knot is saved "rotated", with new points coordinates)
+* move all data and as much as possible code from knotWindow to KnotWidget
+* replace linked list in seifert structures with std::list
 
 ### User interface
 

@@ -56,8 +56,8 @@ public:
 
 	void paint();
 
-	virtual const Color &getFrontColor() const = 0;
-	virtual const Color &getBackColor() const = 0;
+	virtual const Color &frontColor() const = 0;
+	virtual const Color &backColor() const = 0;
 
 private:
 	Surface(const Surface&) = delete;

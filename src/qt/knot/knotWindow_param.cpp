@@ -15,7 +15,7 @@ void knotWindow::setLength() {
     this->knot.center();
     this->knotSurface->destroy(false);
     this->seifertSurface->destroy(false);
-    repaint3d();
+    this->centralWidget()->update();
     if (mth) {
       mth->recompute();
 		}
@@ -30,7 +30,7 @@ void knotWindow::setNumberOfPoints() {
     this->knot.center();
 		this->knot.setLength(length);
     this->knotSurface->destroy(false);
-    repaint3d();
+    this->centralWidget()->update();
     if (mth) {
       mth->recompute();
 		}

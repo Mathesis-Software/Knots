@@ -10,9 +10,6 @@ class GLWindow : public abstractWindow {
 private:
 	void printIt(QPrinter*);
 
-protected:
-	void repaint3d();
-
 public:
 	GLWindow();
 	GLWidget *glWidget() const;

@@ -57,11 +57,11 @@ void knotWindow::initMenu() {
   addToolbarAction("math.svg", "Show parameters", [this] { this->math(); });
   addToolbarSeparator();
   this->registerAction(
-		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->bp_plus(); }),
+		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->moveSeifertBasePoint(0.02); }),
 		[this](QAction &action) { action.setEnabled(this->seifertSurface->isVisible()); }
 	);
   this->registerAction(
-  	addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->bp_minus(); }),
+  	addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->moveSeifertBasePoint(-0.02); }),
 		[this](QAction &action) { action.setEnabled(this->seifertSurface->isVisible()); }
 	);
 

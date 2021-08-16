@@ -26,8 +26,8 @@ private:
 public:
 	SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint);
 
-	const Color &getFrontColor() const override;
-	const Color &getBackColor() const override;
+	const Color &frontColor() const override;
+	const Color &backColor() const override;
 
 	bool destroy(bool force);
 };

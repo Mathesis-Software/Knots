@@ -4,8 +4,7 @@
 
 namespace KE { namespace GL {
 
-KnotSurface::KnotSurface(const ThreeD::KnotWrapper &knot, double thickness, std::size_t numberOfPointsOnMeridian) : Surface(true, false), knot(knot) {
-	this->setThickness(thickness);
+KnotSurface::KnotSurface(const ThreeD::KnotWrapper &knot, std::size_t numberOfPointsOnMeridian) : Surface(true, false), knot(knot) {
 	this->setNumberOfPointsOnMeridian(numberOfPointsOnMeridian);
 }
 
@@ -15,20 +14,18 @@ const Color white(255, 255, 255);
 
 }
 
-const Color &KnotSurface::getFrontColor() const {
-	const auto saved = this->knot.knotColor;
-	return saved ? *saved : white;
+const Color &KnotSurface::frontColor() const {
+	const auto ref = this->knot.knotColor;
+	return ref ? *ref : white;
 }
 
-const Color &KnotSurface::getBackColor() const {
+const Color &KnotSurface::backColor() const {
 	return white;
 }
 
-void KnotSurface::setThickness(double thickness) {
-	if (thickness != this->thickness) {
-		this->thickness = thickness;
-		this->destroy(true);
-	}
+double KnotSurface::thickness() const {
+	const auto ref = this->knot.knotThickness;
+	return ref ? *ref : 1.0;
 }
 
 void KnotSurface::setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian) {
@@ -107,6 +104,7 @@ void KnotSurface::calculate() {
 	}
 
 	/* Creating surface */
+	const double thickness = 0.05 * this->thickness();
 	for (std::size_t j = 0; j < this->sines.size() - 1; ++j) {
 		std::size_t j1 = j;
 		std::size_t j2 = (j + 1) % (this->sines.size() - 1);

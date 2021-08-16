@@ -18,9 +18,3 @@ void GLWindow::printIt(QPrinter *prn) {
 	pnt.drawPixmap(0, 0, QPixmap::grabWindow(centralWidget()->winId()));
 	pnt.end();
 }
-
-void GLWindow::repaint3d() {
-	if (isVisible()) {
-		((GLWidget*)centralWidget())->update();
-	}
-}

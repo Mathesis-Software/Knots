@@ -49,14 +49,14 @@ const Color white(255, 255, 255);
 
 }
 
-const Color &SeifertSurface::getFrontColor() const {
-	const auto saved = this->base.seifertFrontColor;
-	return saved ? *saved : white;
+const Color &SeifertSurface::frontColor() const {
+	const auto ref = this->base.seifertFrontColor;
+	return ref ? *ref : white;
 }
 
-const Color &SeifertSurface::getBackColor() const {
-	const auto saved = this->base.seifertBackColor;
-	return saved ? *saved : white;
+const Color &SeifertSurface::backColor() const {
+	const auto ref = this->base.seifertBackColor;
+	return ref ? *ref : white;
 }
 
 void SeifertSurface::addTriangles(seifert *s) {

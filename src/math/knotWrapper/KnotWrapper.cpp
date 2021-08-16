@@ -37,6 +37,9 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
 		componentUi.AddMember("color", color, doc.GetAllocator());
 	}
+	if (this->knotThickness) {
+		componentUi.AddMember("thickness", *this->knotThickness, doc.GetAllocator());
+	}
 	doc["components"][0].AddMember("ui", componentUi, doc.GetAllocator());
 }
 
@@ -45,6 +48,9 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 	if (componentRoot.HasMember("ui") && componentRoot["ui"].IsObject()) {
 		const auto &componentUi = componentRoot["ui"];
 		this->knotColor = GL::Color::parse(Util::rapidjson::getString(componentUi, "color"));
+		if (componentUi.HasMember("thickness") && componentUi["thickness"].IsNumber()) {
+			this->knotThickness = std::make_shared<double>(componentUi["thickness"].GetDouble());
+		}
 	}
 }
 

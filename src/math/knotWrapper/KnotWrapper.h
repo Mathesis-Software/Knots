@@ -17,6 +17,7 @@ public:
 	std::shared_ptr<GL::Color> knotColor;
 	std::shared_ptr<GL::Color> seifertFrontColor;
 	std::shared_ptr<GL::Color> seifertBackColor;
+	std::shared_ptr<double> knotThickness;
 
 public:
 	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);

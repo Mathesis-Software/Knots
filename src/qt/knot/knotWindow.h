@@ -48,7 +48,6 @@ private:
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
 	KE::ThreeD::Point seifertStartPoint;
 	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
-  double thickness;
 	SmoothingThread smoothingThread;
 
   QMenu *mathMenu;
@@ -90,8 +89,6 @@ private slots:
   void setKnotColor();
   void setSeifertFrontColor();
   void setSeifertBackColor();
-  void bp_plus();
-  void bp_minus();
 
 public:
   knotWindow(const rapidjson::Document &doc);
@@ -104,6 +101,8 @@ private:
 	QString fileFilter() const override { return "Knot files (*.knt)"; }
 	void updateActions() override;
 	void rename() override;
+
+  void moveSeifertBasePoint(double distance);
 };
 
 #endif /* __KNOTWINDOW_H__ */

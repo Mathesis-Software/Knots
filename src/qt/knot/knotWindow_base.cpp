@@ -11,14 +11,13 @@
 #include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::init() {
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 0.05, 28);
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
   this->glWidget()->addSurface(this->knotSurface);
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
   this->glWidget()->addSurface(this->seifertSurface);
 
   this->knotSurface->show();
 
-  thickness = 1.0;
   mth = NULL;
 
   initMenu();
@@ -51,7 +50,7 @@ void knotWindow::toggleKnotVisibility() {
     this->knotSurface->show();
   }
 
-  this->glWidget()->update();
+  this->centralWidget()->update();
 	this->updateActions();
 }
 
@@ -62,7 +61,7 @@ void knotWindow::toggleSeifertSurfaceVisibility() {
     this->seifertSurface->show();
   }
 
-  this->glWidget()->update();
+  this->centralWidget()->update();
 	this->updateActions();
 }
 
@@ -88,4 +87,12 @@ void knotWindow::rename() {
 		this->knot.setCaption(text.toStdString());
 		this->updateActions();
 	}
+}
+
+void knotWindow::moveSeifertBasePoint(double distance) {
+	this->seifertStartPoint.move(
+		KE::GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot.snapshot()), distance
+	);
+	this->seifertSurface->destroy(true);
+	this->centralWidget()->update();
 }

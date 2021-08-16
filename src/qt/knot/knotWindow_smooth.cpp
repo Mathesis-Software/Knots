@@ -35,7 +35,7 @@ void knotWindow::doSmooth() {
 
 void knotWindow::onKnotChanged() {
   if (this->knotSurface->destroy(false) || this->seifertSurface->destroy(false)) {
-		this->repaint3d();
+		this->centralWidget()->update();
 		if (mth) {
 			mth->recompute();
 		}

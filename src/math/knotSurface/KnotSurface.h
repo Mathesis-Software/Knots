@@ -12,20 +12,19 @@ class KnotSurface : public Surface {
 
 private:
 	const ThreeD::KnotWrapper &knot;
-	double thickness;
 	std::vector<double> sines;
 	std::vector<double> cosines;
 	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 public:
-	KnotSurface(const ThreeD::KnotWrapper &knot, double thickness, std::size_t numberOfPointsOnMeridian);
+	KnotSurface(const ThreeD::KnotWrapper &knot, std::size_t numberOfPointsOnMeridian);
 	void calculate() override;
 	bool destroy(bool force);
-	void setThickness(double thickness);
 	void setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian);
 
-	const Color &getFrontColor() const override;
-	const Color &getBackColor() const override;
+	double thickness() const;
+	const Color &frontColor() const override;
+	const Color &backColor() const override;
 
 private:
 	KnotSurface(const KnotSurface&) = delete;

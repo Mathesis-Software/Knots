@@ -1,12 +1,12 @@
 #include "knotWindow.h"
-#include "../../math/knotSurface/KnotSurface.h"
 #include "../setValue/setValue.h"
+#include "../../math/knotSurface/KnotSurface.h"
 
 void knotWindow::setThickness() {
-  double old = thickness;
-  thickness = setDouble("Thickness", thickness, 0.1, 10.0);
-  if (old != thickness) {
-    this->knotSurface->setThickness(0.05 * thickness);
-    repaint3d();
+  const double thickness = setDouble("Thickness", this->knotSurface->thickness(), 0.1, 10.0);
+  if (thickness != this->knotSurface->thickness()) {
+		this->knot.knotThickness = std::make_shared<double>(thickness);
+    this->knotSurface->destroy(true);
+		this->centralWidget()->update();
   }
 }

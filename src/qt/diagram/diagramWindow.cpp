@@ -44,7 +44,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 	const auto &diagram = widget->diagram;
 
 	this->connect(widget, &DiagramWidget::setActionTip, [this](const QString &text) {
-		if (text != QString::null) {
+		if (!text.isNull()) {
 			this->statusBar()->showMessage(text);
 		} else {
 			this->statusBar()->clearMessage();

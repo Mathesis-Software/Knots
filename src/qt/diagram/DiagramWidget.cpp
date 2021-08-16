@@ -366,7 +366,7 @@ void DiagramWidget::setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 			emit setActionTip("Left-click adds point; right-click closes the diagram");
 		}
 	} else {
-		emit setActionTip(QString::null);
+		emit setActionTip(QString());
 	}
 }
 
@@ -385,7 +385,7 @@ void DiagramWidget::captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Verte
 			emit setActionTip("Left-click starts the point moving; right-click deletes the point");
 		}
 	} else {
-		emit setActionTip(QString::null);
+		emit setActionTip(QString());
 	}
 }
 
@@ -404,7 +404,7 @@ void DiagramWidget::captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &
 			emit setActionTip("Mouse click creates point on the edge");
 		}
 	} else {
-		emit setActionTip(QString::null);
+		emit setActionTip(QString());
 	}
 }
 
@@ -419,7 +419,7 @@ void DiagramWidget::captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Cro
 	if (crossing) {
 		emit setActionTip("Mouse click flips the crossing");
 	} else {
-		emit setActionTip(QString::null);
+		emit setActionTip(QString());
 	}
 }
 

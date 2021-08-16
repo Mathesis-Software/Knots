@@ -12,19 +12,13 @@ bool KnotSurface::isVisible() const {
 	return true;
 }
 
-namespace {
-
-const Color white(255, 255, 255);
-
-}
-
 const Color &KnotSurface::frontColor() const {
 	const auto ref = this->knot.knotColor;
-	return ref ? *ref : white;
+	return ref ? *ref : Color::white;
 }
 
 const Color &KnotSurface::backColor() const {
-	return white;
+	return Color::white;
 }
 
 double KnotSurface::thickness() const {

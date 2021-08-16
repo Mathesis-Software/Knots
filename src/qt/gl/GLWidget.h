@@ -13,7 +13,6 @@ class GLWidget : public QOpenGLWidget {
 private:
 	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
 
-	float backgroundRGB[3];
 	std::unique_ptr<double[]> currentMatrix;
 
 	QPoint capturedPoint;
@@ -32,13 +31,10 @@ private:
 
 public:
 	GLWidget(QWidget *parent);
+	virtual const KE::GL::Color &backgroundColor() const = 0;
+
 	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
-
-	const float *getBackgroundRGB() const;
-	void setBackgroundRGB(const float rgb[3]);
-
 	void rotate(int, int);
-
 	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
 };
 

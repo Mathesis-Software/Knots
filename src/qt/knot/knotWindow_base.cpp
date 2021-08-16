@@ -10,7 +10,25 @@
 #include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"
 
+namespace {
+
+class KnotWidget : public GLWidget {
+
+private:
+	const KE::ThreeD::KnotWrapper &knot;
+
+public:
+	KnotWidget(QWidget *parent, const KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot) {}
+	const KE::GL::Color &backgroundColor() const override {
+		const auto ref = this->knot.backgroundColor;
+		return ref ? *ref : KE::GL::Color::white;
+	}
+};
+
+}
+
 void knotWindow::init() {
+	this->setCentralWidget(new KnotWidget(this, this->knot));
   this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
   this->glWidget()->addSurface(this->knotSurface);
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);

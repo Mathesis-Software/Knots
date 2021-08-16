@@ -48,20 +48,14 @@ bool SeifertSurface::isVisible() const {
 	return ref && *ref;
 }
 
-namespace {
-
-const Color white(255, 255, 255);
-
-}
-
 const Color &SeifertSurface::frontColor() const {
 	const auto ref = this->base.seifertFrontColor;
-	return ref ? *ref : white;
+	return ref ? *ref : Color::white;
 }
 
 const Color &SeifertSurface::backColor() const {
 	const auto ref = this->base.seifertBackColor;
-	return ref ? *ref : white;
+	return ref ? *ref : Color::white;
 }
 
 void SeifertSurface::addTriangles(seifert *s) {

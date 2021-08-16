@@ -4,7 +4,6 @@
 #include "GLWindow.h"
 
 GLWindow::GLWindow() {
-	setCentralWidget(new GLWidget(this));
 }
 
 GLWidget *GLWindow::glWidget() const {

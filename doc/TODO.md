@@ -6,10 +6,10 @@
 ### Code structure
 
 * move everything into namespaces
-* consistent file names
+* consistent source file names
 * drop "qt/setValue" code
-* use KnotWrapper to store here visual features like colours, thickness, etc.
 * (?) merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
+* (?) save rotation matrix (currently knot is saved "rotated", with new points coordinates)
 
 ### User interface
 
@@ -18,14 +18,14 @@
 * open windows list
 * knot window: combine tunable parameters (colours, thickness, length, number of points) into a single dialogue
 * create default settings storage and settings dialogue (all the same parameters as in previous item + maybe something els)
-* "save file dialogue": do not use non-writeable directory by default
-* save "visual" features like colours, knot thickness, window size, etc.
-* save rotation matrix (currently knot is saved "rotated", with new points coordinates)
+* "save file dialogue": do not use read-only directory by default
+* save latest file directory between runs
+* save window sizes between runs
 * printing: drop or re-implement (currently it is disabled)
 * add exporting images to PNG
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
-* pass diagram/knot files to open as parameters of command line
+* pass diagram/knot files to open as parameters in command line
 
 ### Technical feature improvements
 

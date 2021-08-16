@@ -30,6 +30,8 @@ std::string Color::stringValue() const {
 	return os.str();
 }
 
+const Color Color::white(255, 255, 255);
+
 std::shared_ptr<Color> Color::parse(const std::string &stringValue) {
 	if (stringValue.size() != 6) {
 		return nullptr;

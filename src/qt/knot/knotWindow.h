@@ -8,7 +8,7 @@
 #include "../../math/knotWrapper/KnotWrapper.h"
 #include "../../math/seifert/seifert.h"
 
-class GLWidget;
+class KnotWidget;
 
 namespace KE { namespace GL {
 
@@ -77,7 +77,7 @@ private:
 	void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter);
 
   void toggleSeifertSurfaceVisibility();
-	GLWidget *knotWidget() const;
+	KnotWidget *knotWidget() const;
 
 private slots:
   void stop();

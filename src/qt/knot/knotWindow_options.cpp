@@ -1,7 +1,7 @@
 #include <QtWidgets/QColorDialog>
 
 #include "knotWindow.h"
-#include "../gl/GLWidget.h"
+#include "KnotWidget.h"
 #include "../setValue/setValue.h"
 #include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"

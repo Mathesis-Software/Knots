@@ -5,27 +5,10 @@
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
-#include "../gl/GLWidget.h"
+#include "KnotWidget.h"
 #include "../diagram/diagramWindow.h"
 #include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"
-
-namespace {
-
-class KnotWidget : public GLWidget {
-
-private:
-	const KE::ThreeD::KnotWrapper &knot;
-
-public:
-	KnotWidget(QWidget *parent, const KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot) {}
-	const KE::GL::Color &backgroundColor() const override {
-		const auto ref = this->knot.backgroundColor;
-		return ref ? *ref : KE::GL::Color::white;
-	}
-};
-
-}
 
 void knotWindow::init() {
 	this->setCentralWidget(new KnotWidget(this, this->knot));
@@ -103,6 +86,6 @@ void knotWindow::moveSeifertBasePoint(double distance) {
 	this->centralWidget()->update();
 }
 
-GLWidget *knotWindow::knotWidget() const {
-	return (GLWidget*)this->centralWidget();
+KnotWidget *knotWindow::knotWidget() const {
+	return dynamic_cast<KnotWidget*>(this->centralWidget());
 }

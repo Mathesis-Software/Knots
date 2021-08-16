@@ -1,8 +1,8 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "../gl/GLWidget.h"
 #include "knotWindow.h"
+#include "KnotWidget.h"
 
 bool knotWindow::isSaved() const {
 	double matrix[3][3];

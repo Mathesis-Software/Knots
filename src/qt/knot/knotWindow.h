@@ -70,12 +70,9 @@ private:
   void init();
   void initMenu();
 
-  bool continuousSmoothing;
-  int smoothSteps;
-  int redrawAfter;
-  void startSmooth(int, int, bool = true);
-
+  void startSmoothing();
   void doSmooth();
+  void stopSmoothing();
 
 	bool isSaved() const override;
 
@@ -85,10 +82,7 @@ private:
 	KnotWidget *knotWidget() const;
 
 private slots:
-  void stop();
   void math();
-  void smooth();
-  void decreaseEnergy();
 
 public:
   knotWindow(const rapidjson::Document &doc);

@@ -25,13 +25,15 @@
 #include "knotWindow_math.h"
 #include "KnotWidget.h"
 
-void knotWindow::smooth() {
+void knotWindow::startSmoothing() {
   if (!this->smoothingThread.isRunning()) {
-    this->startSmooth(0, 20);
+		this->smoothingThread.start();
+		statusBar()->showMessage("Smoothing…");
+		this->updateActions();
 	}
 }
 
-void knotWindow::stop() {
+void knotWindow::stopSmoothing() {
   if (this->smoothingThread.isRunning()) {
 		this->smoothingThread.requestInterruption();
     statusBar()->showMessage("Smoothing complete", 3000);
@@ -40,27 +42,9 @@ void knotWindow::stop() {
 }
 
 void knotWindow::doSmooth() {
-  if (!continuousSmoothing) {
-    if (redrawAfter > smoothSteps)
-      redrawAfter = smoothSteps;
-    smoothSteps -= redrawAfter;
-    if (!smoothSteps)
-      stop();
-  }
-
-	for (int i = 0; i < redrawAfter; ++i) {
+	for (int i = 0; i < 20; ++i) {
 		this->knot.decreaseEnergy();
 	}
-}
-
-void knotWindow::startSmooth(int st, int ra, bool cont) {
-  smoothSteps = st;
-  redrawAfter = ra;
-  continuousSmoothing = cont;
-
-	this->smoothingThread.start();
-  statusBar()->showMessage("Smoothing…");
-	this->updateActions();
 }
 
 SmoothingThread::SmoothingThread(knotWindow &window) : window(window) {

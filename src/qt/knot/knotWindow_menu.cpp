@@ -29,11 +29,11 @@ void knotWindow::initMenu() {
   mathMenu->addAction("View parameters", this, SLOT(math()));
   mathMenu->addSeparator();
 	this->registerAction(
-  	mathMenu->addAction("Start smoothing…", this, SLOT(decreaseEnergy())),
+  	mathMenu->addAction("Start smoothing", [this] { this->startSmoothing(); }),
 		[this](QAction &action) { action.setEnabled(!this->smoothingThread.isRunning()); }
 	);
 	this->registerAction(
-  	mathMenu->addAction("Stop smoothing", this, SLOT(stop())),
+  	mathMenu->addAction("Stop smoothing", [this] { this->stopSmoothing(); }),
 		[this](QAction &action) { action.setEnabled(this->smoothingThread.isRunning()); }
 	);
   mathMenu->addSeparator();
@@ -58,11 +58,11 @@ void knotWindow::initMenu() {
   optionsMenu->addAction("Seifert surface back color…", [this] { this->knotWidget()->setSeifertBackColor(); });
 
 	this->registerAction(
-		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->smooth(); }),
+		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->startSmoothing(); }),
 		[this](QAction &action) { action.setVisible(!this->smoothingThread.isRunning()); }
 	);
 	this->registerAction(
-		addToolbarAction("stop.svg", "Interrupt smoothing", [this] { this->stop(); }),
+		addToolbarAction("stop.svg", "Interrupt smoothing", [this] { this->stopSmoothing(); }),
 		[this](QAction &action) { action.setVisible(this->smoothingThread.isRunning()); }
 	);
   addToolbarSeparator();

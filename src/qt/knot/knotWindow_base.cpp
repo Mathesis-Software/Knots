@@ -28,10 +28,9 @@
 #include "knotWindow.h"
 #include "knotWindow_math.h"
 #include "KnotWidget.h"
-#include "../diagram/diagramWindow.h"
+#include "../diagram/DiagramWidget.h"
 
-void knotWindow::init() {
-	auto widget = new KnotWidget(this, this->knot);
+void knotWindow::init(KnotWidget *widget) {
 	this->setCentralWidget(widget);
 
 	this->connect(widget, &KnotWidget::setActionTip, [this](const QString &text) {
@@ -51,12 +50,12 @@ void knotWindow::init() {
 	this->updateActions();
 }
 
-knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc) {
-  this->init();
+knotWindow::knotWindow(const rapidjson::Document &doc) {
+  this->init(new KnotWidget(this, doc));
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()) {
-  this->init();
+knotWindow::knotWindow(const DiagramWidget &diagramWidget) {
+  this->init(new KnotWidget(this, diagramWidget.diagram.diagram(), diagramWidget.width(), diagramWidget.height()));
 }
 
 knotWindow::~knotWindow() {
@@ -76,7 +75,7 @@ void knotWindow::closeEvent(QCloseEvent *event) {
 }
 
 void knotWindow::updateActions() {
-  setWindowTitle(this->knot.caption().c_str());
+  setWindowTitle(this->knotWidget()->knot().caption().c_str());
 	if (mth) {
 		mth->recompute();
 	}
@@ -86,14 +85,23 @@ void knotWindow::updateActions() {
 void knotWindow::rename() {
 	bool ok;
 	const QString text = QInputDialog::getText(
-		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knot.caption().c_str(), &ok
+		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knotWidget()->knot().caption().c_str(), &ok
 	);
   if (ok) {
-		this->knot.setCaption(text.toStdString());
+		this->knotWidget()->setCaption(text);
 		this->updateActions();
 	}
 }
 
 KnotWidget *knotWindow::knotWidget() const {
 	return dynamic_cast<KnotWidget*>(this->centralWidget());
+}
+
+bool knotWindow::isSaved() const {
+	auto widget = this->knotWidget();
+	return !widget || widget->isKnotSaved();
+}
+
+void knotWindow::saveIt(std::ostream &os) {
+	this->knotWidget()->saveKnot(os);
 }

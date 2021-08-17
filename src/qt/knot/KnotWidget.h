@@ -60,7 +60,7 @@ friend class SmoothingThread;
 Q_OBJECT
 
 private:
-	KE::ThreeD::KnotWrapper &knot;
+	KE::ThreeD::KnotWrapper _knot;
 
 	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
 	KE::ThreeD::Point seifertStartPoint;
@@ -69,9 +69,18 @@ private:
 	SmoothingThread smoothingThread;
 
 public:
-	KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot);
+	KnotWidget(QWidget *parent, const rapidjson::Document &doc);
+	KnotWidget(QWidget *parent, const KE::TwoD::Diagram &diagram, std::size_t width, std::size_t height);
 
+private:
+	void init();
+
+public:
+	const KE::ThreeD::KnotWrapper &knot() const { return this->_knot; }
 	const KE::GL::Color &backgroundColor() const override;
+
+  void saveKnot(std::ostream &os);
+	bool isKnotSaved() const;
 
   void startSmoothing();
   void stopSmoothing();
@@ -82,6 +91,7 @@ public:
   void toggleSeifertSurfaceVisibility();
   void moveSeifertBasePoint(double distance);
 
+  void setCaption(const QString &caption) { this->_knot.setCaption(caption.toStdString()); }
   void setLength();
   void setNumberOfPoints();
   void setThickness();

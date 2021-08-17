@@ -56,7 +56,7 @@ public:
 
 	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
 	void rotate(int, int);
-	double currMatr(int i, int j) { return this->currentMatrix[4 * i + j]; }
+	double currMatr(int i, int j) const { return this->currentMatrix[4 * i + j]; }
 };
 
 #endif /* __GLWIDGET_H__ */

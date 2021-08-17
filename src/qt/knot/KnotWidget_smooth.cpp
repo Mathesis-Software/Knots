@@ -44,7 +44,7 @@ void KnotWidget::stopSmoothingAndWait() {
 	}
 }
 
-SmoothingThread::SmoothingThread(KnotWidget *widget) : knot(widget->knot) {
+SmoothingThread::SmoothingThread(KnotWidget *widget) : knot(widget->_knot) {
 	connect(this, &SmoothingThread::knotChanged, [widget] { widget->onKnotChanged(false); });
 	connect(this, &SmoothingThread::finished, [widget] { widget->onKnotChanged(true); });
 }

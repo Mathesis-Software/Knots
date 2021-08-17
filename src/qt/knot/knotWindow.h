@@ -28,21 +28,19 @@
 class KnotWidget;
 
 class paramWindow;
-class diagramWindow;
+class DiagramWidget;
 class knotWindow;
 
 class knotWindow : public GLWindow {
 
 private:
-	KE::ThreeD::KnotWrapper knot;
-
   QMenu *mathMenu;
   QMenu *viewMenu;
 
   friend class paramWindow;
   paramWindow *mth;
 
-  void init();
+  void init(KnotWidget *widget);
   void initMenu();
 
 	bool isSaved() const override;
@@ -56,7 +54,7 @@ private:
 
 public:
   knotWindow(const rapidjson::Document &doc);
-  knotWindow(const diagramWindow &diagram);
+  knotWindow(const DiagramWidget &diagramWidget);
   ~knotWindow();
 
 private:

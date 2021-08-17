@@ -164,7 +164,7 @@ void diagramWindow::convert() {
 		return;
 	}
 
-	(new knotWindow(*this))->show();
+	(new knotWindow(*this->diagramWidget()))->show();
 }
 
 void diagramWindow::saveIt(std::ostream &os) {

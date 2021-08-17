@@ -24,21 +24,29 @@
 #include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"
 
-KnotWidget::KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(this) {
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
+KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), _knot(doc), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(this) {
+	this->init();
+}
+
+KnotWidget::KnotWidget(QWidget *parent, const KE::TwoD::Diagram &diagram, std::size_t width, std::size_t height) : GLWidget(parent), _knot(diagram, width, height), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(this) {
+	this->init();
+}
+
+void KnotWidget::init() {
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot(), 28);
   this->addSurface(this->knotSurface);
-  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
+  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot(), this->seifertStartPoint);
   this->addSurface(this->seifertSurface);
 }
 
 const KE::GL::Color &KnotWidget::backgroundColor() const {
-	const auto ref = this->knot.backgroundColor;
+	const auto ref = this->knot().backgroundColor;
 	return ref ? *ref : KE::GL::Color::white;
 }
 
 void KnotWidget::moveSeifertBasePoint(double distance) {
 	this->seifertStartPoint.move(
-		KE::GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot.snapshot()), distance
+		KE::GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot().snapshot()), distance
 	);
 	this->seifertSurface->destroy();
 	this->update();
@@ -46,9 +54,9 @@ void KnotWidget::moveSeifertBasePoint(double distance) {
 
 void KnotWidget::toggleSeifertSurfaceVisibility() {
   if (this->seifertSurface->isVisible()) {
-    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(false);
+    this->_knot.isSeifertSurfaceVisible = std::make_shared<bool>(false);
   } else {
-    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
+    this->_knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
   }
 
   this->update();

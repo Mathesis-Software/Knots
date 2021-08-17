@@ -22,22 +22,28 @@
 #include <math.h>
 #include "seifert.h"
 
-static bool test(const KE::ThreeD::Vector &v0, const KE::ThreeD::Vector &v1, const KE::ThreeD::Vector &v2, const KE::ThreeD::Vector &v3) {
+namespace KE { namespace GL {
+
+namespace {
+
+bool test(const ThreeD::Vector &v0, const ThreeD::Vector &v1, const ThreeD::Vector &v2, const ThreeD::Vector &v3) {
   // Вспомогательная процедура, проверяющая циклический порядок векторов
   // v1, v2, v3. Вектор v0 ортогонален им всем и задает циклический порядок.
-	KE::ThreeD::Vector u1(v1);
+	ThreeD::Vector u1(v1);
 	u1.add(v2, -1);
-	KE::ThreeD::Vector u2(v1);
+	ThreeD::Vector u2(v1);
 	u2.add(v3, -1);
 	return v0.scalar_product(u1.vector_product(u2)) > 0;
 }
 
-static void orthn(const KE::ThreeD::Vector &v0, KE::ThreeD::Vector &v1) {
+void orthn(const ThreeD::Vector &v0, ThreeD::Vector &v1) {
   // Вспомогательная процедура. Делает вектор v1 ортогональным v0
   // и нормирует его.
 	const double a = v0.scalar_product(v1) / v0.square();
 	v1.add(v0, -a);
 	v1.normalize();
+}
+
 }
 
 void seifert_list::insert_after(seifert *s) {
@@ -91,8 +97,8 @@ void seifert_list::insert(seifert *s) {
     // Создаем переменные для векторов направлений из центра на соседей,
     // vect0 -- для нового соседа, vect1 и vect2 -- для двух подряд
     // идущих старых. Записываем в vect0 и vect1 начальные значения.
-		KE::ThreeD::Vector vect0(basepoint->point, s->point);
-		KE::ThreeD::Vector vect1(basepoint->point, value->point);
+		ThreeD::Vector vect0(basepoint->point, s->point);
+		ThreeD::Vector vect1(basepoint->point, value->point);
     orthn(basepoint->gradient, vect0);
     orthn(basepoint->gradient, vect1);
 
@@ -100,7 +106,7 @@ void seifert_list::insert(seifert *s) {
     seifert_list *current = this;
     for (;;) {
       // Создаем и нормируем vect2.
-			KE::ThreeD::Vector vect2(basepoint->point, current->next->value->point);
+			ThreeD::Vector vect2(basepoint->point, current->next->value->point);
       orthn(basepoint->gradient, vect2);
 
       // Проверяем, сюда ли следует вставить нового соседа.
@@ -143,3 +149,5 @@ seifert_list::~seifert_list() {
     delete current;
   }
 }
+
+}}

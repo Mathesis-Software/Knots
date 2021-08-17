@@ -4,7 +4,6 @@
 
 ### Code structure
 
-* move everything into namespaces
 * consistent source file names
 * drop "qt/setValue" code
 * (?) merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth

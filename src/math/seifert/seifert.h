@@ -24,15 +24,12 @@
 
 #include "../knot/Knot.h"
 
-class seifert;
-class seifert_list;
-class seifert_ord;
-
 namespace KE { namespace GL {
 
 class SeifertSurface;
 
-}}
+class seifert;
+class seifert_ord;
 
 class seifert_list {
 
@@ -48,7 +45,7 @@ private:
 	~seifert_list();
 
 	friend class seifert;
-	friend class KE::GL::SeifertSurface;
+	friend class SeifertSurface;
 };
 
 class seifert_ord {
@@ -63,15 +60,15 @@ private:
 	~seifert_ord();
 
 	friend class seifert;
-	friend class KE::GL::SeifertSurface;
+	friend class SeifertSurface;
 };
 
 class seifert {
 
 private:
-	const KE::ThreeD::Knot::Snapshot snapshot;
-	const KE::ThreeD::Point point;
-	const KE::ThreeD::Vector gradient;
+	const ThreeD::Knot::Snapshot snapshot;
+	const ThreeD::Point point;
+	const ThreeD::Vector gradient;
 
 	double localEps;
 	seifert_list *neighborhood;
@@ -79,20 +76,22 @@ private:
 
 	void searchForNeighbor();
 	void checkNeighborhood();
-	void addPoint(const KE::ThreeD::Vector &direction);
-	void addPoint60(const KE::ThreeD::Vector &direction);
+	void addPoint(const ThreeD::Vector &direction);
+	void addPoint60(const ThreeD::Vector &direction);
 	seifert_list *hasNeighbor(seifert*);
 	void markUsed(seifert*, seifert*);
 	void correction_local();
 	void correction();
 
 public:
-	seifert(const KE::ThreeD::Knot::Snapshot &snapshot, const KE::ThreeD::Point &point, seifert* = nullptr);
+	seifert(const ThreeD::Knot::Snapshot &snapshot, const ThreeD::Point &point, seifert* = nullptr);
 	~seifert();
 
 	friend class seifert_ord;
 	friend class seifert_list;
-	friend class KE::GL::SeifertSurface;
+	friend class SeifertSurface;
 };
+
+}}
 
 #endif /* __SEIFERT_H__ */

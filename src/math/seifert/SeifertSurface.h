@@ -25,9 +25,9 @@
 #include "../knotWrapper/KnotWrapper.h"
 #include "../../gl/surface/Surface.h"
 
-class seifert;
-
 namespace KE { namespace GL {
+
+class seifert;
 
 class SeifertSurface : public Surface {
 

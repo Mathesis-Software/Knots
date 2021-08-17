@@ -31,10 +31,11 @@
 class abstractWindow : public QMainWindow {
 
 private:
-public:
   static std::list<abstractWindow*> AWRegister;
 
 public:
+  static QWidget *newDiagram();
+  static QWidget *openFile();
 	static void exitApplication();
 
 private:

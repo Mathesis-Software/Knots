@@ -1,10 +1,10 @@
 ROOTDIR = ../..
 
-all: gl.a
+all: widget.a
 
 include $(ROOTDIR)/config.mk
 
-gl.a: $(OBJECTS)
+widget.a: $(OBJECTS)
 	@echo -n 'Linking $@ ...'
 	@$(RM) $@
 	@$(AR) $@ $^

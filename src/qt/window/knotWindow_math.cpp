@@ -22,7 +22,7 @@
 #include "../../math/computables/computables.h"
 #include "../../math/computables/experimental.h"
 #include "knotWindow_math.h"
-#include "KnotWidget.h"
+#include "../widget/KnotWidget.h"
 
 void knotWindow::math() {
 	if (mth) {

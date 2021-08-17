@@ -30,10 +30,6 @@ namespace KE { namespace Qt {
 
 class ManagerWindow : public QMainWindow {
 
-public:
-  static QWidget *newDiagram();
-  static QWidget *openFile();
-
 private:
 	QMenu *fileMenu;
 

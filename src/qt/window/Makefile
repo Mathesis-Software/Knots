@@ -1,10 +1,10 @@
 ROOTDIR = ../..
 
-all: diagram.a
+all: window.a
 
 include $(ROOTDIR)/config.mk
 
-diagram.a: $(OBJECTS)
+window.a: $(OBJECTS)
 	@echo -n 'Linking $@ ...'
 	@$(RM) $@
 	@$(AR) $@ $^

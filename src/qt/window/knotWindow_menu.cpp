@@ -21,8 +21,8 @@
 
 #include <QtWidgets/QMenuBar>
 
-#include "KnotWidget.h"
 #include "knotWindow.h"
+#include "../widget/KnotWidget.h"
 
 void knotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("Math");

@@ -19,44 +19,20 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __DIAGRAMWINDOW_H__
-#define __DIAGRAMWINDOW_H__
+#ifndef __GLWINDOW_H__
+#define __GLWINDOW_H__
 
-#include <QtWidgets/QMenu>
+#include "abstractWindow.h"
 
-#include "DiagramWidget.h"
-#include "../abstractWindow/abstractWindow.h"
+class GLWidget;
 
-class diagramWindow : public abstractWindow {
+class GLWindow : public abstractWindow {
 
 private:
-	QMenu *actionsMenu;
-
-	void init(DiagramWidget *widget);
-
-	QString fileFilter() const override { return "Diagram files (*.dgr)"; }
-
-	void printIt(QPrinter*) override;
-
-	void setMode(DiagramWidget::EditorMode mode);
-
-	void convert();
-	void clear();
-	void simplify();
-
-	void rename() override;
+	void printIt(QPrinter*);
 
 public:
-	diagramWindow(const rapidjson::Document &doc);
-	diagramWindow();
-	~diagramWindow();
-
-	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
-
-	void saveIt(std::ostream&) override;
-	bool isSaved() const override;
-
-	void updateActions() override;
+	GLWindow();
 };
 
-#endif /* __DIAGRAMWINDOW_H__ */
+#endif /* __GLWINDOW_H__ */

@@ -29,7 +29,7 @@
 #include <rapidjson/writer.h>
 
 #include "diagramWindow.h"
-#include "../knot/knotWindow.h"
+#include "knotWindow.h"
 
 diagramWindow::diagramWindow(const rapidjson::Document &doc) {
 	this->init(new DiagramWidget(this, doc));

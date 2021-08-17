@@ -24,7 +24,7 @@
 
 #include <QtCore/QThread>
 
-#include "../gl/GLWidget.h"
+#include "GLWidget.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace GL {

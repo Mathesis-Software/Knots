@@ -27,8 +27,8 @@
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
-#include "KnotWidget.h"
-#include "../diagram/DiagramWidget.h"
+#include "../widget/KnotWidget.h"
+#include "../widget/DiagramWidget.h"
 
 void knotWindow::init(KnotWidget *widget) {
 	this->setCentralWidget(widget);

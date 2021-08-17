@@ -22,7 +22,7 @@
 #ifndef __KNOTWINDOW_H__
 #define __KNOTWINDOW_H__
 
-#include "../gl/GLWindow.h"
+#include "GLWindow.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
 class KnotWidget;

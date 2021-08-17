@@ -19,21 +19,13 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QFileDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QPushButton>
 
-#include <rapidjson/istreamwrapper.h>
-
-#include "../../util/rapidjson.h"
 #include "manager.h"
 #include "about.h"
-#include "iconProvider.h"
-#include "../knot/knotWindow.h"
-#include "../diagram/diagramWindow.h"
+#include "../window/abstractWindow.h"
 
 namespace KE { namespace Qt {
 
@@ -50,7 +42,7 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Create new diagram");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::clicked, [this] {
-			auto window = newDiagram();
+			auto window = abstractWindow::newDiagram();
 			window->setGeometry(this->geometry());
 			this->close();
 		});
@@ -60,7 +52,7 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Open existing file");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::clicked, [this] {
-			auto window = openFile();
+			auto window = abstractWindow::openFile();
 			if (window) {
 				window->setGeometry(this->geometry());
 				this->close();
@@ -76,69 +68,6 @@ ManagerWindow::ManagerWindow() {
 
 ManagerWindow::~ManagerWindow() {
 	delete fileMenu;
-}
-
-namespace {
-
-QString getOpenFileNameEx() {
-	QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
-	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
-	dialog.setIconProvider(FileIconProvider::instance());
-	dialog.setNameFilters({
-		"Knot Editor files (*.knt *.dgr)",
-		"Knot files only (*.knt)",
-		"Diagram files only (*.dgr)",
-		"Any files (*)"
-	});
-	if (dialog.exec() == QDialog::Accepted) {
-		return dialog.selectedUrls().value(0).toLocalFile();
-	}
-	return QString();
-}
-
-}
-
-QWidget *ManagerWindow::newDiagram() {
-	auto window = new diagramWindow();
-	window->show();
-	return window;
-}
-
-QWidget *ManagerWindow::openFile() {
-	QString filename = getOpenFileNameEx();
-
-	if (filename.isEmpty()) {
-		return nullptr;
-	}
-
-	try {
-		std::ifstream is(filename.toStdString());
-		if (!is) {
-			throw std::runtime_error("Cannot read the file content");
-		}
-		rapidjson::Document doc;
-		rapidjson::IStreamWrapper wrapper(is);
-		doc.ParseStream(wrapper);
-		is.close();
-
-		abstractWindow *window = nullptr;
-		if (doc.IsNull()) {
-			throw std::runtime_error("The file is not in JSON format");
-		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
-			window = new diagramWindow(doc);
-		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
-			window = new knotWindow(doc);
-		} else {
-			throw std::runtime_error("The file does not represent a knot nor a diagram");
-		}
-
-		window->show();
-		return window;
-	} catch (const std::runtime_error &e) {
-		abstractWindow::AWRegister.pop_back();
-		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
-		return nullptr;
-	}
 }
 
 }}

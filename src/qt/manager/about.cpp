@@ -25,7 +25,7 @@
 #include <QtWidgets/QLabel>
 
 #include "about.h"
-#include "../abstractWindow/abstractWindow.h"
+#include "../window/abstractWindow.h"
 
 namespace KE { namespace Qt {
 

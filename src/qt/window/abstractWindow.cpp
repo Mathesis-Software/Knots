@@ -19,35 +19,25 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <cstdlib>
-
 #include <QtGui/QCloseEvent>
-#include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
-#include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
-#include <QtWidgets/QMenu>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
-#include <QtWidgets/QWhatsThis>
 
 #include "abstractWindow.h"
-#include "../setValue/setValue.h"
 #include "../manager/about.h"
 #include "../manager/iconProvider.h"
-#include "../manager/manager.h"
-
-std::list<abstractWindow*> abstractWindow::AWRegister;
 
 abstractWindow::abstractWindow() {
 	this->setAttribute(Qt::WA_DeleteOnClose);
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto newd = fileMenu->addAction("New diagram", [this] { KE::Qt::ManagerWindow::newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [this] { abstractWindow::newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [this] { KE::Qt::ManagerWindow::openFile(); });
+	auto open = fileMenu->addAction("Open…", [this] { abstractWindow::openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
@@ -138,22 +128,6 @@ void abstractWindow::print() {
 	//if (prn.setup(this)) {
 	//	printIt(&prn);
 	//}
-}
-
-void abstractWindow::exitApplication() {
-	if (closeAllWindows()) {
-		qApp->quit();
-	}
-}
-
-bool abstractWindow::closeAllWindows() {
-	while (!abstractWindow::AWRegister.empty()) {
-		abstractWindow *av = abstractWindow::AWRegister.back();
-		if (!av->close()) {
-			return false;
-		}
-	}
-	return true;
 }
 
 QAction *abstractWindow::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {

@@ -31,14 +31,14 @@ class KnotWindow;
 class KnotMathDialog : public QDialog {
 
 private:
-	KnotWindow *Parent;
+	KnotWindow &window;
 	std::vector<std::function<void()>> callbacks;
 
 private:
 	void closeEvent(QCloseEvent*);
 
 public:
-	KnotMathDialog(KnotWindow*);
+	KnotMathDialog(KnotWindow &window);
 	void recompute();
 };
 

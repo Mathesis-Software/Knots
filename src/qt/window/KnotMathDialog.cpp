@@ -32,24 +32,23 @@
 namespace KE { namespace Qt {
 
 void KnotWindow::math() {
-	if (mth) {
-		mth->show();
-		mth->raise();
+	if (this->mth) {
+		this->mth->show();
+		this->mth->raise();
 		return;
 	}
 
-	mth = new KnotMathDialog (this);
-	mth->setWindowTitle ((QString) "Parameters for " + windowTitle ());
-	mth->show ();
+	this->mth = new KnotMathDialog(*this);
+	this->mth->setWindowTitle("Parameters for " + this->windowTitle());
+	this->mth->show();
 }
 
-KnotMathDialog::KnotMathDialog (KnotWindow *p) {
-	Parent = p;
+KnotMathDialog::KnotMathDialog(KnotWindow &window) : window(window) {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 
 	auto layout = new QGridLayout(this);
 
-	const auto &knot = p->knotWidget()->knot();
+	const auto &knot = window.knotWidget()->knot();
 	std::vector<std::shared_ptr<ThreeD::Computables::Computable>> computables = {
 		std::make_shared<ThreeD::Computables::MoebiusEnergy>(knot),
 		std::make_shared<ThreeD::Computables::AverageCrossingNumber>(knot, false),
@@ -97,7 +96,7 @@ void KnotMathDialog::recompute() {
 }
 
 void KnotMathDialog::closeEvent(QCloseEvent*) {
-	Parent->mth = nullptr;
+	this->window.mth = nullptr;
 }
 
 }}

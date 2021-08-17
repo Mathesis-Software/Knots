@@ -22,7 +22,7 @@
 #ifndef __KNOTWINDOW_H__
 #define __KNOTWINDOW_H__
 
-#include "GLWindow.h"
+#include "Window.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
 namespace KE { namespace Qt {
@@ -33,7 +33,7 @@ class paramWindow;
 class DiagramWidget;
 class KnotWindow;
 
-class KnotWindow : public GLWindow {
+class KnotWindow : public Window {
 
 private:
   QMenu *mathMenu;
@@ -47,6 +47,7 @@ private:
 
 	bool isSaved() const override;
 
+	void printIt(QPrinter*);
   void saveIt(std::ostream&);
 
 private:

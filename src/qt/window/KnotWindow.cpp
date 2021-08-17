@@ -20,6 +20,7 @@
  */
 
 #include <QtGui/QCloseEvent>
+#include <QtGui/QPainter>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
@@ -106,6 +107,14 @@ bool KnotWindow::isSaved() const {
 
 void KnotWindow::saveIt(std::ostream &os) {
 	this->knotWidget()->saveKnot(os);
+}
+
+void KnotWindow::printIt(QPrinter *prn) {
+	QPainter pnt;
+	pnt.begin(prn);
+	raise();
+	pnt.drawPixmap(0, 0, QPixmap::grabWindow(centralWidget()->winId()));
+	pnt.end();
 }
 
 }}

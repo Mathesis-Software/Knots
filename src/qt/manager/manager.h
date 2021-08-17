@@ -37,9 +37,6 @@ public:
 private:
 	QMenu *fileMenu;
 
-private:
-  void exit();
-
 public:
   ManagerWindow();
   ~ManagerWindow();

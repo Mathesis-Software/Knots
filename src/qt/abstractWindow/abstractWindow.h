@@ -31,11 +31,20 @@
 class abstractWindow : public QMainWindow {
 
 private:
+public:
+  static std::list<abstractWindow*> AWRegister;
+
+public:
+	static void exitApplication();
+
+private:
+  static bool closeAllWindows();
+
+private:
   QToolBar *toolbar;
 	std::map<QAction*,std::function<void(QAction&)>> actionsMap;
 
 protected:
-	void exit();
   void closeEvent(QCloseEvent*);
 
   virtual void printIt(QPrinter*) = 0;
@@ -55,13 +64,8 @@ protected:
 public:
   abstractWindow();
   virtual ~abstractWindow();
-
 	virtual void updateActions();
-
   virtual QString fileFilter() const = 0;
-
-  static std::list<abstractWindow*> AWRegister;
-  static bool closeAllWindows();
 
 protected:
   virtual void rename() = 0;

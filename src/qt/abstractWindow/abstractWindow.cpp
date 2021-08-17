@@ -60,7 +60,7 @@ abstractWindow::abstractWindow() {
 	fileMenu->addSeparator();
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
-	auto quit = fileMenu->addAction("Quit", [this] { this->exit(); });
+	auto quit = fileMenu->addAction("Quit", [] { abstractWindow::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	this->toolbar = new QToolBar(this);
@@ -140,7 +140,7 @@ void abstractWindow::print() {
 	//}
 }
 
-void abstractWindow::exit() {
+void abstractWindow::exitApplication() {
 	if (closeAllWindows()) {
 		qApp->quit();
 	}

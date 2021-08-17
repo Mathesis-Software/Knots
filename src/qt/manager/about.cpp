@@ -19,11 +19,13 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QLabel>
 
 #include "about.h"
+#include "../abstractWindow/abstractWindow.h"
 
 namespace KE { namespace Qt {
 
@@ -54,6 +56,19 @@ AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
 	text->setFont(fnt);
 	text->setAlignment(::Qt::AlignCenter);
 	text->setText(QString("Knot Editor\nversion ") + VERSION);
+
+	auto close = new QAction();
+	close->setShortcut(QKeySequence("Ctrl+W"));
+	QObject::connect(close, &QAction::triggered, [this] { this->close(); });
+	this->addAction(close);
+
+	auto quit = new QAction();
+	quit->setShortcut(QKeySequence("Ctrl+Q"));
+	QObject::connect(quit, &QAction::triggered, [this] {
+		this->close();
+		abstractWindow::exitApplication();
+	});
+	this->addAction(quit);
 }
 
 void AboutWindow::showMe() {

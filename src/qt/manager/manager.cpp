@@ -41,7 +41,7 @@ ManagerWindow::ManagerWindow() {
 	fileMenu = this->menuBar()->addMenu("File");
 	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
-	auto quit = fileMenu->addAction("Quit", [this] { this->exit(); });
+	auto quit = fileMenu->addAction("Quit", [] { abstractWindow::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	auto center = new QWidget;
@@ -138,12 +138,6 @@ QWidget *ManagerWindow::openFile() {
 		abstractWindow::AWRegister.pop_back();
 		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
-	}
-}
-
-void ManagerWindow::exit() {
-	if (abstractWindow::closeAllWindows()) {
-		qApp->quit();
 	}
 }
 

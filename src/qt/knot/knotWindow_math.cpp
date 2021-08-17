@@ -65,13 +65,13 @@ paramWindow::paramWindow (knotWindow *p) {
 
 void paramWindow::recompute() {
 	for (int i = 0; i < nLabels; i++) {
-		pLabels [i]->renew ();
+		pLabels[i]->renew();
 	}
 }
 
 paramWindow::~paramWindow() {
 	for (int i = 0; i < nLabels; i++) {
-		delete pLabels [i];
+		delete pLabels[i];
 	}
 
 	delete[] pLabels;

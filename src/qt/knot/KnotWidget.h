@@ -25,14 +25,44 @@
 #include "../gl/GLWidget.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
+namespace KE { namespace GL {
+
+class KnotSurface;
+class SeifertSurface;
+
+}}
+
 class KnotWidget : public GLWidget {
 
+Q_OBJECT
+
 private:
-	const KE::ThreeD::KnotWrapper &knot;
+	KE::ThreeD::KnotWrapper &knot;
+
+	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
+	KE::ThreeD::Point seifertStartPoint;
+	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
 
 public:
-	KnotWidget(QWidget *parent, const KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot) {}
+	KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot);
 	const KE::GL::Color &backgroundColor() const override;
+
+	bool isSeifertSurfaceVisible() const;
+  void toggleSeifertSurfaceVisibility();
+  void moveSeifertBasePoint(double distance);
+
+  void setLength();
+  void setNumberOfPoints();
+  void setThickness();
+  void setBgColor();
+  void setKnotColor();
+  void setSeifertFrontColor();
+  void setSeifertBackColor();
+
+	void onKnotChanged();
+
+signals:
+	void actionsUpdated();
 };
 
 #endif /* __KNOTWIDGET_H__ */

@@ -22,41 +22,10 @@
 #include <cstdio>
 
 #include "knotWindow.h"
+#include "KnotWidget.h"
 #include "knotWindow_math.h"
 #include "knotWindow_param.h"
 #include "../setValue/setValue.h"
-#include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/SeifertSurface.h"
-
-void knotWindow::setLength() {
-	const auto snapshot = this->knot.snapshot();
-  double d = setDouble ("Knot length", snapshot.knotLength(), 1.0, 1000.0);
-  if (d != snapshot.knotLength()) {
-    this->knot.setLength(d);
-    this->knot.center();
-    this->knotSurface->destroy(false);
-    this->seifertSurface->destroy(false);
-    this->centralWidget()->update();
-    if (mth) {
-      mth->recompute();
-		}
-  }
-}
-
-void knotWindow::setNumberOfPoints() {
-	const std::size_t numberOfPoints = setInt("Set number of points", this->knot.snapshot().size(), 10, 30000);
-  if (numberOfPoints != this->knot.snapshot().size()) {
-		const double length = this->knot.snapshot().knotLength();
-    this->knot.normalize(numberOfPoints);
-    this->knot.center();
-		this->knot.setLength(length);
-    this->knotSurface->destroy(false);
-    this->centralWidget()->update();
-    if (mth) {
-      mth->recompute();
-		}
-  }
-}
 
 void knotWindow::decreaseEnergy() {
   int steps, redraw_after;

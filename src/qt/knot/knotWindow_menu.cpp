@@ -21,10 +21,8 @@
 
 #include <QtWidgets/QMenuBar>
 
+#include "KnotWidget.h"
 #include "knotWindow.h"
-
-#include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("Math");
@@ -39,25 +37,25 @@ void knotWindow::initMenu() {
 		[this](QAction &action) { action.setEnabled(this->smoothingThread.isRunning()); }
 	);
   mathMenu->addSeparator();
-  mathMenu->addAction("Number of points…", this, SLOT(setNumberOfPoints()));
-  mathMenu->addAction("Length…", this, SLOT(setLength()));
+  mathMenu->addAction("Number of points…", [this] { this->knotWidget()->setNumberOfPoints(); });
+  mathMenu->addAction("Length…", [this] { this->knotWidget()->setLength(); });
   
   viewMenu = menuBar()->addMenu("View");
 	auto toggleSeifert = this->registerAction(
-		viewMenu->addAction("Show Seifert surface", this, &knotWindow::toggleSeifertSurfaceVisibility),
+		viewMenu->addAction("Show Seifert surface", [this] { this->knotWidget()->toggleSeifertSurfaceVisibility(); }),
 		[this](QAction &action) {
-			action.setChecked(this->seifertSurface->isVisible());  
+			action.setChecked(this->knotWidget()->isSeifertSurfaceVisible());  
 		}
 	);
 	toggleSeifert->setCheckable(true);
   
   QMenu *optionsMenu = menuBar()->addMenu("Options");
-  optionsMenu->addAction("Thickness…", this, SLOT(setThickness()));
+  optionsMenu->addAction("Thickness…", [this] { this->knotWidget()->setThickness(); });
   optionsMenu->addSeparator();
-  optionsMenu->addAction("Background color…", this, SLOT(setBgColor()));
-  optionsMenu->addAction("Knot color…", this, SLOT(setKnotColor()));
-  optionsMenu->addAction("Seifert surface front color…", this, SLOT(setSeifertFrontColor()));
-  optionsMenu->addAction("Seifert surface back color…", this, SLOT(setSeifertBackColor()));
+  optionsMenu->addAction("Background color…", [this] { this->knotWidget()->setBgColor(); });
+  optionsMenu->addAction("Knot color…", [this] { this->knotWidget()->setKnotColor(); });
+  optionsMenu->addAction("Seifert surface front color…", [this] { this->knotWidget()->setSeifertFrontColor(); });
+  optionsMenu->addAction("Seifert surface back color…", [this] { this->knotWidget()->setSeifertBackColor(); });
 
 	this->registerAction(
 		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->smooth(); }),
@@ -71,12 +69,12 @@ void knotWindow::initMenu() {
   addToolbarAction("math.svg", "Show parameters", [this] { this->math(); });
   addToolbarSeparator();
   this->registerAction(
-		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->moveSeifertBasePoint(0.02); }),
-		[this](QAction &action) { action.setEnabled(this->seifertSurface->isVisible()); }
+		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(0.02); }),
+		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
 	);
   this->registerAction(
-  	addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->moveSeifertBasePoint(-0.02); }),
-		[this](QAction &action) { action.setEnabled(this->seifertSurface->isVisible()); }
+  	addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(-0.02); }),
+		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
 	);
 
 	this->updateActions();

@@ -23,8 +23,7 @@
 #include <QtWidgets/QStatusBar>
 
 #include "knotWindow_math.h"
-#include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/SeifertSurface.h"
+#include "KnotWidget.h"
 
 void knotWindow::smooth() {
   if (!this->smoothingThread.isRunning()) {
@@ -54,15 +53,6 @@ void knotWindow::doSmooth() {
 	}
 }
 
-void knotWindow::onKnotChanged() {
-  if (this->knotSurface->destroy(false) || this->seifertSurface->destroy(false)) {
-		this->centralWidget()->update();
-		if (mth) {
-			mth->recompute();
-		}
-	}
-}
-
 void knotWindow::startSmooth(int st, int ra, bool cont) {
   smoothSteps = st;
   redrawAfter = ra;
@@ -73,9 +63,9 @@ void knotWindow::startSmooth(int st, int ra, bool cont) {
 	this->updateActions();
 }
 
-SmoothingThread::SmoothingThread(knotWindow &knot) : knot(knot) {
-	connect(this, &SmoothingThread::knotChanged, &knot, &knotWindow::onKnotChanged);
-	connect(this, &SmoothingThread::finished, &knot, &knotWindow::updateActions);
+SmoothingThread::SmoothingThread(knotWindow &window) : window(window) {
+	connect(this, &SmoothingThread::knotChanged, [&window] { window.knotWidget()->onKnotChanged(); });
+	connect(this, &SmoothingThread::finished, &window, &knotWindow::updateActions);
 }
 
 void SmoothingThread::run() {
@@ -86,7 +76,7 @@ void SmoothingThread::run() {
 			break;
 		}
 		this->msleep(20);
-		knot.doSmooth();
+		this->window.doSmooth();
 		emit knotChanged();
 	}
 }

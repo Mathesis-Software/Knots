@@ -21,7 +21,48 @@
 
 #include "KnotWidget.h"
 
+#include "../../math/knotSurface/KnotSurface.h"
+#include "../../math/seifert/SeifertSurface.h"
+
+KnotWidget::KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot), seifertStartPoint(0.0, 0.0, 0.4) {
+  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
+  this->addSurface(this->knotSurface);
+  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
+  this->addSurface(this->seifertSurface);
+}
+
 const KE::GL::Color &KnotWidget::backgroundColor() const {
 	const auto ref = this->knot.backgroundColor;
 	return ref ? *ref : KE::GL::Color::white;
+}
+
+void KnotWidget::moveSeifertBasePoint(double distance) {
+	this->seifertStartPoint.move(
+		KE::GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot.snapshot()), distance
+	);
+	this->seifertSurface->destroy(true);
+	this->update();
+}
+
+void KnotWidget::toggleSeifertSurfaceVisibility() {
+  if (this->seifertSurface->isVisible()) {
+    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(false);
+  } else {
+    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
+  }
+	this->seifertSurface->destroy(true);
+
+  this->update();
+	emit actionsUpdated();
+}
+
+void KnotWidget::onKnotChanged() {
+  if (this->knotSurface->destroy(false) || this->seifertSurface->destroy(false)) {
+		this->update();
+		emit actionsUpdated();
+	}
+}
+
+bool KnotWidget::isSeifertSurfaceVisible() const {
+	return this->seifertSurface->isVisible();
 }

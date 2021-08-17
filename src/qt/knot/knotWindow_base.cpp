@@ -28,15 +28,11 @@
 #include "knotWindow_math.h"
 #include "KnotWidget.h"
 #include "../diagram/diagramWindow.h"
-#include "../../math/knotSurface/KnotSurface.h"
-#include "../../math/seifert/SeifertSurface.h"
 
 void knotWindow::init() {
-	this->setCentralWidget(new KnotWidget(this, this->knot));
-  this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
-  this->knotWidget()->addSurface(this->knotSurface);
-  this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
-  this->knotWidget()->addSurface(this->seifertSurface);
+	auto widget = new KnotWidget(this, this->knot);
+	this->setCentralWidget(widget);
+	this->connect(widget, &KnotWidget::actionsUpdated, this, &knotWindow::updateActions);
 
   mth = NULL;
 
@@ -46,11 +42,11 @@ void knotWindow::init() {
 	this->updateActions();
 }
 
-knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
+knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), smoothingThread(*this) {
   this->init();
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(*this) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()), smoothingThread(*this) {
   this->init();
 }
 
@@ -63,18 +59,6 @@ knotWindow::~knotWindow() {
   delete viewMenu;
 }
 
-void knotWindow::toggleSeifertSurfaceVisibility() {
-  if (this->seifertSurface->isVisible()) {
-    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(false);
-  } else {
-    this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
-  }
-	this->seifertSurface->destroy(true);
-
-  this->centralWidget()->update();
-	this->updateActions();
-}
-
 void knotWindow::closeEvent(QCloseEvent *event) {
 	abstractWindow::closeEvent(event);
 	if (event->isAccepted() && this->smoothingThread.isRunning()) {
@@ -85,6 +69,9 @@ void knotWindow::closeEvent(QCloseEvent *event) {
 
 void knotWindow::updateActions() {
   setWindowTitle(this->knot.caption().c_str());
+	if (mth) {
+		mth->recompute();
+	}
 	abstractWindow::updateActions();
 }
 
@@ -97,14 +84,6 @@ void knotWindow::rename() {
 		this->knot.setCaption(text.toStdString());
 		this->updateActions();
 	}
-}
-
-void knotWindow::moveSeifertBasePoint(double distance) {
-	this->seifertStartPoint.move(
-		KE::GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot.snapshot()), distance
-	);
-	this->seifertSurface->destroy(true);
-	this->centralWidget()->update();
 }
 
 KnotWidget *knotWindow::knotWidget() const {

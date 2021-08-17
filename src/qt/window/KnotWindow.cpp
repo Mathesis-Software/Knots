@@ -74,6 +74,9 @@ void KnotWindow::closeEvent(QCloseEvent *event) {
 	Window::closeEvent(event);
 	if (event->isAccepted()) {
 		this->knotWidget()->stopSmoothingAndWait();
+		if (this->mth) {
+			this->mth->close();
+		}
 	}
 }
 

@@ -19,6 +19,10 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <QtWidgets/QCheckBox>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
+
 #include "../../math/computables/computables.h"
 #include "../../math/computables/experimental.h"
 #include "KnotWindow_math.h"
@@ -40,6 +44,9 @@ void KnotWindow::math() {
 
 paramWindow::paramWindow (KnotWindow *p) {
 	Parent = p;
+	this->setAttribute(::Qt::WA_DeleteOnClose);
+
+	auto layout = new QGridLayout(this);
 
 	const auto &knot = p->knotWidget()->knot();
 	std::vector<std::shared_ptr<ThreeD::Computables::Computable>> computables = {
@@ -57,64 +64,39 @@ paramWindow::paramWindow (KnotWindow *p) {
 //		std::make_shared<ThreeD::Computables::Experimental2>(knot, 3, "Experimental 3"),
 //		std::make_shared<ThreeD::Computables::Experimental2>(knot, 4, "Experimental 4"),
 	};
-	nLabels = computables.size();
-	pLabels = new parameterLabel*[nLabels];
-	int index = 0;
-	for (auto computable : computables) {
-		pLabels[index] = new parameterLabel(this, computable, 20, 15 + 30 * index);
-		index += 1;
+	for (std::size_t index = 0; index < computables.size(); index += 1) {
+		const auto computable = computables[index];
+
+		auto checkbox = new QCheckBox(computable->name.c_str());
+		layout->addWidget(checkbox, index, 0);
+
+		auto value = new QLabel();
+		value->setFrameStyle(QFrame::Panel | QFrame::Sunken);
+		value->setMinimumWidth(100);
+		layout->addWidget(value, index, 1);
+
+		const auto callback = [checkbox, value, computable] {
+			if (checkbox->isChecked()) {
+				value->setText(QString::number(computable->value()));
+			} else {
+				value->setText(QString());
+			}
+		};
+		this->callbacks.push_back(callback);
+		QObject::connect(checkbox, &QCheckBox::clicked, callback);
 	}
-	setFixedSize (380, 25 + 30 * nLabels);
+
+	layout->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 void paramWindow::recompute() {
-	for (int i = 0; i < nLabels; i++) {
-		pLabels[i]->renew();
+	for (const auto &cb : this->callbacks) {
+		cb();
 	}
-}
-
-paramWindow::~paramWindow() {
-	for (int i = 0; i < nLabels; i++) {
-		delete pLabels[i];
-	}
-
-	delete[] pLabels;
 }
 
 void paramWindow::closeEvent(QCloseEvent*) {
-	Parent->mth = NULL;
-	delete this;
-}
-
-parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<ThreeD::Computables::Computable> computable, int x, int y) : QWidget(parent), computable(computable) {
-	lbl = new QLabel (this);
-	lbl->setGeometry (240, 0, 100, 25);
-	lbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-
-	chkbox = new QCheckBox (computable->name.c_str(), this);
-	chkbox->setGeometry (0, 0, 220, 25);
-	connect (chkbox, SIGNAL (clicked ()), SLOT (doit ()));
-
-	setGeometry (x, y, 340, 25);
-}
-
-parameterLabel::~parameterLabel() {
-	delete lbl;
-	delete chkbox;
-}
-
-void parameterLabel::doit() {
-	if (chkbox->isChecked()) {
-		lbl->setText(QString::number(computable->value()));
-	} else {
-		lbl->setText(QString());
-	}
-}
-
-void parameterLabel::renew() {
-	if (chkbox->isChecked()) {
-		lbl->setText(QString::number(computable->value()));
-	}
+	Parent->mth = nullptr;
 }
 
 }}

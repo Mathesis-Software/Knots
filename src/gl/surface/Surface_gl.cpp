@@ -30,8 +30,11 @@ void KE::GL::Surface::paint() {
 	}
 
 	// Если нужно, сначала делаем вычисления.
+	if (this->isObsolete()) {
+		this->points.clear();
+	}
 	if (this->points.empty()) {
-		calculate();
+		this->calculate();
 	}
 
 	// Устанавливаем цвета обеих сторон поверхности.

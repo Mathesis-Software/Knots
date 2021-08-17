@@ -58,11 +58,11 @@ void KnotSurface::setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridi
 		this->sines.push_back(sin(2 * M_PI / numberOfPointsOnMeridian * i));
 		this->cosines.push_back(cos(2 * M_PI / numberOfPointsOnMeridian * i));
 	}
-	this->destroy(true);
+	this->destroy();
 }
 
-bool KnotSurface::destroy(bool force) {
-	return Surface::destroy(force || !this->stored || this->stored->isObsolete());
+bool KnotSurface::isObsolete() const {
+	return Surface::isObsolete() || !this->stored || this->stored->isObsolete();
 }
 
 void KnotSurface::calculate() {

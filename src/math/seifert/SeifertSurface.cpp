@@ -125,15 +125,16 @@ void SeifertSurface::addTriangles(seifert *s) {
   }
 }
 
-bool SeifertSurface::destroy(bool force) {
-	return Surface::destroy(force || !this->stored || this->stored->isObsolete());
+bool SeifertSurface::isObsolete() const {
+	return Surface::isObsolete() || !this->stored || this->stored->isObsolete();
 }
 
 void SeifertSurface::calculate() {
-  // Создаем граф поверхности.
-	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(this->base.snapshot());
+	const auto snapshot = this->base.snapshot();
+	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(snapshot);
 
-  seifert *s = new seifert(this->base.snapshot(), this->startPoint);
+  // Создаем граф поверхности.
+  seifert *s = new seifert(snapshot, this->startPoint);
   s->correction();
 
   // Создаем поверхность.

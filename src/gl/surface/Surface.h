@@ -74,10 +74,11 @@ public:
 	void paint();
 
 	virtual bool isVisible() const = 0;
+	virtual bool isObsolete() const;
+	void destroy();
+
 	virtual const Color &frontColor() const = 0;
 	virtual const Color &backColor() const = 0;
-
-	virtual bool destroy(bool force);
 
 private:
 	Surface(const Surface&) = delete;

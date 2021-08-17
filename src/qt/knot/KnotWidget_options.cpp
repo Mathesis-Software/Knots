@@ -32,8 +32,6 @@ void KnotWidget::setLength() {
   if (d != snapshot.knotLength()) {
     this->knot.setLength(d);
     this->knot.center();
-    this->knotSurface->destroy(false);
-    this->seifertSurface->destroy(false);
     this->update();
 		emit actionsUpdated();
   }
@@ -46,7 +44,6 @@ void KnotWidget::setNumberOfPoints() {
     this->knot.normalize(numberOfPoints);
     this->knot.center();
 		this->knot.setLength(length);
-    this->knotSurface->destroy(false);
     this->update();
 		emit actionsUpdated();
   }
@@ -56,7 +53,7 @@ void KnotWidget::setThickness() {
   const double thickness = setDouble("Thickness", this->knotSurface->thickness(), 0.1, 10.0);
   if (thickness != this->knotSurface->thickness()) {
 		this->knot.knotThickness = std::make_shared<double>(thickness);
-    this->knotSurface->destroy(true);
+    this->knotSurface->destroy();
 		this->update();
   }
 }

@@ -40,7 +40,7 @@ void KnotWidget::moveSeifertBasePoint(double distance) {
 	this->seifertStartPoint.move(
 		KE::GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot.snapshot()), distance
 	);
-	this->seifertSurface->destroy(true);
+	this->seifertSurface->destroy();
 	this->update();
 }
 
@@ -50,14 +50,13 @@ void KnotWidget::toggleSeifertSurfaceVisibility() {
   } else {
     this->knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
   }
-	this->seifertSurface->destroy(true);
 
   this->update();
 	emit actionsUpdated();
 }
 
 void KnotWidget::onKnotChanged() {
-  if (this->knotSurface->destroy(false) || this->seifertSurface->destroy(false)) {
+  if (this->knotSurface->isObsolete() || this->seifertSurface->isObsolete()) {
 		this->update();
 		emit actionsUpdated();
 	}

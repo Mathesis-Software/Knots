@@ -31,11 +31,12 @@ Surface::Surface(bool stripped, bool showBackSide) : stripped(stripped), showBac
 Surface::~Surface() {
 }
 
-bool Surface::destroy(bool force) {
-	if (force) {
-		this->points.clear();
-	}
-	return force;
+bool Surface::isObsolete() const {
+	return this->points.empty();
+}
+
+void Surface::destroy() {
+	this->points.clear();
 }
 
 void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) {

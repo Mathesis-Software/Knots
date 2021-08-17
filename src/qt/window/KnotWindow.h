@@ -28,10 +28,8 @@
 namespace KE { namespace Qt {
 
 class KnotWidget;
-
-class paramWindow;
+class KnotMathDialog;
 class DiagramWidget;
-class KnotWindow;
 
 class KnotWindow : public Window {
 
@@ -39,8 +37,8 @@ private:
   QMenu *mathMenu;
   QMenu *viewMenu;
 
-  friend class paramWindow;
-  paramWindow *mth;
+  friend class KnotMathDialog;
+  KnotMathDialog *mth;
 
   void init(KnotWidget *widget);
   void initMenu();

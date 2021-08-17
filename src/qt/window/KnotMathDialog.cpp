@@ -23,9 +23,10 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 
+#include "KnotMathDialog.h"
+#include "KnotWindow.h"
 #include "../../math/computables/computables.h"
 #include "../../math/computables/experimental.h"
-#include "KnotWindow_math.h"
 #include "../widget/KnotWidget.h"
 
 namespace KE { namespace Qt {
@@ -37,12 +38,12 @@ void KnotWindow::math() {
 		return;
 	}
 
-	mth = new paramWindow (this);
+	mth = new KnotMathDialog (this);
 	mth->setWindowTitle ((QString) "Parameters for " + windowTitle ());
 	mth->show ();
 }
 
-paramWindow::paramWindow (KnotWindow *p) {
+KnotMathDialog::KnotMathDialog (KnotWindow *p) {
 	Parent = p;
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 
@@ -89,13 +90,13 @@ paramWindow::paramWindow (KnotWindow *p) {
 	layout->setSizeConstraint(QLayout::SetFixedSize);
 }
 
-void paramWindow::recompute() {
+void KnotMathDialog::recompute() {
 	for (const auto &cb : this->callbacks) {
 		cb();
 	}
 }
 
-void paramWindow::closeEvent(QCloseEvent*) {
+void KnotMathDialog::closeEvent(QCloseEvent*) {
 	Parent->mth = nullptr;
 }
 

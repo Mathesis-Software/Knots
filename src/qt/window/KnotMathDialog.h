@@ -19,16 +19,16 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KNOTWINDOW_MATH_H__
-#define __KNOTWINDOW_MATH_H__
+#ifndef __KE_QT_KNOT_MATH_DIALOG_H__
+#define __KE_QT_KNOT_MATH_DIALOG_H__
 
 #include <QtWidgets/QDialog>
 
-#include "KnotWindow.h"
-
 namespace KE { namespace Qt {
 
-class paramWindow : public QDialog {
+class KnotWindow;
+
+class KnotMathDialog : public QDialog {
 
 private:
 	KnotWindow *Parent;
@@ -38,10 +38,10 @@ private:
 	void closeEvent(QCloseEvent*);
 
 public:
-	paramWindow(KnotWindow*);
+	KnotMathDialog(KnotWindow*);
 	void recompute();
 };
 
 }}
 
-#endif /* __KNOTWINDOW_MATH_H__ */
+#endif /* __KE_QT_KNOT_MATH_DIALOG_H__ */

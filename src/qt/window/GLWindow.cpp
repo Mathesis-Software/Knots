@@ -23,8 +23,7 @@
 
 #include "GLWindow.h"
 
-GLWindow::GLWindow() {
-}
+namespace KE { namespace Qt {
 
 void GLWindow::printIt(QPrinter *prn) {
 	QPainter pnt;
@@ -33,3 +32,5 @@ void GLWindow::printIt(QPrinter *prn) {
 	pnt.drawPixmap(0, 0, QPixmap::grabWindow(centralWidget()->winId()));
 	pnt.end();
 }
+
+}}

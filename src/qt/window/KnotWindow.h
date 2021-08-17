@@ -19,54 +19,54 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KNOTWINDOW_MATH_H__
-#define __KNOTWINDOW_MATH_H__
+#ifndef __KNOTWINDOW_H__
+#define __KNOTWINDOW_H__
 
-#include <QtWidgets/QCheckBox>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QDialog>
+#include "GLWindow.h"
+#include "../../math/knotWrapper/KnotWrapper.h"
 
-#include "knotWindow.h"
-#include "../../math/computables/computable.h"
+namespace KE { namespace Qt {
 
-class paramWindow : public QDialog {
+class KnotWidget;
 
-	Q_OBJECT
+class paramWindow;
+class DiagramWidget;
+class KnotWindow;
 
-private:
- 
-	knotWindow *Parent;
-	int nLabels;
-	class parameterLabel **pLabels;
-	void closeEvent(QCloseEvent*);
-
-public:
-
-	paramWindow(knotWindow*);
-	~paramWindow();
-	void recompute();
-};
-
-class parameterLabel : public QWidget {
-
-Q_OBJECT
+class KnotWindow : public GLWindow {
 
 private:
+  QMenu *mathMenu;
+  QMenu *viewMenu;
 
-	QLabel *lbl;
-	QCheckBox *chkbox;
-	std::shared_ptr<KE::ThreeD::Computables::Computable> computable;
+  friend class paramWindow;
+  paramWindow *mth;
 
-private slots:
+  void init(KnotWidget *widget);
+  void initMenu();
 
-	void doit();
+	bool isSaved() const override;
+
+  void saveIt(std::ostream&);
+
+private:
+	KnotWidget *knotWidget() const;
+
+  void math();
 
 public:
+  KnotWindow(const rapidjson::Document &doc);
+  KnotWindow(const DiagramWidget &diagramWidget);
+  ~KnotWindow();
 
-	parameterLabel(QDialog*, std::shared_ptr<KE::ThreeD::Computables::Computable>, int, int);
-	~parameterLabel();
+private:
+	void closeEvent(QCloseEvent *event) override;
 
-	void renew();
+	QString fileFilter() const override { return "Knot files (*.knt)"; }
+	void updateActions() override;
+	void rename() override;
 };
 
-#endif /* __KNOTWINDOW_MATH_H__ */
+}}
+
+#endif /* __KNOTWINDOW_H__ */

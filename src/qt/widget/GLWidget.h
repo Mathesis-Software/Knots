@@ -29,10 +29,12 @@
 
 #include "../../gl/surface/Surface.h"
 
+namespace KE { namespace Qt {
+
 class GLWidget : public QOpenGLWidget {
 
 private:
-	std::list<std::shared_ptr<KE::GL::Surface>> surfaces;
+	std::list<std::shared_ptr<GL::Surface>> surfaces;
 
 	std::unique_ptr<double[]> currentMatrix;
 
@@ -52,11 +54,13 @@ private:
 
 public:
 	GLWidget(QWidget *parent);
-	virtual const KE::GL::Color &backgroundColor() const = 0;
+	virtual const GL::Color &backgroundColor() const = 0;
 
-	void addSurface(std::shared_ptr<KE::GL::Surface> surface) { this->surfaces.push_back(surface); };
+	void addSurface(std::shared_ptr<GL::Surface> surface) { this->surfaces.push_back(surface); };
 	void rotate(int, int);
 	double currMatr(int i, int j) const { return this->currentMatrix[4 * i + j]; }
 };
+
+}}
 
 #endif /* __GLWIDGET_H__ */

@@ -27,12 +27,16 @@
 #include "GLWidget.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
-namespace KE { namespace GL {
+namespace KE {
+
+namespace GL {
 
 class KnotSurface;
 class SeifertSurface;
 
-}}
+}
+
+namespace Qt {
 
 class KnotWidget;
 
@@ -41,7 +45,7 @@ class SmoothingThread : public QThread {
 Q_OBJECT
 
 private:
-	KE::ThreeD::KnotWrapper &knot;
+	ThreeD::KnotWrapper &knot;
 
 public:
 	SmoothingThread(KnotWidget *widget);
@@ -60,24 +64,24 @@ friend class SmoothingThread;
 Q_OBJECT
 
 private:
-	KE::ThreeD::KnotWrapper _knot;
+	ThreeD::KnotWrapper _knot;
 
-	std::shared_ptr<KE::GL::KnotSurface> knotSurface;
-	KE::ThreeD::Point seifertStartPoint;
-	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
+	std::shared_ptr<GL::KnotSurface> knotSurface;
+	ThreeD::Point seifertStartPoint;
+	std::shared_ptr<GL::SeifertSurface> seifertSurface;
 
 	SmoothingThread smoothingThread;
 
 public:
 	KnotWidget(QWidget *parent, const rapidjson::Document &doc);
-	KnotWidget(QWidget *parent, const KE::TwoD::Diagram &diagram, std::size_t width, std::size_t height);
+	KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
 
 private:
 	void init();
 
 public:
-	const KE::ThreeD::KnotWrapper &knot() const { return this->_knot; }
-	const KE::GL::Color &backgroundColor() const override;
+	const ThreeD::KnotWrapper &knot() const { return this->_knot; }
+	const GL::Color &backgroundColor() const override;
 
   void saveKnot(std::ostream &os);
 	bool isKnotSaved() const;
@@ -106,5 +110,7 @@ signals:
 	void setActionTip(const QString &tip);
 	void actionsUpdated();
 };
+
+}}
 
 #endif /* __KNOTWIDGET_H__ */

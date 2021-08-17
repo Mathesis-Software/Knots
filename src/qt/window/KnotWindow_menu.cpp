@@ -21,10 +21,12 @@
 
 #include <QtWidgets/QMenuBar>
 
-#include "knotWindow.h"
+#include "KnotWindow.h"
 #include "../widget/KnotWidget.h"
 
-void knotWindow::initMenu() {
+namespace KE { namespace Qt {
+
+void KnotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("Math");
   mathMenu->addAction("View parameters", [this] { this->math(); });
   mathMenu->addSeparator();
@@ -79,3 +81,5 @@ void knotWindow::initMenu() {
 
 	this->updateActions();
 }
+
+}}

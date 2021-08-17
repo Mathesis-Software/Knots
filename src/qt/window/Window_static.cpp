@@ -25,23 +25,25 @@
 
 #include <rapidjson/istreamwrapper.h>
 
-#include "abstractWindow.h"
-#include "diagramWindow.h"
-#include "knotWindow.h"
+#include "Window.h"
+#include "DiagramWindow.h"
+#include "KnotWindow.h"
 #include "../manager/iconProvider.h"
 #include "../../util/rapidjson.h"
 
-std::list<abstractWindow*> abstractWindow::AWRegister;
+namespace KE { namespace Qt {
 
-void abstractWindow::exitApplication() {
+std::list<Window*> Window::AWRegister;
+
+void Window::exitApplication() {
 	if (closeAllWindows()) {
 		qApp->quit();
 	}
 }
 
-bool abstractWindow::closeAllWindows() {
-	while (!abstractWindow::AWRegister.empty()) {
-		abstractWindow *av = abstractWindow::AWRegister.back();
+bool Window::closeAllWindows() {
+	while (!Window::AWRegister.empty()) {
+		Window *av = Window::AWRegister.back();
 		if (!av->close()) {
 			return false;
 		}
@@ -54,7 +56,7 @@ namespace {
 QString getOpenFileNameEx() {
 	QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
-	dialog.setIconProvider(KE::Qt::FileIconProvider::instance());
+	dialog.setIconProvider(Qt::FileIconProvider::instance());
 	dialog.setNameFilters({
 		"Knot Editor files (*.knt *.dgr)",
 		"Knot files only (*.knt)",
@@ -69,13 +71,13 @@ QString getOpenFileNameEx() {
 
 }
 
-QWidget *abstractWindow::newDiagram() {
-	auto window = new diagramWindow();
+QWidget *Window::newDiagram() {
+	auto window = new DiagramWindow();
 	window->show();
 	return window;
 }
 
-QWidget *abstractWindow::openFile() {
+QWidget *Window::openFile() {
 	QString filename = getOpenFileNameEx();
 
 	if (filename.isEmpty()) {
@@ -92,13 +94,13 @@ QWidget *abstractWindow::openFile() {
 		doc.ParseStream(wrapper);
 		is.close();
 
-		abstractWindow *window = nullptr;
+		Window *window = nullptr;
 		if (doc.IsNull()) {
 			throw std::runtime_error("The file is not in JSON format");
-		} else if (doc.IsObject() && KE::Util::rapidjson::getString(doc, "type") == "diagram") {
-			window = new diagramWindow(doc);
-		} else if (doc.IsObject() && KE::Util::rapidjson::getString(doc, "type") == "link") {
-			window = new knotWindow(doc);
+		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
+			window = new DiagramWindow(doc);
+		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
+			window = new KnotWindow(doc);
 		} else {
 			throw std::runtime_error("The file does not represent a knot nor a diagram");
 		}
@@ -106,8 +108,10 @@ QWidget *abstractWindow::openFile() {
 		window->show();
 		return window;
 	} catch (const std::runtime_error &e) {
-		abstractWindow::AWRegister.pop_back();
+		Window::AWRegister.pop_back();
 		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}
 }
+
+}}

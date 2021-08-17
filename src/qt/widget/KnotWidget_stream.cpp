@@ -24,6 +24,8 @@
 
 #include "KnotWidget.h"
 
+namespace KE { namespace Qt {
+
 bool KnotWidget::isKnotSaved() const {
 	double matrix[3][3];
 	for (int i = 0; i < 3; ++i) {
@@ -47,3 +49,5 @@ void KnotWidget::saveKnot(std::ostream &os) {
 	writer.SetMaxDecimalPlaces(5);
 	doc.Accept(writer);
 }
+
+}}

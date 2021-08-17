@@ -26,18 +26,20 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 
-#include "abstractWindow.h"
+#include "Window.h"
 #include "../manager/about.h"
 #include "../manager/iconProvider.h"
 
-abstractWindow::abstractWindow() {
-	this->setAttribute(Qt::WA_DeleteOnClose);
+namespace KE { namespace Qt {
+
+Window::Window() {
+	this->setAttribute(::Qt::WA_DeleteOnClose);
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto newd = fileMenu->addAction("New diagram", [this] { abstractWindow::newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [this] { Window::newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [this] { abstractWindow::openFile(); });
+	auto open = fileMenu->addAction("Open…", [this] { Window::openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
@@ -46,11 +48,11 @@ abstractWindow::abstractWindow() {
 	fileMenu->addSeparator();
 	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();
-	fileMenu->addAction("About", [] { KE::Qt::AboutWindow::showAboutDialog(); });
+	fileMenu->addAction("About", [] { Qt::AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
-	auto quit = fileMenu->addAction("Quit", [] { abstractWindow::exitApplication(); });
+	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	this->toolbar = new QToolBar(this);
@@ -59,11 +61,11 @@ abstractWindow::abstractWindow() {
 	AWRegister.push_back(this);
 }
 
-abstractWindow::~abstractWindow() {
+Window::~Window() {
 	delete this->toolbar;
 }
 
-int abstractWindow::askForSave() {
+int Window::askForSave() {
 	show();
 	raise();
 	while (!this->isSaved()) {
@@ -79,7 +81,7 @@ int abstractWindow::askForSave() {
 	return 0;
 }
 
-void abstractWindow::closeEvent(QCloseEvent *event) {
+void Window::closeEvent(QCloseEvent *event) {
 	if (!this->isSaved() && this->askForSave()) {
 		event->ignore();
 		return;
@@ -94,7 +96,7 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 	QFileDialog dialog(nullptr, "Save file", getenv("KNOTEDITOR_DATA"));
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setAcceptMode(QFileDialog::AcceptSave);
-	dialog.setIconProvider(KE::Qt::FileIconProvider::instance());
+	dialog.setIconProvider(Qt::FileIconProvider::instance());
 	dialog.setNameFilters({
 		fileFilter,
 		"Any files (*)"
@@ -107,7 +109,7 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 
 }
 
-void abstractWindow::save() {
+void Window::save() {
 	QString filename = getSaveFileNameEx(this->fileFilter());
 	if (filename.isEmpty()) {
 		return;
@@ -123,35 +125,37 @@ void abstractWindow::save() {
 	os.close();
 }
 
-void abstractWindow::print() {
+void Window::print() {
 	QPrinter prn;
 	//if (prn.setup(this)) {
 	//	printIt(&prn);
 	//}
 }
 
-QAction *abstractWindow::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {
+QAction *Window::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {
 	const QIcon icon(":images/" + iconFilename);
 	return this->toolbar->addAction(icon, text, functor);
 }
 
-void abstractWindow::addToolbarSeparator() {
+void Window::addToolbarSeparator() {
 	this->toolbar->addSeparator();
 }
 
-void abstractWindow::complete() {
+void Window::complete() {
 	this->toolbar->show();
 	statusBar()->setVisible(true);
 	this->resize(508, 594);
 }
 
-QAction *abstractWindow::registerAction(QAction *action, std::function<void(QAction&)> controller) {
+QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> controller) {
 	this->actionsMap[action] = controller;
 	return action;
 }
 
-void abstractWindow::updateActions() {
+void Window::updateActions() {
 	for (auto &[action, controller] : this->actionsMap) {
 		controller(*action);
 	}
 }
+
+}}

@@ -26,6 +26,8 @@
 
 #include "../../math/diagramEditor/DiagramEditor.h"
 
+namespace KE { namespace Qt {
+
 class DiagramWidget : public QWidget {
 
 Q_OBJECT
@@ -38,32 +40,32 @@ public:
 	};
 
 public:
-	KE::TwoD::DiagramEditor diagram;
+	TwoD::DiagramEditor diagram;
 
 private:
 	DiagramWidget::EditorMode _editorMode;
 
-	std::shared_ptr<KE::TwoD::Diagram::Vertex> fakeVertex;
-	std::shared_ptr<KE::TwoD::Diagram::Vertex> capturedVertex;
-	std::shared_ptr<KE::TwoD::Diagram::Edge> capturedEdge;
-	std::shared_ptr<KE::TwoD::Diagram::Crossing> capturedCrossing;
+	std::shared_ptr<TwoD::Diagram::Vertex> fakeVertex;
+	std::shared_ptr<TwoD::Diagram::Vertex> capturedVertex;
+	std::shared_ptr<TwoD::Diagram::Edge> capturedEdge;
+	std::shared_ptr<TwoD::Diagram::Crossing> capturedCrossing;
 	QPoint capturedPoint;
 
-	void setFakeVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex);
-	void captureVertex(const std::shared_ptr<KE::TwoD::Diagram::Vertex> &vertex, bool active = false);
-	void captureEdge(const std::shared_ptr<KE::TwoD::Diagram::Edge> &edge);
-	void captureCrossing(const std::shared_ptr<KE::TwoD::Diagram::Crossing> &crossing);
+	void setFakeVertex(const std::shared_ptr<TwoD::Diagram::Vertex> &vertex);
+	void captureVertex(const std::shared_ptr<TwoD::Diagram::Vertex> &vertex, bool active = false);
+	void captureEdge(const std::shared_ptr<TwoD::Diagram::Edge> &edge);
+	void captureCrossing(const std::shared_ptr<TwoD::Diagram::Crossing> &crossing);
 	void capturePoint(const QPoint &point);
 
-	void drawVertex(QPainter&, const KE::TwoD::Diagram::Vertex &vertex, bool highlight);
+	void drawVertex(QPainter&, const TwoD::Diagram::Vertex &vertex, bool highlight);
 	enum EdgeMode {
 		normal,
 		highlighted,
 		fake,
 		fake2
 	};
-	void drawEdge(QPainter&, const KE::TwoD::Diagram::Edge &edge, EdgeMode mode);
-	void highlightCrossing(QPainter &painter, const KE::TwoD::Diagram::Crossing &crossing);
+	void drawEdge(QPainter&, const TwoD::Diagram::Edge &edge, EdgeMode mode);
+	void highlightCrossing(QPainter &painter, const TwoD::Diagram::Crossing &crossing);
 
 	void paintEvent(QPaintEvent*) override;
 	void leaveEvent(QEvent*) override;
@@ -90,5 +92,7 @@ signals:
 	void setActionTip(const QString &tip);
 	void actionsUpdated();
 };
+
+}}
 
 #endif /* __DIAGRAMWIDGET_H__ */

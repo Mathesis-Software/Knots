@@ -22,17 +22,18 @@
 #ifndef __GLWINDOW_H__
 #define __GLWINDOW_H__
 
-#include "abstractWindow.h"
+#include "Window.h"
+
+namespace KE { namespace Qt {
 
 class GLWidget;
 
-class GLWindow : public abstractWindow {
+class GLWindow : public Window {
 
 private:
 	void printIt(QPrinter*);
-
-public:
-	GLWindow();
 };
+
+}}
 
 #endif /* __GLWINDOW_H__ */

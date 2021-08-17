@@ -19,8 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __ABSTRACTWINDOW_H__
-#define __ABSTRACTWINDOW_H__
+#ifndef __KE_QT_WINDOW_H__
+#define __KE_QT_WINDOW_H__
 
 #include <fstream>
 #include <list>
@@ -28,10 +28,12 @@
 #include <QtPrintSupport/QPrinter>
 #include <QtWidgets/QMainWindow>
 
-class abstractWindow : public QMainWindow {
+namespace KE { namespace Qt {
+
+class Window : public QMainWindow {
 
 private:
-  static std::list<abstractWindow*> AWRegister;
+  static std::list<Window*> AWRegister;
 
 public:
   static QWidget *newDiagram();
@@ -63,8 +65,8 @@ protected:
 	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
 
 public:
-  abstractWindow();
-  virtual ~abstractWindow();
+  Window();
+  virtual ~Window();
 	virtual void updateActions();
   virtual QString fileFilter() const = 0;
 
@@ -72,4 +74,6 @@ protected:
   virtual void rename() = 0;
 };
 
-#endif /* __ABSTRACTWINDOW_H__ */
+}}
+
+#endif /* __KE_QT_WINDOW_H__ */

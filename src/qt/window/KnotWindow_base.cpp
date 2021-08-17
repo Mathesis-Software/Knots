@@ -25,12 +25,14 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QStatusBar>
 
-#include "knotWindow.h"
-#include "knotWindow_math.h"
+#include "KnotWindow.h"
+#include "KnotWindow_math.h"
 #include "../widget/KnotWidget.h"
 #include "../widget/DiagramWidget.h"
 
-void knotWindow::init(KnotWidget *widget) {
+namespace KE { namespace Qt {
+
+void KnotWindow::init(KnotWidget *widget) {
 	this->setCentralWidget(widget);
 
 	this->connect(widget, &KnotWidget::setActionTip, [this](const QString &text) {
@@ -40,7 +42,7 @@ void knotWindow::init(KnotWidget *widget) {
 			this->statusBar()->clearMessage();
 		}
 	});
-	this->connect(widget, &KnotWidget::actionsUpdated, this, &knotWindow::updateActions);
+	this->connect(widget, &KnotWidget::actionsUpdated, this, &KnotWindow::updateActions);
 
   mth = NULL;
 
@@ -50,15 +52,15 @@ void knotWindow::init(KnotWidget *widget) {
 	this->updateActions();
 }
 
-knotWindow::knotWindow(const rapidjson::Document &doc) {
+KnotWindow::KnotWindow(const rapidjson::Document &doc) {
   this->init(new KnotWidget(this, doc));
 }
 
-knotWindow::knotWindow(const DiagramWidget &diagramWidget) {
+KnotWindow::KnotWindow(const DiagramWidget &diagramWidget) {
   this->init(new KnotWidget(this, diagramWidget.diagram.diagram(), diagramWidget.width(), diagramWidget.height()));
 }
 
-knotWindow::~knotWindow() {
+KnotWindow::~KnotWindow() {
   if (mth) {
     delete mth;
 	}
@@ -67,22 +69,22 @@ knotWindow::~knotWindow() {
   delete viewMenu;
 }
 
-void knotWindow::closeEvent(QCloseEvent *event) {
-	abstractWindow::closeEvent(event);
+void KnotWindow::closeEvent(QCloseEvent *event) {
+	Window::closeEvent(event);
 	if (event->isAccepted()) {
 		this->knotWidget()->stopSmoothingAndWait();
 	}
 }
 
-void knotWindow::updateActions() {
+void KnotWindow::updateActions() {
   setWindowTitle(this->knotWidget()->knot().caption().c_str());
 	if (mth) {
 		mth->recompute();
 	}
-	abstractWindow::updateActions();
+	Window::updateActions();
 }
 
-void knotWindow::rename() {
+void KnotWindow::rename() {
 	bool ok;
 	const QString text = QInputDialog::getText(
 		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knotWidget()->knot().caption().c_str(), &ok
@@ -93,15 +95,17 @@ void knotWindow::rename() {
 	}
 }
 
-KnotWidget *knotWindow::knotWidget() const {
+KnotWidget *KnotWindow::knotWidget() const {
 	return dynamic_cast<KnotWidget*>(this->centralWidget());
 }
 
-bool knotWindow::isSaved() const {
+bool KnotWindow::isSaved() const {
 	auto widget = this->knotWidget();
 	return !widget || widget->isKnotSaved();
 }
 
-void knotWindow::saveIt(std::ostream &os) {
+void KnotWindow::saveIt(std::ostream &os) {
 	this->knotWidget()->saveKnot(os);
 }
+
+}}

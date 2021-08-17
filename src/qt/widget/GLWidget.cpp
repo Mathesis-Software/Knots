@@ -23,6 +23,8 @@
 
 #include "GLWidget.h"
 
+namespace KE { namespace Qt {
+
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
 	for (int i = 0; i < 16; ++i) {
 		this->currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
@@ -89,8 +91,10 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
 
 void GLWidget::selectMouseCursor() {
 	if (!this->capturedPoint.isNull()) {
-		this->setCursor(Qt::DragMoveCursor);
+		this->setCursor(::Qt::DragMoveCursor);
 	} else {
 		this->unsetCursor();
 	}
 }
+
+}}

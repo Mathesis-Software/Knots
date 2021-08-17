@@ -25,7 +25,7 @@
 
 #include "manager.h"
 #include "about.h"
-#include "../window/abstractWindow.h"
+#include "../window/Window.h"
 
 namespace KE { namespace Qt {
 
@@ -33,7 +33,7 @@ ManagerWindow::ManagerWindow() {
 	fileMenu = this->menuBar()->addMenu("File");
 	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
-	auto quit = fileMenu->addAction("Quit", [] { abstractWindow::exitApplication(); });
+	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	auto center = new QWidget;
@@ -42,7 +42,7 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Create new diagram");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::clicked, [this] {
-			auto window = abstractWindow::newDiagram();
+			auto window = Window::newDiagram();
 			window->setGeometry(this->geometry());
 			this->close();
 		});
@@ -52,7 +52,7 @@ ManagerWindow::ManagerWindow() {
 		auto button = new QPushButton("Open existing file");
 		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 		button->connect(button, &QPushButton::clicked, [this] {
-			auto window = abstractWindow::openFile();
+			auto window = Window::openFile();
 			if (window) {
 				window->setGeometry(this->geometry());
 				this->close();

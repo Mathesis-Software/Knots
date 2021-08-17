@@ -25,7 +25,7 @@
 #include <QtWidgets/QLabel>
 
 #include "about.h"
-#include "../window/abstractWindow.h"
+#include "../window/Window.h"
 
 namespace KE { namespace Qt {
 
@@ -66,7 +66,7 @@ AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 	QObject::connect(quit, &QAction::triggered, [this] {
 		this->close();
-		abstractWindow::exitApplication();
+		Window::exitApplication();
 	});
 	this->addAction(quit);
 }

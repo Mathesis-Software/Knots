@@ -27,17 +27,19 @@ const double STEP = 0.006;
 
 #define		M(x,y)		this->currentMatrix[4*x+y]
 
+namespace KE { namespace Qt {
+
 void GLWidget::rotate(const QPoint &start, const QPoint &end) {
 	int dx = end.x() - start.x();
 	int dy = end.y() - start.y();
 	int dz = 0;
 	const auto modifiers = QApplication::queryKeyboardModifiers();
 
-	if (modifiers & Qt::AltModifier) {
+	if (modifiers & ::Qt::AltModifier) {
 		dz = dx;
 		dx = 0;
 		dy = 0;
-	} else if (modifiers & Qt::ShiftModifier) {
+	} else if (modifiers & ::Qt::ShiftModifier) {
 		if (abs(dx) > abs(dy)) {
 			dy = 0;
 		} else {
@@ -83,3 +85,5 @@ void GLWidget::rotate(const QPoint &start, const QPoint &end) {
 
 	this->update();
 }
+
+}}

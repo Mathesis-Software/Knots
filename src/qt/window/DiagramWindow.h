@@ -19,15 +19,17 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __DIAGRAMWINDOW_H__
-#define __DIAGRAMWINDOW_H__
+#ifndef __KE_QT_DIAGRAM_WINDOW_H__
+#define __KE_QT_DIAGRAM_WINDOW_H__
 
 #include <QtWidgets/QMenu>
 
-#include "abstractWindow.h"
+#include "Window.h"
 #include "../widget/DiagramWidget.h"
 
-class diagramWindow : public abstractWindow {
+namespace KE { namespace Qt {
+
+class DiagramWindow : public Window {
 
 private:
 	QMenu *actionsMenu;
@@ -47,9 +49,9 @@ private:
 	void rename() override;
 
 public:
-	diagramWindow(const rapidjson::Document &doc);
-	diagramWindow();
-	~diagramWindow();
+	DiagramWindow(const rapidjson::Document &doc);
+	DiagramWindow();
+	~DiagramWindow();
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
 
@@ -59,4 +61,6 @@ public:
 	void updateActions() override;
 };
 
-#endif /* __DIAGRAMWINDOW_H__ */
+}}
+
+#endif /* __KE_QT_DIAGRAM_WINDOW_H__ */

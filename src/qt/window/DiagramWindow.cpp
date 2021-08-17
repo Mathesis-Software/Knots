@@ -28,18 +28,20 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "diagramWindow.h"
-#include "knotWindow.h"
+#include "DiagramWindow.h"
+#include "KnotWindow.h"
 
-diagramWindow::diagramWindow(const rapidjson::Document &doc) {
+namespace KE { namespace Qt {
+
+DiagramWindow::DiagramWindow(const rapidjson::Document &doc) {
 	this->init(new DiagramWidget(this, doc));
 }
 
-diagramWindow::diagramWindow() {
+DiagramWindow::DiagramWindow() {
 	this->init(new DiagramWidget(this));
 }
 
-void diagramWindow::init(DiagramWidget *widget) {
+void DiagramWindow::init(DiagramWidget *widget) {
 	setCentralWidget(widget);
 	const auto &diagram = widget->diagram;
 
@@ -50,7 +52,7 @@ void diagramWindow::init(DiagramWidget *widget) {
 			this->statusBar()->clearMessage();
 		}
 	});
-	this->connect(widget, &DiagramWidget::actionsUpdated, this, &diagramWindow::updateActions);
+	this->connect(widget, &DiagramWidget::actionsUpdated, this, &DiagramWindow::updateActions);
 
 	actionsMenu = this->menuBar()->addMenu("Actions");
 	this->registerAction(
@@ -139,21 +141,21 @@ void diagramWindow::init(DiagramWidget *widget) {
 	this->updateActions();
 }
 
-diagramWindow::~diagramWindow() {
+DiagramWindow::~DiagramWindow() {
 	delete actionsMenu;
 }
 
-void diagramWindow::setMode(DiagramWidget::EditorMode mode) {
+void DiagramWindow::setMode(DiagramWidget::EditorMode mode) {
 	this->diagramWidget()->setEditorMode(mode);
 	this->updateActions();
 }
 
-void diagramWindow::clear() {
+void DiagramWindow::clear() {
 	this->diagramWidget()->clear();
 	this->updateActions();
 }
 
-void diagramWindow::convert() {
+void DiagramWindow::convert() {
 	if (!this->diagramWidget()->diagram.isClosed()) {
 		QMessageBox::critical(this, "Error", "\nCannot convert non-closed diagram.\n");
 		return;
@@ -164,38 +166,38 @@ void diagramWindow::convert() {
 		return;
 	}
 
-	(new knotWindow(*this->diagramWidget()))->show();
+	(new KnotWindow(*this->diagramWidget()))->show();
 }
 
-void diagramWindow::saveIt(std::ostream &os) {
+void DiagramWindow::saveIt(std::ostream &os) {
 	const rapidjson::Document doc = this->diagramWidget()->diagram.serialize();
 	rapidjson::OStreamWrapper wrapper(os);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	doc.Accept(writer);
 }
 
-void diagramWindow::simplify() {
+void DiagramWindow::simplify() {
 	if (this->diagramWidget()->diagram.simplify()) {
 		this->centralWidget()->repaint();
 	}
 }
 
-void diagramWindow::printIt(QPrinter *prn) {
+void DiagramWindow::printIt(QPrinter *prn) {
 	QPainter pnt;
 	pnt.begin(prn);
 	this->diagramWidget()->drawIt(pnt);
 	pnt.end();
 }
 
-void diagramWindow::updateActions() {
+void DiagramWindow::updateActions() {
 	const auto widget = this->diagramWidget();
 	if (widget) {
 		setWindowTitle(widget->diagram.caption().c_str());
 	}
-	abstractWindow::updateActions();
+	Window::updateActions();
 }
 
-void diagramWindow::rename() {
+void DiagramWindow::rename() {
 	auto &diagram = this->diagramWidget()->diagram;
 
 	bool ok;
@@ -208,7 +210,9 @@ void diagramWindow::rename() {
 	}
 }
 
-bool diagramWindow::isSaved() const {
+bool DiagramWindow::isSaved() const {
 	const auto widget = this->diagramWidget();
 	return !widget || widget->diagram.isSaved();
 }
+
+}}

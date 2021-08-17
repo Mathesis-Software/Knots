@@ -21,10 +21,12 @@
 
 #include "../../math/computables/computables.h"
 #include "../../math/computables/experimental.h"
-#include "knotWindow_math.h"
+#include "KnotWindow_math.h"
 #include "../widget/KnotWidget.h"
 
-void knotWindow::math() {
+namespace KE { namespace Qt {
+
+void KnotWindow::math() {
 	if (mth) {
 		mth->show();
 		mth->raise();
@@ -36,24 +38,24 @@ void knotWindow::math() {
 	mth->show ();
 }
 
-paramWindow::paramWindow (knotWindow *p) {
+paramWindow::paramWindow (KnotWindow *p) {
 	Parent = p;
 
 	const auto &knot = p->knotWidget()->knot();
-	std::vector<std::shared_ptr<KE::ThreeD::Computables::Computable>> computables = {
-		std::make_shared<KE::ThreeD::Computables::MoebiusEnergy>(knot),
-		std::make_shared<KE::ThreeD::Computables::AverageCrossingNumber>(knot, false),
-		std::make_shared<KE::ThreeD::Computables::AverageCrossingNumber>(knot, true),
-		std::make_shared<KE::ThreeD::Computables::AverageExtremumNumber>(knot),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(knot, 2),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(knot, 3),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(knot, 4),
-		std::make_shared<KE::ThreeD::Computables::VassilievInvariant>(knot, 5),
-		std::make_shared<KE::ThreeD::Computables::Experimental>(knot)
-//		std::make_shared<KE::ThreeD::Computables::Singular>(knot),
-//		std::make_shared<KE::ThreeD::Computables::Experimental2>(knot, 2, "Experimental 2"),
-//		std::make_shared<KE::ThreeD::Computables::Experimental2>(knot, 3, "Experimental 3"),
-//		std::make_shared<KE::ThreeD::Computables::Experimental2>(knot, 4, "Experimental 4"),
+	std::vector<std::shared_ptr<ThreeD::Computables::Computable>> computables = {
+		std::make_shared<ThreeD::Computables::MoebiusEnergy>(knot),
+		std::make_shared<ThreeD::Computables::AverageCrossingNumber>(knot, false),
+		std::make_shared<ThreeD::Computables::AverageCrossingNumber>(knot, true),
+		std::make_shared<ThreeD::Computables::AverageExtremumNumber>(knot),
+		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 2),
+		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 3),
+		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 4),
+		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 5),
+		std::make_shared<ThreeD::Computables::Experimental>(knot)
+//		std::make_shared<ThreeD::Computables::Singular>(knot),
+//		std::make_shared<ThreeD::Computables::Experimental2>(knot, 2, "Experimental 2"),
+//		std::make_shared<ThreeD::Computables::Experimental2>(knot, 3, "Experimental 3"),
+//		std::make_shared<ThreeD::Computables::Experimental2>(knot, 4, "Experimental 4"),
 	};
 	nLabels = computables.size();
 	pLabels = new parameterLabel*[nLabels];
@@ -84,7 +86,7 @@ void paramWindow::closeEvent(QCloseEvent*) {
 	delete this;
 }
 
-parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<KE::ThreeD::Computables::Computable> computable, int x, int y) : QWidget(parent), computable(computable) {
+parameterLabel::parameterLabel(QDialog* parent, std::shared_ptr<ThreeD::Computables::Computable> computable, int x, int y) : QWidget(parent), computable(computable) {
 	lbl = new QLabel (this);
 	lbl->setGeometry (240, 0, 100, 25);
 	lbl->setFrameStyle(QFrame::Panel | QFrame::Sunken);
@@ -114,3 +116,5 @@ void parameterLabel::renew() {
 		lbl->setText(QString::number(computable->value()));
 	}
 }
+
+}}

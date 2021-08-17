@@ -1,6 +1,5 @@
 ### Bug fixing
 
-* GL: smoothing with number of steps updates status line from wrong thread
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 
 ### Code structure

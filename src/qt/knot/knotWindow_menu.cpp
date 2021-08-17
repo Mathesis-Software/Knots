@@ -26,15 +26,15 @@
 
 void knotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("Math");
-  mathMenu->addAction("View parameters", this, SLOT(math()));
+  mathMenu->addAction("View parameters", [this] { this->math(); });
   mathMenu->addSeparator();
 	this->registerAction(
-  	mathMenu->addAction("Start smoothing", [this] { this->startSmoothing(); }),
-		[this](QAction &action) { action.setEnabled(!this->smoothingThread.isRunning()); }
+		mathMenu->addAction("Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
+		[this](QAction &action) { action.setEnabled(!this->knotWidget()->isSmoothingInProgress()); }
 	);
 	this->registerAction(
-  	mathMenu->addAction("Stop smoothing", [this] { this->stopSmoothing(); }),
-		[this](QAction &action) { action.setEnabled(this->smoothingThread.isRunning()); }
+		mathMenu->addAction("Stop smoothing", [this] { this->knotWidget()->stopSmoothing(); }),
+		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSmoothingInProgress()); }
 	);
   mathMenu->addSeparator();
   mathMenu->addAction("Number of points…", [this] { this->knotWidget()->setNumberOfPoints(); });
@@ -58,12 +58,12 @@ void knotWindow::initMenu() {
   optionsMenu->addAction("Seifert surface back color…", [this] { this->knotWidget()->setSeifertBackColor(); });
 
 	this->registerAction(
-		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->startSmoothing(); }),
-		[this](QAction &action) { action.setVisible(!this->smoothingThread.isRunning()); }
+		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
+		[this](QAction &action) { action.setVisible(!this->knotWidget()->isSmoothingInProgress()); }
 	);
 	this->registerAction(
-		addToolbarAction("stop.svg", "Interrupt smoothing", [this] { this->stopSmoothing(); }),
-		[this](QAction &action) { action.setVisible(this->smoothingThread.isRunning()); }
+		addToolbarAction("stop.svg", "Interrupt smoothing", [this] { this->knotWidget()->stopSmoothing(); }),
+		[this](QAction &action) { action.setVisible(this->knotWidget()->isSmoothingInProgress()); }
 	);
   addToolbarSeparator();
   addToolbarAction("math.svg", "Show parameters", [this] { this->math(); });
@@ -73,7 +73,7 @@ void knotWindow::initMenu() {
 		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
 	);
   this->registerAction(
-  	addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(-0.02); }),
+		addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(-0.02); }),
 		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
 	);
 

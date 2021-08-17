@@ -22,6 +22,8 @@
 #ifndef __KNOTWIDGET_H__
 #define __KNOTWIDGET_H__
 
+#include <QtCore/QThread>
+
 #include "../gl/GLWidget.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
@@ -32,7 +34,28 @@ class SeifertSurface;
 
 }}
 
+class KnotWidget;
+
+class SmoothingThread : public QThread {
+
+Q_OBJECT
+
+private:
+	KE::ThreeD::KnotWrapper &knot;
+
+public:
+	SmoothingThread(KnotWidget *widget);
+
+signals:
+	void knotChanged();
+
+private:
+	void run() override;
+};
+
 class KnotWidget : public GLWidget {
+
+friend class SmoothingThread;
 
 Q_OBJECT
 
@@ -43,9 +66,17 @@ private:
 	KE::ThreeD::Point seifertStartPoint;
 	std::shared_ptr<KE::GL::SeifertSurface> seifertSurface;
 
+	SmoothingThread smoothingThread;
+
 public:
 	KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot);
+
 	const KE::GL::Color &backgroundColor() const override;
+
+  void startSmoothing();
+  void stopSmoothing();
+  void stopSmoothingAndWait();
+	bool isSmoothingInProgress() const;
 
 	bool isSeifertSurfaceVisible() const;
   void toggleSeifertSurfaceVisibility();
@@ -59,9 +90,10 @@ public:
   void setSeifertFrontColor();
   void setSeifertBackColor();
 
-	void onKnotChanged();
+	void onKnotChanged(bool force);
 
 signals:
+	void setActionTip(const QString &tip);
 	void actionsUpdated();
 };
 

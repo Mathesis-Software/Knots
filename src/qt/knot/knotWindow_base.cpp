@@ -23,6 +23,7 @@
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
+#include <QtWidgets/QStatusBar>
 
 #include "knotWindow.h"
 #include "knotWindow_math.h"
@@ -32,6 +33,14 @@
 void knotWindow::init() {
 	auto widget = new KnotWidget(this, this->knot);
 	this->setCentralWidget(widget);
+
+	this->connect(widget, &KnotWidget::setActionTip, [this](const QString &text) {
+		if (!text.isNull()) {
+			this->statusBar()->showMessage(text);
+		} else {
+			this->statusBar()->clearMessage();
+		}
+	});
 	this->connect(widget, &KnotWidget::actionsUpdated, this, &knotWindow::updateActions);
 
   mth = NULL;
@@ -42,11 +51,11 @@ void knotWindow::init() {
 	this->updateActions();
 }
 
-knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc), smoothingThread(*this) {
+knotWindow::knotWindow(const rapidjson::Document &doc) : knot(doc) {
   this->init();
 }
 
-knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()), smoothingThread(*this) {
+knotWindow::knotWindow(const diagramWindow &d) : knot(d.diagramWidget()->diagram.diagram(), d.width(), d.height()) {
   this->init();
 }
 
@@ -61,9 +70,8 @@ knotWindow::~knotWindow() {
 
 void knotWindow::closeEvent(QCloseEvent *event) {
 	abstractWindow::closeEvent(event);
-	if (event->isAccepted() && this->smoothingThread.isRunning()) {
-		this->smoothingThread.requestInterruption();
-		this->smoothingThread.wait();
+	if (event->isAccepted()) {
+		this->knotWidget()->stopSmoothingAndWait();
 	}
 }
 

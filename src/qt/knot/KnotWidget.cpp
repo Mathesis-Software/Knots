@@ -24,7 +24,7 @@
 #include "../../math/knotSurface/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"
 
-KnotWidget::KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot), seifertStartPoint(0.0, 0.0, 0.4) {
+KnotWidget::KnotWidget(QWidget *parent, KE::ThreeD::KnotWrapper &knot) : GLWidget(parent), knot(knot), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(this) {
   this->knotSurface = std::make_shared<KE::GL::KnotSurface>(this->knot, 28);
   this->addSurface(this->knotSurface);
   this->seifertSurface = std::make_shared<KE::GL::SeifertSurface>(this->knot, this->seifertStartPoint);
@@ -55,8 +55,8 @@ void KnotWidget::toggleSeifertSurfaceVisibility() {
 	emit actionsUpdated();
 }
 
-void KnotWidget::onKnotChanged() {
-  if (this->knotSurface->isObsolete() || this->seifertSurface->isObsolete()) {
+void KnotWidget::onKnotChanged(bool force) {
+  if (force || this->knotSurface->isObsolete() || this->seifertSurface->isObsolete()) {
 		this->update();
 		emit actionsUpdated();
 	}
@@ -64,4 +64,8 @@ void KnotWidget::onKnotChanged() {
 
 bool KnotWidget::isSeifertSurfaceVisible() const {
 	return this->seifertSurface->isVisible();
+}
+
+bool KnotWidget::isSmoothingInProgress() const {
+	return this->smoothingThread.isRunning();
 }

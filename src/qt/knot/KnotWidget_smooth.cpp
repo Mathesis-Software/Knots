@@ -19,37 +19,34 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <QtWidgets/QAction>
-#include <QtWidgets/QStatusBar>
-
-#include "knotWindow_math.h"
 #include "KnotWidget.h"
 
-void knotWindow::startSmoothing() {
+void KnotWidget::startSmoothing() {
   if (!this->smoothingThread.isRunning()) {
 		this->smoothingThread.start();
-		statusBar()->showMessage("Smoothing…");
-		this->updateActions();
+		emit setActionTip("Smoothing…");
+		emit actionsUpdated();
 	}
 }
 
-void knotWindow::stopSmoothing() {
+void KnotWidget::stopSmoothing() {
   if (this->smoothingThread.isRunning()) {
 		this->smoothingThread.requestInterruption();
-    statusBar()->showMessage("Smoothing complete", 3000);
-		this->updateActions();
+		emit setActionTip(QString());
+		emit actionsUpdated();
   }
 }
 
-void knotWindow::doSmooth() {
-	for (int i = 0; i < 20; ++i) {
-		this->knot.decreaseEnergy();
+void KnotWidget::stopSmoothingAndWait() {
+	if (this->smoothingThread.isRunning()) {
+		this->smoothingThread.requestInterruption();
+		this->smoothingThread.wait();
 	}
 }
 
-SmoothingThread::SmoothingThread(knotWindow &window) : window(window) {
-	connect(this, &SmoothingThread::knotChanged, [&window] { window.knotWidget()->onKnotChanged(); });
-	connect(this, &SmoothingThread::finished, &window, &knotWindow::updateActions);
+SmoothingThread::SmoothingThread(KnotWidget *widget) : knot(widget->knot) {
+	connect(this, &SmoothingThread::knotChanged, [widget] { widget->onKnotChanged(false); });
+	connect(this, &SmoothingThread::finished, [widget] { widget->onKnotChanged(true); });
 }
 
 void SmoothingThread::run() {
@@ -60,7 +57,9 @@ void SmoothingThread::run() {
 			break;
 		}
 		this->msleep(20);
-		this->window.doSmooth();
+		for (int i = 0; i < 20; ++i) {
+			this->knot.decreaseEnergy();
+		}
 		emit knotChanged();
 	}
 }

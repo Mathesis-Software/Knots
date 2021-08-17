@@ -22,8 +22,6 @@
 #ifndef __KNOTWINDOW_H__
 #define __KNOTWINDOW_H__
 
-#include <QtCore/QThread>
-
 #include "../gl/GLWindow.h"
 #include "../../math/knotWrapper/KnotWrapper.h"
 
@@ -33,33 +31,10 @@ class paramWindow;
 class diagramWindow;
 class knotWindow;
 
-class SmoothingThread : public QThread {
-
-Q_OBJECT
-
-private:
-	knotWindow &window;
-
-public:
-	SmoothingThread(knotWindow &window);
-
-signals:
-	void knotChanged();
-
-private:
-	void run() override;
-};
-
 class knotWindow : public GLWindow {
-
-friend class SmoothingThread;
-
-Q_OBJECT
 
 private:
 	KE::ThreeD::KnotWrapper knot;
-
-	SmoothingThread smoothingThread;
 
   QMenu *mathMenu;
   QMenu *viewMenu;
@@ -70,10 +45,6 @@ private:
   void init();
   void initMenu();
 
-  void startSmoothing();
-  void doSmooth();
-  void stopSmoothing();
-
 	bool isSaved() const override;
 
   void saveIt(std::ostream&);
@@ -81,7 +52,6 @@ private:
 private:
 	KnotWidget *knotWidget() const;
 
-private slots:
   void math();
 
 public:
@@ -89,9 +59,9 @@ public:
   knotWindow(const diagramWindow &diagram);
   ~knotWindow();
 
-	void closeEvent(QCloseEvent *event);
-
 private:
+	void closeEvent(QCloseEvent *event) override;
+
 	QString fileFilter() const override { return "Knot files (*.knt)"; }
 	void updateActions() override;
 	void rename() override;

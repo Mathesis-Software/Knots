@@ -4,7 +4,7 @@
 
 Originally written in 199x. One of my first programming projects.
 
-Partially refurbished in July-August 2021.
+Partially refurbished in July-August 2021. Special thanks to [@temper8]( https://github.com/temper8 ) for OpenGL smoothing solution.
 
 An app for
 

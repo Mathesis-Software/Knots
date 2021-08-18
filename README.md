@@ -23,7 +23,7 @@ Build dependencies: C++ compiler (the code uses some C++17 features), Qt5, OpenG
 
 To install build dependencies on Ubuntu 20.04:
 ```
-sudo apt install g++ make qtbase5-dev qtbase5-dev-tools libqt5opengl5-dev libgl-dev rapidjson-dev
+sudo apt install g++ make ccache qtbase5-dev qtbase5-dev-tools libqt5opengl5-dev libgl-dev rapidjson-dev
 ```
 
 To build:

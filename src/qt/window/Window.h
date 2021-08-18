@@ -25,7 +25,6 @@
 #include <fstream>
 #include <list>
 
-#include <QtPrintSupport/QPrinter>
 #include <QtWidgets/QMainWindow>
 
 namespace KE { namespace Qt {
@@ -50,13 +49,13 @@ private:
 protected:
   void closeEvent(QCloseEvent*);
 
-  virtual void printIt(QPrinter*) = 0;
-  void print();
-
   void save();
   virtual void saveIt(std::ostream&) = 0;
   virtual bool isSaved() const = 0;
-  int askForSave(void);
+  int askForSave();
+
+	void exportPNG();
+  virtual QImage exportImage() const = 0;
 
   QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
   void addToolbarSeparator();

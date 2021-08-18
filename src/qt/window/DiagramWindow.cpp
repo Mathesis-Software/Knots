@@ -182,11 +182,18 @@ void DiagramWindow::simplify() {
 	}
 }
 
-void DiagramWindow::printIt(QPrinter *prn) {
-	QPainter pnt;
-	pnt.begin(prn);
-	this->diagramWidget()->drawIt(pnt);
-	pnt.end();
+QImage DiagramWindow::exportImage() const {
+	const auto widget = this->diagramWidget();
+	const auto size = widget->size();
+	const auto dpr = widget->devicePixelRatio();
+	QImage image(size.width() * dpr, size.height() * dpr, QImage::Format_ARGB32);
+	QPainter painter;
+	image.setDevicePixelRatio(dpr);
+	image.fill(::Qt::transparent);
+	painter.begin(&image);
+	widget->drawIt(painter);
+	painter.end();
+	return image;
 }
 
 void DiagramWindow::updateActions() {

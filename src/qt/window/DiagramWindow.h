@@ -38,7 +38,7 @@ private:
 
 	QString fileFilter() const override { return "Diagram files (*.dgr)"; }
 
-	void printIt(QPrinter*) override;
+	QImage exportImage() const override;
 
 	void setMode(DiagramWidget::EditorMode mode);
 

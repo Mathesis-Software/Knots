@@ -112,12 +112,8 @@ void KnotWindow::saveIt(std::ostream &os) {
 	this->knotWidget()->saveKnot(os);
 }
 
-void KnotWindow::printIt(QPrinter *prn) {
-	QPainter pnt;
-	pnt.begin(prn);
-	raise();
-	pnt.drawPixmap(0, 0, QPixmap::grabWindow(centralWidget()->winId()));
-	pnt.end();
+QImage KnotWindow::exportImage() const {
+	return this->knotWidget()->grabFramebuffer();
 }
 
 }}

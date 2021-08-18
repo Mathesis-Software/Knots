@@ -43,10 +43,10 @@ private:
   void init(KnotWidget *widget);
   void initMenu();
 
-	bool isSaved() const override;
+	QImage exportImage() const override;
 
-	void printIt(QPrinter*);
-  void saveIt(std::ostream&);
+	bool isSaved() const override;
+  void saveIt(std::ostream&) override;
 
 private:
 	KnotWidget *knotWidget() const;

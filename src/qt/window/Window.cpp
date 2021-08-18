@@ -44,7 +44,7 @@ Window::Window() {
 	fileMenu->addSeparator();
 	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
 	save->setShortcut(QKeySequence("Ctrl+S"));
-	fileMenu->addAction("Print…", [this] { this->print(); })->setEnabled(false);
+	fileMenu->addAction("Export as PNG…", this, &Window::exportPNG);
 	fileMenu->addSeparator();
 	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();
@@ -117,7 +117,7 @@ void Window::save() {
 
 	std::ofstream os(filename.toStdString());
 	if (!os) {
-		QMessageBox::critical(this, "Error", "\nCouldn't open file \"" + filename + "\" for writing\n");
+		QMessageBox::critical(this, "Error", "\nCannot open file \"" + filename + "\" for writing\n");
 		return;
 	}
 
@@ -125,11 +125,17 @@ void Window::save() {
 	os.close();
 }
 
-void Window::print() {
-	QPrinter prn;
-	//if (prn.setup(this)) {
-	//	printIt(&prn);
-	//}
+void Window::exportPNG() {
+	auto image = this->exportImage();
+	if (image.isNull()) {
+		QMessageBox::critical(this, "Error", "\nCannot grab image\n");
+		return;
+	}
+
+	QString filename = QFileDialog::getSaveFileName(nullptr, "Export PNG", QString(), "PNG files (*.png)");
+	if (!filename.isEmpty()) {
+		image.save(filename);
+	}
 }
 
 QAction *Window::addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor) {

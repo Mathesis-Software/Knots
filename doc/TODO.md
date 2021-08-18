@@ -21,8 +21,6 @@
 * "save file dialogue": do not use read-only directory by default
 * save latest file directory between runs
 * save window sizes between runs
-* printing: drop or re-implement (currently it is disabled)
-* add exporting images to PNG
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
 * pass diagram/knot files to open as parameters in command line

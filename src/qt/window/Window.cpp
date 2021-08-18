@@ -132,7 +132,7 @@ void Window::exportPNG() {
 		return;
 	}
 
-	QString filename = QFileDialog::getSaveFileName(nullptr, "Export PNG", QString(), "PNG files (*.png)");
+	QString filename = QFileDialog::getSaveFileName(nullptr, "Export as image", QString(), "Image files (*.png *.jpg *.jpeg)");
 	if (!filename.isEmpty()) {
 		image.save(filename);
 	}

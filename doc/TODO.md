@@ -1,6 +1,7 @@
 ### Bug fixing
 
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
+* Multiple scratches in Seifert surfaces
 
 ### Code structure
 

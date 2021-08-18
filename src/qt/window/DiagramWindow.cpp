@@ -186,10 +186,10 @@ QImage DiagramWindow::exportImage() const {
 	const auto widget = this->diagramWidget();
 	const auto size = widget->size();
 	const auto dpr = widget->devicePixelRatio();
-	QImage image(size.width() * dpr, size.height() * dpr, QImage::Format_ARGB32);
+	QImage image(size.width() * dpr, size.height() * dpr, QImage::Format_RGB32);
 	QPainter painter;
 	image.setDevicePixelRatio(dpr);
-	image.fill(::Qt::transparent);
+	image.fill(::Qt::white);
 	painter.begin(&image);
 	widget->drawIt(painter);
 	painter.end();

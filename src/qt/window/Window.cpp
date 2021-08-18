@@ -44,7 +44,7 @@ Window::Window() {
 	fileMenu->addSeparator();
 	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
 	save->setShortcut(QKeySequence("Ctrl+S"));
-	fileMenu->addAction("Export as PNG…", this, &Window::exportPNG);
+	fileMenu->addAction("Export as image…", this, &Window::exportPNG);
 	fileMenu->addSeparator();
 	fileMenu->addAction("Rename…", [this] { this->rename(); });
 	fileMenu->addSeparator();

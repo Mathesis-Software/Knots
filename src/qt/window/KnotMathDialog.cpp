@@ -41,6 +41,11 @@ void KnotWindow::math() {
 	this->mth = new KnotMathDialog(*this);
 	this->mth->setWindowTitle("Parameters for " + this->windowTitle());
 	this->mth->show();
+	const QRect geometry = this->geometry();
+	const QRect mthGeometry = this->mth->geometry();
+	const int x = geometry.x() + (geometry.width() - mthGeometry.width()) / 2;
+	const int y = geometry.y() + (geometry.height() - mthGeometry.height()) / 2;
+	this->mth->move(x, y);
 }
 
 KnotMathDialog::KnotMathDialog(KnotWindow &window) : window(window) {

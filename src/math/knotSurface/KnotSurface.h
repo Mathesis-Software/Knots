@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "../knotWrapper/KnotWrapper.h"
-#include "../../gl/surface/Surface.h"
+#include "../surface/Surface.h"
 
 namespace KE { namespace GL {
 

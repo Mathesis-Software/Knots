@@ -4,7 +4,6 @@ include src/config.mk
 
 all:
 	make -C src/math all
-	make -C src/gl all
 	make -C src/qt all
 
 install: install_bin install_data
@@ -36,7 +35,6 @@ archive:
 
 clean:
 	@make -C src/math clean
-	@make -C src/gl clean
 	@make -C src/qt clean
 	@make -C src/other clean
 	@make .clean

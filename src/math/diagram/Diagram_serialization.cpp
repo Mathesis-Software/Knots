@@ -22,7 +22,7 @@
 #include <map>
 #include <vector>
 
-#include "../../util/rapidjson.h"
+#include "../util/rapidjson.h"
 #include "Diagram.h"
 
 namespace KE { namespace TwoD {

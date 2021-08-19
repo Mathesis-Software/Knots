@@ -25,7 +25,7 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include "../util/rapidjson.h"
+#include "../math/util/rapidjson.h"
 #include "../math/knotWrapper/KnotWrapper.h"
 #include "../math/computables/computables.h"
 

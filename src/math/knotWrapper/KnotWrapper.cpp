@@ -20,7 +20,7 @@
  */
 
 #include "KnotWrapper.h"
-#include "../../util/rapidjson.h"
+#include "../util/rapidjson.h"
 
 namespace KE { namespace ThreeD {
 

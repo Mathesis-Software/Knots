@@ -23,7 +23,7 @@
 #define __SEIFERT_SURFACE_H__
 
 #include "../knotWrapper/KnotWrapper.h"
-#include "../../gl/surface/Surface.h"
+#include "../surface/Surface.h"
 
 namespace KE { namespace GL {
 

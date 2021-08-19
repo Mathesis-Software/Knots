@@ -27,7 +27,7 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "../util/rapidjson.h"
+#include "../math/util/rapidjson.h"
 #include "../math/diagram/Diagram.h"
 #include "../math/knot/Knot.h"
 

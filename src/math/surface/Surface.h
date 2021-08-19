@@ -26,7 +26,7 @@
 #include <string>
 #include <vector>
 
-#include "../../math/knot/primitives.h"
+#include "../util/primitives.h"
 
 namespace KE { namespace GL {
 

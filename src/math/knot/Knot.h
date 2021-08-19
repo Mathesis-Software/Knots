@@ -29,7 +29,7 @@
 
 #include <rapidjson/document.h>
 
-#include "primitives.h"
+#include "../util/primitives.h"
 
 namespace KE {
 

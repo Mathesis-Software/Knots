@@ -29,7 +29,7 @@
 #include "DiagramWindow.h"
 #include "KnotWindow.h"
 #include "../manager/iconProvider.h"
-#include "../../util/rapidjson.h"
+#include "../../math/util/rapidjson.h"
 
 namespace KE { namespace Qt {
 

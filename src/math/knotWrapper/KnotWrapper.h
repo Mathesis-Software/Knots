@@ -23,7 +23,7 @@
 #define __KNOTEDITOR_H__
 
 #include "../knot/Knot.h"
-#include "../../gl/surface/Surface.h"
+#include "../surface/Surface.h"
 
 namespace KE { namespace ThreeD {
 

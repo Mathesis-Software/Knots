@@ -65,8 +65,9 @@ double VassilievInvariant::compute(const Knot::Snapshot &snapshot) {
 		v.insert(v.end(), snapshot.size(), 0.0);
 	}
 	for (std::size_t i = 0; i < snapshot.size(); i++) {
-		for (std::size_t j = snapshot.next(i); j != i; j = snapshot.next(j))
+		for (std::size_t j = snapshot.next(i); j != i; j = snapshot.next(j)) {
 			gauss_sum[i][j] = gauss_sum[i][snapshot.prev(j)] + gauss[i][j];
+		}
 	}
 
 	for (std::size_t i = 0; i < snapshot.size(); i++) {

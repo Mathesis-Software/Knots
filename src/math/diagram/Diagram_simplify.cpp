@@ -43,7 +43,7 @@ bool Diagram::simplify(std::size_t depth) {
 	}
 
 	std::vector<bool> single_flags;
-	for (const auto edge : edges) {
+	for (const auto &edge : edges) {
 		single_flags.push_back(crossings.find(edge.start) == crossings.end());
 	}
 	for (std::size_t i = 0; i < 2 * depth; ++i) {

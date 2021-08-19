@@ -37,9 +37,9 @@ Window::Window() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto newd = fileMenu->addAction("New diagram", [this] { Window::newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [] { Window::newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [this] { Window::openFile(); });
+	auto open = fileMenu->addAction("Open…", [] { Window::openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });

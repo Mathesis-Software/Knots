@@ -43,7 +43,7 @@ private:
 private:
 	void initializeGL() override;
 	void resizeGL(int, int) override;
-	void paintGL();
+	void paintGL() override;
 
 	void mousePressEvent(QMouseEvent *event) override;
 	void mouseReleaseEvent(QMouseEvent *event) override;

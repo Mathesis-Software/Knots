@@ -19,25 +19,25 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include "Surface.h"
+#ifndef __KE_COLOR_H__
+#define __KE_COLOR_H__
 
-namespace KE::GL {
+#include <memory>
+#include <string>
 
-Surface::Surface(bool stripped, bool showBackSide) : stripped(stripped), showBackSide(showBackSide) {}
+namespace KE {
 
-Surface::~Surface() {
-}
+struct Color {
+	float rgb[3];
 
-bool Surface::isObsolete() const {
-	return this->points.empty();
-}
+	Color(int red, int green, int blue) : rgb {red / 255.0f, green / 255.0f, blue / 255.0f} {}
 
-void Surface::destroy() {
-	this->points.clear();
-}
+	std::string stringValue() const;
 
-void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) {
-	this->points.push_back(SurfacePoint(vertex.x, vertex.y, vertex.z, normal.x, normal.y, normal.z));
-}
+	static std::shared_ptr<Color> parse(const std::string &stringValue);
+	static const Color white;
+};
 
 }
+
+#endif /* __KE_COLOR_H__ */

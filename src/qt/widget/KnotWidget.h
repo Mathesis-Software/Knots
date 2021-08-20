@@ -76,7 +76,7 @@ private:
 
 public:
 	const ThreeD::KnotWrapper &knot() const { return this->_knot; }
-	const GL::Color &backgroundColor() const override;
+	const Color &backgroundColor() const override;
 
   void saveKnot(std::ostream &os);
 	bool isKnotSaved() const;

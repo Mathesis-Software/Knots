@@ -39,9 +39,9 @@ void KnotWidget::init() {
   this->addSurface(this->knot().seifertSurface);
 }
 
-const GL::Color &KnotWidget::backgroundColor() const {
+const Color &KnotWidget::backgroundColor() const {
 	const auto ref = this->knot().backgroundColor;
-	return ref ? *ref : GL::Color::white;
+	return ref ? *ref : Color::white;
 }
 
 void KnotWidget::moveSeifertBasePoint(double distance) {

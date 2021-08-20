@@ -98,7 +98,7 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 	const auto &component = doc["components"][0];
 	if (component.HasMember("ui") && component["ui"].IsObject()) {
 		const auto &ui = component["ui"];
-		this->knotColor = GL::Color::parse(Util::rapidjson::getString(ui, "color"));
+		this->knotColor = Color::parse(Util::rapidjson::getString(ui, "color"));
 		if (ui.HasMember("thickness") && ui["thickness"].IsNumber()) {
 			this->knotThickness = std::make_shared<double>(ui["thickness"].GetDouble());
 		}
@@ -106,9 +106,9 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 
 	if (doc.HasMember("ui") && doc["ui"].IsObject()) {
 		const auto &ui = doc["ui"];
-		this->backgroundColor = GL::Color::parse(Util::rapidjson::getString(ui, "backgroundColor"));
-		this->seifertFrontColor = GL::Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
-		this->seifertBackColor = GL::Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));
+		this->backgroundColor = Color::parse(Util::rapidjson::getString(ui, "backgroundColor"));
+		this->seifertFrontColor = Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
+		this->seifertBackColor = Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));
 		if (ui.HasMember("isSeifertSurfaceVisible") && ui["isSeifertSurfaceVisible"].IsBool()) {
 			this->isSeifertSurfaceVisible = std::make_shared<bool>(ui["isSeifertSurfaceVisible"].GetBool());
 		}

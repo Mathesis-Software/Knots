@@ -54,7 +54,7 @@ private:
 
 public:
 	GLWidget(QWidget *parent);
-	virtual const GL::Color &backgroundColor() const = 0;
+	virtual const Color &backgroundColor() const = 0;
 
 	void addSurface(std::shared_ptr<GL::Surface> surface) { this->surfaces.push_back(surface); };
 	void rotate(int, int);

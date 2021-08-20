@@ -23,7 +23,7 @@
 #define __KNOTEDITOR_H__
 
 #include "../knot/Knot.h"
-#include "../surface/Surface.h"
+#include "../surface/Color.h"
 
 namespace KE::GL {
 
@@ -41,12 +41,12 @@ private:
 	std::string saveCheckpoint;
 
 public:
-	std::shared_ptr<GL::Color> backgroundColor;
-	std::shared_ptr<GL::Color> knotColor;
+	std::shared_ptr<Color> backgroundColor;
+	std::shared_ptr<Color> knotColor;
 	std::shared_ptr<double> knotThickness;
 	std::shared_ptr<bool> isSeifertSurfaceVisible;
-	std::shared_ptr<GL::Color> seifertFrontColor;
-	std::shared_ptr<GL::Color> seifertBackColor;
+	std::shared_ptr<Color> seifertFrontColor;
+	std::shared_ptr<Color> seifertBackColor;
 
 	std::shared_ptr<GL::KnotSurface> knotSurface;
 	ThreeD::Point seifertStartPoint;

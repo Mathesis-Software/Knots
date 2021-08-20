@@ -62,7 +62,7 @@ void KnotWidget::setThickness() {
 
 namespace {
 
-QColor from(const GL::Color &color) {
+QColor from(const Color &color) {
 	return QColor((int)round(color.rgb[0] * 255), (int)round(color.rgb[1] * 255), (int)round(color.rgb[2] * 255));
 }
 
@@ -83,7 +83,7 @@ void KnotWidget::setBgColor() {
 		"Background Color",
 		[this] { return from(this->backgroundColor()); },
 		[this] (const QColor &color) {
-			this->_knot.backgroundColor = std::make_shared<GL::Color>(color.red(), color.green(), color.blue());
+			this->_knot.backgroundColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
 			this->update();
 		}
 	);
@@ -94,7 +94,7 @@ void KnotWidget::setKnotColor() {
 		"Knot Color",
 		[this] { return from(this->knot().knotSurface->frontColor()); },
 		[this] (const QColor &color) {
-			this->_knot.knotColor = std::make_shared<GL::Color>(color.red(), color.green(), color.blue());
+			this->_knot.knotColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
 			this->update();
 		}
 	);
@@ -105,7 +105,7 @@ void KnotWidget::setSeifertFrontColor() {
 		"Seifert Surface Color",
 		[this] { return from(this->knot().seifertSurface->frontColor()); },
 		[this] (const QColor &color) {
-			this->_knot.seifertFrontColor = std::make_shared<GL::Color>(color.red(), color.green(), color.blue());
+			this->_knot.seifertFrontColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
 			this->update();
 		}
 	);
@@ -116,7 +116,7 @@ void KnotWidget::setSeifertBackColor() {
 		"Seifert Surface Back Side Color",
 		[this] { return from(this->knot().seifertSurface->backColor()); },
 		[this] (const QColor &color) {
-			this->_knot.seifertBackColor = std::make_shared<GL::Color>(color.red(), color.green(), color.blue());
+			this->_knot.seifertBackColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
 			this->update();
 		}
 	);

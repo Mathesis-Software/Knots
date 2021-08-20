@@ -22,24 +22,12 @@
 #ifndef __SURFACE_H__
 #define __SURFACE_H__
 
-#include <memory>
-#include <string>
 #include <vector>
 
+#include "Color.h"
 #include "../util/primitives.h"
 
-namespace KE { namespace GL {
-
-struct Color {
-	float rgb[3];
-
-	Color(int red, int green, int blue) : rgb {red / 255.0f, green / 255.0f, blue / 255.0f} {}
-
-	std::string stringValue() const;
-
-	static std::shared_ptr<Color> parse(const std::string &stringValue);
-	static const Color white;
-};
+namespace KE::GL {
 
 class Surface {
 
@@ -85,6 +73,6 @@ private:
 	Surface& operator = (const Surface&) = delete;
 };
 
-}}
+}
 
 #endif /* __SURFACE_H__ */

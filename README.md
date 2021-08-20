@@ -28,18 +28,18 @@ sudo apt install g++ make ccache qtbase5-dev qtbase5-dev-tools libqt5opengl5-dev
 
 To build:
 ```
-$ make
+make
 ```
 On a non-Ubuntu system, you might need to edit `src/config.mk` to configure the build.
 
 By default, the app is installed to `/usr/local/KnotEditor`, with script `knoted` in `/usr/local/bin`. Alternatively, you can change the `INSTPREFIX` var in `src/config.mk`.
 ```
-$ sudo make install
+sudo make install
 ```
 
 To run:
 ```
-$ knoted
+knoted
 ```
 
 ![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-08-17.png?raw=true)

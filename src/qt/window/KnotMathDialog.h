@@ -36,10 +36,10 @@ private:
 
 private:
 	void closeEvent(QCloseEvent*);
+	void recompute();
 
 public:
 	KnotMathDialog(KnotWindow &window);
-	void recompute();
 };
 
 }}

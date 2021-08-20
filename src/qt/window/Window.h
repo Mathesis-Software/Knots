@@ -31,6 +31,8 @@ namespace KE { namespace Qt {
 
 class Window : public QMainWindow {
 
+Q_OBJECT
+
 private:
   static std::list<Window*> AWRegister;
 
@@ -68,6 +70,10 @@ public:
   virtual ~Window();
 	virtual void updateActions();
   virtual QString fileFilter() const = 0;
+
+signals:
+	void closing();
+	void contentChanged();
 
 protected:
   virtual void rename() = 0;

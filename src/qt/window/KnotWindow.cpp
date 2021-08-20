@@ -45,7 +45,7 @@ void KnotWindow::init(KnotWidget *widget) {
 	});
 	this->connect(widget, &KnotWidget::actionsUpdated, this, &KnotWindow::updateActions);
 
-  mth = NULL;
+  this->mth = nullptr;
 
   initMenu();
   complete();
@@ -62,10 +62,6 @@ KnotWindow::KnotWindow(const DiagramWidget &diagramWidget) {
 }
 
 KnotWindow::~KnotWindow() {
-  if (mth) {
-    delete mth;
-	}
-
   delete mathMenu;
   delete viewMenu;
 }
@@ -74,17 +70,11 @@ void KnotWindow::closeEvent(QCloseEvent *event) {
 	Window::closeEvent(event);
 	if (event->isAccepted()) {
 		this->knotWidget()->stopSmoothingAndWait();
-		if (this->mth) {
-			this->mth->close();
-		}
 	}
 }
 
 void KnotWindow::updateActions() {
   setWindowTitle(this->knotWidget()->knot().caption().c_str());
-	if (mth) {
-		mth->recompute();
-	}
 	Window::updateActions();
 }
 

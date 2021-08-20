@@ -33,7 +33,6 @@ namespace KE { namespace Qt {
 
 void KnotWindow::math() {
 	if (this->mth) {
-		this->mth->show();
 		this->mth->raise();
 		return;
 	}
@@ -92,6 +91,9 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) : window(window) {
 	}
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);
+
+	this->connect(&window, &Window::contentChanged, this, &KnotMathDialog::recompute);
+	this->connect(&window, &Window::closing, this, &KnotMathDialog::close);
 }
 
 void KnotMathDialog::recompute() {

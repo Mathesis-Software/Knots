@@ -87,6 +87,7 @@ void Window::closeEvent(QCloseEvent *event) {
 		return;
 	}
 
+	emit closing();
 	AWRegister.remove(this);
 }
 
@@ -162,6 +163,7 @@ void Window::updateActions() {
 	for (auto &[action, controller] : this->actionsMap) {
 		controller(*action);
 	}
+	emit contentChanged();
 }
 
 }}

@@ -11,6 +11,7 @@
 * (?) save rotation matrix (currently knot is saved "rotated", with new points coordinates)
 * move all data and as much as possible code from knotWindow to KnotWidget
 * replace linked list in seifert structures with std::list
+* hide currently public data in KnotWrapper class
 
 ### User interface
 
@@ -30,6 +31,7 @@
 
 ### Technical feature improvements
 
+* save/restore Seifert surface start point
 * move invariants (and other params) computations to a separate thread, with progress indication and a way to interrupt
 * replace "msleep(20)" in the smoothing thread with something more clear
 

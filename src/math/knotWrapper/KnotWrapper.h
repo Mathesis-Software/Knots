@@ -25,7 +25,14 @@
 #include "../knot/Knot.h"
 #include "../surface/Surface.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::GL {
+
+class KnotSurface;
+class SeifertSurface;
+
+}
+
+namespace KE::ThreeD {
 
 class KnotWrapper {
 
@@ -41,6 +48,10 @@ public:
 	std::shared_ptr<GL::Color> seifertFrontColor;
 	std::shared_ptr<GL::Color> seifertBackColor;
 
+	std::shared_ptr<GL::KnotSurface> knotSurface;
+	ThreeD::Point seifertStartPoint;
+	std::shared_ptr<GL::SeifertSurface> seifertSurface;
+
 public:
 	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
 	KnotWrapper(const rapidjson::Document &doc);
@@ -54,14 +65,18 @@ public:
 	void center() { this->knot.center(); }
 	void normalize(std::size_t numberOfPoints) { this->knot.normalize(numberOfPoints); }
 
+	void moveSeifertBasePoint(double distance);
+	void toggleSeifertSurfaceVisibility();
+
 	rapidjson::Document serialize(const double matrix[3][3]);
 	bool isSaved(const double matrix[3][3]) const;
 
 private:
+	void init();
 	void saveUiOptions(rapidjson::Document &doc) const;
 	void readUiOptions(const rapidjson::Document &doc);
 };
 
-}}
+}
 
 #endif /* __KNOTEDITOR_H__ */

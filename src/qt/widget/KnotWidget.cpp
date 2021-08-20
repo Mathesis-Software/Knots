@@ -26,19 +26,17 @@
 
 namespace KE { namespace Qt {
 
-KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), _knot(doc), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(this) {
+KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), _knot(doc), smoothingThread(this) {
 	this->init();
 }
 
-KnotWidget::KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : GLWidget(parent), _knot(diagram, width, height), seifertStartPoint(0.0, 0.0, 0.4), smoothingThread(this) {
+KnotWidget::KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : GLWidget(parent), _knot(diagram, width, height), smoothingThread(this) {
 	this->init();
 }
 
 void KnotWidget::init() {
-  this->knotSurface = std::make_shared<GL::KnotSurface>(this->knot(), 28);
-  this->addSurface(this->knotSurface);
-  this->seifertSurface = std::make_shared<GL::SeifertSurface>(this->knot(), this->seifertStartPoint);
-  this->addSurface(this->seifertSurface);
+  this->addSurface(this->knot().knotSurface);
+  this->addSurface(this->knot().seifertSurface);
 }
 
 const GL::Color &KnotWidget::backgroundColor() const {
@@ -47,33 +45,25 @@ const GL::Color &KnotWidget::backgroundColor() const {
 }
 
 void KnotWidget::moveSeifertBasePoint(double distance) {
-	this->seifertStartPoint.move(
-		GL::SeifertSurface::gradient(this->seifertStartPoint, this->knot().snapshot()), distance
-	);
-	this->seifertSurface->destroy();
+	this->_knot.moveSeifertBasePoint(distance);
 	this->update();
 }
 
 void KnotWidget::toggleSeifertSurfaceVisibility() {
-  if (this->seifertSurface->isVisible()) {
-    this->_knot.isSeifertSurfaceVisible = std::make_shared<bool>(false);
-  } else {
-    this->_knot.isSeifertSurfaceVisible = std::make_shared<bool>(true);
-  }
-
+	this->_knot.toggleSeifertSurfaceVisibility();
   this->update();
 	emit actionsUpdated();
 }
 
 void KnotWidget::onKnotChanged(bool force) {
-  if (force || this->knotSurface->isObsolete() || this->seifertSurface->isObsolete()) {
+  if (force || this->knot().knotSurface->isObsolete() || this->knot().seifertSurface->isObsolete()) {
 		this->update();
 		emit actionsUpdated();
 	}
 }
 
 bool KnotWidget::isSeifertSurfaceVisible() const {
-	return this->seifertSurface->isVisible();
+	return this->knot().seifertSurface->isVisible();
 }
 
 bool KnotWidget::isSmoothingInProgress() const {

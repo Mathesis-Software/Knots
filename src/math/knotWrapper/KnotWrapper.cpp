@@ -20,21 +20,27 @@
  */
 
 #include "KnotWrapper.h"
+#include "../knotSurface/KnotSurface.h"
+#include "../seifert/SeifertSurface.h"
 #include "../util/rapidjson.h"
 
 namespace KE { namespace ThreeD {
 
-KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {
-	auto cp = this->knot.serialize();
-	this->saveUiOptions(cp);
-	this->saveCheckpoint = Util::rapidjson::docToString(cp);
+KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height), seifertStartPoint(0.0, 0.0, 0.4) {
+	this->init();
 }
 
-KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc) {
+KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4) {
 	this->readUiOptions(doc);
+	this->init();
+}
+
+void KnotWrapper::init() {
 	auto cp = this->knot.serialize();
 	this->saveUiOptions(cp);
 	this->saveCheckpoint = Util::rapidjson::docToString(cp);
+  this->knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
+  this->seifertSurface = std::make_shared<GL::SeifertSurface>(*this, this->seifertStartPoint);
 }
 
 rapidjson::Document KnotWrapper::serialize(const double matrix[3][3]) {
@@ -107,6 +113,21 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 			this->isSeifertSurfaceVisible = std::make_shared<bool>(ui["isSeifertSurfaceVisible"].GetBool());
 		}
 	}
+}
+
+void KnotWrapper::moveSeifertBasePoint(double distance) {
+	this->seifertStartPoint.move(
+		GL::SeifertSurface::gradient(this->seifertStartPoint, this->snapshot()), distance
+	);
+	this->seifertSurface->destroy();
+}
+
+void KnotWrapper::toggleSeifertSurfaceVisibility() {
+  if (this->seifertSurface->isVisible()) {
+    this->isSeifertSurfaceVisible = std::make_shared<bool>(false);
+  } else {
+    this->isSeifertSurfaceVisible = std::make_shared<bool>(true);
+  }
 }
 
 }}

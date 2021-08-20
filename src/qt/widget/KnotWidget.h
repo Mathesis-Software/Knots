@@ -65,11 +65,6 @@ Q_OBJECT
 
 private:
 	ThreeD::KnotWrapper _knot;
-
-	std::shared_ptr<GL::KnotSurface> knotSurface;
-	ThreeD::Point seifertStartPoint;
-	std::shared_ptr<GL::SeifertSurface> seifertSurface;
-
 	SmoothingThread smoothingThread;
 
 public:

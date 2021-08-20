@@ -1,4 +1,5 @@
 all:
+	@make -C surface all
 	@make -C diagram all
 	@make -C diagramEditor all
 	@make -C knot all
@@ -8,6 +9,7 @@ all:
 	@make -C seifert all
 
 clean:
+	@make -C surface .clean
 	@make -C diagram .clean
 	@make -C diagramEditor .clean
 	@make -C knot .clean

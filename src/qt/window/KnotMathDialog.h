@@ -34,12 +34,11 @@ private:
 	KnotWindow &window;
 	std::vector<std::function<void()>> callbacks;
 
-private:
-	void closeEvent(QCloseEvent*);
-	void recompute();
-
 public:
 	KnotMathDialog(KnotWindow &window);
+
+private:
+	void recompute();
 };
 
 }}

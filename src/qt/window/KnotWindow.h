@@ -28,18 +28,24 @@
 namespace KE { namespace Qt {
 
 class KnotWidget;
-class KnotMathDialog;
 class DiagramWidget;
 
 class KnotWindow : public Window {
+
+Q_OBJECT
 
 private:
   QMenu *mathMenu;
   QMenu *viewMenu;
 
-  friend class KnotMathDialog;
-  KnotMathDialog *mth;
+public:
+  KnotWindow(const rapidjson::Document &doc);
+  KnotWindow(const DiagramWidget &diagramWidget);
+  ~KnotWindow();
 
+	KnotWidget *knotWidget() const;
+
+private:
   void init(KnotWidget *widget);
   void initMenu();
 
@@ -48,22 +54,16 @@ private:
 	bool isSaved() const override;
   void saveIt(std::ostream&) override;
 
-private:
-	KnotWidget *knotWidget() const;
-
-  void math();
-
-public:
-  KnotWindow(const rapidjson::Document &doc);
-  KnotWindow(const DiagramWidget &diagramWidget);
-  ~KnotWindow();
-
-private:
 	void closeEvent(QCloseEvent *event) override;
 
 	QString fileFilter() const override { return "Knot files (*.knt)"; }
 	void updateActions() override;
 	void rename() override;
+
+  void showMathDialog();
+
+signals:
+	void raiseMathDialog();
 };
 
 }}

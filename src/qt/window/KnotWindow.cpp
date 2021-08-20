@@ -45,8 +45,6 @@ void KnotWindow::init(KnotWidget *widget) {
 	});
 	this->connect(widget, &KnotWidget::actionsUpdated, this, &KnotWindow::updateActions);
 
-  this->mth = nullptr;
-
   initMenu();
   complete();
 

@@ -28,7 +28,7 @@ namespace KE { namespace Qt {
 
 void KnotWindow::initMenu() {
   mathMenu = menuBar()->addMenu("Math");
-  mathMenu->addAction("View parameters", [this] { this->math(); });
+  mathMenu->addAction("View parameters", [this] { this->showMathDialog(); });
   mathMenu->addSeparator();
 	this->registerAction(
 		mathMenu->addAction("Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
@@ -68,7 +68,7 @@ void KnotWindow::initMenu() {
 		[this](QAction &action) { action.setVisible(this->knotWidget()->isSmoothingInProgress()); }
 	);
   addToolbarSeparator();
-  addToolbarAction("math.svg", "Show parameters", [this] { this->math(); });
+  addToolbarAction("math.svg", "Show parameters", [this] { this->showMathDialog(); });
   addToolbarSeparator();
   this->registerAction(
 		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(0.02); }),

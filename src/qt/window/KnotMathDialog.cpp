@@ -19,6 +19,7 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <QtCore/QMetaMethod>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
@@ -31,20 +32,20 @@
 
 namespace KE { namespace Qt {
 
-void KnotWindow::math() {
-	if (this->mth) {
-		this->mth->raise();
+void KnotWindow::showMathDialog() {
+	if (this->isSignalConnected(QMetaMethod::fromSignal(&KnotWindow::raiseMathDialog))) {
+		emit raiseMathDialog();
 		return;
 	}
 
-	this->mth = new KnotMathDialog(*this);
-	this->mth->setWindowTitle("Parameters for " + this->windowTitle());
-	this->mth->show();
+	auto mth = new KnotMathDialog(*this);
+	mth->setWindowTitle("Parameters for " + this->windowTitle());
+	mth->show();
 	const QRect geometry = this->geometry();
-	const QRect mthGeometry = this->mth->geometry();
+	const QRect mthGeometry = mth->geometry();
 	const int x = geometry.x() + (geometry.width() - mthGeometry.width()) / 2;
 	const int y = geometry.y() + (geometry.height() - mthGeometry.height()) / 2;
-	this->mth->move(x, y);
+	mth->move(x, y);
 }
 
 KnotMathDialog::KnotMathDialog(KnotWindow &window) : window(window) {
@@ -93,17 +94,14 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) : window(window) {
 	layout->setSizeConstraint(QLayout::SetFixedSize);
 
 	this->connect(&window, &Window::contentChanged, this, &KnotMathDialog::recompute);
-	this->connect(&window, &Window::closing, this, &KnotMathDialog::close);
+	this->connect(&window, &Window::closing, this, &QDialog::close);
+	this->connect(&window, &KnotWindow::raiseMathDialog, this, &QDialog::raise);
 }
 
 void KnotMathDialog::recompute() {
 	for (const auto &cb : this->callbacks) {
 		cb();
 	}
-}
-
-void KnotMathDialog::closeEvent(QCloseEvent*) {
-	this->window.mth = nullptr;
 }
 
 }}

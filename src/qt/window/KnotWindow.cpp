@@ -60,8 +60,7 @@ KnotWindow::KnotWindow(const DiagramWidget &diagramWidget) {
 }
 
 KnotWindow::~KnotWindow() {
-  delete mathMenu;
-  delete viewMenu;
+  delete knotMenu;
 }
 
 void KnotWindow::closeEvent(QCloseEvent *event) {

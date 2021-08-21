@@ -70,7 +70,7 @@ public:
 	Point seifertBasePoint() const;
 	void moveSeifertBasePoint(double distance);
 	bool isSeifertSurfaceVisible() const;
-	void toggleSeifertSurfaceVisibility();
+	void setSeifertSurfaceVisibility(bool visible);
 
 	double knotThickness() const;
 	void setKnotThickness(double thickness);

@@ -59,6 +59,7 @@ private:
 
 class KnotWidget : public GLWidget {
 
+friend class KnotOptionsDialog;
 friend class SmoothingThread;
 
 Q_OBJECT
@@ -87,17 +88,12 @@ public:
 	bool isSmoothingInProgress() const;
 
 	bool isSeifertSurfaceVisible() const;
-  void toggleSeifertSurfaceVisibility();
+  void setSeifertSurfaceVisibility(bool visible);
   void moveSeifertBasePoint(double distance);
 
   void setCaption(const QString &caption) { this->_knot.setCaption(caption.toStdString()); }
   void setLength();
   void setNumberOfPoints();
-  void setThickness();
-  void setBgColor();
-  void setKnotColor();
-  void setSeifertFrontColor();
-  void setSeifertBackColor();
 
 	void onKnotChanged(bool force);
 

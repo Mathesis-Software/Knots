@@ -39,8 +39,8 @@ void KnotWrapper::init() {
 	auto cp = this->knot.serialize();
 	this->saveUiOptions(cp);
 	this->saveCheckpoint = Util::rapidjson::docToString(cp);
-  this->_knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
-  this->_seifertSurface = std::make_shared<GL::SeifertSurface>(*this);
+	this->_knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
+	this->_seifertSurface = std::make_shared<GL::SeifertSurface>(*this);
 }
 
 rapidjson::Document KnotWrapper::serialize(const double matrix[3][3]) {
@@ -155,12 +155,12 @@ bool KnotWrapper::isSeifertSurfaceVisible() const {
 	return ref && *ref;
 }
 
-void KnotWrapper::toggleSeifertSurfaceVisibility() {
-  if (this->isSeifertSurfaceVisible()) {
-    this->_isSeifertSurfaceVisible = std::make_shared<bool>(false);
-  } else {
-    this->_isSeifertSurfaceVisible = std::make_shared<bool>(true);
-  }
+void KnotWrapper::setSeifertSurfaceVisibility(bool visible) {
+	if (visible == this->isSeifertSurfaceVisible()) {
+		return;
+	}
+
+	this->_isSeifertSurfaceVisible = std::make_shared<bool>(visible);
 }
 
 double KnotWrapper::knotThickness() const {
@@ -169,10 +169,10 @@ double KnotWrapper::knotThickness() const {
 }
 
 void KnotWrapper::setKnotThickness(double thickness) {
-  if (thickness != this->knotThickness()) {
+	if (thickness != this->knotThickness()) {
 		this->_knotThickness = std::make_shared<double>(thickness);
-    this->_knotSurface->destroy();
-  }
+		this->_knotSurface->destroy();
+	}
 }
 
 const Color &KnotWrapper::backgroundColor() const {

@@ -27,38 +27,22 @@
 namespace KE { namespace Qt {
 
 void KnotWindow::initMenu() {
-  mathMenu = menuBar()->addMenu("Math");
-  mathMenu->addAction("View parameters", [this] { this->showMathDialog(); });
-  mathMenu->addSeparator();
+  knotMenu = menuBar()->addMenu("Knot");
+  knotMenu->addAction("Computables…", [this] { this->showMathDialog(); });
+  knotMenu->addSeparator();
 	this->registerAction(
-		mathMenu->addAction("Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
+		knotMenu->addAction("Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
 		[this](QAction &action) { action.setEnabled(!this->knotWidget()->isSmoothingInProgress()); }
 	);
 	this->registerAction(
-		mathMenu->addAction("Stop smoothing", [this] { this->knotWidget()->stopSmoothing(); }),
+		knotMenu->addAction("Stop smoothing", [this] { this->knotWidget()->stopSmoothing(); }),
 		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSmoothingInProgress()); }
 	);
-  mathMenu->addSeparator();
-  mathMenu->addAction("Number of points…", [this] { this->knotWidget()->setNumberOfPoints(); });
-  mathMenu->addAction("Length…", [this] { this->knotWidget()->setLength(); });
+  knotMenu->addSeparator();
+  knotMenu->addAction("Visual options…", [this] { this->showOptionsDialog(); });
+  knotMenu->addAction("Number of points…", [this] { this->knotWidget()->setNumberOfPoints(); });
+  knotMenu->addAction("Length…", [this] { this->knotWidget()->setLength(); });
   
-  viewMenu = menuBar()->addMenu("View");
-	auto toggleSeifert = this->registerAction(
-		viewMenu->addAction("Show Seifert surface", [this] { this->knotWidget()->toggleSeifertSurfaceVisibility(); }),
-		[this](QAction &action) {
-			action.setChecked(this->knotWidget()->isSeifertSurfaceVisible());  
-		}
-	);
-	toggleSeifert->setCheckable(true);
-  
-  QMenu *optionsMenu = menuBar()->addMenu("Options");
-  optionsMenu->addAction("Thickness…", [this] { this->knotWidget()->setThickness(); });
-  optionsMenu->addSeparator();
-  optionsMenu->addAction("Background color…", [this] { this->knotWidget()->setBgColor(); });
-  optionsMenu->addAction("Knot color…", [this] { this->knotWidget()->setKnotColor(); });
-  optionsMenu->addAction("Seifert surface front color…", [this] { this->knotWidget()->setSeifertFrontColor(); });
-  optionsMenu->addAction("Seifert surface back color…", [this] { this->knotWidget()->setSeifertBackColor(); });
-
 	this->registerAction(
 		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
 		[this](QAction &action) { action.setVisible(!this->knotWidget()->isSmoothingInProgress()); }

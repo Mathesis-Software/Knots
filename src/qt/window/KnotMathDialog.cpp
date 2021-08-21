@@ -43,7 +43,7 @@ void KnotWindow::showMathDialog() {
 	mth->show();
 	const QRect geometry = this->geometry();
 	const QRect mthGeometry = mth->geometry();
-	const int x = geometry.x() + (geometry.width() - mthGeometry.width()) / 2;
+	const int x = geometry.right();
 	const int y = geometry.y() + (geometry.height() - mthGeometry.height()) / 2;
 	mth->move(x, y);
 }

@@ -19,54 +19,21 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KNOTWINDOW_H__
-#define __KNOTWINDOW_H__
+#ifndef __KE_QT_KNOT_OPTIONS_DIALOG_H__
+#define __KE_QT_KNOT_OPTIONS_DIALOG_H__
 
-#include "Window.h"
-#include "../../math/knotWrapper/KnotWrapper.h"
+#include <QtWidgets/QDialog>
 
 namespace KE { namespace Qt {
 
-class KnotWidget;
-class DiagramWidget;
+class KnotWindow;
 
-class KnotWindow : public Window {
-
-Q_OBJECT
-
-private:
-  QMenu *knotMenu;
+class KnotOptionsDialog : public QDialog {
 
 public:
-  KnotWindow(const rapidjson::Document &doc);
-  KnotWindow(const DiagramWidget &diagramWidget);
-  ~KnotWindow();
-
-	KnotWidget *knotWidget() const;
-
-private:
-  void init(KnotWidget *widget);
-  void initMenu();
-
-	QImage exportImage() const override;
-
-	bool isSaved() const override;
-  void saveIt(std::ostream&) override;
-
-	void closeEvent(QCloseEvent *event) override;
-
-	QString fileFilter() const override { return "Knot files (*.knt)"; }
-	void updateActions() override;
-	void rename() override;
-
-  void showMathDialog();
-  void showOptionsDialog();
-
-signals:
-	void raiseMathDialog();
-	void raiseOptionsDialog();
+	KnotOptionsDialog(KnotWindow &window);
 };
 
 }}
 
-#endif /* __KNOTWINDOW_H__ */
+#endif /* __KE_QT_KNOT_OPTIONS_DIALOG_H__ */

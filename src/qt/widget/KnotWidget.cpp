@@ -48,8 +48,8 @@ void KnotWidget::moveSeifertBasePoint(double distance) {
 	this->update();
 }
 
-void KnotWidget::toggleSeifertSurfaceVisibility() {
-	this->_knot.toggleSeifertSurfaceVisibility();
+void KnotWidget::setSeifertSurfaceVisibility(bool visible) {
+	this->_knot.setSeifertSurfaceVisibility(visible);
   this->update();
 	emit actionsUpdated();
 }

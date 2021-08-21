@@ -39,7 +39,7 @@ void KnotWindow::showMathDialog() {
 	}
 
 	auto mth = new KnotMathDialog(*this);
-	mth->setWindowTitle("Parameters for " + this->windowTitle());
+	mth->setWindowTitle("Computables for " + this->windowTitle());
 	mth->show();
 	const QRect geometry = this->geometry();
 	const QRect mthGeometry = mth->geometry();

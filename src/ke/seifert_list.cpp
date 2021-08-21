@@ -19,7 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <math.h>
+#include <cmath>
+
 #include "seifert.h"
 
 namespace KE::GL {

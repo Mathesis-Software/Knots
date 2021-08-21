@@ -6,7 +6,6 @@
 ### Code structure
 
 * consistent source file names
-* drop "qt/setValue" code
 * replace linked list in seifert structures with std::list
 
 ### User interface

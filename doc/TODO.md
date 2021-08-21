@@ -30,6 +30,7 @@
 * replace "msleep(20)" in the smoothing thread with something more clear
 * migrate from OpenGL to Vulkan/Metal/DirectX
 * do not save the app data in QtProject.conf, use own name instead
+* seifert base point: save rotated
 
 ### Math feature improvements
 

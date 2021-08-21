@@ -39,13 +39,13 @@ private:
 
 private:
 	const ThreeD::KnotWrapper &base;
-	const ThreeD::Point &startPoint;
-
-	void addTriangles(seifert *s) const;
-	void calculate() const override;
 
 public:
-	SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint);
+	SeifertSurface(const ThreeD::KnotWrapper &base);
+
+private:
+	void addTriangles(seifert *s) const;
+	void calculate() const override;
 
 	const Color &frontColor() const override;
 	const Color &backColor() const override;

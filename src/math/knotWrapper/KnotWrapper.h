@@ -49,7 +49,7 @@ private:
 	std::shared_ptr<Color> _seifertBackColor;
 
 	std::shared_ptr<GL::KnotSurface> _knotSurface;
-	ThreeD::Point seifertStartPoint;
+	std::shared_ptr<ThreeD::Point> _seifertBasePoint;
 	std::shared_ptr<GL::SeifertSurface> _seifertSurface;
 
 public:
@@ -67,6 +67,7 @@ public:
 
 	std::shared_ptr<const GL::Surface> knotSurface() const;
 	std::shared_ptr<const GL::Surface> seifertSurface() const;
+	Point seifertBasePoint() const;
 	void moveSeifertBasePoint(double distance);
 	bool isSeifertSurfaceVisible() const;
 	void toggleSeifertSurfaceVisibility();

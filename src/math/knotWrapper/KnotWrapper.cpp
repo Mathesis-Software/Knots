@@ -26,11 +26,11 @@
 
 namespace KE { namespace ThreeD {
 
-KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height), seifertStartPoint(0.0, 0.0, 0.4) {
+KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {
 	this->init();
 }
 
-KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc), seifertStartPoint(0.0, 0.0, 0.4) {
+KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc) {
 	this->readUiOptions(doc);
 	this->init();
 }
@@ -40,7 +40,7 @@ void KnotWrapper::init() {
 	this->saveUiOptions(cp);
 	this->saveCheckpoint = Util::rapidjson::docToString(cp);
   this->_knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
-  this->_seifertSurface = std::make_shared<GL::SeifertSurface>(*this, this->seifertStartPoint);
+  this->_seifertSurface = std::make_shared<GL::SeifertSurface>(*this);
 }
 
 rapidjson::Document KnotWrapper::serialize(const double matrix[3][3]) {
@@ -72,6 +72,13 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 	rapidjson::Value globalUi(rapidjson::kObjectType);
 	if (this->_isSeifertSurfaceVisible) {
 		globalUi.AddMember("isSeifertSurfaceVisible", *this->_isSeifertSurfaceVisible, doc.GetAllocator());
+	}
+	if (this->_seifertBasePoint) {
+		rapidjson::Value basePoint(rapidjson::kObjectType);
+		basePoint.AddMember("x", this->_seifertBasePoint->x, doc.GetAllocator());
+		basePoint.AddMember("y", this->_seifertBasePoint->y, doc.GetAllocator());
+		basePoint.AddMember("z", this->_seifertBasePoint->z, doc.GetAllocator());
+		globalUi.AddMember("seifertBasePoint", basePoint, doc.GetAllocator());
 	}
 	if (this->_backgroundColor) {
 		const std::string sv = this->_backgroundColor->stringValue();
@@ -112,6 +119,12 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 		if (ui.HasMember("isSeifertSurfaceVisible") && ui["isSeifertSurfaceVisible"].IsBool()) {
 			this->_isSeifertSurfaceVisible = std::make_shared<bool>(ui["isSeifertSurfaceVisible"].GetBool());
 		}
+		if (ui.HasMember("seifertBasePoint") && ui["seifertBasePoint"].IsObject()) {
+			const auto &basePoint = ui["seifertBasePoint"];
+			if (basePoint.HasMember("x") && basePoint["x"].IsNumber() && basePoint.HasMember("y") && basePoint["y"].IsNumber() && basePoint.HasMember("z") && basePoint["z"].IsNumber()) {
+				this->_seifertBasePoint = std::make_shared<Point>(basePoint["x"].GetDouble(), basePoint["y"].GetDouble(), basePoint["z"].GetDouble());
+			}
+		}
 	}
 }
 
@@ -123,10 +136,17 @@ std::shared_ptr<const GL::Surface> KnotWrapper::seifertSurface() const {
 	return this->_seifertSurface;
 }
 
+Point KnotWrapper::seifertBasePoint() const {
+	const auto ref = this->_seifertBasePoint;
+	return ref ? *ref : Point(0.0, 0.0, 0.4);
+}
+
 void KnotWrapper::moveSeifertBasePoint(double distance) {
-	this->seifertStartPoint.move(
-		GL::SeifertSurface::gradient(this->seifertStartPoint, this->snapshot()), distance
+	Point basePoint = this->seifertBasePoint();
+	basePoint.move(
+		GL::SeifertSurface::gradient(basePoint, this->snapshot()), distance
 	);
+	this->_seifertBasePoint = std::make_shared<Point>(basePoint);
 	this->_seifertSurface->destroy();
 }
 
@@ -136,7 +156,7 @@ bool KnotWrapper::isSeifertSurfaceVisible() const {
 }
 
 void KnotWrapper::toggleSeifertSurfaceVisibility() {
-  if (this->_seifertSurface->isVisible()) {
+  if (this->isSeifertSurfaceVisible()) {
     this->_isSeifertSurfaceVisible = std::make_shared<bool>(false);
   } else {
     this->_isSeifertSurfaceVisible = std::make_shared<bool>(true);

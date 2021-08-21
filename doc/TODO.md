@@ -30,7 +30,6 @@
 
 ### Technical feature improvements
 
-* save/restore Seifert surface start point
 * move invariants (and other params) computations to a separate thread, with progress indication and a way to interrupt
 * replace "msleep(20)" in the smoothing thread with something more clear
 * migrate from OpenGL to Vulkan/Metal/DirectX

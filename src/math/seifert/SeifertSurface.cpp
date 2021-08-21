@@ -61,7 +61,7 @@ ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD
 	return gradient;
 }
 
-SeifertSurface::SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint) : Surface(false, true), base(base), startPoint(startPoint) {
+SeifertSurface::SeifertSurface(const ThreeD::KnotWrapper &base) : Surface(false, true), base(base) {
 }
 
 bool SeifertSurface::isVisible() const {
@@ -131,7 +131,7 @@ void SeifertSurface::calculate() const {
 	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(snapshot);
 
   // Создаем граф поверхности.
-  seifert *s = new seifert(snapshot, this->startPoint);
+  seifert *s = new seifert(snapshot, this->base.seifertBasePoint());
   s->correction();
 
   // Создаем поверхность.

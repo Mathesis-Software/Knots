@@ -27,6 +27,7 @@
 
 namespace KE::GL {
 
+class Surface;
 class KnotSurface;
 class SeifertSurface;
 
@@ -40,17 +41,16 @@ private:
 	Knot knot;
 	std::string saveCheckpoint;
 
-public:
-	std::shared_ptr<Color> backgroundColor;
-	std::shared_ptr<Color> knotColor;
-	std::shared_ptr<double> knotThickness;
-	std::shared_ptr<bool> isSeifertSurfaceVisible;
-	std::shared_ptr<Color> seifertFrontColor;
-	std::shared_ptr<Color> seifertBackColor;
+	std::shared_ptr<Color> _backgroundColor;
+	std::shared_ptr<Color> _knotColor;
+	std::shared_ptr<double> _knotThickness;
+	std::shared_ptr<bool> _isSeifertSurfaceVisible;
+	std::shared_ptr<Color> _seifertFrontColor;
+	std::shared_ptr<Color> _seifertBackColor;
 
-	std::shared_ptr<GL::KnotSurface> knotSurface;
+	std::shared_ptr<GL::KnotSurface> _knotSurface;
 	ThreeD::Point seifertStartPoint;
-	std::shared_ptr<GL::SeifertSurface> seifertSurface;
+	std::shared_ptr<GL::SeifertSurface> _seifertSurface;
 
 public:
 	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
@@ -65,8 +65,23 @@ public:
 	void center() { this->knot.center(); }
 	void normalize(std::size_t numberOfPoints) { this->knot.normalize(numberOfPoints); }
 
+	std::shared_ptr<const GL::Surface> knotSurface() const;
+	std::shared_ptr<const GL::Surface> seifertSurface() const;
 	void moveSeifertBasePoint(double distance);
+	bool isSeifertSurfaceVisible() const;
 	void toggleSeifertSurfaceVisibility();
+
+	double knotThickness() const;
+	void setKnotThickness(double thickness);
+
+	const Color &backgroundColor() const;
+	void setBackgroundColor(const Color &color);
+	const Color &knotColor() const;
+	void setKnotColor(const Color &color);
+	const Color &seifertFrontColor() const;
+	void setSeifertFrontColor(const Color &color);
+	const Color &seifertBackColor() const;
+	void setSeifertBackColor(const Color &color);
 
 	rapidjson::Document serialize(const double matrix[3][3]);
 	bool isSaved(const double matrix[3][3]) const;

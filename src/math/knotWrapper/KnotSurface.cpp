@@ -34,17 +34,11 @@ bool KnotSurface::isVisible() const {
 }
 
 const Color &KnotSurface::frontColor() const {
-	const auto ref = this->knot.knotColor;
-	return ref ? *ref : Color::white;
+	return this->knot.knotColor();
 }
 
 const Color &KnotSurface::backColor() const {
 	return Color::white;
-}
-
-double KnotSurface::thickness() const {
-	const auto ref = this->knot.knotThickness;
-	return ref ? *ref : 1.0;
 }
 
 void KnotSurface::setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian) {
@@ -65,7 +59,7 @@ bool KnotSurface::isObsolete() const {
 	return Surface::isObsolete() || !this->stored || this->stored->isObsolete();
 }
 
-void KnotSurface::calculate() {
+void KnotSurface::calculate() const {
 	const auto points = this->knot.snapshot();
 	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(points);
 
@@ -119,7 +113,7 @@ void KnotSurface::calculate() {
 	}
 
 	/* Creating surface */
-	const double thickness = 0.05 * this->thickness();
+	const double thickness = 0.05 * this->knot.knotThickness();
 	for (std::size_t j = 0; j < this->sines.size() - 1; ++j) {
 		std::size_t j1 = j;
 		std::size_t j2 = (j + 1) % (this->sines.size() - 1);

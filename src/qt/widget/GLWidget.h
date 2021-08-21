@@ -34,7 +34,7 @@ namespace KE { namespace Qt {
 class GLWidget : public QOpenGLWidget {
 
 private:
-	std::list<std::shared_ptr<GL::Surface>> surfaces;
+	std::list<std::shared_ptr<const GL::Surface>> surfaces;
 
 	std::unique_ptr<double[]> currentMatrix;
 
@@ -56,7 +56,7 @@ public:
 	GLWidget(QWidget *parent);
 	virtual const Color &backgroundColor() const = 0;
 
-	void addSurface(std::shared_ptr<GL::Surface> surface) { this->surfaces.push_back(surface); };
+	void addSurface(std::shared_ptr<const GL::Surface> surface) { this->surfaces.push_back(surface); };
 	void rotate(int, int);
 	double currMatr(int i, int j) const { return this->currentMatrix[4 * i + j]; }
 };

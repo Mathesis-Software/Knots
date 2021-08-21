@@ -21,7 +21,7 @@
 
 #include "KnotWidget.h"
 
-#include "../../math/knotSurface/KnotSurface.h"
+#include "../../math/knotWrapper/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"
 
 namespace KE { namespace Qt {
@@ -35,13 +35,12 @@ KnotWidget::KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_
 }
 
 void KnotWidget::init() {
-  this->addSurface(this->knot().knotSurface);
-  this->addSurface(this->knot().seifertSurface);
+  this->addSurface(this->knot().knotSurface());
+  this->addSurface(this->knot().seifertSurface());
 }
 
 const Color &KnotWidget::backgroundColor() const {
-	const auto ref = this->knot().backgroundColor;
-	return ref ? *ref : Color::white;
+	return this->knot().backgroundColor();
 }
 
 void KnotWidget::moveSeifertBasePoint(double distance) {
@@ -56,14 +55,14 @@ void KnotWidget::toggleSeifertSurfaceVisibility() {
 }
 
 void KnotWidget::onKnotChanged(bool force) {
-  if (force || this->knot().knotSurface->isObsolete() || this->knot().seifertSurface->isObsolete()) {
+  if (force || this->knot().knotSurface()->isObsolete() || this->knot().seifertSurface()->isObsolete()) {
 		this->update();
 		emit actionsUpdated();
 	}
 }
 
 bool KnotWidget::isSeifertSurfaceVisible() const {
-	return this->knot().seifertSurface->isVisible();
+	return this->knot().seifertSurface()->isVisible();
 }
 
 bool KnotWidget::isSmoothingInProgress() const {

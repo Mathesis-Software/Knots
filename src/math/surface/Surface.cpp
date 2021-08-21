@@ -36,7 +36,7 @@ void Surface::destroy() {
 	this->points.clear();
 }
 
-void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) {
+void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) const {
 	this->points.push_back(SurfacePoint(vertex.x, vertex.y, vertex.z, normal.x, normal.y, normal.z));
 }
 

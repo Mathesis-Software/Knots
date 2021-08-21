@@ -20,7 +20,7 @@
  */
 
 #include "KnotWrapper.h"
-#include "../knotSurface/KnotSurface.h"
+#include "KnotSurface.h"
 #include "../seifert/SeifertSurface.h"
 #include "../util/rapidjson.h"
 
@@ -39,8 +39,8 @@ void KnotWrapper::init() {
 	auto cp = this->knot.serialize();
 	this->saveUiOptions(cp);
 	this->saveCheckpoint = Util::rapidjson::docToString(cp);
-  this->knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
-  this->seifertSurface = std::make_shared<GL::SeifertSurface>(*this, this->seifertStartPoint);
+  this->_knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
+  this->_seifertSurface = std::make_shared<GL::SeifertSurface>(*this, this->seifertStartPoint);
 }
 
 rapidjson::Document KnotWrapper::serialize(const double matrix[3][3]) {
@@ -58,35 +58,35 @@ bool KnotWrapper::isSaved(const double matrix[3][3]) const {
 
 void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 	rapidjson::Value componentUi(rapidjson::kObjectType);
-	if (this->knotColor) {
-		const std::string sv = this->knotColor->stringValue();
+	if (this->_knotColor) {
+		const std::string sv = this->_knotColor->stringValue();
 		rapidjson::Value color;
 		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
 		componentUi.AddMember("color", color, doc.GetAllocator());
 	}
-	if (this->knotThickness) {
-		componentUi.AddMember("thickness", *this->knotThickness, doc.GetAllocator());
+	if (this->_knotThickness) {
+		componentUi.AddMember("thickness", *this->_knotThickness, doc.GetAllocator());
 	}
 	doc["components"][0].AddMember("ui", componentUi, doc.GetAllocator());
 
 	rapidjson::Value globalUi(rapidjson::kObjectType);
-	if (this->isSeifertSurfaceVisible) {
-		globalUi.AddMember("isSeifertSurfaceVisible", *this->isSeifertSurfaceVisible, doc.GetAllocator());
+	if (this->_isSeifertSurfaceVisible) {
+		globalUi.AddMember("isSeifertSurfaceVisible", *this->_isSeifertSurfaceVisible, doc.GetAllocator());
 	}
-	if (this->backgroundColor) {
-		const std::string sv = this->backgroundColor->stringValue();
+	if (this->_backgroundColor) {
+		const std::string sv = this->_backgroundColor->stringValue();
 		rapidjson::Value color;
 		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
 		globalUi.AddMember("backgroundColor", color, doc.GetAllocator());
 	}
-	if (this->seifertFrontColor) {
-		const std::string sv = this->seifertFrontColor->stringValue();
+	if (this->_seifertFrontColor) {
+		const std::string sv = this->_seifertFrontColor->stringValue();
 		rapidjson::Value color;
 		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
 		globalUi.AddMember("seifertFrontColor", color, doc.GetAllocator());
 	}
-	if (this->seifertBackColor) {
-		const std::string sv = this->seifertBackColor->stringValue();
+	if (this->_seifertBackColor) {
+		const std::string sv = this->_seifertBackColor->stringValue();
 		rapidjson::Value color;
 		color.SetString(sv.data(), sv.size(), doc.GetAllocator());
 		globalUi.AddMember("seifertBackColor", color, doc.GetAllocator());
@@ -98,36 +98,105 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 	const auto &component = doc["components"][0];
 	if (component.HasMember("ui") && component["ui"].IsObject()) {
 		const auto &ui = component["ui"];
-		this->knotColor = Color::parse(Util::rapidjson::getString(ui, "color"));
+		this->_knotColor = Color::parse(Util::rapidjson::getString(ui, "color"));
 		if (ui.HasMember("thickness") && ui["thickness"].IsNumber()) {
-			this->knotThickness = std::make_shared<double>(ui["thickness"].GetDouble());
+			this->_knotThickness = std::make_shared<double>(ui["thickness"].GetDouble());
 		}
 	}
 
 	if (doc.HasMember("ui") && doc["ui"].IsObject()) {
 		const auto &ui = doc["ui"];
-		this->backgroundColor = Color::parse(Util::rapidjson::getString(ui, "backgroundColor"));
-		this->seifertFrontColor = Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
-		this->seifertBackColor = Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));
+		this->_backgroundColor = Color::parse(Util::rapidjson::getString(ui, "backgroundColor"));
+		this->_seifertFrontColor = Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
+		this->_seifertBackColor = Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));
 		if (ui.HasMember("isSeifertSurfaceVisible") && ui["isSeifertSurfaceVisible"].IsBool()) {
-			this->isSeifertSurfaceVisible = std::make_shared<bool>(ui["isSeifertSurfaceVisible"].GetBool());
+			this->_isSeifertSurfaceVisible = std::make_shared<bool>(ui["isSeifertSurfaceVisible"].GetBool());
 		}
 	}
+}
+
+std::shared_ptr<const GL::Surface> KnotWrapper::knotSurface() const {
+	return this->_knotSurface;
+}
+
+std::shared_ptr<const GL::Surface> KnotWrapper::seifertSurface() const {
+	return this->_seifertSurface;
 }
 
 void KnotWrapper::moveSeifertBasePoint(double distance) {
 	this->seifertStartPoint.move(
 		GL::SeifertSurface::gradient(this->seifertStartPoint, this->snapshot()), distance
 	);
-	this->seifertSurface->destroy();
+	this->_seifertSurface->destroy();
+}
+
+bool KnotWrapper::isSeifertSurfaceVisible() const {
+	const auto ref = this->_isSeifertSurfaceVisible;
+	return ref && *ref;
 }
 
 void KnotWrapper::toggleSeifertSurfaceVisibility() {
-  if (this->seifertSurface->isVisible()) {
-    this->isSeifertSurfaceVisible = std::make_shared<bool>(false);
+  if (this->_seifertSurface->isVisible()) {
+    this->_isSeifertSurfaceVisible = std::make_shared<bool>(false);
   } else {
-    this->isSeifertSurfaceVisible = std::make_shared<bool>(true);
+    this->_isSeifertSurfaceVisible = std::make_shared<bool>(true);
   }
+}
+
+double KnotWrapper::knotThickness() const {
+	const auto ref = this->_knotThickness;
+	return ref ? *ref : 1.0;
+}
+
+void KnotWrapper::setKnotThickness(double thickness) {
+  if (thickness != this->knotThickness()) {
+		this->_knotThickness = std::make_shared<double>(thickness);
+    this->_knotSurface->destroy();
+  }
+}
+
+const Color &KnotWrapper::backgroundColor() const {
+	const auto ref = this->_backgroundColor;
+	return ref ? *ref : Color::white;
+}
+
+void KnotWrapper::setBackgroundColor(const Color &color) {
+	if (color != this->backgroundColor()) {
+		this->_backgroundColor = std::make_shared<Color>(color);
+	}
+}
+
+const Color &KnotWrapper::knotColor() const {
+	const auto ref = this->_knotColor;
+	return ref ? *ref : Color::white;
+}
+
+void KnotWrapper::setKnotColor(const Color &color) {
+	if (color != this->knotColor()) {
+		this->_knotColor = std::make_shared<Color>(color);
+	}
+}
+
+const Color &KnotWrapper::seifertFrontColor() const {
+	const auto ref = this->_seifertFrontColor;
+	return ref ? *ref : Color::white;
+}
+
+void KnotWrapper::setSeifertFrontColor(const Color &color) {
+	if (color != this->seifertFrontColor()) {
+		this->_seifertFrontColor = std::make_shared<Color>(color);
+	}
+}
+
+const Color &KnotWrapper::seifertBackColor() const {
+	const auto ref = this->_seifertBackColor;
+	return ref ? *ref : Color::white;
+}
+
+void KnotWrapper::setSeifertBackColor(const Color &color) {
+	if (color != this->seifertBackColor()) {
+		this->_seifertBackColor = std::make_shared<Color>(color);
+	}
 }
 
 }}

@@ -65,21 +65,18 @@ SeifertSurface::SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Po
 }
 
 bool SeifertSurface::isVisible() const {
-	const auto ref = this->base.isSeifertSurfaceVisible;
-	return ref && *ref;
+	return this->base.isSeifertSurfaceVisible();
 }
 
 const Color &SeifertSurface::frontColor() const {
-	const auto ref = this->base.seifertFrontColor;
-	return ref ? *ref : Color::white;
+	return this->base.seifertFrontColor();
 }
 
 const Color &SeifertSurface::backColor() const {
-	const auto ref = this->base.seifertBackColor;
-	return ref ? *ref : Color::white;
+	return this->base.seifertBackColor();
 }
 
-void SeifertSurface::addTriangles(seifert *s) {
+void SeifertSurface::addTriangles(seifert *s) const {
   // Это оч. убогая версия создания поверхности из графа.
   // Просто в каждой вершине для любых двух ``соседних соседей''
   // создается новый треугольник, треугольники НИКАК не связаны.
@@ -129,7 +126,7 @@ bool SeifertSurface::isObsolete() const {
 	return Surface::isObsolete() || !this->stored || this->stored->isObsolete();
 }
 
-void SeifertSurface::calculate() {
+void SeifertSurface::calculate() const {
 	const auto snapshot = this->base.snapshot();
 	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(snapshot);
 

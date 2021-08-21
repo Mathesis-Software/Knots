@@ -35,13 +35,12 @@ private:
 	const ThreeD::KnotWrapper &knot;
 	std::vector<double> sines;
 	std::vector<double> cosines;
-	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
+	mutable std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 public:
 	KnotSurface(const ThreeD::KnotWrapper &knot, std::size_t numberOfPointsOnMeridian);
 	void setNumberOfPointsOnMeridian(std::size_t numberOfPointsOnMeridian);
 
-	double thickness() const;
 	const Color &frontColor() const override;
 	const Color &backColor() const override;
 
@@ -49,7 +48,7 @@ public:
 	bool isVisible() const override;
 
 private:
-	void calculate() override;
+	void calculate() const override;
 
 private:
 	KnotSurface(const KnotSurface&) = delete;

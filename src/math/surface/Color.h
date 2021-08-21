@@ -22,6 +22,7 @@
 #ifndef __KE_COLOR_H__
 #define __KE_COLOR_H__
 
+#include <cmath>
 #include <memory>
 #include <string>
 
@@ -34,8 +35,17 @@ struct Color {
 
 	std::string stringValue() const;
 
+	int red() const { return (int)round(255 * rgb[0]); }
+	int green() const { return (int)round(255 * rgb[1]); }
+	int blue() const { return (int)round(255 * rgb[2]); }
+
 	static std::shared_ptr<Color> parse(const std::string &stringValue);
 	static const Color white;
+
+	bool operator == (const Color &color) const {
+		return this->red() == color.red() && this->green() == color.green() && this->blue() == color.blue();
+	}
+	bool operator != (const Color &color) const { return !(*this == color); }
 };
 
 }

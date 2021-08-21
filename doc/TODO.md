@@ -11,7 +11,6 @@
 * (?) save rotation matrix (currently knot is saved "rotated", with new points coordinates)
 * move all data and as much as possible code from knotWindow to KnotWidget
 * replace linked list in seifert structures with std::list
-* hide currently public data in KnotWrapper class
 
 ### User interface
 

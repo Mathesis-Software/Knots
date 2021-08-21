@@ -49,17 +49,17 @@ private:
 	const bool stripped;
 	const bool showBackSide;
 
-	std::vector<SurfacePoint> points;
+	mutable std::vector<SurfacePoint> points;
 
 protected:
-	virtual void calculate() = 0;
-	void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal);
+	virtual void calculate() const = 0;
+	void addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) const;
 
 public:
 	Surface(bool stripped, bool showBackSide);
 	virtual ~Surface();
 
-	void paint();
+	void paint() const;
 
 	virtual bool isVisible() const = 0;
 	virtual bool isObsolete() const;

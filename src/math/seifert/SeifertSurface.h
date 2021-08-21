@@ -35,14 +35,14 @@ public:
 	static ThreeD::Vector gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot);
 
 private:
-	std::shared_ptr<ThreeD::Knot::Snapshot> stored;
+	mutable std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
 private:
 	const ThreeD::KnotWrapper &base;
 	const ThreeD::Point &startPoint;
 
-	void addTriangles(seifert *s);
-	void calculate() override;
+	void addTriangles(seifert *s) const;
+	void calculate() const override;
 
 public:
 	SeifertSurface(const ThreeD::KnotWrapper &base, const ThreeD::Point &startPoint);

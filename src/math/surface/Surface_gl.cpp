@@ -23,7 +23,7 @@
 
 #include "Surface.h"
 
-void KE::GL::Surface::paint() {
+void KE::GL::Surface::paint() const {
 	// Поверхность перерисовывается, если она видима.
 	if (!this->isVisible()) {
 		return;

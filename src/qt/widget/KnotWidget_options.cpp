@@ -23,7 +23,7 @@
 
 #include "KnotWidget.h"
 #include "../setValue/setValue.h"
-#include "../../math/knotSurface/KnotSurface.h"
+#include "../../math/knotWrapper/KnotSurface.h"
 #include "../../math/seifert/SeifertSurface.h"
 
 namespace KE { namespace Qt {
@@ -52,10 +52,9 @@ void KnotWidget::setNumberOfPoints() {
 }
 
 void KnotWidget::setThickness() {
-  const double thickness = setDouble("Thickness", this->knot().knotSurface->thickness(), 0.1, 10.0);
-  if (thickness != this->knot().knotSurface->thickness()) {
-		this->_knot.knotThickness = std::make_shared<double>(thickness);
-    this->knot().knotSurface->destroy();
+  const double thickness = setDouble("Thickness", this->knot().knotThickness(), 0.1, 10.0);
+  if (thickness != this->knot().knotThickness()) {
+		this->_knot.setKnotThickness(thickness);
 		this->update();
   }
 }
@@ -63,7 +62,7 @@ void KnotWidget::setThickness() {
 namespace {
 
 QColor from(const Color &color) {
-	return QColor((int)round(color.rgb[0] * 255), (int)round(color.rgb[1] * 255), (int)round(color.rgb[2] * 255));
+	return QColor(color.red(), color.green(), color.blue());
 }
 
 void runColorDialog(const QString &title, std::function<QColor()> getter, std::function<void(const QColor&)> setter) {
@@ -81,9 +80,9 @@ void runColorDialog(const QString &title, std::function<QColor()> getter, std::f
 void KnotWidget::setBgColor() {
 	runColorDialog(
 		"Background Color",
-		[this] { return from(this->backgroundColor()); },
+		[this] { return from(this->knot().backgroundColor()); },
 		[this] (const QColor &color) {
-			this->_knot.backgroundColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
+			this->_knot.setBackgroundColor(Color(color.red(), color.green(), color.blue()));
 			this->update();
 		}
 	);
@@ -92,9 +91,9 @@ void KnotWidget::setBgColor() {
 void KnotWidget::setKnotColor() {
 	runColorDialog(
 		"Knot Color",
-		[this] { return from(this->knot().knotSurface->frontColor()); },
+		[this] { return from(this->knot().knotColor()); },
 		[this] (const QColor &color) {
-			this->_knot.knotColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
+			this->_knot.setKnotColor(Color(color.red(), color.green(), color.blue()));
 			this->update();
 		}
 	);
@@ -103,9 +102,9 @@ void KnotWidget::setKnotColor() {
 void KnotWidget::setSeifertFrontColor() {
 	runColorDialog(
 		"Seifert Surface Color",
-		[this] { return from(this->knot().seifertSurface->frontColor()); },
+		[this] { return from(this->knot().seifertSurface()->frontColor()); },
 		[this] (const QColor &color) {
-			this->_knot.seifertFrontColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
+			this->_knot.setSeifertFrontColor(Color(color.red(), color.green(), color.blue()));
 			this->update();
 		}
 	);
@@ -114,9 +113,9 @@ void KnotWidget::setSeifertFrontColor() {
 void KnotWidget::setSeifertBackColor() {
 	runColorDialog(
 		"Seifert Surface Back Side Color",
-		[this] { return from(this->knot().seifertSurface->backColor()); },
+		[this] { return from(this->knot().seifertSurface()->backColor()); },
 		[this] (const QColor &color) {
-			this->_knot.seifertBackColor = std::make_shared<Color>(color.red(), color.green(), color.blue());
+			this->_knot.setSeifertBackColor(Color(color.red(), color.green(), color.blue()));
 			this->update();
 		}
 	);

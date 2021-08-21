@@ -23,11 +23,11 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 
-#include "manager.h"
-#include "about.h"
-#include "../window/Window.h"
+#include "AboutWindow.h"
+#include "ManagerWindow.h"
+#include "Window.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 ManagerWindow::ManagerWindow() {
 	fileMenu = this->menuBar()->addMenu("File");
@@ -70,4 +70,4 @@ ManagerWindow::~ManagerWindow() {
 	delete fileMenu;
 }
 
-}}
+}

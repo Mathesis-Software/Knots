@@ -14,7 +14,7 @@ install_bin: all
 	chmod 755 $(INSTPREFIX)/bin/knoted
 	$(INSTALL) -d $(INSTDIR)
 	$(INSTALL) -d $(INSTDIR)/bin
-	$(INSTALL) -s src/qt/manager/KnotEditor $(INSTDIR)/bin
+	$(INSTALL) -s src/qt/KnotEditor $(INSTDIR)/bin
 	
 install_data:
 	$(INSTALL) -d $(INSTDIR)/data
@@ -35,7 +35,7 @@ archive:
 
 clean:
 	@make -C src/math clean
-	@make -C src/qt clean
+	@make -C src/qt .clean
 	@make -C src/other clean
 	@make .clean
 	@$(RM) *.tar.gz

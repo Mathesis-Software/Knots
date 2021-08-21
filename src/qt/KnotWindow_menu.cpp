@@ -21,10 +21,10 @@
 
 #include <QtWidgets/QMenuBar>
 
+#include "KnotWidget.h"
 #include "KnotWindow.h"
-#include "../widget/KnotWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void KnotWindow::initMenu() {
   knotMenu = menuBar()->addMenu("Knot");
@@ -66,4 +66,4 @@ void KnotWindow::initMenu() {
 	this->updateActions();
 }
 
-}}
+}

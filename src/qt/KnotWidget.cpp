@@ -21,10 +21,10 @@
 
 #include "KnotWidget.h"
 
-#include "../../math/knotWrapper/KnotSurface.h"
-#include "../../math/seifert/SeifertSurface.h"
+#include "../math/knotWrapper/KnotSurface.h"
+#include "../math/seifert/SeifertSurface.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), _knot(doc), smoothingThread(this) {
 	this->init();
@@ -69,4 +69,4 @@ bool KnotWidget::isSmoothingInProgress() const {
 	return this->smoothingThread.isRunning();
 }
 
-}}
+}

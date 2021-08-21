@@ -24,10 +24,10 @@
 #include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QLabel>
 
-#include "about.h"
-#include "../window/Window.h"
+#include "AboutWindow.h"
+#include "Window.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void AboutWindow::showAboutDialog() {
 	(new AboutWindow(nullptr))->showMe();
@@ -83,4 +83,4 @@ void AboutWindow::mousePressEvent(QMouseEvent*) {
 	this->close();
 }
 
-}}
+}

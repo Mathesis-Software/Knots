@@ -23,7 +23,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QProxyStyle>
 
-#include "manager.h"
+#include "ManagerWindow.h"
 
 class ProxyStyle : public QProxyStyle {
 

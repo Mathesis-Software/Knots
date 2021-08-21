@@ -26,11 +26,11 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 
+#include "AboutWindow.h"
+#include "FileIconProvider.h"
 #include "Window.h"
-#include "../manager/about.h"
-#include "../manager/iconProvider.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 Window::Window() {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
@@ -166,4 +166,4 @@ void Window::updateActions() {
 	emit contentChanged();
 }
 
-}}
+}

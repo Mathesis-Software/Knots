@@ -25,13 +25,13 @@
 
 #include <rapidjson/istreamwrapper.h>
 
-#include "Window.h"
 #include "DiagramWindow.h"
+#include "FileIconProvider.h"
 #include "KnotWindow.h"
-#include "../manager/iconProvider.h"
-#include "../../math/util/rapidjson.h"
+#include "Window.h"
+#include "../math/util/rapidjson.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 std::list<Window*> Window::AWRegister;
 
@@ -114,4 +114,4 @@ QWidget *Window::openFile() {
 	}
 }
 
-}}
+}

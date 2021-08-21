@@ -19,9 +19,9 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include "iconProvider.h"
+#include "FileIconProvider.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 FileIconProvider *FileIconProvider::_instance = 0;
 
@@ -47,4 +47,4 @@ QIcon FileIconProvider::icon(const QFileInfo &finfo) const {
 	return QFileIconProvider::icon(finfo);
 }
 
-}}
+}

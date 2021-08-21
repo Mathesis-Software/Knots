@@ -26,12 +26,12 @@
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QStatusBar>
 
-#include "KnotWindow.h"
+#include "DiagramWidget.h"
 #include "KnotMathDialog.h"
-#include "../widget/KnotWidget.h"
-#include "../widget/DiagramWidget.h"
+#include "KnotWidget.h"
+#include "KnotWindow.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void KnotWindow::init(KnotWidget *widget) {
 	this->setCentralWidget(widget);
@@ -103,4 +103,4 @@ QImage KnotWindow::exportImage() const {
 	return this->knotWidget()->grabFramebuffer();
 }
 
-}}
+}

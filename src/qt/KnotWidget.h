@@ -25,18 +25,16 @@
 #include <QtCore/QThread>
 
 #include "GLWidget.h"
-#include "../../math/knotWrapper/KnotWrapper.h"
+#include "../math/knotWrapper/KnotWrapper.h"
 
-namespace KE {
-
-namespace GL {
+namespace KE::GL {
 
 class KnotSurface;
 class SeifertSurface;
 
 }
 
-namespace Qt {
+namespace KE::Qt {
 
 class KnotWidget;
 
@@ -102,6 +100,6 @@ signals:
 	void actionsUpdated();
 };
 
-}}
+}
 
 #endif /* __KNOTWIDGET_H__ */

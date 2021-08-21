@@ -1,12 +1,12 @@
-include ../config.mk
+ROOTDIR = ..
 
-all:
-	@make -C widget all
-	@make -C window all
-	@make -C manager all
+all: KnotEditor
 
-clean:
-	@make -C widget .clean
-	@make -C window .clean
-	@make -C manager .clean
-	@$(RM) manager/KnotEditor
+include $(ROOTDIR)/config.mk
+
+OTHERS = $(ROOTDIR)/math/computables/computables.a $(ROOTDIR)/math/knotWrapper/knotWrapper.a $(ROOTDIR)/math/knot/knot.a $(ROOTDIR)/math/diagramEditor/diagramEditor.a $(ROOTDIR)/math/diagram/diagram.a $(ROOTDIR)/math/seifert/seifert.a $(ROOTDIR)/math/surface/surface.a
+
+KnotEditor: $(OBJECTS) $(OTHERS)
+	@echo -n 'Linking $@ ...'
+	@$(CC) $(DEBUGOPT) -o $@ $^ $(LIBS)
+	@echo ' OK'

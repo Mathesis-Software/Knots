@@ -24,9 +24,9 @@
 
 #include <QtWidgets/QWidget>
 
-#include "../../math/diagramEditor/DiagramEditor.h"
+#include "../math/diagramEditor/DiagramEditor.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class DiagramWidget : public QWidget {
 
@@ -93,6 +93,6 @@ signals:
 	void actionsUpdated();
 };
 
-}}
+}
 
 #endif /* __DIAGRAMWIDGET_H__ */

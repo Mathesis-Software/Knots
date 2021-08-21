@@ -27,9 +27,9 @@
 
 #include <QtWidgets/QOpenGLWidget>
 
-#include "../../math/surface/Surface.h"
+#include "../math/surface/Surface.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class GLWidget : public QOpenGLWidget {
 
@@ -61,6 +61,6 @@ public:
 	double currMatr(int i, int j) const { return this->currentMatrix[4 * i + j]; }
 };
 
-}}
+}
 
 #endif /* __GLWIDGET_H__ */

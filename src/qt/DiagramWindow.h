@@ -19,34 +19,48 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KNOTWINDOW_PARAM_H__
-#define __KNOTWINDOW_PARAM_H__
+#ifndef __KE_QT_DIAGRAM_WINDOW_H__
+#define __KE_QT_DIAGRAM_WINDOW_H__
 
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
+#include <QtWidgets/QMenu>
 
-class setupSmooth : public QDialog {
+#include "DiagramWidget.h"
+#include "Window.h"
 
-Q_OBJECT
-  
+namespace KE::Qt {
+
+class DiagramWindow : public Window {
+
 private:
+	QMenu *actionsMenu;
 
-  setupSmooth (int*, int*);
-  ~setupSmooth (void);
+	void init(DiagramWidget *widget);
 
-  QLineEdit *steps_label, *redraw_label;
-  QPushButton *startButton, *cancelButton;
-  
-  int *steps, *redraw;
+	QString fileFilter() const override { return "Diagram files (*.dgr)"; }
 
-private slots:
+	QImage exportImage() const override;
 
-  void test ();
+	void setMode(DiagramWidget::EditorMode mode);
+
+	void convert();
+	void clear();
+	void simplify();
+
+	void rename() override;
 
 public:
+	DiagramWindow(const rapidjson::Document &doc);
+	DiagramWindow();
+	~DiagramWindow();
 
-  static bool set (int*, int*);
+	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
+
+	void saveIt(std::ostream&) override;
+	bool isSaved() const override;
+
+	void updateActions() override;
 };
 
-#endif /* __KNOTWINDOW_PARAM_H__ */
+}
+
+#endif /* __KE_QT_DIAGRAM_WINDOW_H__ */

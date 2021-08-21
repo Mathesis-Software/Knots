@@ -25,12 +25,12 @@
 #include <QtWidgets/QLabel>
 
 #include "KnotMathDialog.h"
+#include "KnotWidget.h"
 #include "KnotWindow.h"
-#include "../../math/computables/computables.h"
-#include "../../math/computables/experimental.h"
-#include "../widget/KnotWidget.h"
+#include "../math/computables/computables.h"
+#include "../math/computables/experimental.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void KnotWindow::showMathDialog() {
 	if (this->isSignalConnected(QMetaMethod::fromSignal(&KnotWindow::raiseMathDialog))) {
@@ -104,4 +104,4 @@ void KnotMathDialog::recompute() {
 	}
 }
 
-}}
+}

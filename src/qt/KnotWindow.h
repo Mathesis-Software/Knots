@@ -19,48 +19,54 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KE_QT_DIAGRAM_WINDOW_H__
-#define __KE_QT_DIAGRAM_WINDOW_H__
-
-#include <QtWidgets/QMenu>
+#ifndef __KNOTWINDOW_H__
+#define __KNOTWINDOW_H__
 
 #include "Window.h"
-#include "../widget/DiagramWidget.h"
+#include "../math/knotWrapper/KnotWrapper.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
-class DiagramWindow : public Window {
+class KnotWidget;
+class DiagramWidget;
+
+class KnotWindow : public Window {
+
+Q_OBJECT
 
 private:
-	QMenu *actionsMenu;
+  QMenu *knotMenu;
 
-	void init(DiagramWidget *widget);
+public:
+  KnotWindow(const rapidjson::Document &doc);
+  KnotWindow(const DiagramWidget &diagramWidget);
+  ~KnotWindow();
 
-	QString fileFilter() const override { return "Diagram files (*.dgr)"; }
+	KnotWidget *knotWidget() const;
+
+private:
+  void init(KnotWidget *widget);
+  void initMenu();
 
 	QImage exportImage() const override;
 
-	void setMode(DiagramWidget::EditorMode mode);
+	bool isSaved() const override;
+  void saveIt(std::ostream&) override;
 
-	void convert();
-	void clear();
-	void simplify();
+	void closeEvent(QCloseEvent *event) override;
 
+	QString fileFilter() const override { return "Knot files (*.knt)"; }
+	void updateActions() override;
 	void rename() override;
 
-public:
-	DiagramWindow(const rapidjson::Document &doc);
-	DiagramWindow();
-	~DiagramWindow();
+  void showMathDialog();
+  void showOptionsDialog();
 
-	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
-
-	void saveIt(std::ostream&) override;
-	bool isSaved() const override;
-
-	void updateActions() override;
+signals:
+	void raiseMathDialog();
+	void raiseOptionsDialog();
 };
 
-}}
+}
 
-#endif /* __KE_QT_DIAGRAM_WINDOW_H__ */
+#endif /* __KNOTWINDOW_H__ */

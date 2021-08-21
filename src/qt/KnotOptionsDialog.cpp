@@ -31,10 +31,10 @@
 #include <QtWidgets/QPushButton>
 
 #include "KnotOptionsDialog.h"
+#include "KnotWidget.h"
 #include "KnotWindow.h"
-#include "../widget/KnotWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 namespace {
 
@@ -225,4 +225,4 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	QObject::connect(&window, &KnotWindow::raiseOptionsDialog, this, &QDialog::raise);
 }
 
-}}
+}

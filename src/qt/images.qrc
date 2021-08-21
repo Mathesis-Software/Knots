@@ -4,12 +4,12 @@
 	<file>../../images/diagram_mode_moving.svg</file>
 	<file>../../images/diagram_mode_quick_drawing.svg</file>
 	<file>../../images/diagram.svg</file>
+	<file>../../images/magic_start.svg</file>
+	<file>../../images/magic_stop.svg</file>
 	<file>../../images/math.svg</file>
 	<file>../../images/minus.svg</file>
 	<file>../../images/plus.svg</file>
 	<file>../../images/redo.svg</file>
-	<file>../../images/smooth.svg</file>
-	<file>../../images/stop.svg</file>
 	<file>../../images/trefoil.png</file>
 	<file>../../images/undo.svg</file>
 </qresource>

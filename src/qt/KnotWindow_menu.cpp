@@ -44,11 +44,11 @@ void KnotWindow::initMenu() {
   knotMenu->addAction("Length…", [this] { this->knotWidget()->setLength(); });
   
 	this->registerAction(
-		addToolbarAction("smooth.svg", "Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
+		addToolbarAction("magic_start.svg", "Start smoothing", [this] { this->knotWidget()->startSmoothing(); }),
 		[this](QAction &action) { action.setVisible(!this->knotWidget()->isSmoothingInProgress()); }
 	);
 	this->registerAction(
-		addToolbarAction("stop.svg", "Interrupt smoothing", [this] { this->knotWidget()->stopSmoothing(); }),
+		addToolbarAction("magic_stop.svg", "Interrupt smoothing", [this] { this->knotWidget()->stopSmoothing(); }),
 		[this](QAction &action) { action.setVisible(this->knotWidget()->isSmoothingInProgress()); }
 	);
   addToolbarSeparator();

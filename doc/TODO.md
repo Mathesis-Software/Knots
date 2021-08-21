@@ -7,9 +7,6 @@
 
 * consistent source file names
 * drop "qt/setValue" code
-* (?) merge ManagerWindow, knotWindow, and diagramWindow into single class with replaceable content + menu + toolbars; this makes first opening smooth
-* (?) save rotation matrix (currently knot is saved "rotated", with new points coordinates)
-* move all data and as much as possible code from knotWindow to KnotWidget
 * replace linked list in seifert structures with std::list
 
 ### User interface
@@ -33,6 +30,7 @@
 * move invariants (and other params) computations to a separate thread, with progress indication and a way to interrupt
 * replace "msleep(20)" in the smoothing thread with something more clear
 * migrate from OpenGL to Vulkan/Metal/DirectX
+* do not save the app data in QtProject.conf, use own name instead
 
 ### Math feature improvements
 

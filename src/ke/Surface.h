@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "Color.h"
-#include "../util/primitives.h"
+#include "primitives.h"
 
 namespace KE::GL {
 

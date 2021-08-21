@@ -20,9 +20,9 @@
  */
 
 #include "experimental.h"
-#include "../knotWrapper/KnotWrapper.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace ThreeD { namespace Computables {
+namespace KE::ThreeD::Computables {
 
 namespace {
 
@@ -224,4 +224,4 @@ double Experimental::compute(const Knot::Snapshot &snapshot) {
 	return value / (64 * M_PI);
 }
 
-}}}
+}

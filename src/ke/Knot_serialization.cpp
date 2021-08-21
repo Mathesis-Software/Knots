@@ -19,7 +19,7 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include "../util/rapidjson.h"
+#include "Util_rapidjson.h"
 #include "Knot.h"
 
 namespace KE { namespace ThreeD {

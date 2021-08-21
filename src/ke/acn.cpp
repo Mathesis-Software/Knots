@@ -20,9 +20,9 @@
  */
 
 #include "computables.h"
-#include "../knotWrapper/KnotWrapper.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace ThreeD { namespace Computables {
+namespace KE::ThreeD::Computables {
 
 AverageCrossingNumber::AverageCrossingNumber(const KnotWrapper &knot, bool withSign) :
 	Computable(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
@@ -58,4 +58,4 @@ double AverageCrossingNumber::compute(const Knot::Snapshot &snapshot) {
 	return value / (2 * M_PI);
 }
 
-}}}
+}

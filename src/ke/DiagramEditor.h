@@ -24,9 +24,9 @@
 
 #include <vector>
 
-#include "../diagram/Diagram.h"
+#include "Diagram.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 class DiagramEditor {
 
@@ -100,6 +100,6 @@ public:
 	bool simplify();
 };
 
-}}
+}
 
 #endif /* __DIAGRAM_EDITOR_H__ */

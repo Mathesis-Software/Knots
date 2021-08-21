@@ -1,10 +1,10 @@
-ROOTDIR = ../..
+ROOTDIR = ..
 
-all: computables.a
+all: libke.a
 
 include $(ROOTDIR)/config.mk
 
-computables.a: $(OBJECTS)
+libke.a: $(OBJECTS)
 	@echo -n 'Linking $@ ...'
 	@$(RM) $@
 	@$(AR) $@ $^

@@ -27,7 +27,7 @@
 
 #include <QtWidgets/QOpenGLWidget>
 
-#include "../math/surface/Surface.h"
+#include "../ke/Surface.h"
 
 namespace KE::Qt {
 

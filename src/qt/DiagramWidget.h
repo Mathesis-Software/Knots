@@ -24,7 +24,7 @@
 
 #include <QtWidgets/QWidget>
 
-#include "../math/diagramEditor/DiagramEditor.h"
+#include "../ke/DiagramEditor.h"
 
 namespace KE::Qt {
 

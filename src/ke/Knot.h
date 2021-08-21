@@ -29,17 +29,15 @@
 
 #include <rapidjson/document.h>
 
-#include "../util/primitives.h"
+#include "primitives.h"
 
-namespace KE {
-
-namespace TwoD {
+namespace KE::TwoD {
 
 class Diagram;
 
 }
 
-namespace ThreeD {
+namespace KE::ThreeD {
 
 class Knot {
 
@@ -125,6 +123,6 @@ private:
 	Knot& operator = (const Knot&) = delete;
 };
 
-}}
+}
 
 #endif /* __KNOT_H__ */

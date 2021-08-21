@@ -21,10 +21,10 @@
 
 #include "KnotWrapper.h"
 #include "KnotSurface.h"
-#include "../seifert/SeifertSurface.h"
-#include "../util/rapidjson.h"
+#include "SeifertSurface.h"
+#include "Util_rapidjson.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {
 	this->init();
@@ -219,4 +219,4 @@ void KnotWrapper::setSeifertBackColor(const Color &color) {
 	}
 }
 
-}}
+}

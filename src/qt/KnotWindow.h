@@ -23,7 +23,7 @@
 #define __KNOTWINDOW_H__
 
 #include "Window.h"
-#include "../math/knotWrapper/KnotWrapper.h"
+#include "../ke/KnotWrapper.h"
 
 namespace KE::Qt {
 

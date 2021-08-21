@@ -20,9 +20,9 @@
  */
 
 #include "computables.h"
-#include "../knotWrapper/KnotWrapper.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace ThreeD { namespace Computables {
+namespace KE::ThreeD::Computables {
 
 VassilievInvariant::VassilievInvariant(const KnotWrapper &knot, int order) :
 	Computable(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),
@@ -86,4 +86,4 @@ double VassilievInvariant::compute(const Knot::Snapshot &snapshot) {
 	return value / (4 * M_PI * M_PI);
 }
 
-}}}
+}

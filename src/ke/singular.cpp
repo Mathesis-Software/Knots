@@ -20,9 +20,9 @@
  */
 
 #include "experimental.h"
-#include "../knotWrapper/KnotWrapper.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace ThreeD { namespace Computables {
+namespace KE::ThreeD::Computables {
 
 namespace {
 
@@ -166,4 +166,4 @@ double Singular::compute(const Knot::Snapshot &snapshot) {
 	return value;
 }
 
-}}}
+}

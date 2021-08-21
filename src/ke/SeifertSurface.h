@@ -19,37 +19,41 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __COMPUTABLE_H__
-#define __COMPUTABLE_H__
+#ifndef __SEIFERT_SURFACE_H__
+#define __SEIFERT_SURFACE_H__
 
-#include "../knot/Knot.h"
+#include "KnotWrapper.h"
+#include "Surface.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::GL {
 
-class KnotWrapper;
+class seifert;
 
-namespace Computables {
-
-class Computable {
+class SeifertSurface : public Surface {
 
 public:
-	const std::string name;
+	static ThreeD::Vector gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot);
 
 private:
-	const KnotWrapper &knot;
-	std::shared_ptr<Knot::Snapshot> snapshot;
-	double _value;
+	mutable std::shared_ptr<ThreeD::Knot::Snapshot> stored;
 
-protected:
-	virtual double compute(const Knot::Snapshot &snapshot) = 0;
+private:
+	const ThreeD::KnotWrapper &base;
 
 public:
-	Computable(const KnotWrapper &knot, const std::string &name) : name(name), knot(knot) {}
-	virtual ~Computable() {}
+	SeifertSurface(const ThreeD::KnotWrapper &base);
 
-	double value();
+private:
+	void addTriangles(seifert *s) const;
+	void calculate() const override;
+
+	const Color &frontColor() const override;
+	const Color &backColor() const override;
+
+	bool isObsolete() const override;
+	bool isVisible() const override;
 };
 
-}}}
+}
 
-#endif /* __COMPUTABLE_H__ */
+#endif /* __SEIFERT_SURFACE_H__ */

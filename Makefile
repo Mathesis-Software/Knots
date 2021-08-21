@@ -3,7 +3,7 @@ ROOTDIR = .
 include src/config.mk
 
 all:
-	make -C src/math all
+	make -C src/ke all
 	make -C src/qt all
 
 install: install_bin install_data
@@ -34,7 +34,7 @@ archive:
 	$(RM) -r KnotEditor-$(VERSION) .ls
 
 clean:
-	@make -C src/math clean
+	@make -C src/ke .clean
 	@make -C src/qt .clean
 	@make -C src/other clean
 	@make .clean

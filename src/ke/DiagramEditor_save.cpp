@@ -19,37 +19,20 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __RAPIDJSON_H__
-#define __RAPIDJSON_H__
+#include "DiagramEditor.h"
+#include "Util_rapidjson.h"
 
-#include <sstream>
-#include <string>
+namespace KE { namespace TwoD {
 
-#include <rapidjson/document.h>
-#include <rapidjson/ostreamwrapper.h>
-#include <rapidjson/writer.h>
-
-namespace KE { namespace Util { namespace rapidjson {
-
-inline std::string getString(const ::rapidjson::Value &doc, const std::string &key) {
-	if (doc.HasMember(key.c_str())) {
-		const auto &obj = doc[key.c_str()];
-		if (obj.IsString()) {
-			return std::string(obj.GetString(), obj.GetStringLength());
-		}
-	}
-	return "";
+rapidjson::Document DiagramEditor::serialize() {
+	auto doc = this->currentDiagram->serialize();
+	this->saveCheckpoint = Util::rapidjson::docToString(doc);
+	return doc;
 }
 
-inline std::string docToString(const ::rapidjson::Document &doc) {
-	std::stringstream os;
-	::rapidjson::OStreamWrapper wrapper(os);
-	::rapidjson::Writer<::rapidjson::OStreamWrapper> writer(wrapper);
-	writer.SetMaxDecimalPlaces(5);
-	doc.Accept(writer);
-	return os.str();
+bool DiagramEditor::isSaved() const {
+	auto doc = this->currentDiagram->serialize();
+	return this->saveCheckpoint == Util::rapidjson::docToString(doc);
 }
 
-}}}
-
-#endif /* __RAPIDJSON_H__ */
+}}

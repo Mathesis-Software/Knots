@@ -27,9 +27,9 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "../math/util/rapidjson.h"
-#include "../math/diagram/Diagram.h"
-#include "../math/knot/Knot.h"
+#include "../ke/Util_rapidjson.h"
+#include "../ke/Diagram.h"
+#include "../ke/Knot.h"
 
 int main(int argc, const char **argv) {
 	rapidjson::Document doc;

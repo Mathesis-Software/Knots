@@ -22,9 +22,9 @@
 #ifndef __SEIFERT_H__
 #define __SEIFERT_H__
 
-#include "../knot/Knot.h"
+#include "Knot.h"
 
-namespace KE { namespace GL {
+namespace KE::GL {
 
 class SeifertSurface;
 
@@ -92,6 +92,6 @@ public:
 	friend class SeifertSurface;
 };
 
-}}
+}
 
 #endif /* __SEIFERT_H__ */

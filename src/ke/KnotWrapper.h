@@ -19,11 +19,11 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KNOTEDITOR_H__
-#define __KNOTEDITOR_H__
+#ifndef __KE_KNOT_WRAPPER_H__
+#define __KE_KNOT_WRAPPER_H__
 
-#include "../knot/Knot.h"
-#include "../surface/Color.h"
+#include "Color.h"
+#include "Knot.h"
 
 namespace KE::GL {
 
@@ -95,4 +95,4 @@ private:
 
 }
 
-#endif /* __KNOTEDITOR_H__ */
+#endif /* __KE_KNOT_WRAPPER_H__ */

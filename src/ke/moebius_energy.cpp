@@ -20,9 +20,9 @@
  */
 
 #include "computables.h"
-#include "../knotWrapper/KnotWrapper.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace ThreeD { namespace Computables {
+namespace KE::ThreeD::Computables {
 
 MoebiusEnergy::MoebiusEnergy(const KnotWrapper &knot) : Computable(knot, "Moebius energy") {
 }
@@ -83,4 +83,4 @@ double MoebiusEnergy::compute(const Knot::Snapshot &snapshot) {
 	return value;
 }
 
-}}}
+}

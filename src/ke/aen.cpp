@@ -20,9 +20,9 @@
  */
 
 #include "computables.h"
-#include "../knotWrapper/KnotWrapper.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace ThreeD { namespace Computables {
+namespace KE::ThreeD::Computables {
 
 AverageExtremumNumber::AverageExtremumNumber(const KnotWrapper &knot) :
 	Computable(knot, "Average extremum number") {
@@ -55,4 +55,4 @@ double AverageExtremumNumber::compute(const Knot::Snapshot &snapshot) {
 	return value / M_PI + snapshot.size();
 }
 
-}}}
+}

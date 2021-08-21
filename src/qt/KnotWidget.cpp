@@ -21,8 +21,8 @@
 
 #include "KnotWidget.h"
 
-#include "../math/knotWrapper/KnotSurface.h"
-#include "../math/seifert/SeifertSurface.h"
+#include "../ke/KnotSurface.h"
+#include "../ke/SeifertSurface.h"
 
 namespace KE::Qt {
 

@@ -27,8 +27,8 @@
 #include "KnotMathDialog.h"
 #include "KnotWidget.h"
 #include "KnotWindow.h"
-#include "../math/computables/computables.h"
-#include "../math/computables/experimental.h"
+#include "../ke/computables.h"
+#include "../ke/experimental.h"
 
 namespace KE::Qt {
 

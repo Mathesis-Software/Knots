@@ -22,10 +22,10 @@
 #include <cmath>
 #include <map>
 
+#include "Diagram.h"
 #include "Knot.h"
-#include "../diagram/Diagram.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : caption(diagram.caption + " (from diagram)"), generation(1), lockCount(0) {
 	const auto edges = diagram.edges();
@@ -72,4 +72,4 @@ Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) 
 	center();
 }
 
-}}
+}

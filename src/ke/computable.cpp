@@ -19,20 +19,18 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include "DiagramEditor.h"
-#include "../util/rapidjson.h"
+#include "computable.h"
+#include "KnotWrapper.h"
 
-namespace KE { namespace TwoD {
+namespace KE::ThreeD::Computables {
 
-rapidjson::Document DiagramEditor::serialize() {
-	auto doc = this->currentDiagram->serialize();
-	this->saveCheckpoint = Util::rapidjson::docToString(doc);
-	return doc;
+double Computable::value() {
+	if (!this->snapshot || this->snapshot->isObsolete()) {
+		this->snapshot = std::make_shared<Knot::Snapshot>(this->knot.snapshot());
+		this->_value = this->compute(*this->snapshot);
+	}
+
+	return this->_value;
 }
 
-bool DiagramEditor::isSaved() const {
-	auto doc = this->currentDiagram->serialize();
-	return this->saveCheckpoint == Util::rapidjson::docToString(doc);
 }
-
-}}

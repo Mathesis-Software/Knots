@@ -19,18 +19,39 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include "computable.h"
-#include "../knotWrapper/KnotWrapper.h"
+#ifndef __COMPUTABLE_H__
+#define __COMPUTABLE_H__
 
-namespace KE { namespace ThreeD { namespace Computables {
+#include "Knot.h"
 
-double Computable::value() {
-	if (!this->snapshot || this->snapshot->isObsolete()) {
-		this->snapshot = std::make_shared<Knot::Snapshot>(this->knot.snapshot());
-		this->_value = this->compute(*this->snapshot);
-	}
+namespace KE::ThreeD {
 
-	return this->_value;
+class KnotWrapper;
+
 }
 
-}}}
+namespace KE::ThreeD::Computables {
+
+class Computable {
+
+public:
+	const std::string name;
+
+private:
+	const KnotWrapper &knot;
+	std::shared_ptr<Knot::Snapshot> snapshot;
+	double _value;
+
+protected:
+	virtual double compute(const Knot::Snapshot &snapshot) = 0;
+
+public:
+	Computable(const KnotWrapper &knot, const std::string &name) : name(name), knot(knot) {}
+	virtual ~Computable() {}
+
+	double value();
+};
+
+}
+
+#endif /* __COMPUTABLE_H__ */

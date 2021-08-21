@@ -24,10 +24,10 @@
 
 #include <vector>
 
-#include "../knotWrapper/KnotWrapper.h"
-#include "../surface/Surface.h"
+#include "KnotWrapper.h"
+#include "Surface.h"
 
-namespace KE { namespace GL {
+namespace KE::GL {
 
 class KnotSurface : public Surface {
 
@@ -55,6 +55,6 @@ private:
 	KnotSurface& operator = (const KnotSurface&) = delete;
 };
 
-}}
+}
 
 #endif /* __KNOT_SURFACE_H__ */

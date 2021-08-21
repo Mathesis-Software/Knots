@@ -22,10 +22,10 @@
 #include <map>
 #include <vector>
 
-#include "../util/rapidjson.h"
+#include "Util_rapidjson.h"
 #include "Diagram.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 	if (doc.IsNull()) {
@@ -136,4 +136,4 @@ rapidjson::Document Diagram::serialize() const {
 	return doc;
 }
 
-}}
+}

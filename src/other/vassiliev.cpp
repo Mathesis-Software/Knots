@@ -25,9 +25,9 @@
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include "../math/util/rapidjson.h"
-#include "../math/knotWrapper/KnotWrapper.h"
-#include "../math/computables/computables.h"
+#include "../ke/Util_rapidjson.h"
+#include "../ke/KnotWrapper.h"
+#include "../ke/computables.h"
 
 int main(int argc, const char **argv) {
 	rapidjson::Document doc;

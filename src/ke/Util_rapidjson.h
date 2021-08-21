@@ -19,41 +19,37 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __SEIFERT_SURFACE_H__
-#define __SEIFERT_SURFACE_H__
+#ifndef __KE_UTIL_RAPIDJSON_H__
+#define __KE_UTIL_RAPIDJSON_H__
 
-#include "../knotWrapper/KnotWrapper.h"
-#include "../surface/Surface.h"
+#include <sstream>
+#include <string>
 
-namespace KE { namespace GL {
+#include <rapidjson/document.h>
+#include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/writer.h>
 
-class seifert;
+namespace KE::Util::rapidjson {
 
-class SeifertSurface : public Surface {
+inline std::string getString(const ::rapidjson::Value &doc, const std::string &key) {
+	if (doc.HasMember(key.c_str())) {
+		const auto &obj = doc[key.c_str()];
+		if (obj.IsString()) {
+			return std::string(obj.GetString(), obj.GetStringLength());
+		}
+	}
+	return "";
+}
 
-public:
-	static ThreeD::Vector gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot);
+inline std::string docToString(const ::rapidjson::Document &doc) {
+	std::stringstream os;
+	::rapidjson::OStreamWrapper wrapper(os);
+	::rapidjson::Writer<::rapidjson::OStreamWrapper> writer(wrapper);
+	writer.SetMaxDecimalPlaces(5);
+	doc.Accept(writer);
+	return os.str();
+}
 
-private:
-	mutable std::shared_ptr<ThreeD::Knot::Snapshot> stored;
+}
 
-private:
-	const ThreeD::KnotWrapper &base;
-
-public:
-	SeifertSurface(const ThreeD::KnotWrapper &base);
-
-private:
-	void addTriangles(seifert *s) const;
-	void calculate() const override;
-
-	const Color &frontColor() const override;
-	const Color &backColor() const override;
-
-	bool isObsolete() const override;
-	bool isVisible() const override;
-};
-
-}}
-
-#endif /* __SEIFERT_SURFACE_H__ */
+#endif /* __KE_UTIL_RAPIDJSON_H__ */

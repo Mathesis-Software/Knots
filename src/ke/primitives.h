@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 struct Vector;
 
@@ -87,6 +87,6 @@ inline double Point::distanceTo(const Point &pt) const {
 	return Vector(pt, *this).length();
 }
 
-}}
+}
 
 #endif /* __POINT_H__ */

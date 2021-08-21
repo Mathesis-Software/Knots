@@ -24,7 +24,7 @@
 
 #include <QtWidgets/QDialog>
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class KnotWindow;
 
@@ -34,6 +34,6 @@ public:
 	KnotOptionsDialog(KnotWindow &window);
 };
 
-}}
+}
 
 #endif /* __KE_QT_KNOT_OPTIONS_DIALOG_H__ */

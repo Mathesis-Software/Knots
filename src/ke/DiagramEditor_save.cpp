@@ -22,7 +22,7 @@
 #include "DiagramEditor.h"
 #include "Util_rapidjson.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 rapidjson::Document DiagramEditor::serialize() {
 	auto doc = this->currentDiagram->serialize();
@@ -35,4 +35,4 @@ bool DiagramEditor::isSaved() const {
 	return this->saveCheckpoint == Util::rapidjson::docToString(doc);
 }
 
-}}
+}

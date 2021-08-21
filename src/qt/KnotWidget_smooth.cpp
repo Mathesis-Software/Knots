@@ -21,7 +21,7 @@
 
 #include "KnotWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void KnotWidget::startSmoothing() {
   if (!this->smoothingThread.isRunning()) {
@@ -66,4 +66,4 @@ void SmoothingThread::run() {
 	}
 }
 
-}}
+}

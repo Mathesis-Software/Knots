@@ -24,7 +24,7 @@
 
 #include "KnotWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 bool KnotWidget::isKnotSaved() const {
 	double matrix[3][3];
@@ -50,4 +50,4 @@ void KnotWidget::saveKnot(std::ostream &os) {
 	doc.Accept(writer);
 }
 
-}}
+}

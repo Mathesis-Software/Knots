@@ -31,7 +31,7 @@
 #include "DiagramWindow.h"
 #include "KnotWindow.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 DiagramWindow::DiagramWindow(const rapidjson::Document &doc) {
 	this->init(new DiagramWidget(this, doc));
@@ -222,4 +222,4 @@ bool DiagramWindow::isSaved() const {
 	return !widget || widget->diagram.isSaved();
 }
 
-}}
+}

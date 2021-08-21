@@ -24,7 +24,7 @@
 #include "seifert.h"
 #include "SeifertSurface.h"
 
-namespace KE { namespace GL {
+namespace KE::GL {
 
 namespace {
 
@@ -312,4 +312,4 @@ seifert::~seifert() {
 	counter --;
 }
 
-}}
+}

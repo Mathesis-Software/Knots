@@ -21,7 +21,7 @@
 
 #include "Knot.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 std::vector<Point> Knot::normalizedPoints(const Snapshot &snapshot, std::size_t newNumberOfPoints) {
 	const auto &edgeLengths = snapshot.edgeLengths();
@@ -63,4 +63,4 @@ void Knot::normalize(std::size_t newNumberOfPoints) {
 	this->_points.swap(normalized);
 }
 
-}}
+}

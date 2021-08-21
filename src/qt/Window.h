@@ -27,7 +27,7 @@
 
 #include <QtWidgets/QMainWindow>
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class Window : public QMainWindow {
 
@@ -79,6 +79,6 @@ protected:
   virtual void rename() = 0;
 };
 
-}}
+}
 
 #endif /* __KE_QT_WINDOW_H__ */

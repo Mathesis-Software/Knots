@@ -21,7 +21,7 @@
 
 #include "seifert.h"
 
-namespace KE { namespace GL {
+namespace KE::GL {
 
 seifert_ord *seifert_ord::insert(seifert *s) {
   if (value->point.x > s->point.x) {
@@ -62,4 +62,4 @@ seifert_ord::~seifert_ord() {
     prev->next = nullptr;
 }
 
-}}
+}

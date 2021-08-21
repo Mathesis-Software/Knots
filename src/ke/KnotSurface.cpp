@@ -23,7 +23,7 @@
 
 #include "KnotSurface.h"
 
-namespace KE { namespace GL {
+namespace KE::GL {
 
 KnotSurface::KnotSurface(const ThreeD::KnotWrapper &knot, std::size_t numberOfPointsOnMeridian) : Surface(true, false), knot(knot) {
 	this->setNumberOfPointsOnMeridian(numberOfPointsOnMeridian);
@@ -138,4 +138,4 @@ void KnotSurface::calculate() const {
 	}
 }
 
-}}
+}

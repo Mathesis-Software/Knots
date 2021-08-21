@@ -24,7 +24,7 @@
 
 #include <QtWidgets/QFileIconProvider>
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class FileIconProvider : public QFileIconProvider {
 
@@ -45,6 +45,6 @@ private:
 	const QIcon knotIcon;
 };
 
-}}
+}
 
 #endif /* __ICON_PROVIDER_H__ */

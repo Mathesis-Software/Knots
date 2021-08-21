@@ -24,11 +24,13 @@
 
 #include "computable.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 class Knot;
 
-namespace Computables {
+}
+
+namespace KE::ThreeD::Computables {
 
 class AverageCrossingNumber : public Computable {
 
@@ -72,6 +74,6 @@ public:
 	VassilievInvariant(const KnotWrapper &knot, int order);
 };
 
-}}}
+}
 
 #endif /* __COMPUTABLES_H__ */

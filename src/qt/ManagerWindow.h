@@ -26,7 +26,7 @@
 
 #include <QtWidgets/QMainWindow>
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class ManagerWindow : public QMainWindow {
 
@@ -38,6 +38,6 @@ public:
   ~ManagerWindow();
 };
 
-}}
+}
 
 #endif /* __MANAGER_H__ */

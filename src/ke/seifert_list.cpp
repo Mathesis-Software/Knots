@@ -22,7 +22,7 @@
 #include <math.h>
 #include "seifert.h"
 
-namespace KE { namespace GL {
+namespace KE::GL {
 
 namespace {
 
@@ -150,4 +150,4 @@ seifert_list::~seifert_list() {
   }
 }
 
-}}
+}

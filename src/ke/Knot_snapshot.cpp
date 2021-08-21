@@ -23,7 +23,7 @@
 
 #include "Knot.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 namespace {
 
@@ -61,4 +61,4 @@ double Knot::Snapshot::knotLength() const {
 	return std::accumulate(edgeLengths.begin(), edgeLengths.end(), 0.0);
 }
 
-}}
+}

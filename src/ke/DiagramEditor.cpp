@@ -21,7 +21,7 @@
 
 #include "DiagramEditor.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 namespace {
 
@@ -293,4 +293,4 @@ void DiagramEditor::setCaption(const std::string &caption) {
 	}
 }
 
-}}
+}

@@ -24,7 +24,7 @@
 
 #include <QtWidgets/QDialog>
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class KnotWindow;
 
@@ -41,6 +41,6 @@ private:
 	void recompute();
 };
 
-}}
+}
 
 #endif /* __KE_QT_KNOT_MATH_DIALOG_H__ */

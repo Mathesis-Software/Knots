@@ -23,7 +23,7 @@
 
 #include "Diagram.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 	if (this->isClosed()) {
@@ -219,4 +219,4 @@ void Diagram::removeEdge(const Edge &edge) {
 	}
 }
 
-}}
+}

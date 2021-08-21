@@ -27,7 +27,7 @@ const double STEP = 0.006;
 
 #define		M(x,y)		this->currentMatrix[4*x+y]
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void GLWidget::rotate(const QPoint &start, const QPoint &end) {
 	int dx = end.x() - start.x();
@@ -86,4 +86,4 @@ void GLWidget::rotate(const QPoint &start, const QPoint &end) {
 	this->update();
 }
 
-}}
+}

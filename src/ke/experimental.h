@@ -24,11 +24,13 @@
 
 #include "computable.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 class Knot;
 
-namespace Computables {
+}
+
+namespace KE::ThreeD::Computables {
 
 class Experimental : public Computable {
 
@@ -60,6 +62,6 @@ public:
 	Experimental2(const KnotWrapper &knot, int order);
 };
 
-}}}
+}
 
 #endif /* __EXPERIMENTAL_H__ */

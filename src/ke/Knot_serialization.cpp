@@ -22,7 +22,7 @@
 #include "Util_rapidjson.h"
 #include "Knot.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 Knot::Knot(const rapidjson::Document &doc) : generation(1), lockCount(0) {
 	if (doc.IsNull()) {
@@ -101,4 +101,4 @@ rapidjson::Document Knot::serialize(const double matrix[3][3]) const {
 	return doc;
 }
 
-}}
+}

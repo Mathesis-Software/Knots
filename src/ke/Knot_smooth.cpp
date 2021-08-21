@@ -23,7 +23,7 @@
 
 #include "Knot.h"
 
-namespace KE { namespace ThreeD {
+namespace KE::ThreeD {
 
 // Узел перемещается так, чтобы его центр масс оказался
 // в начале координат.
@@ -171,4 +171,4 @@ void Knot::decreaseEnergy() {
 	this->_points.swap(points);
 }
 
-}}
+}

@@ -24,7 +24,7 @@
 
 #include <QtWidgets/QWidget>
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 class AboutWindow : public QWidget {
 
@@ -39,6 +39,6 @@ private:
 	void mousePressEvent(QMouseEvent*) override;
 };
 
-}}
+}
 
 #endif /* __ABOUT_H__ */

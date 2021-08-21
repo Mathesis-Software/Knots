@@ -25,7 +25,7 @@
 
 #include "DiagramWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 DiagramWidget::DiagramWidget(QWidget *parent) : QWidget(parent), _editorMode(QUICK_DRAWING) {
 	this->setMouseTracking(true);
@@ -446,4 +446,4 @@ void DiagramWidget::selectMouseCursor() {
 	}
 }
 
-}}
+}

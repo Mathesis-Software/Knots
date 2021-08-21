@@ -23,7 +23,7 @@
 
 #include "KnotWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 void KnotWidget::setLength() {
 	const auto snapshot = this->knot().snapshot();
@@ -48,4 +48,4 @@ void KnotWidget::setNumberOfPoints() {
   }
 }
 
-}}
+}

@@ -23,7 +23,7 @@
 
 #include "Diagram.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
 	const int d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
@@ -107,4 +107,4 @@ void Diagram::Edge::orderCrossings(std::list<Crossing> &crossings) const {
 	crossings.sort(comparator);
 }
 
-}}
+}

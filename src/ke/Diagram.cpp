@@ -24,7 +24,7 @@
 
 #include "Diagram.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 Diagram::Diagram() : caption("New Diagram"), _isClosed(false) {
 }
@@ -150,4 +150,4 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 		ori == orientation(*edge.end, *this->start, *edge.start);
 }
 
-}}
+}

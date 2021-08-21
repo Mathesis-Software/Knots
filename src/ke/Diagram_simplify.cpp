@@ -24,7 +24,7 @@
 
 #include "Diagram.h"
 
-namespace KE { namespace TwoD {
+namespace KE::TwoD {
 
 bool Diagram::simplify(std::size_t depth) {
 	const auto list = this->edges();
@@ -78,4 +78,4 @@ bool Diagram::simplify(std::size_t depth) {
 	return size != edges.size();
 }
 
-}}
+}

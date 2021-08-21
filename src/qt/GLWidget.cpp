@@ -23,7 +23,7 @@
 
 #include "GLWidget.h"
 
-namespace KE { namespace Qt {
+namespace KE::Qt {
 
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
 	for (int i = 0; i < 16; ++i) {
@@ -97,4 +97,4 @@ void GLWidget::selectMouseCursor() {
 	}
 }
 
-}}
+}

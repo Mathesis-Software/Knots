@@ -30,15 +30,13 @@
 
 #include <rapidjson/document.h>
 
-namespace KE {
-
-namespace ThreeD {
+namespace KE::ThreeD {
 
 class Knot;
 
 }
 
-namespace TwoD {
+namespace KE::TwoD {
 
 struct FloatPoint {
 	const float x, y;
@@ -155,6 +153,6 @@ private:
 	Diagram& operator=(const Diagram&) = delete;
 };
 
-}}
+}
 
 #endif /* __DIAGRAM_H__ */

@@ -1,9 +1,9 @@
 include ../config.mk
 
-all: torus
+all: vassiliev
 
-torus: torus.cpp
-	$(CC) -otorus torus.cpp -lm -lstdc++
+vassiliev: vassiliev.cpp ../ke/libke.a
+	$(CC) -ovassiliev $< -L../ke -lke
 
 clean:
-	$(RM) torus
+	$(RM) vassiliev

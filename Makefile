@@ -5,6 +5,7 @@ include src/config.mk
 all:
 	make -C src/ke all
 	make -C src/qt all
+	make -C src/other all
 
 install: install_bin install_data
 

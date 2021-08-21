@@ -19,18 +19,15 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <QtWidgets/QColorDialog>
+#include <QtWidgets/QInputDialog>
 
 #include "KnotWidget.h"
-#include "../setValue/setValue.h"
-#include "../../math/knotWrapper/KnotSurface.h"
-#include "../../math/seifert/SeifertSurface.h"
 
 namespace KE { namespace Qt {
 
 void KnotWidget::setLength() {
 	const auto snapshot = this->knot().snapshot();
-  double d = setDouble ("Knot length", snapshot.knotLength(), 1.0, 1000.0);
+  const double d = QInputDialog::getDouble(nullptr, "Set value", "Knot length", snapshot.knotLength(), 1.0, 1000.0, 4);
   if (d != snapshot.knotLength()) {
     this->_knot.setLength(d);
     this->_knot.center();
@@ -40,7 +37,7 @@ void KnotWidget::setLength() {
 }
 
 void KnotWidget::setNumberOfPoints() {
-	const std::size_t numberOfPoints = setInt("Set number of points", this->knot().snapshot().size(), 10, 30000);
+	const std::size_t numberOfPoints = QInputDialog::getInt(nullptr, "Set value", "Number of points", this->knot().snapshot().size(), 10, 30000, 10);
   if (numberOfPoints != this->knot().snapshot().size()) {
 		const double length = this->knot().snapshot().knotLength();
     this->_knot.normalize(numberOfPoints);

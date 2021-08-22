@@ -185,7 +185,7 @@ std::shared_ptr<const GL::Surface> KnotWrapper::seifertSurface() const {
 
 Point KnotWrapper::seifertBasePoint() const {
 	const auto ref = this->_seifertBasePoint;
-	return ref ? *ref : Point(0.0, 0.0, 0.4);
+	return ref ? *ref : Point(0.0, 0.0, 0.2);
 }
 
 void KnotWrapper::moveSeifertBasePoint(double distance) {

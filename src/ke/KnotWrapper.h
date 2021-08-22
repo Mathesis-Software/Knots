@@ -39,6 +39,7 @@ class KnotWrapper {
 
 private:
 	Knot knot;
+	double rotationMatrix[3][3];
 	std::string saveCheckpoint;
 
 	std::shared_ptr<Color> _backgroundColor;
@@ -84,8 +85,12 @@ public:
 	const Color &seifertBackColor() const;
 	void setSeifertBackColor(const Color &color);
 
-	rapidjson::Document serialize(const double matrix[3][3]);
-	bool isSaved(const double matrix[3][3]) const;
+	double rotationMatrixElement(int i, int j) const { return this->rotationMatrix[i][j]; }
+	void rotate(double dx, double dy, double dz);
+
+	rapidjson::Document serialize() const;
+	void setSaveCheckpoint(const rapidjson::Document &doc);
+	bool isSaved() const;
 
 private:
 	void init();

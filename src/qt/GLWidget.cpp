@@ -25,9 +25,10 @@
 
 namespace KE::Qt {
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), currentMatrix(new double[16]) {
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	for (int i = 0; i < 16; ++i) {
-		this->currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
+		this->_currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
+		this->_inverseMatrix[i] = (i % 5) ? 0.0 : 1.0;
 	}
 	auto format = this->format();
 	format.setSamples(4);
@@ -47,7 +48,7 @@ void GLWidget::resizeGL(int w, int h) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glTranslatef(0.0, 0.0, -10.0);
-	glMultMatrixd(this->currentMatrix.get());
+	glMultMatrixd(this->currentMatrix());
 }
 
 void GLWidget::initializeGL() {
@@ -76,14 +77,14 @@ void GLWidget::mousePressEvent(QMouseEvent *event) {
 
 void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 	if (!this->capturedPoint.isNull()) {
-		this->rotate(this->capturedPoint, event->pos());
+		this->rotate(this->capturedPoint, event->pos(), event->modifiers());
 		this->capturedPoint = event->pos();
 	}
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
 	if (!this->capturedPoint.isNull()) {
-		this->rotate(this->capturedPoint, event->pos());
+		this->rotate(this->capturedPoint, event->pos(), event->modifiers());
 	}
 	this->capturedPoint = QPoint();
 	this->selectMouseCursor();
@@ -95,6 +96,45 @@ void GLWidget::selectMouseCursor() {
 	} else {
 		this->unsetCursor();
 	}
+}
+
+const double *GLWidget::currentMatrix() const {
+	this->prepareMatrix(this->_currentMatrix, false);
+	return this->_currentMatrix;
+}
+
+const double *GLWidget::inverseMatrix() const {
+	this->prepareMatrix(this->_inverseMatrix, true);
+	return this->_inverseMatrix;
+}
+
+void GLWidget::rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers) {
+	this->makeCurrent();
+	glMultMatrixd(this->inverseMatrix());
+
+	double dx = end.x() - start.x();
+	double dy = end.y() - start.y();
+	double dz = 0;
+
+	if (modifiers & ::Qt::AltModifier) {
+		const int centerX = this->width() / 2;
+		const int centerY = this->height() / 2;
+		dx = 0;
+		dy = 0;
+		dz = ((end.x() - centerX) * (start.y() - centerY) - (start.x() - centerX) * (end.y() - centerY)) / hypot(centerX, centerY);
+	} else if (modifiers & ::Qt::ShiftModifier) {
+		if (abs(dx) > abs(dy)) {
+			dy = 0;
+		} else {
+			dx = 0;
+		}
+	}
+
+	const double step = 0.006;
+	this->rotate(step * dx, step * dy, step * dz);
+
+	glMultMatrixd(this->currentMatrix());
+	this->update();
 }
 
 }

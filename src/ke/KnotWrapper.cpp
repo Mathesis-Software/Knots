@@ -27,31 +27,43 @@
 namespace KE::ThreeD {
 
 KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			this->rotationMatrix[i][j] = i == j ? 1.0 : 0.0;
+		}
+	}
 	this->init();
 }
 
 KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc) {
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			this->rotationMatrix[i][j] = i == j ? 1.0 : 0.0;
+		}
+	}
 	this->readUiOptions(doc);
 	this->init();
 }
 
 void KnotWrapper::init() {
-	auto cp = this->knot.serialize();
-	this->saveUiOptions(cp);
-	this->saveCheckpoint = Util::rapidjson::docToString(cp);
+	auto cp = this->serialize();
+	this->setSaveCheckpoint(cp);
 	this->_knotSurface = std::make_shared<GL::KnotSurface>(*this, 28);
 	this->_seifertSurface = std::make_shared<GL::SeifertSurface>(*this);
 }
 
-rapidjson::Document KnotWrapper::serialize(const double matrix[3][3]) {
-	auto doc = this->knot.serialize(matrix);
+rapidjson::Document KnotWrapper::serialize() const {
+	auto doc = this->knot.serialize(this->rotationMatrix);
 	this->saveUiOptions(doc);
-	this->saveCheckpoint = Util::rapidjson::docToString(doc);
 	return doc;
 }
 
-bool KnotWrapper::isSaved(const double matrix[3][3]) const {
-	auto doc = this->knot.serialize(matrix);
+void KnotWrapper::setSaveCheckpoint(const rapidjson::Document &doc) {
+	this->saveCheckpoint = Util::rapidjson::docToString(doc);
+}
+
+bool KnotWrapper::isSaved() const {
+	auto doc = this->serialize();
 	this->saveUiOptions(doc);
 	return this->saveCheckpoint == Util::rapidjson::docToString(doc);
 }
@@ -216,6 +228,30 @@ const Color &KnotWrapper::seifertBackColor() const {
 void KnotWrapper::setSeifertBackColor(const Color &color) {
 	if (color != this->seifertBackColor()) {
 		this->_seifertBackColor = std::make_shared<Color>(color);
+	}
+}
+
+namespace {
+
+void rotateMatrix(double matrix[3][3], int axis0, int axis1, double angleDelta) {
+	for (int i = 0; i < 3; ++i) {
+		const double tmp = matrix[i][axis0] * sin(angleDelta) + matrix[i][axis1] * cos(angleDelta);
+		matrix[i][axis0] = matrix[i][axis0] * cos(angleDelta) - matrix[i][axis1] * sin(angleDelta);
+		matrix[i][axis1] = tmp;
+	}
+}
+
+}
+
+void KnotWrapper::rotate(double dx, double dy, double dz) {
+	if (dx != 0) {
+		rotateMatrix(this->rotationMatrix, 2, 0, dx);
+	}
+	if (dy != 0) {
+		rotateMatrix(this->rotationMatrix, 1, 2, dy);
+	}
+	if (dz != 0) {
+		rotateMatrix(this->rotationMatrix, 0, 1, dz);
 	}
 }
 

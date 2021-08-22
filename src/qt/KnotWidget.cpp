@@ -69,4 +69,20 @@ bool KnotWidget::isSmoothingInProgress() const {
 	return this->smoothingThread.isRunning();
 }
 
+void KnotWidget::prepareMatrix(double *matrix, bool inverse) const {
+	for (int i = 0; i < 3; ++i) {
+		for (int j = 0; j < 3; ++j) {
+			if (inverse) {
+				matrix[4 * i + j] = this->knot().rotationMatrixElement(j, i);
+			} else {
+				matrix[4 * i + j] = this->knot().rotationMatrixElement(i, j);
+			}
+		}
+	}
+}
+
+void KnotWidget::rotate(double dx, double dy, double dz) {
+	this->_knot.rotate(dx, dy, dz);
+}
+
 }

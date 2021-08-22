@@ -72,6 +72,8 @@ public:
 
 private:
 	void init();
+	void prepareMatrix(double *matrix, bool inverse) const override;
+	void rotate(double dx, double dy, double dz) override;
 
 public:
 	const ThreeD::KnotWrapper &knot() const { return this->_knot; }

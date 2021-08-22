@@ -22,8 +22,6 @@
 #ifndef __MANAGER_H__
 #define __MANAGER_H__
 
-#include <memory>
-
 #include <QtWidgets/QMainWindow>
 
 class QPushButton;

@@ -56,7 +56,6 @@ private:
 	void closeEvent(QCloseEvent *event) override;
 
 	QString fileFilter() const override { return "Knot files (*.knt)"; }
-	void updateActions() override;
 	void rename() override;
 
   void showMathDialog();

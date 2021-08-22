@@ -44,14 +44,17 @@ KnotWindow::KnotWindow(const DiagramWidget &diagramWidget) {
 void KnotWindow::init(KnotWidget *widget) {
 	this->setCentralWidget(widget);
 
-	this->connect(widget, &KnotWidget::setActionTip, [this](const QString &text) {
+	QObject::connect(widget, &KnotWidget::setActionTip, [this](const QString &text) {
 		if (!text.isNull()) {
 			this->statusBar()->showMessage(text);
 		} else {
 			this->statusBar()->clearMessage();
 		}
 	});
-	this->connect(widget, &KnotWidget::actionsUpdated, this, &KnotWindow::updateActions);
+	QObject::connect(widget, &KnotWidget::actionsUpdated, this, &KnotWindow::updateActions);
+	QObject::connect(this, &Window::contentChanged, [this] {
+  	this->setWindowTitle(this->knotWidget()->knot().caption().c_str());
+	});
 
   initMenu();
   complete();
@@ -95,8 +98,6 @@ void KnotWindow::initMenu() {
 		addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(-0.02); }),
 		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
 	);
-
-	this->updateActions();
 }
 
 KnotWindow::~KnotWindow() {
@@ -108,11 +109,6 @@ void KnotWindow::closeEvent(QCloseEvent *event) {
 	if (event->isAccepted()) {
 		this->knotWidget()->stopSmoothingAndWait();
 	}
-}
-
-void KnotWindow::updateActions() {
-  setWindowTitle(this->knotWidget()->knot().caption().c_str());
-	Window::updateActions();
 }
 
 void KnotWindow::rename() {

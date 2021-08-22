@@ -57,8 +57,6 @@ public:
 
 	void saveIt(std::ostream&) override;
 	bool isSaved() const override;
-
-	void updateActions() override;
 };
 
 }

@@ -138,6 +138,10 @@ void DiagramWindow::init(DiagramWidget *widget) {
 
 	complete();
 
+	QObject::connect(this, &Window::contentChanged, [this] {
+		this->setWindowTitle(this->diagramWidget()->diagram.caption().c_str());
+	});
+
 	this->updateActions();
 }
 
@@ -194,14 +198,6 @@ QImage DiagramWindow::exportImage() const {
 	widget->drawIt(painter);
 	painter.end();
 	return image;
-}
-
-void DiagramWindow::updateActions() {
-	const auto widget = this->diagramWidget();
-	if (widget) {
-		setWindowTitle(widget->diagram.caption().c_str());
-	}
-	Window::updateActions();
 }
 
 void DiagramWindow::rename() {

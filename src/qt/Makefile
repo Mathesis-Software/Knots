@@ -10,3 +10,6 @@ KnotEditor: $(OBJECTS) $(OTHERS)
 	@echo -n 'Linking $@ ...'
 	@$(CC) $(DEBUGOPT) -o $@ $^ $(LIBS)
 	@echo ' OK'
+
+clean: .clean
+	@$(RM) KnotEditor

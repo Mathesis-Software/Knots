@@ -3,7 +3,9 @@ include ../config.mk
 all: vassiliev
 
 vassiliev: vassiliev.cpp ../ke/libke.a
-	$(CC) -ovassiliev $< -L../ke -lke
+	@echo -n 'Linking $@ ...'
+	@$(CC) $(CFLAGS) -ovassiliev $< -L../ke -lke
+	@echo ' OK'
 
 clean:
-	$(RM) vassiliev
+	@$(RM) vassiliev

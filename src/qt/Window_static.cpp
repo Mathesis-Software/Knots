@@ -35,8 +35,6 @@
 
 namespace KE::Qt {
 
-std::list<Window*> Window::AWRegister;
-
 void Window::exitApplication() {
 	if (closeAllWindows()) {
 		qApp->quit();
@@ -44,10 +42,11 @@ void Window::exitApplication() {
 }
 
 bool Window::closeAllWindows() {
-	while (!Window::AWRegister.empty()) {
-		Window *av = Window::AWRegister.back();
-		if (!av->close()) {
-			return false;
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<Window*>(widget)) {
+			if (!window->close()) {
+				return false;
+			}
 		}
 	}
 	return true;
@@ -110,7 +109,6 @@ QWidget *Window::openFile() {
 		window->show();
 		return window;
 	} catch (const std::runtime_error &e) {
-		Window::AWRegister.pop_back();
 		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}

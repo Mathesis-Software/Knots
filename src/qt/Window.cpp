@@ -59,8 +59,6 @@ Window::Window() {
 
 	this->toolbar = new QToolBar(this);
 	addToolBar(this->toolbar);
-
-	AWRegister.push_back(this);
 }
 
 Window::~Window() {
@@ -90,7 +88,6 @@ void Window::closeEvent(QCloseEvent *event) {
 	}
 
 	emit closing();
-	AWRegister.remove(this);
 }
 
 namespace {

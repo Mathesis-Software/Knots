@@ -22,8 +22,6 @@
 #ifndef __KE_QT_WINDOW_H__
 #define __KE_QT_WINDOW_H__
 
-#include <list>
-
 #include <QtWidgets/QMainWindow>
 
 namespace KE::Qt {
@@ -31,9 +29,6 @@ namespace KE::Qt {
 class Window : public QMainWindow {
 
 Q_OBJECT
-
-private:
-  static std::list<Window*> AWRegister;
 
 public:
   static QWidget *newDiagram();

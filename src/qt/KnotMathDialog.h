@@ -31,7 +31,6 @@ class KnotWindow;
 class KnotMathDialog : public QDialog {
 
 private:
-	KnotWindow &window;
 	std::vector<std::function<void()>> callbacks;
 
 public:

@@ -48,7 +48,7 @@ void KnotWindow::showMathDialog() {
 	mth->move(x, y);
 }
 
-KnotMathDialog::KnotMathDialog(KnotWindow &window) : window(window) {
+KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 
 	auto layout = new QGridLayout(this);

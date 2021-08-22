@@ -36,20 +36,15 @@
 namespace KE::Qt {
 
 void Window::exitApplication() {
-	if (closeAllWindows()) {
-		qApp->quit();
-	}
-}
-
-bool Window::closeAllWindows() {
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<Window*>(widget)) {
 			if (!window->close()) {
-				return false;
+				return;
 			}
 		}
 	}
-	return true;
+
+	qApp->quit();
 }
 
 namespace {

@@ -36,9 +36,6 @@ public:
 	static void exitApplication();
 
 private:
-  static bool closeAllWindows();
-
-private:
   QToolBar *toolbar;
 
 protected:

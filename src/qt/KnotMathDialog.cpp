@@ -87,21 +87,14 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 				value->setText(QString());
 			}
 		};
-		this->callbacks.push_back(callback);
+		QObject::connect(&window, &Window::contentChanged, callback);
 		QObject::connect(checkbox, &QCheckBox::clicked, callback);
 	}
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);
 
-	this->connect(&window, &Window::contentChanged, this, &KnotMathDialog::recompute);
-	this->connect(&window, &Window::closing, this, &QDialog::close);
-	this->connect(&window, &KnotWindow::raiseMathDialog, this, &QDialog::raise);
-}
-
-void KnotMathDialog::recompute() {
-	for (const auto &cb : this->callbacks) {
-		cb();
-	}
+	QObject::connect(&window, &Window::closing, this, &QDialog::close);
+	QObject::connect(&window, &KnotWindow::raiseMathDialog, this, &QDialog::raise);
 }
 
 }

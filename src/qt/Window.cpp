@@ -161,8 +161,4 @@ QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> c
 	return action;
 }
 
-void Window::updateActions() {
-	emit contentChanged();
-}
-
 }

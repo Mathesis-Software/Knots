@@ -52,7 +52,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 			this->statusBar()->clearMessage();
 		}
 	});
-	this->connect(widget, &DiagramWidget::actionsUpdated, this, &DiagramWindow::updateActions);
+	this->connect(widget, &DiagramWidget::actionsUpdated, [this] { emit this->contentChanged(); });
 
 	actionsMenu = this->menuBar()->addMenu("Actions");
 	this->registerAction(
@@ -116,7 +116,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 			widget->diagram.undo();
 			widget->repaint();
 			widget->updateEditorMode();
-			this->updateActions();
+			emit this->contentChanged();
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canUndo()); }
 	);
@@ -126,7 +126,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 			widget->diagram.redo();
 			widget->repaint();
 			widget->updateEditorMode();
-			this->updateActions();
+			emit this->contentChanged();
 		}),
 		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); }
 	);
@@ -142,7 +142,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 		this->setWindowTitle(this->diagramWidget()->diagram.caption().c_str());
 	});
 
-	this->updateActions();
+	emit this->contentChanged();
 }
 
 DiagramWindow::~DiagramWindow() {
@@ -151,12 +151,12 @@ DiagramWindow::~DiagramWindow() {
 
 void DiagramWindow::setMode(DiagramWidget::EditorMode mode) {
 	this->diagramWidget()->setEditorMode(mode);
-	this->updateActions();
+	emit this->contentChanged();
 }
 
 void DiagramWindow::clear() {
 	this->diagramWidget()->clear();
-	this->updateActions();
+	emit this->contentChanged();
 }
 
 void DiagramWindow::convert() {
@@ -209,7 +209,7 @@ void DiagramWindow::rename() {
 	);
 	if (ok) {
 		diagram.setCaption(text.toStdString());
-		this->updateActions();
+		emit this->contentChanged();
 	}
 }
 

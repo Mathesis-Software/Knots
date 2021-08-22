@@ -66,7 +66,6 @@ protected:
 public:
   Window();
   virtual ~Window();
-	void updateActions();
   virtual QString fileFilter() const = 0;
 
 signals:

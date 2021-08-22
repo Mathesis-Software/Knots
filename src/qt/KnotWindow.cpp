@@ -51,7 +51,7 @@ void KnotWindow::init(KnotWidget *widget) {
 			this->statusBar()->clearMessage();
 		}
 	});
-	QObject::connect(widget, &KnotWidget::actionsUpdated, this, &KnotWindow::updateActions);
+	QObject::connect(widget, &KnotWidget::actionsUpdated, [this] { emit this->contentChanged(); });
 	QObject::connect(this, &Window::contentChanged, [this] {
   	this->setWindowTitle(this->knotWidget()->knot().caption().c_str());
 	});
@@ -59,7 +59,7 @@ void KnotWindow::init(KnotWidget *widget) {
   initMenu();
   complete();
 
-	this->updateActions();
+	emit this->contentChanged();
 }
 
 void KnotWindow::initMenu() {
@@ -118,7 +118,7 @@ void KnotWindow::rename() {
 	);
   if (ok) {
 		this->knotWidget()->setCaption(text);
-		this->updateActions();
+		emit this->contentChanged();
 	}
 }
 

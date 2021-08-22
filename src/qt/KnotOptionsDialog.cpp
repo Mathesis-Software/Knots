@@ -104,7 +104,7 @@ template<class W> struct WidgetWithLabel {
 		this->label->setEnabled(enabled);
 	}
 
-	void addToLayout(QGridLayout *layout, int row = -1) {
+	void addToLayout(QGridLayout *layout, int row = -1) const {
 		if (row == -1) {
 			row = layout->rowCount();
 		}

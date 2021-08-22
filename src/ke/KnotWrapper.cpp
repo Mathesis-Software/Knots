@@ -26,21 +26,33 @@
 
 namespace KE::ThreeD {
 
-KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {
+namespace {
+
+void initUnitaryMatrix(double matrix[3][3]) {
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {
-			this->rotationMatrix[i][j] = i == j ? 1.0 : 0.0;
+			matrix[i][j] = i == j ? 1.0 : 0.0;
 		}
 	}
+}
+
+void rotateMatrix(double matrix[3][3], int axis0, int axis1, double angleDelta) {
+	for (int i = 0; i < 3; ++i) {
+		const double tmp = matrix[i][axis0] * sin(angleDelta) + matrix[i][axis1] * cos(angleDelta);
+		matrix[i][axis0] = matrix[i][axis0] * cos(angleDelta) - matrix[i][axis1] * sin(angleDelta);
+		matrix[i][axis1] = tmp;
+	}
+}
+
+}
+
+KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(diagram, width, height) {
+	initUnitaryMatrix(this->rotationMatrix);
 	this->init();
 }
 
 KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc) {
-	for (int i = 0; i < 3; ++i) {
-		for (int j = 0; j < 3; ++j) {
-			this->rotationMatrix[i][j] = i == j ? 1.0 : 0.0;
-		}
-	}
+	initUnitaryMatrix(this->rotationMatrix);
 	this->readUiOptions(doc);
 	this->init();
 }
@@ -252,18 +264,6 @@ void KnotWrapper::setSeifertBackColor(const Color &color) {
 	if (color != this->seifertBackColor()) {
 		this->_seifertBackColor = std::make_shared<Color>(color);
 	}
-}
-
-namespace {
-
-void rotateMatrix(double matrix[3][3], int axis0, int axis1, double angleDelta) {
-	for (int i = 0; i < 3; ++i) {
-		const double tmp = matrix[i][axis0] * sin(angleDelta) + matrix[i][axis1] * cos(angleDelta);
-		matrix[i][axis0] = matrix[i][axis0] * cos(angleDelta) - matrix[i][axis1] * sin(angleDelta);
-		matrix[i][axis1] = tmp;
-	}
-}
-
 }
 
 void KnotWrapper::rotate(double dx, double dy, double dz) {

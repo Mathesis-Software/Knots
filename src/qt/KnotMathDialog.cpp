@@ -24,7 +24,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 
-#include "KnotMathDialog.h"
 #include "KnotWidget.h"
 #include "KnotWindow.h"
 #include "../ke/computables.h"

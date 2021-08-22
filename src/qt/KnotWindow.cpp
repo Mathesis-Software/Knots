@@ -27,7 +27,6 @@
 #include <QtWidgets/QStatusBar>
 
 #include "DiagramWidget.h"
-#include "KnotMathDialog.h"
 #include "KnotWidget.h"
 #include "KnotWindow.h"
 

@@ -30,7 +30,6 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 
-#include "KnotOptionsDialog.h"
 #include "KnotWidget.h"
 #include "KnotWindow.h"
 

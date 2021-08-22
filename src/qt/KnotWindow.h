@@ -19,8 +19,10 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KNOTWINDOW_H__
-#define __KNOTWINDOW_H__
+#ifndef __KE_QT_KNOT_WINDOW_H__
+#define __KE_QT_KNOT_WINDOW_H__
+
+#include <QtWidgets/QDialog>
 
 #include "Window.h"
 #include "../ke/KnotWrapper.h"
@@ -66,6 +68,18 @@ signals:
 	void raiseOptionsDialog();
 };
 
+class KnotMathDialog : public QDialog {
+
+public:
+	KnotMathDialog(KnotWindow &window);
+};
+
+class KnotOptionsDialog : public QDialog {
+
+public:
+	KnotOptionsDialog(KnotWindow &window);
+};
+
 }
 
-#endif /* __KNOTWINDOW_H__ */
+#endif /* __KE_QT_KNOT_WINDOW_H__ */

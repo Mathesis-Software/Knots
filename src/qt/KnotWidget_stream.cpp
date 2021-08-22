@@ -31,7 +31,7 @@ bool KnotWidget::isKnotSaved() const {
 }
 
 void KnotWidget::saveKnot(std::ostream &os) {
-	const rapidjson::Document doc = this->_knot.serialize();
+	const rapidjson::Document doc = this->knot().serialize();
 	rapidjson::OStreamWrapper wrapper(os);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	writer.SetMaxDecimalPlaces(5);

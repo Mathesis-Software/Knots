@@ -28,37 +28,42 @@
 #include <rapidjson/writer.h>
 
 #include "../ke/Util_rapidjson.h"
-#include "../ke/Diagram.h"
-#include "../ke/Knot.h"
+#include "../ke/DiagramEditor.h"
+#include "../ke/KnotWrapper.h"
 
-int main(int argc, const char **argv) {
+void convert(const std::string &filename) {
 	rapidjson::Document doc;
 	{
-		std::ifstream is(argv[1]);
+		std::ifstream is(filename);
 		rapidjson::IStreamWrapper wrapper(is);
 		doc.ParseStream(wrapper);
 		is.close();
 	}
 
-	const std::string type = KE::Util::rapidjson::get_string(doc, "type");
+	const std::string type = KE::Util::rapidjson::getString(doc, "type");
 	if (type == "link") {
-		KE::ThreeD::Knot knot(doc);
+		KE::ThreeD::KnotWrapper knot(doc);
 		doc = knot.serialize();
 	} else if (type == "diagram") {
-		KE::TwoD::Diagram diagram(doc);
+		KE::TwoD::DiagramEditor diagram(doc);
 		doc = diagram.serialize();
 	} else {
 		throw std::runtime_error("Unknown file type");
 	}
 
 	{
-		std::ofstream os(argv[1]);
+		std::ofstream os(filename);
 		rapidjson::OStreamWrapper wrapper(os);
 		rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 		writer.SetMaxDecimalPlaces(5);
 		doc.Accept(writer);
 		os.close();
 	}
+}
 
+int main(int argc, const char **argv) {
+	for (int i = 1; i < argc; ++i) {
+		convert(argv[i]);
+	}
 	return 0;
 }

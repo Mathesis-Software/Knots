@@ -113,7 +113,6 @@ public:
 	void normalize(std::size_t numberOfPoints);
 
 	rapidjson::Document serialize() const;
-	rapidjson::Document serialize(const double matrix[3][3]) const;
 
 private:
 	static std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints);

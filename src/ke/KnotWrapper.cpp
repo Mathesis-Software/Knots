@@ -53,7 +53,7 @@ void KnotWrapper::init() {
 }
 
 rapidjson::Document KnotWrapper::serialize() const {
-	auto doc = this->knot.serialize(this->rotationMatrix);
+	auto doc = this->knot.serialize();
 	this->saveUiOptions(doc);
 	return doc;
 }
@@ -64,7 +64,6 @@ void KnotWrapper::setSaveCheckpoint(const rapidjson::Document &doc) {
 
 bool KnotWrapper::isSaved() const {
 	auto doc = this->serialize();
-	this->saveUiOptions(doc);
 	return this->saveCheckpoint == Util::rapidjson::docToString(doc);
 }
 
@@ -82,6 +81,17 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 	doc["components"][0].AddMember("ui", componentUi, doc.GetAllocator());
 
 	rapidjson::Value globalUi(rapidjson::kObjectType);
+
+	rapidjson::Value matrix(rapidjson::kArrayType);
+	for (int i = 0; i < 3; ++i) {
+		rapidjson::Value row(rapidjson::kArrayType);
+		for (int j = 0; j < 3; ++j) {
+			row.PushBack(this->rotationMatrix[i][j], doc.GetAllocator());
+		}
+		matrix.PushBack(row, doc.GetAllocator());
+	}
+	globalUi.AddMember("matrix", matrix, doc.GetAllocator());
+
 	if (this->_isSeifertSurfaceVisible) {
 		globalUi.AddMember("isSeifertSurfaceVisible", *this->_isSeifertSurfaceVisible, doc.GetAllocator());
 	}
@@ -125,6 +135,19 @@ void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
 
 	if (doc.HasMember("ui") && doc["ui"].IsObject()) {
 		const auto &ui = doc["ui"];
+		if (ui.HasMember("matrix") && ui["matrix"].IsArray() && ui["matrix"].Size() == 3) {
+			const auto &matrix = ui["matrix"];
+			for (int i = 0; i < 3; ++i) {
+				const auto &row = matrix[i];
+				if (row.IsArray() && row.Size() == 3) {
+					for (int j = 0; j < 3; ++j) {
+						if (row[j].IsNumber()) {
+							this->rotationMatrix[i][j] = row[j].GetDouble();
+						}
+					}
+				}
+			}
+		}
 		this->_backgroundColor = Color::parse(Util::rapidjson::getString(ui, "backgroundColor"));
 		this->_seifertFrontColor = Color::parse(Util::rapidjson::getString(ui, "seifertFrontColor"));
 		this->_seifertBackColor = Color::parse(Util::rapidjson::getString(ui, "seifertBackColor"));

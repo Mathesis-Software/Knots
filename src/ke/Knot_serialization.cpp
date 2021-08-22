@@ -60,15 +60,6 @@ Knot::Knot(const rapidjson::Document &doc) : generation(1), lockCount(0) {
 }
 
 rapidjson::Document Knot::serialize() const {
-	double matrix[3][3] = {
-		{1.0, 0.0, 0.0},
-		{0.0, 1.0, 0.0},
-		{0.0, 0.0, 1.0}
-	};
-	return this->serialize(matrix);
-}
-
-rapidjson::Document Knot::serialize(const double matrix[3][3]) const {
 	rapidjson::Document doc;
 	doc.SetObject();
 	doc.AddMember("type", "link", doc.GetAllocator());
@@ -82,14 +73,9 @@ rapidjson::Document Knot::serialize(const double matrix[3][3]) const {
 	const auto pts = this->snapshot();
 	for (std::size_t i = 0; i < pts.size(); ++i) {
 		rapidjson::Value point(rapidjson::kArrayType);
-		for (std::size_t j = 0; j < 3; ++j) {
-			point.PushBack(
-				matrix[0][j] * pts[i].x +
-				matrix[1][j] * pts[i].y +
-				matrix[2][j] * pts[i].z,
-				doc.GetAllocator()
-			);
-		}
+		point.PushBack(pts[i].x, doc.GetAllocator());
+		point.PushBack(pts[i].y, doc.GetAllocator());
+		point.PushBack(pts[i].z, doc.GetAllocator());
 		points.PushBack(point, doc.GetAllocator());
 	}
 	first.AddMember("points", points, doc.GetAllocator());

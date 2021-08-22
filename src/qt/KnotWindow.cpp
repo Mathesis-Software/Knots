@@ -52,7 +52,7 @@ void KnotWindow::init(KnotWidget *widget) {
 	});
 	QObject::connect(widget, &KnotWidget::actionsUpdated, [this] { emit this->contentChanged(); });
 	QObject::connect(this, &Window::contentChanged, [this] {
-  	this->setWindowTitle(this->knotWidget()->knot().caption().c_str());
+  	this->setWindowTitle(this->knotWidget()->knot.caption().c_str());
 	});
 
   initMenu();
@@ -91,11 +91,11 @@ void KnotWindow::initMenu() {
   addToolbarSeparator();
   this->registerAction(
 		addToolbarAction("plus.svg", "Shift Seifert surface forward along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(0.02); }),
-		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
+		[this](QAction &action) { action.setEnabled(this->knotWidget()->knot.isSeifertSurfaceVisible()); }
 	);
   this->registerAction(
 		addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(-0.02); }),
-		[this](QAction &action) { action.setEnabled(this->knotWidget()->isSeifertSurfaceVisible()); }
+		[this](QAction &action) { action.setEnabled(this->knotWidget()->knot.isSeifertSurfaceVisible()); }
 	);
 }
 
@@ -113,10 +113,10 @@ void KnotWindow::closeEvent(QCloseEvent *event) {
 void KnotWindow::rename() {
 	bool ok;
 	const QString text = QInputDialog::getText(
-		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knotWidget()->knot().caption().c_str(), &ok
+		this, "Rename knot", "New knot name:", QLineEdit::Normal, this->knotWidget()->knot.caption().c_str(), &ok
 	);
   if (ok) {
-		this->knotWidget()->setCaption(text);
+		this->knotWidget()->knot.setCaption(text.toStdString());
 		emit this->contentChanged();
 	}
 }
@@ -127,7 +127,7 @@ KnotWidget *KnotWindow::knotWidget() const {
 
 bool KnotWindow::isSaved() const {
 	auto widget = this->knotWidget();
-	return !widget || widget->knot().isSaved();
+	return !widget || widget->knot.isSaved();
 }
 
 void KnotWindow::saveIt(std::ostream &os) {

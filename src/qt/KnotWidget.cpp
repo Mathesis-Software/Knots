@@ -31,43 +31,39 @@
 
 namespace KE::Qt {
 
-KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), _knot(doc), smoothingThread(this) {
+KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), knot(doc), smoothingThread(this) {
 	this->init();
 }
 
-KnotWidget::KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : GLWidget(parent), _knot(diagram, width, height), smoothingThread(this) {
+KnotWidget::KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : GLWidget(parent), knot(diagram, width, height), smoothingThread(this) {
 	this->init();
 }
 
 void KnotWidget::init() {
-  this->addSurface(this->knot().knotSurface());
-  this->addSurface(this->knot().seifertSurface());
+  this->addSurface(this->knot.knotSurface());
+  this->addSurface(this->knot.seifertSurface());
 }
 
 const Color &KnotWidget::backgroundColor() const {
-	return this->knot().backgroundColor();
+	return this->knot.backgroundColor();
 }
 
 void KnotWidget::moveSeifertBasePoint(double distance) {
-	this->_knot.moveSeifertBasePoint(distance);
+	this->knot.moveSeifertBasePoint(distance);
 	this->update();
 }
 
 void KnotWidget::setSeifertSurfaceVisibility(bool visible) {
-	this->_knot.setSeifertSurfaceVisibility(visible);
+	this->knot.setSeifertSurfaceVisibility(visible);
   this->update();
 	emit actionsUpdated();
 }
 
 void KnotWidget::onKnotChanged(bool force) {
-  if (force || this->knot().knotSurface()->isObsolete() || this->knot().seifertSurface()->isObsolete()) {
+  if (force || this->knot.knotSurface()->isObsolete() || this->knot.seifertSurface()->isObsolete()) {
 		this->update();
 		emit actionsUpdated();
 	}
-}
-
-bool KnotWidget::isSeifertSurfaceVisible() const {
-	return this->knot().seifertSurface()->isVisible();
 }
 
 bool KnotWidget::isSmoothingInProgress() const {
@@ -78,45 +74,45 @@ void KnotWidget::prepareMatrix(double *matrix, bool inverse) const {
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {
 			if (inverse) {
-				matrix[4 * i + j] = this->knot().rotationMatrixElement(j, i);
+				matrix[4 * i + j] = this->knot.rotationMatrixElement(j, i);
 			} else {
-				matrix[4 * i + j] = this->knot().rotationMatrixElement(i, j);
+				matrix[4 * i + j] = this->knot.rotationMatrixElement(i, j);
 			}
 		}
 	}
 }
 
 void KnotWidget::rotate(double dx, double dy, double dz) {
-	this->_knot.rotate(dx, dy, dz);
+	this->knot.rotate(dx, dy, dz);
 }
 
 void KnotWidget::saveKnot(std::ostream &os) {
-	const rapidjson::Document doc = this->knot().serialize();
+	const rapidjson::Document doc = this->knot.serialize();
 	rapidjson::OStreamWrapper wrapper(os);
 	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
 	writer.SetMaxDecimalPlaces(5);
 	doc.Accept(writer);
-	this->_knot.setSaveCheckpoint(doc);
+	this->knot.setSaveCheckpoint(doc);
 }
 
 void KnotWidget::setLength() {
-	const auto snapshot = this->knot().snapshot();
+	const auto snapshot = this->knot.snapshot();
   const double d = QInputDialog::getDouble(nullptr, "Set value", "Knot length", snapshot.knotLength(), 1.0, 1000.0, 4);
   if (d != snapshot.knotLength()) {
-    this->_knot.setLength(d);
-    this->_knot.center();
+    this->knot.setLength(d);
+    this->knot.center();
     this->update();
 		emit actionsUpdated();
   }
 }
 
 void KnotWidget::setNumberOfPoints() {
-	const std::size_t numberOfPoints = QInputDialog::getInt(nullptr, "Set value", "Number of points", this->knot().snapshot().size(), 10, 30000, 10);
-  if (numberOfPoints != this->knot().snapshot().size()) {
-		const double length = this->knot().snapshot().knotLength();
-    this->_knot.normalize(numberOfPoints);
-    this->_knot.center();
-		this->_knot.setLength(length);
+	const std::size_t numberOfPoints = QInputDialog::getInt(nullptr, "Set value", "Number of points", this->knot.snapshot().size(), 10, 30000, 10);
+  if (numberOfPoints != this->knot.snapshot().size()) {
+		const double length = this->knot.snapshot().knotLength();
+    this->knot.normalize(numberOfPoints);
+    this->knot.center();
+		this->knot.setLength(length);
     this->update();
 		emit actionsUpdated();
   }

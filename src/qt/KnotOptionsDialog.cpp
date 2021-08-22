@@ -139,12 +139,12 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 
 	auto widget = window.knotWidget();
 
-	const auto initialThickness = widget->knot().knotThickness();
-	const auto initialBackgroundColor = widget->knot().backgroundColor();
-	const auto initialKnotColor = widget->knot().knotColor();
-	const auto initialSeifertVisibility = widget->isSeifertSurfaceVisible();
-	const auto initialSeifertFrontColor = widget->knot().seifertFrontColor();
-	const auto initialSeifertBackColor = widget->knot().seifertBackColor();
+	const auto initialThickness = widget->knot.knotThickness();
+	const auto initialBackgroundColor = widget->knot.backgroundColor();
+	const auto initialKnotColor = widget->knot.knotColor();
+	const auto initialSeifertVisibility = widget->knot.isSeifertSurfaceVisible();
+	const auto initialSeifertFrontColor = widget->knot.seifertFrontColor();
+	const auto initialSeifertBackColor = widget->knot.seifertBackColor();
 
 	auto vbox = new QVBoxLayout(this);
 	auto layout = new QGridLayout();
@@ -153,12 +153,12 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
 	QObject::connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
 	QObject::connect(buttonBox, &QDialogButtonBox::rejected, [=] {
-		widget->_knot.setKnotThickness(initialThickness);
-		widget->_knot.setBackgroundColor(initialBackgroundColor);
-		widget->_knot.setKnotColor(initialKnotColor);
+		widget->knot.setKnotThickness(initialThickness);
+		widget->knot.setBackgroundColor(initialBackgroundColor);
+		widget->knot.setKnotColor(initialKnotColor);
 		widget->setSeifertSurfaceVisibility(initialSeifertVisibility);
-		widget->_knot.setSeifertFrontColor(initialSeifertFrontColor);
-		widget->_knot.setSeifertBackColor(initialSeifertBackColor);
+		widget->knot.setSeifertFrontColor(initialSeifertFrontColor);
+		widget->knot.setSeifertBackColor(initialSeifertBackColor);
 		widget->update();
 		this->reject();
 	});
@@ -174,7 +174,7 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 		if (ok && doubleValue >= 0.01 && doubleValue <= 20) {
 			thickness->setStyleSheet(QString());
 			buttonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-			widget->_knot.setKnotThickness(doubleValue);
+			widget->knot.setKnotThickness(doubleValue);
 			widget->update();
 		} else {
 			thickness->setStyleSheet("border: 1px solid red;");
@@ -186,11 +186,11 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	WidgetWithLabel(thickness, "Knot thickness").addToLayout(layout);
 
 	addColorButton("Background color", initialBackgroundColor, [widget](const Color &color) {
-		widget->_knot.setBackgroundColor(color);
+		widget->knot.setBackgroundColor(color);
 		widget->update();
 	}).addToLayout(layout);
 	addColorButton("Knot color", initialKnotColor, [widget](const Color &color) {
-		widget->_knot.setKnotColor(color);
+		widget->knot.setKnotColor(color);
 		widget->update();
 	}).addToLayout(layout);
 
@@ -199,14 +199,14 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	sameColor.widget->setChecked(initialSeifertFrontColor == initialSeifertBackColor);
 
 	auto seifertBack = addColorButton("Seifert surface back color", initialSeifertBackColor, [widget](const Color &color) {
-		widget->_knot.setSeifertBackColor(color);
+		widget->knot.setSeifertBackColor(color);
 		widget->update();
 	});
 
 	auto seifertFront = addColorButton("Seifert surface color", initialSeifertFrontColor, [=](const Color &color) {
-		widget->_knot.setSeifertFrontColor(color);
+		widget->knot.setSeifertFrontColor(color);
 		if (sameColor.widget->isChecked()) {
-			widget->_knot.setSeifertBackColor(color);
+			widget->knot.setSeifertBackColor(color);
 			seifertBack.widget->setColor(QColor(color.red(), color.green(), color.blue()));
 		}
 		widget->update();

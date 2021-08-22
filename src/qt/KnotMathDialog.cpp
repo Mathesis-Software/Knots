@@ -52,7 +52,7 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 
 	auto layout = new QGridLayout(this);
 
-	const auto &knot = window.knotWidget()->knot();
+	const auto &knot = window.knotWidget()->knot;
 	std::vector<std::shared_ptr<ThreeD::Computables::Computable>> computables = {
 		std::make_shared<ThreeD::Computables::MoebiusEnergy>(knot),
 		std::make_shared<ThreeD::Computables::AverageCrossingNumber>(knot, false),

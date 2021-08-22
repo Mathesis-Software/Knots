@@ -57,13 +57,12 @@ private:
 
 class KnotWidget : public GLWidget {
 
-friend class KnotOptionsDialog;
-friend class SmoothingThread;
-
 Q_OBJECT
 
+public:
+	ThreeD::KnotWrapper knot;
+
 private:
-	ThreeD::KnotWrapper _knot;
 	SmoothingThread smoothingThread;
 
 public:
@@ -76,7 +75,6 @@ private:
 	void rotate(double dx, double dy, double dz) override;
 
 public:
-	const ThreeD::KnotWrapper &knot() const { return this->_knot; }
 	const Color &backgroundColor() const override;
 
   void saveKnot(std::ostream &os);
@@ -86,11 +84,9 @@ public:
   void stopSmoothingAndWait();
 	bool isSmoothingInProgress() const;
 
-	bool isSeifertSurfaceVisible() const;
   void setSeifertSurfaceVisibility(bool visible);
   void moveSeifertBasePoint(double distance);
 
-  void setCaption(const QString &caption) { this->_knot.setCaption(caption.toStdString()); }
   void setLength();
   void setNumberOfPoints();
 

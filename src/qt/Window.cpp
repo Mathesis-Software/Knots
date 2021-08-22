@@ -19,6 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <fstream>
+
 #include <QtGui/QCloseEvent>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMenuBar>
@@ -155,14 +157,11 @@ void Window::complete() {
 }
 
 QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> controller) {
-	this->actionsMap[action] = controller;
+	QObject::connect(this, &Window::contentChanged, [action, controller] { controller(*action); });
 	return action;
 }
 
 void Window::updateActions() {
-	for (auto &[action, controller] : this->actionsMap) {
-		controller(*action);
-	}
 	emit contentChanged();
 }
 

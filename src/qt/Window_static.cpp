@@ -19,6 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <fstream>
+
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>

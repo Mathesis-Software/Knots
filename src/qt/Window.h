@@ -22,7 +22,6 @@
 #ifndef __KE_QT_WINDOW_H__
 #define __KE_QT_WINDOW_H__
 
-#include <fstream>
 #include <list>
 
 #include <QtWidgets/QMainWindow>
@@ -46,7 +45,6 @@ private:
 
 private:
   QToolBar *toolbar;
-	std::map<QAction*,std::function<void(QAction&)>> actionsMap;
 
 protected:
   void closeEvent(QCloseEvent*);

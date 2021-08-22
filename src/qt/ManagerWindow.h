@@ -26,6 +26,8 @@
 
 #include <QtWidgets/QMainWindow>
 
+class QPushButton;
+
 namespace KE::Qt {
 
 class ManagerWindow : public QMainWindow {
@@ -36,6 +38,9 @@ private:
 public:
   ManagerWindow();
   ~ManagerWindow();
+
+private:
+	QPushButton *createButton(const QString &title, std::function<QWidget*()> creator);
 };
 
 }

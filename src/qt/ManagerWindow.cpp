@@ -19,7 +19,7 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 
@@ -37,33 +37,26 @@ ManagerWindow::ManagerWindow() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
 	auto center = new QWidget;
-	auto layout = new QGridLayout(center);
-	{
-		auto button = new QPushButton("Create new diagram");
-		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		button->connect(button, &QPushButton::clicked, [this] {
-			auto window = Window::newDiagram();
-			window->setGeometry(this->geometry());
-			this->close();
-		});
-		layout->addWidget(button, 0, 0);
-	}
-	{
-		auto button = new QPushButton("Open existing file");
-		button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-		button->connect(button, &QPushButton::clicked, [this] {
-			auto window = Window::openFile();
-			if (window) {
-				window->setGeometry(this->geometry());
-				this->close();
-			}
-		});
-		layout->addWidget(button, 0, 1);
-	}
+	auto layout = new QHBoxLayout(center);
+	layout->addWidget(this->createButton("Create new diagram", &Window::newDiagram));
+	layout->addWidget(this->createButton("Open existing file", &Window::openFile));
 	this->setCentralWidget(center);
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);
+}
+
+QPushButton *ManagerWindow::createButton(const QString &title, std::function<QWidget*()> creator) {
+	auto button = new QPushButton(title);
+	button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+	button->connect(button, &QPushButton::clicked, [=] {
+		auto window = creator();
+		if (window) {
+			window->setGeometry(this->geometry());
+			this->close();
+		}
+	});
+	return button;
 }
 
 ManagerWindow::~ManagerWindow() {

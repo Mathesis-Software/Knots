@@ -30,10 +30,10 @@
 namespace KE::Qt {
 
 void AboutWindow::showAboutDialog() {
-	(new AboutWindow(nullptr))->showMe();
+	(new AboutWindow())->showMe();
 }
 
-AboutWindow::AboutWindow(QWidget *parent) : QWidget(parent) {
+AboutWindow::AboutWindow() {
 	this->setWindowFlags(::Qt::Window | ::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 	this->setWindowModality(::Qt::ApplicationModal);

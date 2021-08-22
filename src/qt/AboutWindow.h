@@ -32,11 +32,11 @@ public:
 	static void showAboutDialog();
 
 public:
-	AboutWindow(QWidget*);
+	AboutWindow();
 	void showMe();
 
 private:
-	void mousePressEvent(QMouseEvent*) override;
+	void mousePressEvent(QMouseEvent *event) override;
 };
 
 }

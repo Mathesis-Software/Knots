@@ -68,9 +68,8 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 //		std::make_shared<ThreeD::Computables::Experimental2>(knot, 3, "Experimental 3"),
 //		std::make_shared<ThreeD::Computables::Experimental2>(knot, 4, "Experimental 4"),
 	};
-	for (std::size_t index = 0; index < computables.size(); index += 1) {
-		const auto computable = computables[index];
-
+	for (const auto computable : computables) {
+		const int index = layout->rowCount();
 		auto checkbox = new QCheckBox(computable->name.c_str());
 		layout->addWidget(checkbox, index, 0);
 

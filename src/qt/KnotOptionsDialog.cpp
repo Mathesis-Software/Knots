@@ -103,10 +103,8 @@ template<class W> struct WidgetWithLabel {
 		this->label->setEnabled(enabled);
 	}
 
-	void addToLayout(QGridLayout *layout, int row = -1) const {
-		if (row == -1) {
-			row = layout->rowCount();
-		}
+	void addToLayout(QGridLayout *layout) const {
+		const int row = layout->rowCount();
 		layout->addWidget(this->label, row, 0);
 		layout->addWidget(this->widget, row, 1);
 		layout->setRowMinimumHeight(row, 30);
@@ -185,7 +183,7 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 		}
 		thickness->update();
 	});
-	WidgetWithLabel(thickness, "Knot thickness").addToLayout(layout, 0);
+	WidgetWithLabel(thickness, "Knot thickness").addToLayout(layout);
 
 	addColorButton("Background color", initialBackgroundColor, [widget](const Color &color) {
 		widget->_knot.setBackgroundColor(color);

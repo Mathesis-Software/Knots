@@ -97,23 +97,25 @@ template<class W> struct WidgetWithLabel {
 	W *widget;
 	QLabel *label;
 
-	WidgetWithLabel(W *widget, QLabel *label) : widget(widget), label(label) {
-	}
+	WidgetWithLabel(W *widget, const QString &title) : widget(widget), label(new QLabel(title)) {}
 
 	void setEnabled(bool enabled) const {
 		this->widget->setEnabled(enabled);
 		this->label->setEnabled(enabled);
 	}
 
-	void addToLayout(QGridLayout *layout) {
-		const int row = layout->rowCount();
+	void addToLayout(QGridLayout *layout, int row = -1) {
+		if (row == -1) {
+			row = layout->rowCount();
+		}
 		layout->addWidget(this->label, row, 0);
 		layout->addWidget(this->widget, row, 1);
+		layout->setRowMinimumHeight(row, 30);
 	}
 };
 
 WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &initialColor, std::function<void(const Color&)> setter) {
-	return WidgetWithLabel(new ColorButton(title, initialColor, setter), new QLabel(title));
+	return WidgetWithLabel(new ColorButton(title, initialColor, setter), title);
 }
 
 }
@@ -166,7 +168,6 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	vbox->addWidget(buttonBox);
 	vbox->setSizeConstraint(QLayout::SetFixedSize);
 
-	layout->addWidget(new QLabel("Knot thickness"), 0, 0);
 	auto thickness = new QLineEdit();
 	thickness->setValidator(new QDoubleValidator(0.01, 20, 5));
 	thickness->setText(QString::number(initialThickness));
@@ -185,7 +186,7 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 		}
 		thickness->update();
 	});
-	layout->addWidget(thickness, 0, 1);
+	WidgetWithLabel(thickness, "Knot thickness").addToLayout(layout, 0);
 
 	addColorButton("Background color", initialBackgroundColor, [widget](const Color &color) {
 		widget->_knot.setBackgroundColor(color);
@@ -196,14 +197,8 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 		widget->update();
 	}).addToLayout(layout);
 
-	const int row = layout->rowCount();
-	layout->addWidget(new QLabel("Show Seifert surface"), row, 0);
-	auto seifertVisibility = new QCheckBox(QString());
-	layout->addWidget(seifertVisibility, row, 1);
-
-	WidgetWithLabel<QCheckBox> sameColor(
-		new QCheckBox(QString()), new QLabel("Same color for front & back")
-	);
+	WidgetWithLabel seifertVisibility(new QCheckBox(QString()), "Show Seifert surface");
+	WidgetWithLabel sameColor(new QCheckBox(QString()), "Same color for front & back");
 	sameColor.widget->setChecked(initialSeifertFrontColor == initialSeifertBackColor);
 
 	auto seifertBack = addColorButton("Seifert surface back color", initialSeifertBackColor, [widget](const Color &color) {
@@ -220,11 +215,12 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 		widget->update();
 	});
 
+	seifertVisibility.addToLayout(layout);
 	seifertFront.addToLayout(layout);
 	sameColor.addToLayout(layout);
 	seifertBack.addToLayout(layout);
 
-	QObject::connect(seifertVisibility, &QCheckBox::stateChanged, [=](int state) {
+	QObject::connect(seifertVisibility.widget, &QCheckBox::stateChanged, [=](int state) {
 		const bool visible = state == ::Qt::Checked;
 		widget->setSeifertSurfaceVisibility(visible);
 		seifertFront.setEnabled(visible);
@@ -233,19 +229,15 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	});
 	QObject::connect(sameColor.widget, &QCheckBox::stateChanged, [=](int state) {
 		const bool same = state == ::Qt::Checked;
-		seifertBack.setEnabled(!same && seifertVisibility->isChecked());
+		seifertBack.setEnabled(!same && seifertVisibility.widget->isChecked());
 		if (same) {
 			seifertBack.widget->setColor(seifertFront.widget->currentColor, true);
 		}
 	});
-	seifertVisibility->setChecked(initialSeifertVisibility);
+	seifertVisibility.widget->setChecked(initialSeifertVisibility);
 	seifertFront.setEnabled(initialSeifertVisibility);
 	sameColor.setEnabled(initialSeifertVisibility);
 	seifertBack.setEnabled(initialSeifertVisibility && !sameColor.widget->isChecked());
-
-	for (int row = 0; row < layout->rowCount(); row += 1) {
-		layout->setRowMinimumHeight(row, 30);
-	}
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);
 	QObject::connect(&window, &Window::closing, this, &QDialog::close);

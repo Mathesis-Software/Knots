@@ -80,7 +80,6 @@ public:
 	const Color &backgroundColor() const override;
 
   void saveKnot(std::ostream &os);
-	bool isKnotSaved() const;
 
   void startSmoothing();
   void stopSmoothing();

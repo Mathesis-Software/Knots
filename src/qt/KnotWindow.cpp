@@ -127,7 +127,7 @@ KnotWidget *KnotWindow::knotWidget() const {
 
 bool KnotWindow::isSaved() const {
 	auto widget = this->knotWidget();
-	return !widget || widget->isKnotSaved();
+	return !widget || widget->knot().isSaved();
 }
 
 void KnotWindow::saveIt(std::ostream &os) {

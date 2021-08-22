@@ -90,10 +90,6 @@ void KnotWidget::rotate(double dx, double dy, double dz) {
 	this->_knot.rotate(dx, dy, dz);
 }
 
-bool KnotWidget::isKnotSaved() const {
-	return this->knot().isSaved();
-}
-
 void KnotWidget::saveKnot(std::ostream &os) {
 	const rapidjson::Document doc = this->knot().serialize();
 	rapidjson::OStreamWrapper wrapper(os);

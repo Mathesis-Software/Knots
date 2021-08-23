@@ -57,7 +57,10 @@ Window::Window() {
 	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 
+	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
 	this->toolbar = new QToolBar(this);
+	this->toolbar->setMovable(false);
+	this->toolbar->setContextMenuPolicy(::Qt::PreventContextMenu);
 	addToolBar(this->toolbar);
 }
 

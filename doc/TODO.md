@@ -20,7 +20,6 @@
 * save window sizes between runs
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
-* pass diagram/knot files to open as parameters in command line
 * undo/redo in knot window
 * export image: "draw background" option
 

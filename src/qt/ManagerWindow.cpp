@@ -30,6 +30,8 @@
 namespace KE::Qt {
 
 ManagerWindow::ManagerWindow() {
+	this->setAttribute(::Qt::WA_DeleteOnClose);
+
 	fileMenu = this->menuBar()->addMenu("File");
 	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
@@ -39,7 +41,7 @@ ManagerWindow::ManagerWindow() {
 	auto center = new QWidget;
 	auto layout = new QHBoxLayout(center);
 	layout->addWidget(this->createButton("Create new diagram", &Window::newDiagram));
-	layout->addWidget(this->createButton("Open existing file", &Window::openFile));
+	layout->addWidget(this->createButton("Open existing file", [] { return Window::openFile(); }));
 	this->setCentralWidget(center);
 
 	setWindowTitle("Knot Editor");

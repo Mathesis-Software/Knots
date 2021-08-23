@@ -24,6 +24,7 @@
 #include <QtWidgets/QProxyStyle>
 
 #include "ManagerWindow.h"
+#include "Window.h"
 
 class ProxyStyle : public QProxyStyle {
 
@@ -53,7 +54,15 @@ int main(int argc, char **argv) {
 	pixmap.setDevicePixelRatio(qa.devicePixelRatio());
 	qa.setWindowIcon(pixmap);
 
-	KE::Qt::ManagerWindow manager;
-	manager.show();
+	int count = 0;
+	for (int i = 1; i < argc; ++i) {
+		if (KE::Qt::Window::openFile(argv[i])) {
+			count += 1;
+		}
+	}
+	if (count == 0) {
+		(new KE::Qt::ManagerWindow())->show();
+	}
+
 	return qa.exec();
 }

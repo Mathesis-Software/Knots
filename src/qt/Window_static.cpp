@@ -74,8 +74,10 @@ QWidget *Window::newDiagram() {
 }
 
 QWidget *Window::openFile() {
-	QString filename = getOpenFileNameEx();
+	return openFile(getOpenFileNameEx());
+}
 
+QWidget *Window::openFile(const QString &filename) {
 	if (filename.isEmpty()) {
 		return nullptr;
 	}
@@ -104,7 +106,7 @@ QWidget *Window::openFile() {
 		window->show();
 		return window;
 	} catch (const std::runtime_error &e) {
-		QMessageBox::critical(0, "File opening error", QString("\n") + e.what() + "\n");
+		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}
 }

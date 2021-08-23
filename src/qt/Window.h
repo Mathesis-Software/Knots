@@ -33,6 +33,7 @@ Q_OBJECT
 public:
 	static QWidget *newDiagram();
 	static QWidget *openFile();
+	static QWidget *openFile(const QString &filename);
 	static void exitApplication();
 
 private:

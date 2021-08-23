@@ -68,7 +68,9 @@ int main(int argc, char **argv) {
 
 	std::stringstream name;
 	name << "Torus " << meridian << "x" << longitude;
-	const KE::ThreeD::Knot knot(points, name.str());
+	KE::ThreeD::Knot knot(points, name.str());
+	knot.normalize(numberOfPoints);
+	knot.center();
 	const rapidjson::Document doc = knot.serialize();
 
 	rapidjson::OStreamWrapper wrapper(std::cout);

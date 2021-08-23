@@ -91,6 +91,12 @@ private:
 	};
 
 public:
+	static std::vector<Point> pointsFromDiagram(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
+
+private:
+	static std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints);
+
+public:
 	std::string caption;
 
 private:
@@ -103,7 +109,8 @@ private:
 
 public:
 	Knot(const rapidjson::Document &doc);
-	Knot(const TwoD::Diagram&, std::size_t width, std::size_t height);
+	Knot(const std::vector<Point> &points, const std::string &caption);
+	//Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
 
 	Snapshot snapshot() const;
 
@@ -113,9 +120,6 @@ public:
 	void normalize(std::size_t numberOfPoints);
 
 	rapidjson::Document serialize() const;
-
-private:
-	static std::vector<Point> normalizedPoints(const Snapshot &snapshot, std::size_t numberOfPoints);
 
 private:
 	Knot(const Knot&) = delete;

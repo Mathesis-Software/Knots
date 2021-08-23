@@ -19,51 +19,62 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <math.h>
-#include <iostream.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cmath>
+#include <iostream>
+#include <numeric>
+#include <sstream>
 
-void usage (const char *program)
-{
-  cerr << "usage:\n"
-       << program
-       << " <number_of_points (>0)> <meredian_number> <longitude_number>\n";
+#include <rapidjson/document.h>
+#include <rapidjson/ostreamwrapper.h>
+#include <rapidjson/writer.h>
+
+#include "../ke/Knot.h"
+
+void print_usage(const std::string argv0) {
+	std::cerr << "usage:\n\t" << argv0 << " <number of points> <meredian number> <longitude number>\n";
 }
 
-int main (int argc, char **argv)
-{
-  int num, L, M;
+int main(int argc, char **argv) {
+	if (argc != 4) {
+		print_usage(argv[0]);
+		return 1;
+	}
 
-  if ( (argc != 4) ||
-     !sscanf (argv [1], "%d", &num) ||
-     (num < 1) ||
-     !sscanf (argv [2], "%d", &M) ||
-     !sscanf (argv [3], "%d", &L) )
-    return usage (argv [0]), 1;
+	const int numberOfPoints = std::stoi(argv[1]);
+	const int meridian = std::stoi(argv[2]);
+	const int longitude = std::stoi(argv[3]);
 
-  {
-    int m = abs (M), l = abs (L);
-    while (l && m)
-      if (l < m)
-        m %= l;
-      else
-        l %= m;
+	if (numberOfPoints < 1) {
+		std::cerr << "Error: number of points (" << numberOfPoints << ") must be a positive integer.\n";
+		return 1;
+	}
 
-    if (l + m != 1)
-      return cerr << "Error: longitude and meredian numbers are not coprime.\n", 2;
-  }
+	const int gcd = std::gcd(meridian, longitude);
+	if (gcd != 1) {
+		std::cerr << "Error: meridian (" << meridian << ") and longitude (" << longitude << ") numbers must be coprime.\n";
+		return 1;
+	}
 
-  cout << "#KNOT Torus (" << M << ", " << L << ") knot\n#LENGTH " << num << "\n";
+	std::vector<KE::ThreeD::Point> points;
+	for (int i = 0; i < numberOfPoints; ++i) {
+		const double lonAngle = 2 * M_PI * longitude * i / numberOfPoints;
+		const double merAngle = 2 * M_PI * meridian * i / numberOfPoints;
+		points.push_back(KE::ThreeD::Point(
+			sin(lonAngle) * (0.7 + 0.3 * cos(merAngle)),
+			cos(lonAngle) * (0.7 + 0.3 * cos(merAngle)),
+			0.3 * sin(merAngle)
+		));
+	}
 
-  for (int i = 0; i < num; i++)
-    cout <<
-     sin (2 * L * M_PI / num * i) * (0.7 + 0.3 * cos (2 * M * M_PI / num * i) ) <<
-     " " <<
-     cos (2 * L * M_PI / num * i) * (0.7 + 0.3 * cos (2 * M * M_PI / num * i) ) <<
-     " " <<
-     0.3 * sin (2 * M * M_PI / num * i) <<
-     "\n";
-  
-  return 0;
+	std::stringstream name;
+	name << "Torus " << meridian << "x" << longitude;
+	const KE::ThreeD::Knot knot(points, name.str());
+	const rapidjson::Document doc = knot.serialize();
+
+	rapidjson::OStreamWrapper wrapper(std::cout);
+	rapidjson::Writer<rapidjson::OStreamWrapper> writer(wrapper);
+	writer.SetMaxDecimalPlaces(5);
+	doc.Accept(writer);
+
+	return 0;
 }

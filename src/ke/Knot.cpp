@@ -27,7 +27,63 @@
 
 namespace KE::ThreeD {
 
-Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : caption(diagram.caption + " (from diagram)"), generation(1), lockCount(0) {
+Knot::Knot(const std::vector<Point> &points, const std::string &caption) : caption(caption), generation(1), lockCount(0) {
+	this->_points = points;
+
+	double min = this->_points.front().distanceTo(this->_points.back());
+	double total = min;
+	for (std::size_t i = 1; i < this->_points.size(); ++i) {
+		const double dist = this->_points[i - 1].distanceTo(this->_points[i]);
+		min = std::min(min, dist);
+		total += dist;
+	}
+	normalize(std::max(5 * this->_points.size(), 3 * (std::size_t)std::round(total / min)));
+	center();
+}
+
+void Knot::normalize(std::size_t newNumberOfPoints) {
+	std::lock_guard<std::mutex> writeMethodGuard(this->writeMethodMutex);
+	const auto snapshot = this->snapshot();
+	auto normalized = this->normalizedPoints(snapshot, newNumberOfPoints);
+
+	counting_lock guard(*this);
+	this->_points.swap(normalized);
+}
+
+std::vector<Point> Knot::normalizedPoints(const Snapshot &snapshot, std::size_t newNumberOfPoints) {
+	const auto &edgeLengths = snapshot.edgeLengths();
+	const double totalLength = snapshot.knotLength();
+	const double newEdgeLength = totalLength / newNumberOfPoints;
+
+	std::vector<Point> newPoints;
+	newPoints.reserve(newNumberOfPoints);
+
+	std::size_t v = 0;
+	double llen = edgeLengths[0];
+	double rest = llen;
+
+	for (std::size_t i = 0; i < newNumberOfPoints; i++) {
+		const auto nextV = v == snapshot.size() - 1 ? 0 : v + 1;
+
+		const Vector delta(snapshot[v], snapshot[nextV]);
+		Point pt(snapshot[v]);
+		pt.move(delta, 1 - rest / llen);
+		newPoints.push_back(pt);
+
+		rest -= newEdgeLength;
+		while (rest < 0) {
+			v = v == snapshot.size() - 1 ? 0 : v + 1;
+			llen = edgeLengths[v];
+			rest += llen;
+		}
+	}
+
+	return newPoints;
+}
+
+std::vector<Point> Knot::pointsFromDiagram(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) {
+	std::vector<Point> points;
+
 	const auto edges = diagram.edges();
 	std::map<std::shared_ptr<TwoD::Diagram::Vertex>,std::list<TwoD::Diagram::Crossing>> all_crossings;
 	for (const auto &edge : edges) {
@@ -41,7 +97,7 @@ Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) 
 
 	for (const auto &edge : edges) {
 		const auto coords = edge.start->coords();
-		this->_points.push_back(Point(
+		points.push_back(Point(
 			2.4 * coords.x / width - 1.2,
 			1.2 - 2.4 * coords.y / height,
 			0
@@ -53,7 +109,7 @@ Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) 
 			if (!current) {
 				continue;
 			}
-			this->_points.push_back(Point(
+			points.push_back(Point(
 				2.4 * current->x / width - 1.2,
 				1.2 - 2.4 * current->y / height,
 				crs.up == edge ? 0.2 : -0.2
@@ -61,15 +117,7 @@ Knot::Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) 
 		}
 	}
 
-	double min = this->_points.front().distanceTo(this->_points.back());
-	double total = min;
-	for (std::size_t i = 1; i < this->_points.size(); ++i) {
-		const double dist = this->_points[i - 1].distanceTo(this->_points[i]);
-		min = std::min(min, dist);
-		total += dist;
-	}
-	normalize(std::max(5 * this->_points.size(), 3 * (std::size_t)std::round(total / min)));
-	center();
+	return points;
 }
 
 }

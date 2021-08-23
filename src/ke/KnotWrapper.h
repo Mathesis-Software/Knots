@@ -61,7 +61,7 @@ public:
 	const std::string &caption() const { return this->knot.caption; }
 
 	void decreaseEnergy() { this->knot.decreaseEnergy(); }
-	void setCaption(const std::string &caption) { this->knot.caption = caption; } 
+	void setCaption(const std::string &caption) { this->knot.caption = caption; }
 	void setLength(double length) { this->knot.setLength(length); }
 	void center() { this->knot.center(); }
 	void normalize(std::size_t numberOfPoints) { this->knot.normalize(numberOfPoints); }

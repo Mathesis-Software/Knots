@@ -77,18 +77,18 @@ private:
 public:
 	const Color &backgroundColor() const override;
 
-  void saveKnot(std::ostream &os);
+	void saveKnot(std::ostream &os);
 
-  void startSmoothing();
-  void stopSmoothing();
-  void stopSmoothingAndWait();
+	void startSmoothing();
+	void stopSmoothing();
+	void stopSmoothingAndWait();
 	bool isSmoothingInProgress() const;
 
-  void setSeifertSurfaceVisibility(bool visible);
-  void moveSeifertBasePoint(double distance);
+	void setSeifertSurfaceVisibility(bool visible);
+	void moveSeifertBasePoint(double distance);
 
-  void setLength();
-  void setNumberOfPoints();
+	void setLength();
+	void setNumberOfPoints();
 
 	void onKnotChanged(bool force);
 

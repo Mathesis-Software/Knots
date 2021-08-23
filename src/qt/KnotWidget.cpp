@@ -40,8 +40,8 @@ KnotWidget::KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_
 }
 
 void KnotWidget::init() {
-  this->addSurface(this->knot.knotSurface());
-  this->addSurface(this->knot.seifertSurface());
+	this->addSurface(this->knot.knotSurface());
+	this->addSurface(this->knot.seifertSurface());
 }
 
 const Color &KnotWidget::backgroundColor() const {
@@ -55,12 +55,12 @@ void KnotWidget::moveSeifertBasePoint(double distance) {
 
 void KnotWidget::setSeifertSurfaceVisibility(bool visible) {
 	this->knot.setSeifertSurfaceVisibility(visible);
-  this->update();
+	this->update();
 	emit actionsUpdated();
 }
 
 void KnotWidget::onKnotChanged(bool force) {
-  if (force || this->knot.knotSurface()->isObsolete() || this->knot.seifertSurface()->isObsolete()) {
+	if (force || this->knot.knotSurface()->isObsolete() || this->knot.seifertSurface()->isObsolete()) {
 		this->update();
 		emit actionsUpdated();
 	}
@@ -97,25 +97,25 @@ void KnotWidget::saveKnot(std::ostream &os) {
 
 void KnotWidget::setLength() {
 	const auto snapshot = this->knot.snapshot();
-  const double d = QInputDialog::getDouble(nullptr, "Set value", "Knot length", snapshot.knotLength(), 1.0, 1000.0, 4);
-  if (d != snapshot.knotLength()) {
-    this->knot.setLength(d);
-    this->knot.center();
-    this->update();
+	const double d = QInputDialog::getDouble(nullptr, "Set value", "Knot length", snapshot.knotLength(), 1.0, 1000.0, 4);
+	if (d != snapshot.knotLength()) {
+		this->knot.setLength(d);
+		this->knot.center();
+		this->update();
 		emit actionsUpdated();
-  }
+	}
 }
 
 void KnotWidget::setNumberOfPoints() {
 	const std::size_t numberOfPoints = QInputDialog::getInt(nullptr, "Set value", "Number of points", this->knot.snapshot().size(), 10, 30000, 10);
-  if (numberOfPoints != this->knot.snapshot().size()) {
+	if (numberOfPoints != this->knot.snapshot().size()) {
 		const double length = this->knot.snapshot().knotLength();
-    this->knot.normalize(numberOfPoints);
-    this->knot.center();
+		this->knot.normalize(numberOfPoints);
+		this->knot.center();
 		this->knot.setLength(length);
-    this->update();
+		this->update();
 		emit actionsUpdated();
-  }
+	}
 }
 
 }

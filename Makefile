@@ -16,7 +16,7 @@ install_bin: all
 	@$(INSTALL) -d $(INSTDIR)
 	@$(INSTALL) -d $(INSTDIR)/bin
 	@$(INSTALL) -s src/qt/KnotEditor $(INSTDIR)/bin
-	
+
 install_data:
 	@$(INSTALL) -d $(INSTDIR)/data
 	@$(INSTALL) -d $(INSTDIR)/data/trefoil

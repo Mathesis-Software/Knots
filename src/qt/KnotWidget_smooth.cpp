@@ -24,7 +24,7 @@
 namespace KE::Qt {
 
 void KnotWidget::startSmoothing() {
-  if (!this->smoothingThread.isRunning()) {
+	if (!this->smoothingThread.isRunning()) {
 		this->smoothingThread.start();
 		emit setActionTip("Smoothing…");
 		emit actionsUpdated();
@@ -32,11 +32,11 @@ void KnotWidget::startSmoothing() {
 }
 
 void KnotWidget::stopSmoothing() {
-  if (this->smoothingThread.isRunning()) {
+	if (this->smoothingThread.isRunning()) {
 		this->smoothingThread.requestInterruption();
 		emit setActionTip(QString());
 		emit actionsUpdated();
-  }
+	}
 }
 
 void KnotWidget::stopSmoothingAndWait() {

@@ -37,31 +37,31 @@ class KnotWindow : public Window {
 Q_OBJECT
 
 private:
-  QMenu *knotMenu;
+	QMenu *knotMenu;
 
 public:
-  KnotWindow(const rapidjson::Document &doc);
-  KnotWindow(const DiagramWidget &diagramWidget);
-  ~KnotWindow();
+	KnotWindow(const rapidjson::Document &doc);
+	KnotWindow(const DiagramWidget &diagramWidget);
+	~KnotWindow();
 
 	KnotWidget *knotWidget() const;
 
 private:
-  void init(KnotWidget *widget);
-  void initMenu();
+	void init(KnotWidget *widget);
+	void initMenu();
 
 	QImage exportImage() const override;
 
 	bool isSaved() const override;
-  void saveIt(std::ostream&) override;
+	void saveIt(std::ostream&) override;
 
 	void closeEvent(QCloseEvent *event) override;
 
 	QString fileFilter() const override { return "Knot files (*.knt)"; }
 	void rename() override;
 
-  void showMathDialog();
-  void showOptionsDialog();
+	void showMathDialog();
+	void showOptionsDialog();
 
 signals:
 	void raiseMathDialog();

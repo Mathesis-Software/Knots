@@ -131,7 +131,7 @@ struct RemoveEdgeCommand : public DiagramEditor::Command {
 
 bool DiagramEditor::canRemoveEdge(const std::shared_ptr<Diagram::Edge> &edge) const {
 	if (this->currentDiagram->isClosed()) {
-	 	return true;
+		return true;
 	}
 	const auto edges = this->currentDiagram->edges();
 	return *edge == edges.front() || *edge == edges.back();

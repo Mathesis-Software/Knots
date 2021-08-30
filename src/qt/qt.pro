@@ -10,6 +10,9 @@ CONFIG += c++17
 
 DEFINES += "VERSION=1.0"
 
+QMAKE_CXX = ccache $$QMAKE_CXX
+QMAKE_CXXFLAGS += -Wno-unused-command-line-argument
+
 SOURCES = \
 	AboutWindow.cpp \
 	DiagramWidget.cpp \

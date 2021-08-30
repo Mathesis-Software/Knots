@@ -39,7 +39,7 @@ AboutWindow::AboutWindow() {
 	this->setWindowModality(::Qt::ApplicationModal);
 	setFixedSize(380, 180);
 	QPalette pal = this->palette();
-	pal.setColor(QPalette::Background, ::Qt::white);
+	pal.setColor(QPalette::Window, ::Qt::white);
 	this->setAutoFillBackground(true);
 	this->setPalette(pal);
 

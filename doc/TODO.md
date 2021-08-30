@@ -1,3 +1,9 @@
+### Mac specific
+
+* Application icon
+* Install samples
+* Review (and re-arrange) the menu
+
 ### Bug fixing
 
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps

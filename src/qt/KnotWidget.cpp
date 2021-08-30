@@ -19,6 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <iostream>
+
 #include <QtWidgets/QInputDialog>
 
 #include <rapidjson/ostreamwrapper.h>

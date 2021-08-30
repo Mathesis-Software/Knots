@@ -19,6 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <iostream>
+
 #include <QtGui/QPainter>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>

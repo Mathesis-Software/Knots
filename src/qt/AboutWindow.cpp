@@ -19,9 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <QtGui/QScreen>
 #include <QtWidgets/QAction>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
 #include <QtWidgets/QLabel>
 
 #include "AboutWindow.h"
@@ -72,7 +71,7 @@ AboutWindow::AboutWindow() {
 }
 
 void AboutWindow::showMe() {
-	const QRect screenGeometry = QApplication::desktop()->screenGeometry();
+	const QRect screenGeometry = this->screen()->geometry();
 	const int x = (screenGeometry.width() - 380) / 2;
 	const int y = (screenGeometry.height() - 180) / 2;
 	this->move(x, y);

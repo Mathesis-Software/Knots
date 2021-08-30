@@ -8,7 +8,7 @@ LIBS += -lke
 
 CONFIG += c++17
 
-DEFINES += "VERSION=1.0"
+DEFINES += 'VERSION=\\"`cat ../VERSION`\\"'
 
 QMAKE_CXX = ccache $$QMAKE_CXX
 QMAKE_CXXFLAGS += -Wno-unused-command-line-argument

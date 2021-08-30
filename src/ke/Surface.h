@@ -31,6 +31,10 @@ namespace KE::GL {
 
 class Surface {
 
+public:
+	const bool stripped;
+	const bool showBackSide;
+
 private:
 	struct SurfacePoint {
 		float vertex[3];
@@ -46,10 +50,7 @@ private:
 		}
 	};
 
-	const bool stripped;
-	const bool showBackSide;
-
-	mutable std::vector<SurfacePoint> points;
+	mutable std::vector<SurfacePoint> _points;
 
 protected:
 	virtual void calculate() const = 0;
@@ -59,7 +60,9 @@ public:
 	Surface(bool stripped, bool showBackSide);
 	virtual ~Surface();
 
-	void paint() const;
+	void prepare() const;
+
+	const std::vector<SurfacePoint> &points() const { return this->_points; }
 
 	virtual bool isVisible() const = 0;
 	virtual bool isObsolete() const;

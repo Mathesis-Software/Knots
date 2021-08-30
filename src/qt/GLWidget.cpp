@@ -63,8 +63,8 @@ void GLWidget::paintGL() {
 	glClearColor(bg->rgb[0], bg->rgb[1], bg->rgb[2], 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (auto surface : this->surfaces) {
-		surface->paint();
+	for (const auto &surface : this->surfaces) {
+		this->paintSurface(*surface);
 	}
 
 	glFlush();
@@ -135,6 +135,33 @@ void GLWidget::rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModi
 
 	glMultMatrixd(this->currentMatrix());
 	this->update();
+}
+
+void GLWidget::paintSurface(const GL::Surface &surface) {
+	// Поверхность перерисовывается, если она видима.
+	if (!surface.isVisible()) {
+		return;
+	}
+
+	// Если нужно, сначала делаем вычисления.
+	surface.prepare();
+
+	// Устанавливаем цвета обеих сторон поверхности.
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, surface.frontColor().rgb);
+	glMaterialfv(GL_BACK, GL_DIFFUSE, surface.backColor().rgb);
+
+	// Двусторонняя ли поверхность?
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, surface.showBackSide);
+
+	// Связаны ли треугольники?
+	glBegin(surface.stripped ? GL_TRIANGLE_STRIP : GL_TRIANGLES);
+
+	for (const auto &pt : surface.points()) {
+		glNormal3fv(pt.normal);
+		glVertex3fv(pt.vertex);
+	}
+
+	glEnd();
 }
 
 }

@@ -19,8 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __MANAGER_H__
-#define __MANAGER_H__
+#ifndef __KE_QT_MANAGER_WINDOW_H__
+#define __KE_QT_MANAGER_WINDOW_H__
 
 #include <QtWidgets/QMainWindow>
 
@@ -43,4 +43,4 @@ private:
 
 }
 
-#endif /* __MANAGER_H__ */
+#endif /* __KE_QT_MANAGER_WINDOW_H__ */

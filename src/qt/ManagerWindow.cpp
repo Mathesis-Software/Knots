@@ -51,7 +51,7 @@ ManagerWindow::ManagerWindow() {
 QPushButton *ManagerWindow::createButton(const QString &title, std::function<QWidget*()> creator) {
 	auto button = new QPushButton(title);
 	button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-	button->connect(button, &QPushButton::clicked, [=] {
+	button->connect(button, &QPushButton::clicked, [this,creator] {
 		auto window = creator();
 		if (window) {
 			window->setGeometry(this->geometry());

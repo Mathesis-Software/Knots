@@ -2,7 +2,6 @@
 
 * Application icon
 * Install samples
-* Review (and re-arrange) the menu
 
 ### Bug fixing
 

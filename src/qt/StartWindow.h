@@ -24,17 +24,12 @@
 
 #include "BaseWindow.h"
 
-class QPushButton;
-
 namespace KE::Qt {
 
 class StartWindow : public BaseWindow {
 
 public:
 	StartWindow();
-
-private:
-	QPushButton *createButton(const QString &title, std::function<QWidget*()> creator);
 };
 
 }

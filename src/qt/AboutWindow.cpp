@@ -29,7 +29,12 @@
 namespace KE::Qt {
 
 void AboutWindow::showAboutDialog() {
-	(new AboutWindow())->showMe();
+	auto about = new AboutWindow();
+	const QRect screenGeometry = about->screen()->geometry();
+	const int x = (screenGeometry.width() - 380) / 2;
+	const int y = (screenGeometry.height() - 180) / 2;
+	about->move(x, y);
+	about->show();
 }
 
 AboutWindow::AboutWindow() {
@@ -68,14 +73,6 @@ AboutWindow::AboutWindow() {
 		Window::exitApplication();
 	});
 	this->addAction(quit);
-}
-
-void AboutWindow::showMe() {
-	const QRect screenGeometry = this->screen()->geometry();
-	const int x = (screenGeometry.width() - 380) / 2;
-	const int y = (screenGeometry.height() - 180) / 2;
-	this->move(x, y);
-	this->show();
 }
 
 void AboutWindow::mousePressEvent(QMouseEvent*) {

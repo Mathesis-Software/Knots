@@ -19,8 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __ICON_PROVIDER_H__
-#define __ICON_PROVIDER_H__
+#ifndef __KE_QT_FILE_ICON_PROVIDER_H__
+#define __KE_QT_FILE_ICON_PROVIDER_H__
 
 #include <QtWidgets/QFileIconProvider>
 
@@ -47,4 +47,4 @@ private:
 
 }
 
-#endif /* __ICON_PROVIDER_H__ */
+#endif /* __KE_QT_FILE_ICON_PROVIDER_H__ */

@@ -19,8 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __ABOUT_H__
-#define __ABOUT_H__
+#ifndef __KE_QT_ABOUT_WINDOW_H__
+#define __KE_QT_ABOUT_WINDOW_H__
 
 #include <QtWidgets/QWidget>
 
@@ -33,7 +33,6 @@ public:
 
 public:
 	AboutWindow();
-	void showMe();
 
 private:
 	void mousePressEvent(QMouseEvent *event) override;
@@ -41,4 +40,4 @@ private:
 
 }
 
-#endif /* __ABOUT_H__ */
+#endif /* __KE_QT_ABOUT_WINDOW_H__ */

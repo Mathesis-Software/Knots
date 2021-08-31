@@ -4,7 +4,7 @@ TARGET = ke
 TEMPLATE = lib
 
 CONFIG -= qt
-CONFIG += c++17 static
+CONFIG += c++17 staticlib
 
 QMAKE_CXX = ccache $$QMAKE_CXX
 QMAKE_CXXFLAGS += -Wno-unused-command-line-argument

@@ -56,9 +56,9 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	});
 	this->connect(widget, &DiagramWidget::actionsUpdated, [this] { emit this->contentChanged(); });
 
-	actionsMenu = this->menuBar()->addMenu("Actions");
+	actionsMenu = this->menuBar()->addMenu("Diagram");
 	this->registerAction(
-		actionsMenu->addAction("Convert", [this] { this->convert(); }),
+		actionsMenu->addAction("Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(

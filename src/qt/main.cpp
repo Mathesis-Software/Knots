@@ -23,7 +23,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QProxyStyle>
 
-#include "ManagerWindow.h"
+#include "StartWindow.h"
 #include "Window.h"
 
 class ProxyStyle : public QProxyStyle {
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 		}
 	}
 	if (count == 0) {
-		(new KE::Qt::ManagerWindow())->show();
+		(new KE::Qt::StartWindow())->show();
 	}
 
 	return qa.exec();

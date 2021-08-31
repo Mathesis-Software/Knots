@@ -23,10 +23,12 @@
 
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
 
 #include <rapidjson/istreamwrapper.h>
 
+#include "AboutWindow.h"
 #include "DiagramWindow.h"
 #include "FileIconProvider.h"
 #include "KnotWindow.h"
@@ -35,7 +37,7 @@
 
 namespace KE::Qt {
 
-void Window::exitApplication() {
+void BaseWindow::exitApplication() {
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<Window*>(widget)) {
 			if (!window->close()) {
@@ -67,17 +69,17 @@ QString getOpenFileNameEx() {
 
 }
 
-QWidget *Window::newDiagram() {
+QWidget *BaseWindow::newDiagram() {
 	auto window = new DiagramWindow();
 	window->show();
 	return window;
 }
 
-QWidget *Window::openFile() {
+QWidget *BaseWindow::openFile() {
 	return openFile(getOpenFileNameEx());
 }
 
-QWidget *Window::openFile(const QString &filename) {
+QWidget *BaseWindow::openFile(const QString &filename) {
 	if (filename.isEmpty()) {
 		return nullptr;
 	}
@@ -109,6 +111,37 @@ QWidget *Window::openFile(const QString &filename) {
 		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}
+}
+
+BaseWindow::BaseWindow() {
+	this->setAttribute(::Qt::WA_DeleteOnClose);
+	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
+}
+
+void BaseWindow::createFileMenu() {
+	Window *window = dynamic_cast<Window*>(this);
+
+	QMenu *fileMenu = this->menuBar()->addMenu("File");
+
+	auto newd = fileMenu->addAction("New diagram", [] { Window::newDiagram(); });
+	newd->setShortcut(QKeySequence("Ctrl+N"));
+	auto open = fileMenu->addAction("Open…", [] { Window::openFile(); });
+	open->setShortcut(QKeySequence("Ctrl+O"));
+	fileMenu->addSeparator();
+	if (window) {
+		auto save = fileMenu->addAction("Save as…", window, &Window::save);
+		save->setShortcut(QKeySequence("Ctrl+S"));
+		fileMenu->addAction("Export as image…", window, &Window::exportPNG);
+		fileMenu->addSeparator();
+		fileMenu->addAction("Rename…", window, &Window::rename);
+		fileMenu->addSeparator();
+	}
+	fileMenu->addAction("About", [] { Qt::AboutWindow::showAboutDialog(); });
+	fileMenu->addSeparator();
+	auto close = fileMenu->addAction("Close", [this] { this->close(); });
+	close->setShortcut(QKeySequence("Ctrl+W"));
+	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
+	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }
 
 }

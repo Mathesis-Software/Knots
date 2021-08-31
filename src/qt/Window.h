@@ -26,47 +26,53 @@
 
 namespace KE::Qt {
 
-class Window : public QMainWindow {
-
-Q_OBJECT
+class BaseWindow : public QMainWindow {
 
 public:
 	static QWidget *newDiagram();
 	static QWidget *openFile();
 	static QWidget *openFile(const QString &filename);
 	static void exitApplication();
-	static void createFileMenu(QMainWindow *window);
+
+protected:
+	BaseWindow();
+	void createFileMenu();
+};
+
+class Window : public BaseWindow {
+
+Q_OBJECT
 
 private:
 	QToolBar *toolbar;
 
 protected:
+	Window();
+
+public:
+	void save();
+	virtual void rename() = 0;
+	void exportPNG();
+
+protected:
 	void closeEvent(QCloseEvent*);
 
-	void save();
 	virtual void saveIt(std::ostream&) = 0;
 	virtual bool isSaved() const = 0;
 	int askForSave();
 
-	void exportPNG();
 	virtual QImage exportImage() const = 0;
 
 	QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
 	void addToolbarSeparator();
 	void complete();
+	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
 
-QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
-
-public:
-	Window();
 	virtual QString fileFilter() const = 0;
 
 signals:
 	void closing();
 	void contentChanged();
-
-protected:
-	virtual void rename() = 0;
 };
 
 }

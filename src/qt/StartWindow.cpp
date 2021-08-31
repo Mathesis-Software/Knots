@@ -20,32 +20,25 @@
  */
 
 #include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 
-#include "AboutWindow.h"
-#include "ManagerWindow.h"
-#include "Window.h"
+#include "StartWindow.h"
 
 namespace KE::Qt {
 
-ManagerWindow::ManagerWindow() {
-	this->setAttribute(::Qt::WA_DeleteOnClose);
-	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
-
-	auto center = new QWidget;
-	auto layout = new QHBoxLayout(center);
-	layout->addWidget(this->createButton("Create new diagram", &Window::newDiagram));
-	layout->addWidget(this->createButton("Open existing file", [] { return Window::openFile(); }));
-	this->setCentralWidget(center);
+StartWindow::StartWindow() {
+	this->setCentralWidget(new QWidget);
+	auto layout = new QHBoxLayout(this->centralWidget());
+	layout->addWidget(this->createButton("Create new diagram", &StartWindow::newDiagram));
+	layout->addWidget(this->createButton("Open existing file", [] { return StartWindow::openFile(); }));
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);
 
-	Window::createFileMenu(this);
+	this->createFileMenu();
 }
 
-QPushButton *ManagerWindow::createButton(const QString &title, std::function<QWidget*()> creator) {
+QPushButton *StartWindow::createButton(const QString &title, std::function<QWidget*()> creator) {
 	auto button = new QPushButton(title);
 	button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	button->connect(button, &QPushButton::clicked, [this,creator] {

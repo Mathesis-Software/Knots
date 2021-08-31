@@ -19,19 +19,19 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KE_QT_MANAGER_WINDOW_H__
-#define __KE_QT_MANAGER_WINDOW_H__
+#ifndef __KE_QT_START_WINDOW_H_
+#define __KE_QT_START_WINDOW_H_
 
-#include <QtWidgets/QMainWindow>
+#include "Window.h"
 
 class QPushButton;
 
 namespace KE::Qt {
 
-class ManagerWindow : public QMainWindow {
+class StartWindow : public BaseWindow {
 
 public:
-	ManagerWindow();
+	StartWindow();
 
 private:
 	QPushButton *createButton(const QString &title, std::function<QWidget*()> creator);
@@ -39,4 +39,4 @@ private:
 
 }
 
-#endif /* __KE_QT_MANAGER_WINDOW_H__ */
+#endif /* __KE_QT_START_WINDOW_H_ */

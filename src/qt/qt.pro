@@ -16,5 +16,6 @@ QMAKE_CXXFLAGS += -Wno-unused-command-line-argument
 SOURCES = *.cpp
 HEADERS = *.h
 RESOURCES = *.qrc
+ICON = ../../images/trefoil.icns
 
 INCLUDEPATH += /usr/local/Cellar/rapidjson/1.1.0/include

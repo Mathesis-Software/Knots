@@ -31,12 +31,7 @@ namespace KE::Qt {
 
 ManagerWindow::ManagerWindow() {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
-
-	QMenu *fileMenu = this->menuBar()->addMenu("File");
-	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
-	fileMenu->addSeparator();
-	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
-	quit->setShortcut(QKeySequence("Ctrl+Q"));
+	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
 
 	auto center = new QWidget;
 	auto layout = new QHBoxLayout(center);
@@ -46,6 +41,8 @@ ManagerWindow::ManagerWindow() {
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);
+
+	Window::createFileMenu(this);
 }
 
 QPushButton *ManagerWindow::createButton(const QString &title, std::function<QWidget*()> creator) {

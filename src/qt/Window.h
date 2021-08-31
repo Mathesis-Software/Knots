@@ -35,6 +35,7 @@ public:
 	static QWidget *openFile();
 	static QWidget *openFile(const QString &filename);
 	static void exitApplication();
+	static void createFileMenu(QMainWindow *window);
 
 private:
 	QToolBar *toolbar;

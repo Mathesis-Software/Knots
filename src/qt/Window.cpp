@@ -34,34 +34,41 @@
 
 namespace KE::Qt {
 
-Window::Window() {
-	this->setAttribute(::Qt::WA_DeleteOnClose);
+void Window::createFileMenu(QMainWindow *mainWindow) {
+	Window *window = dynamic_cast<Window*>(mainWindow);
 
-	QMenu *fileMenu = this->menuBar()->addMenu("File");
+	QMenu *fileMenu = mainWindow->menuBar()->addMenu("File");
 
 	auto newd = fileMenu->addAction("New diagram", [] { Window::newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
 	auto open = fileMenu->addAction("Open…", [] { Window::openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
-	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
-	save->setShortcut(QKeySequence("Ctrl+S"));
-	fileMenu->addAction("Export as image…", this, &Window::exportPNG);
-	fileMenu->addSeparator();
-	fileMenu->addAction("Rename…", [this] { this->rename(); });
-	fileMenu->addSeparator();
+	if (window) {
+		auto save = fileMenu->addAction("Save as…", [window] { window->save(); });
+		save->setShortcut(QKeySequence("Ctrl+S"));
+		fileMenu->addAction("Export as image…", window, &Window::exportPNG);
+		fileMenu->addSeparator();
+		fileMenu->addAction("Rename…", [window] { window->rename(); });
+		fileMenu->addSeparator();
+	}
 	fileMenu->addAction("About", [] { Qt::AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
-	auto close = fileMenu->addAction("Close", [this] { this->close(); });
+	auto close = fileMenu->addAction("Close", [mainWindow] { mainWindow->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
 	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
+}
 
+Window::Window() {
+	this->setAttribute(::Qt::WA_DeleteOnClose);
 	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
 	this->toolbar = new QToolBar(this);
 	this->toolbar->setMovable(false);
 	this->toolbar->setContextMenuPolicy(::Qt::PreventContextMenu);
 	addToolBar(this->toolbar);
+
+	createFileMenu(this);
 }
 
 int Window::askForSave() {

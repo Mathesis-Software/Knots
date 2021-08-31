@@ -58,7 +58,6 @@ QAction *registerAction(QAction *action, std::function<void(QAction&)> controlle
 
 public:
 	Window();
-	virtual ~Window();
 	virtual QString fileFilter() const = 0;
 
 signals:

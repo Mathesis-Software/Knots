@@ -56,17 +56,17 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	});
 	this->connect(widget, &DiagramWidget::actionsUpdated, [this] { emit this->contentChanged(); });
 
-	actionsMenu = this->menuBar()->addMenu("Diagram");
+	QMenu *diagramMenu = this->menuBar()->addMenu("Diagram");
 	this->registerAction(
-		actionsMenu->addAction("Convert to knot", [this] { this->convert(); }),
+		diagramMenu->addAction("Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("Simplify", [this] { this->simplify(); }),
+		diagramMenu->addAction("Simplify", [this] { this->simplify(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("Clear", [this] { this->clear(); }),
+		diagramMenu->addAction("Clear", [this] { this->clear(); }),
 		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
 	);
 
@@ -145,10 +145,6 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	});
 
 	emit this->contentChanged();
-}
-
-DiagramWindow::~DiagramWindow() {
-	delete actionsMenu;
 }
 
 void DiagramWindow::setMode(DiagramWidget::EditorMode mode) {

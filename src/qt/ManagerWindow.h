@@ -30,12 +30,8 @@ namespace KE::Qt {
 
 class ManagerWindow : public QMainWindow {
 
-private:
-	QMenu *fileMenu;
-
 public:
 	ManagerWindow();
-	~ManagerWindow();
 
 private:
 	QPushButton *createButton(const QString &title, std::function<QWidget*()> creator);

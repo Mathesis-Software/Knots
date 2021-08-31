@@ -32,7 +32,7 @@ namespace KE::Qt {
 ManagerWindow::ManagerWindow() {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 
-	fileMenu = this->menuBar()->addMenu("File");
+	QMenu *fileMenu = this->menuBar()->addMenu("File");
 	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
 	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
@@ -59,10 +59,6 @@ QPushButton *ManagerWindow::createButton(const QString &title, std::function<QWi
 		}
 	});
 	return button;
-}
-
-ManagerWindow::~ManagerWindow() {
-	delete fileMenu;
 }
 
 }

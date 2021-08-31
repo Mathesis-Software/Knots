@@ -32,8 +32,6 @@ namespace KE::Qt {
 class DiagramWindow : public Window {
 
 private:
-	QMenu *actionsMenu;
-
 	void init(DiagramWidget *widget);
 
 	QString fileFilter() const override { return "Diagram files (*.dgr)"; }
@@ -51,7 +49,6 @@ private:
 public:
 	DiagramWindow(const rapidjson::Document &doc);
 	DiagramWindow();
-	~DiagramWindow();
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
 

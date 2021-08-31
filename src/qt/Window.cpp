@@ -64,10 +64,6 @@ Window::Window() {
 	addToolBar(this->toolbar);
 }
 
-Window::~Window() {
-	delete this->toolbar;
-}
-
 int Window::askForSave() {
 	show();
 	raise();

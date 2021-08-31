@@ -22,22 +22,9 @@
 #ifndef __KE_QT_WINDOW_H__
 #define __KE_QT_WINDOW_H__
 
-#include <QtWidgets/QMainWindow>
+#include "BaseWindow.h"
 
 namespace KE::Qt {
-
-class BaseWindow : public QMainWindow {
-
-public:
-	static QWidget *newDiagram();
-	static QWidget *openFile();
-	static QWidget *openFile(const QString &filename);
-	static void exitApplication();
-
-protected:
-	BaseWindow();
-	void createFileMenu();
-};
 
 class Window : public BaseWindow {
 

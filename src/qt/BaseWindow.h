@@ -19,24 +19,26 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KE_QT_START_WINDOW_H_
-#define __KE_QT_START_WINDOW_H_
+#ifndef __KE_QT_BASE_WINDOW_H__
+#define __KE_QT_BASE_WINDOW_H__
 
-#include "BaseWindow.h"
-
-class QPushButton;
+#include <QtWidgets/QMainWindow>
 
 namespace KE::Qt {
 
-class StartWindow : public BaseWindow {
+class BaseWindow : public QMainWindow {
 
 public:
-	StartWindow();
+	static QWidget *newDiagram();
+	static QWidget *openFile();
+	static QWidget *openFile(const QString &filename);
+	static void exitApplication();
 
-private:
-	QPushButton *createButton(const QString &title, std::function<QWidget*()> creator);
+protected:
+	BaseWindow();
+	void createFileMenu();
 };
 
 }
 
-#endif /* __KE_QT_START_WINDOW_H_ */
+#endif /* __KE_QT_BASE_WINDOW_H__ */

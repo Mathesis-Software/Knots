@@ -24,7 +24,6 @@
 #include <QtWidgets/QProxyStyle>
 
 #include "StartWindow.h"
-#include "Window.h"
 
 class ProxyStyle : public QProxyStyle {
 
@@ -56,7 +55,7 @@ int main(int argc, char **argv) {
 
 	int count = 0;
 	for (int i = 1; i < argc; ++i) {
-		if (KE::Qt::Window::openFile(argv[i])) {
+		if (KE::Qt::StartWindow::openFile(argv[i])) {
 			count += 1;
 		}
 	}

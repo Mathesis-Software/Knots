@@ -46,7 +46,7 @@ protected:
 
 	virtual void saveIt(std::ostream&) = 0;
 	virtual bool isSaved() const = 0;
-	int askForSave();
+	bool saveBeforeClosing();
 
 	virtual QImage exportImage() const = 0;
 

@@ -41,24 +41,30 @@ Window::Window() {
 	this->createFileMenu();
 }
 
-int Window::askForSave() {
-	show();
-	raise();
-	while (!this->isSaved()) {
-		QString q = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
-		int answer = QMessageBox::warning(
-			this, "Close", q.toStdString().c_str(), "&Yes", "&No", "&Cancel"
-		);
-		if (answer)
-			return answer - 1;
+bool Window::saveBeforeClosing() {
+	this->show();
+	this->raise();
 
-		this->save();
+	const QString question = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
+	while (!this->isSaved()) {
+		const int answer = QMessageBox::warning(
+			this, "Closing window", question, QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
+		);
+		switch (answer) {
+			case QMessageBox::Yes:
+				this->save();
+				break;
+			case QMessageBox::No:
+				return true;
+			default:
+				return false;
+		}
 	}
-	return 0;
+	return true;
 }
 
 void Window::closeEvent(QCloseEvent *event) {
-	if (!this->isSaved() && this->askForSave()) {
+	if (!this->isSaved() && !this->saveBeforeClosing()) {
 		event->ignore();
 		return;
 	}

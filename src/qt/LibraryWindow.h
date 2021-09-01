@@ -19,27 +19,22 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __KE_QT_BASE_WINDOW_H__
-#define __KE_QT_BASE_WINDOW_H__
+#ifndef __KE_QT_LIBRARY_WINDOW_H_
+#define __KE_QT_LIBRARY_WINDOW_H_
 
-#include <QtWidgets/QMainWindow>
+#include "BaseWindow.h"
 
 namespace KE::Qt {
 
-class BaseWindow : public QMainWindow {
+class LibraryWindow : public BaseWindow {
 
 public:
-	static QWidget *library();
-	static QWidget *newDiagram();
-	static QWidget *openFile();
-	static QWidget *openFile(const QString &filename);
-	static void exitApplication();
+	LibraryWindow();
 
-protected:
-	BaseWindow();
-	void createFileMenu();
+private:
+	QWidget *createList(const QString &suffix);
 };
 
 }
 
-#endif /* __KE_QT_BASE_WINDOW_H__ */
+#endif /* __KE_QT_LIBRARY_WINDOW_H_ */

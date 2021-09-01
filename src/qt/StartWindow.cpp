@@ -19,10 +19,11 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QPushButton>
 
 #include "StartWindow.h"
+#include "Window.h"
 
 namespace KE::Qt {
 
@@ -32,9 +33,12 @@ QPushButton *createButton(StartWindow *start, const QString &title, std::functio
 	auto button = new QPushButton(title);
 	button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 	button->connect(button, &QPushButton::clicked, [start, creator] {
-		auto window = creator();
-		if (window) {
-			window->setGeometry(start->geometry());
+		auto widget = creator();
+		if (widget) {
+			auto window = dynamic_cast<Window*>(widget);
+			if (window) {
+				window->setGeometry(start->geometry());
+			}
 			start->close();
 		}
 	});
@@ -45,9 +49,10 @@ QPushButton *createButton(StartWindow *start, const QString &title, std::functio
 
 StartWindow::StartWindow() {
 	this->setCentralWidget(new QWidget);
-	auto layout = new QHBoxLayout(this->centralWidget());
+	auto layout = new QVBoxLayout(this->centralWidget());
 	layout->addWidget(createButton(this, "Create new diagram", &StartWindow::newDiagram));
-	layout->addWidget(createButton(this, "Open existing file", [] { return StartWindow::openFile(); }));
+	layout->addWidget(createButton(this, "Open the library", &StartWindow::library));
+	layout->addWidget(createButton(this, "Open your own file", [] { return StartWindow::openFile(); }));
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);

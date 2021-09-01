@@ -8,6 +8,7 @@
 
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
+* Library window: artifacts on top of tab widget
 
 ### Code structure
 
@@ -16,6 +17,8 @@
 
 ### User interface
 
+* knot library: implement search
+* knot and diagram: store extra info, like description or keywords; use it for search in the library
 * save list of opened windows between runs; reopen them
 * recent documents list in the menu
 * open windows list

@@ -21,6 +21,7 @@
 
 #include <fstream>
 
+#include <QtCore/QResource>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMenuBar>
@@ -32,6 +33,7 @@
 #include "DiagramWindow.h"
 #include "FileIconProvider.h"
 #include "KnotWindow.h"
+#include "LibraryWindow.h"
 #include "Window.h"
 #include "../ke/Util_rapidjson.h"
 
@@ -69,6 +71,20 @@ QString getOpenFileNameEx() {
 
 }
 
+QWidget *BaseWindow::library() {
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
+			window->showNormal();
+			window->raise();
+			return window;
+		}
+	}
+
+	auto window = new LibraryWindow();
+	window->show();
+	return window;
+}
+
 QWidget *BaseWindow::newDiagram() {
 	auto window = new DiagramWindow();
 	window->show();
@@ -85,14 +101,23 @@ QWidget *BaseWindow::openFile(const QString &filename) {
 	}
 
 	try {
-		std::ifstream is(filename.toStdString());
-		if (!is) {
-			throw std::runtime_error("Cannot read the file content");
-		}
 		rapidjson::Document doc;
-		rapidjson::IStreamWrapper wrapper(is);
-		doc.ParseStream(wrapper);
-		is.close();
+
+		if (filename.startsWith(":")) {
+			QResource resource(filename);
+			if (!resource.isValid() || resource.data() == nullptr || resource.size() == 0) {
+				throw std::runtime_error("Cannot read the resource content");
+			}
+			doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
+		} else {
+			std::ifstream is(filename.toStdString());
+			if (!is) {
+				throw std::runtime_error("Cannot read the file content");
+			}
+			rapidjson::IStreamWrapper wrapper(is);
+			doc.ParseStream(wrapper);
+			is.close();
+		}
 
 		Window *window = nullptr;
 		if (doc.IsNull()) {
@@ -123,6 +148,8 @@ void BaseWindow::createFileMenu() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
+	auto library = fileMenu->addAction("Library", [] { Window::library(); });
+	library->setShortcut(QKeySequence("Ctrl+L"));
 	auto newd = fileMenu->addAction("New diagram", [] { Window::newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
 	auto open = fileMenu->addAction("Open…", [] { Window::openFile(); });

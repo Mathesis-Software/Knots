@@ -51,7 +51,7 @@ StartWindow::StartWindow() {
 	this->setCentralWidget(new QWidget);
 	auto layout = new QVBoxLayout(this->centralWidget());
 	layout->addWidget(createButton(this, "Create new diagram", &StartWindow::newDiagram));
-	layout->addWidget(createButton(this, "Open the library", &StartWindow::library));
+	layout->addWidget(createButton(this, "Browse the library", &StartWindow::library));
 	layout->addWidget(createButton(this, "Open your own file", [] { return StartWindow::openFile(); }));
 
 	setWindowTitle("Knot Editor");

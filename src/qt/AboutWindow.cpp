@@ -19,8 +19,8 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <QtGui/QAction>
 #include <QtGui/QScreen>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QLabel>
 
 #include "AboutWindow.h"

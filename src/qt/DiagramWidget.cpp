@@ -242,7 +242,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 					default:
 						break;
 					case ::Qt::LeftButton:
-						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()), true);
+						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->pos().x(), event->pos().y()), true);
 						this->captureEdge(nullptr);
 						break;
 					case ::Qt::RightButton:
@@ -270,14 +270,14 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 		case QUICK_DRAWING:
 		case EDITING:
 			if (this->capturedVertex) {
-				this->diagram.moveVertex(this->capturedVertex, event->x(), event->y(), true);
+				this->diagram.moveVertex(this->capturedVertex, event->pos().x(), event->pos().y(), true);
 				this->captureVertex(nullptr);
 				repaint();
 			}
 			break;
 		case MOVING:
 			if (!this->capturedPoint.isNull()) {
-				this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), true);
+				this->diagram.shift(event->pos().x() - this->capturedPoint.x(), event->pos().y() - this->capturedPoint.y(), true);
 				this->capturePoint(QPoint());
 				repaint();
 			}
@@ -302,16 +302,16 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 				}
 				auto fakeVertex = this->fakeVertex;
 				if (fakeVertex) {
-					fakeVertex->moveTo(event->x(), event->y());
+					fakeVertex->moveTo(event->pos().x(), event->pos().y());
 				} else {
-					this->setFakeVertex(std::make_shared<TwoD::Diagram::Vertex>(event->x(), event->y()));
+					this->setFakeVertex(std::make_shared<TwoD::Diagram::Vertex>(event->pos().x(), event->pos().y()));
 				}
 				this->repaint();
 				break;
 			}
 			case EDITING:
 			{
-				auto vertex = this->diagram.findVertex(TwoD::FloatPoint(event->x(), event->y()), 17);
+				auto vertex = this->diagram.findVertex(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 17);
 				if (vertex) {
 					this->captureEdge(nullptr);
 					this->captureCrossing(nullptr);
@@ -319,7 +319,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 					break;
 				}
 
-				auto crossing = this->diagram.findCrossing(TwoD::FloatPoint(event->x(), event->y()), 17);
+				auto crossing = this->diagram.findCrossing(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 17);
 				if (crossing) {
 					this->captureVertex(nullptr);
 					this->captureEdge(nullptr);
@@ -329,7 +329,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 
 				this->captureVertex(nullptr);
 				this->captureCrossing(nullptr);
-				this->captureEdge(this->diagram.findEdge(TwoD::FloatPoint(event->x(), event->y()), 5));
+				this->captureEdge(this->diagram.findEdge(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 5));
 				break;
 			}
 			default:
@@ -340,13 +340,13 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			case QUICK_DRAWING:
 			case EDITING:
 				if (this->capturedVertex) {
-					this->diagram.moveVertex(this->capturedVertex, event->x(), event->y(), false);
+					this->diagram.moveVertex(this->capturedVertex, event->pos().x(), event->pos().y(), false);
 					repaint();
 				}
 				break;
 			case MOVING:
 				if (!this->capturedPoint.isNull()) {
-					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), false);
+					this->diagram.shift(event->pos().x() - this->capturedPoint.x(), event->pos().y() - this->capturedPoint.y(), false);
 					this->capturePoint(event->pos());
 					repaint();
 				}

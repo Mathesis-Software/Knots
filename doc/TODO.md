@@ -38,8 +38,7 @@
 
 ### Data
 
-* drop the zoo (e.g., the folder "300"), provide good single version for each knot
-* (?) put data inside the executable, to be sure we need no special installation
+* put data inside the executable, to be sure we need no special installation
 
 ### Possible future development
 

@@ -25,6 +25,8 @@
 
 #include "StartWindow.h"
 
+namespace {
+
 class ProxyStyle : public QProxyStyle {
 
 QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override {
@@ -40,6 +42,8 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 }
 
 };
+
+}
 
 int main(int argc, char **argv) {
 	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

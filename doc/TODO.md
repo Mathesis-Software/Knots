@@ -1,7 +1,6 @@
 ### Mac specific
 
 * Application icon
-* Install samples
 * restore other subdir compilation
 
 ### Bug fixing

@@ -25,6 +25,7 @@
 
 #include <QtCore/QDirIterator>
 #include <QtCore/QResource>
+#include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QListWidget>
 
@@ -214,6 +215,31 @@ public:
 	}
 };
 
+class LibraryListWidget : public QListWidget {
+
+private:
+	void leaveEvent(QEvent*) override {
+		const auto selected = this->selectedItems();
+		for (const auto &item : selected) {
+			item->setSelected(false);
+		}
+	}
+
+	void keyPressEvent(QKeyEvent *event) override {
+		if (event->key() != ::Qt::Key_Enter && event->key() != ::Qt::Key_Return) {
+			QListWidget::keyPressEvent(event);
+			return;
+		}
+
+		const auto selected = this->selectedItems();
+		if (selected.size() != 1) {
+			return;
+		}
+		const DataItem *data = dynamic_cast<const DataItem*>(selected[0]);
+		BaseWindow::openFile(data->fullName);
+	}
+};
+
 }
 
 LibraryWindow::LibraryWindow() {
@@ -229,7 +255,7 @@ LibraryWindow::LibraryWindow() {
 }
 
 QWidget *LibraryWindow::createList(const QString &suffix) {
-	auto list = new QListWidget(this);
+	auto list = new LibraryListWidget();
 	list->setMouseTracking(true);
 	list->setViewMode(QListWidget::IconMode);
 	list->setResizeMode(QListWidget::Adjust);

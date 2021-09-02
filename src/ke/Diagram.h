@@ -84,6 +84,8 @@ public:
 		void orderCrossings(std::list<Crossing> &crossings) const;
 
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
+		// for using in maps
+		bool operator < (const Edge &edge) const { return this->start < edge.start || (this->start == edge.start && this->end < edge.end); }
 	};
 
 	struct Crossing {
@@ -94,6 +96,8 @@ public:
 		std::shared_ptr<FloatPoint> coords() const;
 
 		bool operator == (const Crossing &crs) const { return this->up == crs.up && this->down == crs.down; }
+		// for using in maps
+		bool operator < (const Crossing &crs) const { return this->up < crs.up || (this->up == crs.up && this->down < crs.down); }
 	};
 
 	public:

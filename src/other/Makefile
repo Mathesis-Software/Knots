@@ -1,4 +1,4 @@
-TARGETS = vassiliev converter torus
+TARGETS = vassiliev converter torus dtcode
 
 all: $(TARGETS)
 
@@ -9,6 +9,11 @@ LIBS = -L../ke -lke
 .cpp.o:
 	@echo -n 'Compiling $@ ...'
 	@$(CC) $(CFLAGS) -o$@ $<
+	@echo ' OK'
+
+dtcode: dtcode.o ../ke/libke.a
+	@echo -n 'Linking $@ ...'
+	@$(CC) -o$@ $< $(LIBS)
 	@echo ' OK'
 
 vassiliev: vassiliev.o ../ke/libke.a

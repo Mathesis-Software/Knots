@@ -25,7 +25,7 @@
 #include <list>
 #include <memory>
 
-#include <QtWidgets/QOpenGLWidget>
+#include <QtOpenGLWidgets/QOpenGLWidget>
 
 #include "../ke/Surface.h"
 

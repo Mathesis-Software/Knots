@@ -2,26 +2,31 @@ TARGETS = vassiliev converter torus
 
 all: $(TARGETS)
 
-CC = clang++
-CFLAGS = -O2 -std=gnu++1z
+CC = ccache clang++
+CFLAGS = -c -O2 -std=gnu++1z
 LIBS = -L../ke -lke
 
-vassiliev: vassiliev.cpp ../ke/libke.a
-	@echo -n 'Linking $@ ...'
-	@$(CC) $(CFLAGS) -o$@ $< $(LIBS)
+.cpp.o:
+	@echo -n 'Compiling $@ ...'
+	@$(CC) $(CFLAGS) -o$@ $<
 	@echo ' OK'
 
-converter: converter.cpp ../ke/libke.a
+vassiliev: vassiliev.o ../ke/libke.a
 	@echo -n 'Linking $@ ...'
-	@$(CC) $(CFLAGS) -o$@ $< $(LIBS)
+	@$(CC) -o$@ $< $(LIBS)
 	@echo ' OK'
 
-torus: torus.cpp ../ke/libke.a
+converter: converter.o ../ke/libke.a
 	@echo -n 'Linking $@ ...'
-	@$(CC) $(CFLAGS) -o$@ $< $(LIBS)
+	@$(CC) -o$@ $< $(LIBS)
+	@echo ' OK'
+
+torus: torus.o ../ke/libke.a
+	@echo -n 'Linking $@ ...'
+	@$(CC) -o$@ $< $(LIBS)
 	@echo ' OK'
 
 distclean: clean
 
 clean:
-	@$(RM) $(TARGETS)
+	@$(RM) $(TARGETS) *.o

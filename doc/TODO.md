@@ -44,10 +44,6 @@
 * Use other form of energy for smoothing (?) Moebius energy has a subspace of extremum points, not a single extremum
 * Seifert surfaces: understand the logic and probably improve
 
-### Data
-
-* put data inside the executable, to be sure we need no special installation
-
 ### Possible future development
 
 * multi-component links

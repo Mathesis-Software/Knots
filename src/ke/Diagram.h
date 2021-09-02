@@ -30,12 +30,6 @@
 
 #include <rapidjson/document.h>
 
-namespace KE::ThreeD {
-
-class Knot;
-
-}
-
 namespace KE::TwoD {
 
 struct FloatPoint {
@@ -49,8 +43,6 @@ struct FloatPoint {
 };
 
 class Diagram {
-
-friend class ThreeD::Knot;
 
 public:
 	struct Crossing;

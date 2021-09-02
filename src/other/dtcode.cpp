@@ -44,6 +44,27 @@ std::list<int> dtCode(const Diagram &diagram) {
 		}
 	}
 
+	struct CrossingEx {
+		const Diagram::Crossing cro;
+		const bool over;
+
+		CrossingEx(const Diagram::Crossing &cro, bool over) : cro(cro), over(over) {}
+	};
+
+	std::list<CrossingEx> all;
+	for (const auto &edge : edges) {
+		auto &crossings = all_crossings[edge.start];
+		edge.orderCrossings(crossings);
+		for (const auto &cro : crossings) {
+			all.push_back(CrossingEx(cro, cro.up == edge));
+		}
+	}
+
+	while (!all.front().over) {
+		all.push_back(all.front());
+		all.pop_front();
+	}
+
 	struct Index {
 		int odd;
 		int even;
@@ -59,44 +80,13 @@ std::list<int> dtCode(const Diagram &diagram) {
 	};
 	std::map<Diagram::Crossing,Index> indices;
 	int count = 1;
-	bool start = true;
-	int skip = 0;
-	for (const auto &edge : edges) {
-		auto &crossings = all_crossings[edge.start];
-		edge.orderCrossings(crossings);
-		for (const auto &cro : crossings) {
-			if (start && cro.down == edge) {
-				skip += 1;
-				continue;
-			}
-			start = false;
-			if (count % 2 == 0 && cro.up == edge) {
-				indices[cro].update(-count);
-			} else {
-				indices[cro].update(count);
-			}
-			count += 1;
+	for (const auto &ex : all) {
+		if (count % 2 == 0 && ex.over) {
+			indices[ex.cro].update(-count);
+		} else {
+			indices[ex.cro].update(count);
 		}
-	}
-	if (skip > 0) {
-		for (const auto &edge : edges) {
-			auto &crossings = all_crossings[edge.start];
-			for (const auto &cro : crossings) {
-				if (count % 2 == 0 && cro.up == edge) {
-					indices[cro].update(-count);
-				} else {
-					indices[cro].update(count);
-				}
-				count += 1;
-				skip -= 1;
-				if (skip == 0) {
-					break;
-				}
-			}
-			if (skip == 0) {
-				break;
-			}
-		}
+		count += 1;
 	}
 
 	std::list<Index> pairs;

@@ -1,4 +1,4 @@
-TARGETS = vassiliev converter torus dtcode
+TARGETS = vassiliev converter torus dtcode alexander_polynomial
 
 all: $(TARGETS)
 
@@ -9,6 +9,11 @@ LIBS = -L../ke -lke
 .cpp.o:
 	@echo -n 'Compiling $@ ...'
 	@$(CC) $(CFLAGS) -o$@ $<
+	@echo ' OK'
+
+alexander_polynomial: alexander_polynomial.o ../ke/libke.a
+	@echo -n 'Linking $@ ...'
+	@$(CC) -o$@ $< $(LIBS)
 	@echo ' OK'
 
 dtcode: dtcode.o ../ke/libke.a

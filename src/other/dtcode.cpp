@@ -34,13 +34,13 @@ using namespace KE::TwoD;
 
 std::list<int> dtCode(const Diagram &diagram) {
 	const auto edges = diagram.edges();
-	std::map<std::shared_ptr<Diagram::Vertex>,std::list<Diagram::Crossing>> all_crossings;
+	std::map<Diagram::Edge,std::list<Diagram::Crossing>> edge2Crossings;
 	for (const auto &edge : edges) {
 		const auto crossings = diagram.crossings(edge);
-		auto &list = all_crossings[edge.start];
+		auto &list = edge2Crossings[edge];
 		list.insert(list.end(), crossings.begin(), crossings.end());
 		for (const auto &crs : crossings) {
-			all_crossings[crs.up.start].push_back(crs);
+			edge2Crossings[crs.up].push_back(crs);
 		}
 	}
 
@@ -53,7 +53,7 @@ std::list<int> dtCode(const Diagram &diagram) {
 
 	std::list<CrossingEx> all;
 	for (const auto &edge : edges) {
-		auto &crossings = all_crossings[edge.start];
+		auto &crossings = edge2Crossings[edge];
 		edge.orderCrossings(crossings);
 		for (const auto &cro : crossings) {
 			all.push_back(CrossingEx(cro, cro.up == edge));

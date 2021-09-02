@@ -239,18 +239,14 @@ QWidget *LibraryWindow::createList(const QString &suffix) {
 	list->setUniformItemSizes(true);
 	list->setStyleSheet("QListWidget{background:#d8d8d8;} QListWidget::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListWidget::item::selected{border:2px solid #404040;}");
 
-	std::vector<DataItem*> items;
 	for (QDirIterator it(":data", QDirIterator::Subdirectories); it.hasNext(); ) {
 		const auto fileName = it.next();
 		if (!fileName.endsWith(suffix)) {
 			continue;
 		}
-		items.push_back(new DataItem(it));
+		list->addItem(new DataItem(it));
 	}
-	std::sort(items.begin(), items.end(), [](const DataItem *i0, const DataItem *i1) { return *i0 < *i1; });
-	for (const auto &item : items) {
-		list->addItem(item);
-	}
+	list->sortItems();
 	QObject::connect(list, &QListWidget::itemEntered, [](QListWidgetItem *item) {
 		item->setSelected(true);
 	});

@@ -16,6 +16,8 @@
 
 ### User interface
 
+* new diagram view (undoable) actions: center, scale
+* live diagram properties (DT code, Alexander polynomial) in a separate dialog
 * knot library: implement search
 * knot and diagram: store extra info, like description or keywords; use it for search in the library
 * save list of opened windows between runs; reopen them

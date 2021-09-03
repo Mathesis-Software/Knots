@@ -114,6 +114,19 @@ public:
 		return result;
 	}
 
+	bool operator == (int num) const {
+		if (this->coefficients.empty()) {
+			return num == 0;
+		} else if (this->coefficients.size() == 1) {
+			return num == this->coefficients[0];
+		} else {
+			return false;
+		}
+	}
+	bool operator != (int num) const {
+		return !(*this == num);
+	}
+
 friend std::ostream &operator << (std::ostream &os, const Polynomial &poly);
 };
 
@@ -181,10 +194,12 @@ T SquareMatrix<T>::determinant() const {
 		T sum;
 		for (std::size_t i = 0; i < dim; i += 1) {
 			T coef = this->at(i, 0);
-			if (i % 2) {
-				coef *= -1;
+			if (coef != 0) {
+				if (i % 2) {
+					coef *= -1;
+				}
+				sum += coef * SliceMatrix<T>(*this, i, 0).determinant();
 			}
-			sum += coef * SliceMatrix<T>(*this, i, 0).determinant();
 		}
 		return sum;
 	}

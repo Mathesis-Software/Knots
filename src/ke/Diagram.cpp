@@ -83,7 +83,7 @@ std::shared_ptr<Diagram::Crossing> Diagram::findCrossing(const FloatPoint &pt, f
 	std::shared_ptr<Crossing> found;
 
 	for (const auto &edge : this->edges()) {
-		for (const auto &crs : this->crossings(edge)) {
+		for (const auto &crs : this->underCrossings(edge)) {
 			const auto coords = crs.coords();
 			if (!coords) {
 				continue;
@@ -148,6 +148,23 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 		ori == orientation(*edge.start, *this->end, *edge.end) &&
 		ori == orientation(*this->end, *edge.end, *this->start) &&
 		ori == orientation(*edge.end, *this->start, *edge.start);
+}
+
+std::map<Diagram::Edge,std::list<Diagram::Crossing>> Diagram::allCrossings() const {
+	const auto edges = this->edges();
+	std::map<Diagram::Edge,std::list<Diagram::Crossing>> map;
+	for (const auto &edge : edges) {
+		const auto crossings = this->underCrossings(edge);
+		auto &list = map[edge];
+		list.insert(list.end(), crossings.begin(), crossings.end());
+		for (const auto &crs : crossings) {
+			map[crs.up].push_back(crs);
+		}
+	}
+	for (const auto &edge : edges) {
+		edge.orderCrossings(map[edge]);
+	}
+	return map;
 }
 
 }

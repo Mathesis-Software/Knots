@@ -348,21 +348,12 @@ struct Face {
 
 std::vector<Face> collectFaces(const Diagram &diagram) {
 	const auto edges = diagram.edges();
-	std::map<Diagram::Edge,std::list<Diagram::Crossing>> edge2Crossings;
-	for (const auto &edge : edges) {
-		const auto crossings = diagram.crossings(edge);
-		auto &list = edge2Crossings[edge];
-		list.insert(list.end(), crossings.begin(), crossings.end());
-		for (const auto &crs : crossings) {
-			edge2Crossings[crs.up].push_back(crs);
-		}
-	}
+	std::map<Diagram::Edge,std::list<Diagram::Crossing>> edge2Crossings = diagram.allCrossings();
 
 	std::vector<CrossingEx> all;
 	for (const auto &edge : edges) {
 		auto &crossings = edge2Crossings[edge];
-		edge.orderCrossings(crossings);
-		for (const auto &cro : crossings) {
+		for (const auto &cro : edge2Crossings[edge]) {
 			all.push_back(CrossingEx(cro, cro.up == edge));
 		}
 	}

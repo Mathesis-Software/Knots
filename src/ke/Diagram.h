@@ -25,6 +25,7 @@
 #include <cmath>
 #include <functional>
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -119,7 +120,8 @@ public:
 
 		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
-		const std::list<Crossing> &crossings(const Edge &edge) const { return edge.start->crossings; }
+		const std::list<Crossing> &underCrossings(const Edge &edge) const { return edge.start->crossings; }
+		std::map<Diagram::Edge,std::list<Diagram::Crossing>> allCrossings() const;
 		bool hasCrossings() const;
 
 		std::shared_ptr<Vertex> addVertex(int x, int y);

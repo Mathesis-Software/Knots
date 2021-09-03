@@ -36,7 +36,7 @@ bool Diagram::simplify(std::size_t depth) {
 
 	std::set<std::shared_ptr<Vertex>> crossings;
 	for (const auto &edge : edges) {
-		for (const auto &crs : this->crossings(edge)) {
+		for (const auto &crs : this->underCrossings(edge)) {
 			crossings.insert(crs.up.start);
 			crossings.insert(crs.down.start);
 		}

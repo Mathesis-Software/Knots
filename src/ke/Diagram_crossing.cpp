@@ -75,12 +75,12 @@ void Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
 }
 
 std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const Edge &edge2) {
-	for (const auto &crs : this->crossings(edge1)) {
+	for (const auto &crs : this->underCrossings(edge1)) {
 		if (crs.up == edge2) {
 			return std::make_shared<Crossing>(crs);
 		}
 	}
-	for (const auto &crs : this->crossings(edge2)) {
+	for (const auto &crs : this->underCrossings(edge2)) {
 		if (crs.up == edge1) {
 			return std::make_shared<Crossing>(crs);
 		}

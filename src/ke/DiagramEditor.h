@@ -69,7 +69,8 @@ public:
 
 	const std::list<std::shared_ptr<Diagram::Vertex>> &vertices() const { return this->currentDiagram->vertices(); }
 	std::list<Diagram::Edge> edges() const { return this->currentDiagram->edges(); }
-	const std::list<Diagram::Crossing> &crossings(const Diagram::Edge &edge) const { return this->currentDiagram->crossings(edge); }
+	const std::list<Diagram::Crossing> &underCrossings(const Diagram::Edge &edge) const { return this->currentDiagram->underCrossings(edge); }
+	std::map<Diagram::Edge,std::list<Diagram::Crossing>> allCrossings() const { return this->currentDiagram->allCrossings(); }
 	bool isClosed() const { return this->currentDiagram->isClosed(); }
 
 	std::shared_ptr<Diagram::Vertex> findVertex(const FloatPoint &pt, float maxDistance) const {

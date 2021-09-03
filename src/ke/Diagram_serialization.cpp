@@ -117,7 +117,7 @@ rapidjson::Document Diagram::serialize() const {
 
 	rapidjson::Value crossings(rapidjson::kArrayType);
 	for (const auto &edge : this->edges()) {
-		for (const auto &crs : this->crossings(edge)) {
+		for (const auto &crs : this->underCrossings(edge)) {
 			rapidjson::Value c(rapidjson::kObjectType);
 			c.AddMember("down", (int)nums[edge.start], doc.GetAllocator());
 			c.AddMember("up", (int)nums[crs.up.start], doc.GetAllocator());

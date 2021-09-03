@@ -19,99 +19,19 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <cmath>
 #include <iostream>
 #include <fstream>
-#include <list>
-#include <map>
 #include <set>
-#include <vector>
 
-#include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include "../ke/Util_rapidjson.h"
 #include "../ke/Diagram.h"
 #include "../math/Polynomial.h"
+#include "../math/SquareMatrix.h"
 
 using namespace KE::TwoD;
 
 namespace {
-
-template<typename T>
-class SquareMatrix {
-
-public:
-	virtual ~SquareMatrix() {}
-
-	virtual std::size_t dimension() const = 0;
-	virtual const T &at(std::size_t i, std::size_t j) const = 0;
-
-	T determinant() const;
-};
-
-template<typename T>
-class ConstMatrix : public SquareMatrix<T> {
-
-private:
-	const std::vector<std::vector<T>> elements;
-
-public:
-	ConstMatrix(const std::vector<std::vector<T>> &elements) : elements(elements) {
-	}
-
-	std::size_t dimension() const override {
-		return this->elements.size();
-	}
-	const T &at(std::size_t i, std::size_t j) const override {
-		return this->elements[i][j];
-	}
-};
-
-template<typename T>
-class SliceMatrix : public SquareMatrix<T> {
-
-private:
-	const SquareMatrix<T> &base;
-	const std::size_t row, column;
-
-public:
-	SliceMatrix(const SquareMatrix<T> &base, std::size_t row, std::size_t column) : base(base), row(row), column(column) {
-	}
-
-	std::size_t dimension() const override {
-		return this->base.dimension() - 1;
-	}
-	const T &at(std::size_t i, std::size_t j) const override {
-		if (i >= this->row) {
-			i += 1;
-		}
-		if (j >= this->column) {
-			j += 1;
-		}
-		return this->base.at(i, j);
-	}
-};
-
-template<typename T>
-T SquareMatrix<T>::determinant() const {
-	const std::size_t dim = this->dimension();
-	if (dim == 1) {
-		return this->at(0, 0);
-	} else {
-		T sum;
-		for (std::size_t i = 0; i < dim; i += 1) {
-			T coef = this->at(i, 0);
-			if (coef != 0) {
-				if (i % 2) {
-					coef *= -1;
-				}
-				sum += coef * SliceMatrix<T>(*this, i, 0).determinant();
-			}
-		}
-		return sum;
-	}
-}
 
 struct CrossingEx {
 	const Diagram::Crossing cro;
@@ -301,7 +221,7 @@ Math::Polynomial alexanderPolynomial(const Diagram &diagram) {
 		rows.push_back(row);
 	}
 
-	ConstMatrix matrix(rows);
+	Math::ConstMatrix matrix(rows);
 	return matrix.determinant().reduced();
 }
 

@@ -425,7 +425,7 @@ Polynomial poly(Face::Role role) {
 	}
 }
 
-void alexanderPolynomial(const Diagram &diagram) {
+Polynomial alexanderPolynomial(const Diagram &diagram) {
 	const auto faces = collectFaces(diagram);
 
 	std::map<Diagram::Crossing,int> indices;
@@ -449,8 +449,9 @@ void alexanderPolynomial(const Diagram &diagram) {
 		}
 		rows.push_back(row);
 	}
+
 	ConstMatrix matrix(rows);
-	std::cout << matrix.determinant().reduced() << "\n";
+	return matrix.determinant().reduced();
 }
 
 }
@@ -468,7 +469,7 @@ int main(int argc, const char **argv) {
 	is.close();
 	Diagram diagram(doc);
 
-	alexanderPolynomial(diagram);
+	std::cout << alexanderPolynomial(diagram) << "\n";
 
 	return 0;
 }

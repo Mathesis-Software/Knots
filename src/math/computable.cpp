@@ -20,9 +20,9 @@
  */
 
 #include "computable.h"
-#include "KnotWrapper.h"
+#include "../ke/KnotWrapper.h"
 
-namespace KE::ThreeD::Computables {
+namespace KE::ThreeD::Math {
 
 double Computable::value() {
 	if (!this->snapshot || this->snapshot->isObsolete()) {

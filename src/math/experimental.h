@@ -30,7 +30,7 @@ class Knot;
 
 }
 
-namespace KE::ThreeD::Computables {
+namespace KE::ThreeD::Math {
 
 class Experimental : public Computable {
 

@@ -5,6 +5,7 @@ all: $(TARGETS)
 CC = ccache clang++
 CFLAGS = -c -O2 -std=gnu++1z
 LIBS = -L../ke -lke
+MATH_LIBS = -L../math -lmath
 
 .cpp.o:
 	@echo -n 'Compiling $@ ...'
@@ -21,9 +22,9 @@ dtcode: dtcode.o ../ke/libke.a
 	@$(CC) -o$@ $< $(LIBS)
 	@echo ' OK'
 
-vassiliev: vassiliev.o ../ke/libke.a
+vassiliev: vassiliev.o ../ke/libke.a ../math/libmath.a
 	@echo -n 'Linking $@ ...'
-	@$(CC) -o$@ $< $(LIBS)
+	@$(CC) -o$@ $< $(LIBS) $(MATH_LIBS)
 	@echo ' OK'
 
 converter: converter.o ../ke/libke.a

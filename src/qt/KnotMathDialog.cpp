@@ -26,8 +26,8 @@
 
 #include "KnotWidget.h"
 #include "KnotWindow.h"
-#include "../ke/computables.h"
-#include "../ke/experimental.h"
+#include "../math/computables.h"
+#include "../math/experimental.h"
 
 namespace KE::Qt {
 
@@ -53,20 +53,20 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 	auto layout = new QGridLayout(this);
 
 	const auto &knot = window.knotWidget()->knot;
-	std::vector<std::shared_ptr<ThreeD::Computables::Computable>> computables = {
-		std::make_shared<ThreeD::Computables::MoebiusEnergy>(knot),
-		std::make_shared<ThreeD::Computables::AverageCrossingNumber>(knot, false),
-		std::make_shared<ThreeD::Computables::AverageCrossingNumber>(knot, true),
-		std::make_shared<ThreeD::Computables::AverageExtremumNumber>(knot),
-		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 2),
-		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 3),
-		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 4),
-		std::make_shared<ThreeD::Computables::VassilievInvariant>(knot, 5),
-		std::make_shared<ThreeD::Computables::Experimental>(knot)
-//		std::make_shared<ThreeD::Computables::Singular>(knot),
-//		std::make_shared<ThreeD::Computables::Experimental2>(knot, 2, "Experimental 2"),
-//		std::make_shared<ThreeD::Computables::Experimental2>(knot, 3, "Experimental 3"),
-//		std::make_shared<ThreeD::Computables::Experimental2>(knot, 4, "Experimental 4"),
+	std::vector<std::shared_ptr<ThreeD::Math::Computable>> computables = {
+		std::make_shared<ThreeD::Math::MoebiusEnergy>(knot),
+		std::make_shared<ThreeD::Math::AverageCrossingNumber>(knot, false),
+		std::make_shared<ThreeD::Math::AverageCrossingNumber>(knot, true),
+		std::make_shared<ThreeD::Math::AverageExtremumNumber>(knot),
+		std::make_shared<ThreeD::Math::VassilievInvariant>(knot, 2),
+		std::make_shared<ThreeD::Math::VassilievInvariant>(knot, 3),
+		std::make_shared<ThreeD::Math::VassilievInvariant>(knot, 4),
+		std::make_shared<ThreeD::Math::VassilievInvariant>(knot, 5),
+		std::make_shared<ThreeD::Math::Experimental>(knot)
+//		std::make_shared<ThreeD::Math::Singular>(knot),
+//		std::make_shared<ThreeD::Math::Experimental2>(knot, 2, "Experimental 2"),
+//		std::make_shared<ThreeD::Math::Experimental2>(knot, 3, "Experimental 3"),
+//		std::make_shared<ThreeD::Math::Experimental2>(knot, 4, "Experimental 4"),
 	};
 	for (const auto &computable : computables) {
 		const int index = layout->rowCount();

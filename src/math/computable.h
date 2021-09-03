@@ -19,10 +19,10 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#ifndef __COMPUTABLE_H__
-#define __COMPUTABLE_H__
+#ifndef __KE_MATH_COMPUTABLE_H__
+#define __KE_MATH_COMPUTABLE_H__
 
-#include "Knot.h"
+#include "../ke/Knot.h"
 
 namespace KE::ThreeD {
 
@@ -30,7 +30,7 @@ class KnotWrapper;
 
 }
 
-namespace KE::ThreeD::Computables {
+namespace KE::ThreeD::Math {
 
 class Computable {
 
@@ -54,4 +54,4 @@ public:
 
 }
 
-#endif /* __COMPUTABLE_H__ */
+#endif /* __KE_MATH_COMPUTABLE_H__ */

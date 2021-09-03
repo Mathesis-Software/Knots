@@ -20,9 +20,9 @@
  */
 
 #include "computables.h"
-#include "KnotWrapper.h"
+#include "../ke/KnotWrapper.h"
 
-namespace KE::ThreeD::Computables {
+namespace KE::ThreeD::Math {
 
 VassilievInvariant::VassilievInvariant(const KnotWrapper &knot, int order) :
 	Computable(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),

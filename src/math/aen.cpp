@@ -20,9 +20,9 @@
  */
 
 #include "computables.h"
-#include "KnotWrapper.h"
+#include "../ke/KnotWrapper.h"
 
-namespace KE::ThreeD::Computables {
+namespace KE::ThreeD::Math {
 
 AverageExtremumNumber::AverageExtremumNumber(const KnotWrapper &knot) :
 	Computable(knot, "Average extremum number") {

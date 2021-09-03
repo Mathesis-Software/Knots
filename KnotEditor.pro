@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS = src/ke src/qt src/other
+SUBDIRS = src/ke src/math src/qt src/other
 
 CONFIG = ordered

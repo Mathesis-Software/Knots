@@ -5,8 +5,8 @@ QT += core gui widgets openglwidgets
 TARGET = KnotEditor
 TEMPLATE = app
 
-QMAKE_LIBDIR += ../ke
-LIBS += -lke
+QMAKE_LIBDIR += ../ke ../math
+LIBS += -lke -lmath
 
 DEFINES += 'VERSION=\\"`cat ../VERSION`\\"'
 

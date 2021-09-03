@@ -27,7 +27,7 @@
 
 #include "../ke/Util_rapidjson.h"
 #include "../ke/KnotWrapper.h"
-#include "../ke/computables.h"
+#include "../math/computables.h"
 
 int main(int argc, const char **argv) {
 	if (argc != 2) {
@@ -42,7 +42,7 @@ int main(int argc, const char **argv) {
 	is.close();
 	KE::ThreeD::KnotWrapper knot(doc);
 	for (std::size_t order = 1; order < 10; ++order) {
-		KE::ThreeD::Computables::VassilievInvariant invariant(knot, order);
+		KE::ThreeD::Math::VassilievInvariant invariant(knot, order);
 		std::cout << invariant.name << ": " << invariant.value() << "\n";
 	}
 

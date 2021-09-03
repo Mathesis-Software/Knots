@@ -32,6 +32,8 @@ class Diagram;
 
 namespace KE::TwoD::Math {
 
+class Polynomial;
+
 template<typename T>
 class DiagramProperty {
 
@@ -45,6 +47,13 @@ class DTCode : public DiagramProperty<std::list<int>> {
 public:
 	bool isApplicable(const Diagram &diagram) const override;
 	std::list<int> value(const Diagram &diagram) const override;
+};
+
+class AlexanderPolynomial : public DiagramProperty<Polynomial> {
+
+public:
+	bool isApplicable(const Diagram &diagram) const override;
+	Polynomial value(const Diagram &diagram) const override;
 };
 
 }

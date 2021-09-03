@@ -22,7 +22,7 @@
 #ifndef __KE_QT_DIAGRAM_WINDOW_H__
 #define __KE_QT_DIAGRAM_WINDOW_H__
 
-#include <QtWidgets/QMenu>
+#include <QtWidgets/QDialog>
 
 #include "DiagramWidget.h"
 #include "Window.h"
@@ -30,6 +30,8 @@
 namespace KE::Qt {
 
 class DiagramWindow : public Window {
+
+Q_OBJECT
 
 private:
 	void init(DiagramWidget *widget);
@@ -46,6 +48,8 @@ private:
 
 	void rename() override;
 
+	void showPropertiesDialog();
+
 public:
 	DiagramWindow(const rapidjson::Document &doc);
 	DiagramWindow();
@@ -54,6 +58,15 @@ public:
 
 	void saveIt(std::ostream&) override;
 	bool isSaved() const override;
+
+signals:
+	void raisePropertiesDialog();
+};
+
+class DiagramPropertiesDialog : public QDialog {
+
+public:
+	DiagramPropertiesDialog(DiagramWindow &window);
 };
 
 }

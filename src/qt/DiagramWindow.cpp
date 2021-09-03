@@ -58,6 +58,11 @@ void DiagramWindow::init(DiagramWidget *widget) {
 
 	QMenu *diagramMenu = this->menuBar()->addMenu("Diagram");
 	this->registerAction(
+		diagramMenu->addAction("Properties…", [this] { this->showPropertiesDialog(); }),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
+	);
+	diagramMenu->addSeparator();
+	this->registerAction(
 		diagramMenu->addAction("Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
@@ -76,6 +81,14 @@ void DiagramWindow::init(DiagramWidget *widget) {
 			const bool enabled = diagram.isClosed();
 			action.setEnabled(enabled);
 			action.setToolTip(enabled ? "Converting to 3D knot" : "Converting to knot disabled until the diagram is closed.");
+		}
+	);
+	this->registerAction(
+		addToolbarAction("math.svg", "Show properties", [this] { this->showPropertiesDialog(); }),
+		[&diagram](QAction &action) {
+			const bool enabled = diagram.isClosed();
+			action.setEnabled(enabled);
+			action.setToolTip(enabled ? "Diagram properties" : "The properties are not applicable until the diagram is closed.");
 		}
 	);
 

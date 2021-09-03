@@ -13,6 +13,7 @@ DEFINES += 'VERSION=\\"`cat ../VERSION`\\"'
 SOURCES = \
 	AboutWindow.cpp \
 	BaseWindow.cpp \
+	DiagramPropertiesDialog.cpp \
 	DiagramWidget.cpp \
 	DiagramWindow.cpp \
 	FileIconProvider.cpp \

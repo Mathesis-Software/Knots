@@ -74,9 +74,11 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 		layout->addWidget(checkbox, index, 0);
 
 		auto value = new QLabel();
+		value->setTextInteractionFlags(::Qt::TextSelectableByMouse);
 		value->setFrameStyle(QFrame::Panel | QFrame::Sunken);
 		value->setMinimumWidth(100);
 		layout->addWidget(value, index, 1);
+		layout->setRowMinimumHeight(index, 30);
 
 		const auto callback = [checkbox, value, computable] {
 			if (checkbox->isChecked()) {

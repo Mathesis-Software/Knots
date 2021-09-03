@@ -19,36 +19,34 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <iostream>
-#include <fstream>
+#ifndef __KE_MATH_DIAGRAM_PROPERTY_H__
+#define __KE_MATH_DIAGRAM_PROPERTY_H__
+
 #include <list>
 
-#include <rapidjson/document.h>
-#include <rapidjson/istreamwrapper.h>
+namespace KE::TwoD {
 
-#include "../ke/Util_rapidjson.h"
-#include "../ke/Diagram.h"
-#include "../math/DiagramProperty.h"
+class Diagram;
 
-using namespace KE::TwoD;
-
-int main(int argc, const char **argv) {
-	if (argc != 2) {
-		std::cerr << "Usage:\n\t" << argv[0] << " <file.dgr>\n";
-		return 1;
-	}
-
-	rapidjson::Document doc;
-	std::ifstream is(argv[1]);
-	rapidjson::IStreamWrapper wrapper(is);
-	doc.ParseStream(wrapper);
-	is.close();
-	Diagram diagram(doc);
-
-	for (const auto index : Math::DTCode().value(diagram)) {
-		std::cout << index << " ";
-	}
-	std::cout << "\n";
-
-	return 0;
 }
+
+namespace KE::TwoD::Math {
+
+template<typename T>
+class DiagramProperty {
+
+public:
+	virtual bool isApplicable(const Diagram &diagram) const = 0;
+	virtual T value(const Diagram &diagram) const = 0;
+};
+
+class DTCode : public DiagramProperty<std::list<int>> {
+
+public:
+	bool isApplicable(const Diagram &diagram) const override;
+	std::list<int> value(const Diagram &diagram) const override;
+};
+
+}
+
+#endif /* __KE_MATH_DIAGRAM_PROPERTY_H__ */

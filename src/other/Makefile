@@ -17,9 +17,9 @@ alexander_polynomial: alexander_polynomial.o ../ke/libke.a
 	@$(CC) -o$@ $< $(LIBS)
 	@echo ' OK'
 
-dtcode: dtcode.o ../ke/libke.a
+dtcode: dtcode.o ../ke/libke.a ../math/libmath.a
 	@echo -n 'Linking $@ ...'
-	@$(CC) -o$@ $< $(LIBS)
+	@$(CC) -o$@ $< $(LIBS) $(MATH_LIBS)
 	@echo ' OK'
 
 vassiliev: vassiliev.o ../ke/libke.a ../math/libmath.a

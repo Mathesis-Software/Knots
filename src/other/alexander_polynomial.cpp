@@ -348,7 +348,7 @@ struct Face {
 
 std::vector<Face> collectFaces(const Diagram &diagram) {
 	const auto edges = diagram.edges();
-	std::map<Diagram::Edge,std::list<Diagram::Crossing>> edge2Crossings = diagram.allCrossings();
+	auto edge2Crossings = diagram.allCrossings();
 
 	std::vector<CrossingEx> all;
 	for (const auto &edge : edges) {

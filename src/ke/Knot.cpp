@@ -85,7 +85,7 @@ std::vector<Point> Knot::pointsFromDiagram(const TwoD::Diagram &diagram, std::si
 	std::vector<Point> points;
 
 	const auto edges = diagram.edges();
-	std::map<TwoD::Diagram::Edge,std::list<TwoD::Diagram::Crossing>> all_crossings = diagram.allCrossings();
+	auto all_crossings = diagram.allCrossings();
 
 	for (const auto &edge : edges) {
 		const auto coords = edge.start->coords();

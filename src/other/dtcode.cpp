@@ -34,7 +34,7 @@ using namespace KE::TwoD;
 
 std::list<int> dtCode(const Diagram &diagram) {
 	const auto edges = diagram.edges();
-	std::map<Diagram::Edge,std::list<Diagram::Crossing>> edge2Crossings = diagram.allCrossings();
+	auto edge2Crossings = diagram.allCrossings();
 
 	struct CrossingEx {
 		const Diagram::Crossing cro;

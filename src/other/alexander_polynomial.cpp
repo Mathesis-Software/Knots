@@ -210,6 +210,10 @@ std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
 		os << 0;
 		return os;
 	}
+	if (poly.coefficients.size() == 1) {
+		os << poly.coefficients[0];
+		return os;
+	}
 
 	for (int index = poly.coefficients.size() - 1; index >= 0; index -= 1) {
 		const auto coef = poly.coefficients[index];

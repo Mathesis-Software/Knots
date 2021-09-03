@@ -72,7 +72,8 @@ public:
 	};
 
 	struct Edge {
-		friend class Diagram;
+
+	friend class Diagram;
 
 		const std::shared_ptr<Vertex> start;
 		const std::shared_ptr<Vertex> end;
@@ -82,11 +83,13 @@ public:
 		int dx() const { return this->end->x() - this->start->x(); }
 		int dy() const { return this->end->y() - this->start->y(); }
 		bool intersects(const Edge &edge) const;
-		void orderCrossings(std::list<Crossing> &crossings) const;
 
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
 		// for using in maps
 		bool operator < (const Edge &edge) const { return this->start < edge.start || (this->start == edge.start && this->end < edge.end); }
+
+	private:
+		void orderCrossings(std::list<Crossing> &crossings) const;
 	};
 
 	struct Crossing {

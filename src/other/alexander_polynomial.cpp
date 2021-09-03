@@ -32,103 +32,11 @@
 
 #include "../ke/Util_rapidjson.h"
 #include "../ke/Diagram.h"
+#include "../math/Polynomial.h"
 
 using namespace KE::TwoD;
 
 namespace {
-
-class Polynomial {
-
-public:
-	static Polynomial T;
-	static Polynomial MINUS_T;
-	static Polynomial ONE;
-	static Polynomial MINUS_ONE;
-	static Polynomial ZERO;
-
-private:
-	std::vector<int> coefficients;
-
-public:
-	Polynomial() {}
-
-private:
-	Polynomial(const std::vector<int> &coefficients) : coefficients(coefficients) {
-		this->normalize();
-	}
-
-	void normalize() {
-		while (this->coefficients.size() > 0 && this->coefficients.back() == 0) {
-			this->coefficients.pop_back();
-		}
-	}
-
-public:
-	const Polynomial &operator += (const Polynomial &poly) {
-		while (this->coefficients.size() < poly.coefficients.size()) {
-			this->coefficients.push_back(0);
-		}
-		for (std::size_t index = 0; index < poly.coefficients.size(); index += 1) {
-			this->coefficients[index] += poly.coefficients[index];
-		}
-		this->normalize();
-		return *this;
-	}
-
-	const Polynomial &operator *= (int num) {
-		if (num == 0) {
-			this->coefficients.empty();
-			return *this;
-		}
-		std::transform(this->coefficients.begin(), this->coefficients.end(), this->coefficients.begin(), [num](int co) {return co * num;});
-		return *this;
-	}
-
-	Polynomial operator *(const Polynomial &poly) {
-		if (this->coefficients.empty() || poly.coefficients.empty()) {
-			return Polynomial::ZERO;
-		}
-		std::vector<int> product(this->coefficients.size() + poly.coefficients.size() - 1, 0);
-		for (std::size_t i = 0; i < this->coefficients.size(); i += 1) {
-			for (std::size_t j = 0; j < poly.coefficients.size(); j += 1) {
-				product[i + j] += this->coefficients[i] * poly.coefficients[j];
-			}
-		}
-		return Polynomial(product);
-	}
-
-	Polynomial reduced() {
-		std::vector<int> reduced;
-		bool skip = true;
-		for (const auto &coef : this->coefficients) {
-			if (coef == 0 && skip) {
-				continue;
-			}
-			skip = false;
-			reduced.push_back(coef);
-		}
-		Polynomial result(reduced);
-		if (!reduced.empty() && reduced[0] < 0) {
-			result *= -1;
-		}
-		return result;
-	}
-
-	bool operator == (int num) const {
-		if (this->coefficients.empty()) {
-			return num == 0;
-		} else if (this->coefficients.size() == 1) {
-			return num == this->coefficients[0];
-		} else {
-			return false;
-		}
-	}
-	bool operator != (int num) const {
-		return !(*this == num);
-	}
-
-friend std::ostream &operator << (std::ostream &os, const Polynomial &poly);
-};
 
 template<typename T>
 class SquareMatrix {
@@ -204,67 +112,6 @@ T SquareMatrix<T>::determinant() const {
 		return sum;
 	}
 }
-
-std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
-	if (poly.coefficients.empty()) {
-		os << 0;
-		return os;
-	}
-	if (poly.coefficients.size() == 1) {
-		os << poly.coefficients[0];
-		return os;
-	}
-
-	for (int index = poly.coefficients.size() - 1; index >= 0; index -= 1) {
-		const auto coef = poly.coefficients[index];
-		switch (coef) {
-			case 0:
-				continue;
-			case 1:
-				if (index != poly.coefficients.size() - 1) {
-					os << " + ";
-				}
-				if (index == 0) {
-					os << 1;
-				}
-				break;
-			case -1:
-				if (index > 0) {
-					os << " - ";
-				} else {
-					os << "- 1";
-				}
-				break;
-			default:
-				if (index != poly.coefficients.size() - 1) {
-					if (coef > 0) {
-						os << " + ";
-					} else {
-						os << " - ";
-					}
-				}
-				os << abs(coef);
-				break;
-		}
-		switch (index) {
-			case 0:
-				break;
-			case 1:
-				os << "t";
-				break;
-			default:
-				os << "t^" << index;
-				break;
-		}
-	}
-	return os;
-}
-
-Polynomial Polynomial::T = Polynomial({0, 1});
-Polynomial Polynomial::MINUS_T = Polynomial({0, -1});
-Polynomial Polynomial::ONE = Polynomial({1});
-Polynomial Polynomial::MINUS_ONE = Polynomial({-1});
-Polynomial Polynomial::ZERO = Polynomial();
 
 struct CrossingEx {
 	const Diagram::Crossing cro;
@@ -410,29 +257,33 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 	return faces;
 }
 
-Polynomial poly(Face::Role role) {
+Math::Polynomial poly(Face::Role role) {
 	switch (role) {
 		default:
-			return Polynomial::ZERO;
+			return Math::Polynomial::ZERO;
 		case Face::leftBefore:
-			return Polynomial::MINUS_T;
+			return Math::Polynomial::MINUS_T;
 		case Face::rightBefore:
-			return Polynomial::ONE;
+			return Math::Polynomial::ONE;
 		case Face::leftAfter:
-			return Polynomial::T;
+			return Math::Polynomial::T;
 		case Face::rightAfter:
-			return Polynomial::MINUS_ONE;
+			return Math::Polynomial::MINUS_ONE;
 	}
 }
 
-Polynomial alexanderPolynomial(const Diagram &diagram) {
+Math::Polynomial alexanderPolynomial(const Diagram &diagram) {
+	if (!diagram.hasCrossings()) {
+		return Math::Polynomial::ONE;
+	}
+
 	const auto faces = collectFaces(diagram);
 
 	std::map<Diagram::Crossing,int> indices;
 
 	auto edge0 = faces[0].edges()[0];
 	auto edge1 = std::make_pair(edge0.second.inversion(), edge0.first.inversion());
-	std::vector<std::vector<Polynomial>> rows;
+	std::vector<std::vector<Math::Polynomial>> rows;
 	std::size_t size = faces.size() - 2;
 
 	for (const auto &face : faces) {
@@ -440,7 +291,7 @@ Polynomial alexanderPolynomial(const Diagram &diagram) {
 		if (std::find(edges.begin(), edges.end(), edge0) != edges.end() || std::find(edges.begin(), edges.end(), edge1) != edges.end()) {
 			continue;
 		}
-		std::vector<Polynomial> row(size, Polynomial::ZERO);
+		std::vector<Math::Polynomial> row(size, Math::Polynomial::ZERO);
 		for (const auto &[cro, role] : face.matrixRow) {
 			if (indices.find(cro) == indices.end()) {
 				indices.insert(std::make_pair(cro, indices.size()));

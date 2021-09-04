@@ -47,7 +47,7 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 }
 
 int main(int argc, char **argv) {
-	QApplication::setOrganizationName("Knot Editor");
+	QApplication::setOrganizationName("FBReader.ORG Limited");
 	QApplication::setApplicationName("Knot Editor");
 	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 	QApplication qa(argc, argv);

@@ -55,6 +55,7 @@ struct CrossingEx {
 	}
 };
 
+typedef std::pair<CrossingEx,CrossingEx> Bridge;
 struct Face {
 	enum Role {
 		leftBefore,
@@ -63,51 +64,21 @@ struct Face {
 		rightAfter
 	};
 
-	const bool direction;
-	std::list<CrossingEx> crossings;
-	std::map<Diagram::Crossing,Role> matrixRow;
+	std::list<std::pair<CrossingEx,Role>> matrixRow;
 
-	Face(bool direction, const CrossingEx &vertex) : direction(direction) {
-		this->add(vertex);
+	Bridge firstBridge() const {
+		return std::make_pair(this->matrixRow.back().first.inversion(), this->matrixRow.front().first);
 	}
-	bool add(CrossingEx vertex) {
-		if (this->direction) {
-			if (this->crossings.size() > 0 && vertex == this->crossings.front()) {
-				return false;
+
+	bool matches(const Bridge &bridge) const {
+		bool flag = this->matrixRow.back().first.inversion() == bridge.first;
+		for (const auto &pair : this->matrixRow) {
+			if (flag && pair.first == bridge.second) {
+				return true;
 			}
-			this->crossings.push_back(vertex);
-		} else {
-			if (this->crossings.size() > 0 && vertex == this->crossings.back().inversion()) {
-				return false;
-			}
-			this->crossings.push_front(vertex.inversion());
+			flag = pair.first.inversion() == bridge.first;
 		}
-		return true;
-	}
-	CrossingEx lastKey() const {
-		return this->direction ? this->crossings.back().inversion() : this->crossings.front();
-	}
-	std::vector<std::pair<CrossingEx,CrossingEx>> edges() const {
-		std::vector<std::pair<CrossingEx,CrossingEx>> pairs;
-		auto prev = this->crossings.end();
-		for (auto iter = this->crossings.begin(); iter != this->crossings.end(); ++iter) {
-			if (prev != this->crossings.end()) {
-				pairs.push_back(std::make_pair(*prev, *iter));
-			}
-			prev = iter;
-		}
-		pairs.push_back(std::make_pair(crossings.back(), crossings.front()));
-		return pairs;
-	}
-	void computeMatrixRow(std::function<bool(const std::pair<CrossingEx,CrossingEx>&)> isPositive) {
-		for (const auto &edge : this->edges()) {
-			if (!edge.first.over) {
-				this->matrixRow[edge.first.cro] = isPositive(edge) ? leftAfter : rightBefore;
-			}
-			if (edge.second.over) {
-				this->matrixRow[edge.second.cro] = isPositive(edge) ? leftBefore : rightAfter;
-			}
-		}
+		return false;
 	}
 };
 
@@ -124,51 +95,44 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 	std::map<CrossingEx,CrossingEx> next;
 	std::map<CrossingEx,CrossingEx> prev;
 	for (std::size_t i = 0; i < all.size() - 1; i += 1) {
-		next.insert(std::make_pair(all[i], all[i + 1]));
-		prev.insert(std::make_pair(all[i + 1], all[i]));
+		next.emplace(all[i], all[i + 1]);
+		prev.emplace(all[i + 1], all[i]);
 	}
-	next.insert(std::make_pair(all.back(), all.front()));
-	prev.insert(std::make_pair(all.front(), all.back()));
+	next.emplace(all.back(), all.front());
+	prev.emplace(all.front(), all.back());
+
+	std::map<Bridge,std::pair<CrossingEx,Face::Role>> angles;
+	for (const auto &crs : all) {
+		Bridge forward(prev.at(crs), crs);
+		Bridge back(next.at(crs), crs);
+		angles.emplace(forward, std::make_pair(
+			crs.clockwise() ? next.at(crs.inversion()) : prev.at(crs.inversion()),
+			crs.over ? Face::rightBefore : (crs.clockwise() ? Face::rightAfter : Face::leftBefore)
+		));
+		angles.emplace(back, std::make_pair(
+			crs.clockwise() ? prev.at(crs.inversion()): next.at(crs.inversion()),
+			crs.over ? Face::leftAfter : (crs.clockwise() ? Face::leftBefore : Face::rightAfter)
+		));
+	}
 
 	std::vector<Face> faces;
-	std::set<std::pair<CrossingEx,CrossingEx>> used;
-	for (const auto &ex : all) {
-		for (bool direction : {false, true}) {
-			Face face(direction, ex);
-			auto cw = direction;
-			while (true) {
-				const auto key = face.lastKey();
-				if (key.clockwise() == cw) {
-					if (!face.add(next.find(key)->second)) {
-						break;
-					}
-					cw = direction;
-				} else {
-					if (!face.add(prev.find(key)->second)) {
-						break;
-					}
-					cw = !direction;
-				}
+	while (!angles.empty()) {
+		Face face;
+		std::list<Bridge> stack;
+		const auto bridge = angles.begin()->first;
+		stack.push_back(bridge);
+		while (true) {
+			const auto &last = stack.back();
+			const auto &angle = angles.at(last);
+			face.matrixRow.push_back(std::make_pair(last.second, angle.second));
+			Bridge b(last.second.inversion(), angle.first);
+			angles.extract(last);
+			if (b == stack.front()) {
+				break;
 			}
-
-			std::size_t used_count = 0;
-			const auto edges = face.edges();
-			for (const auto &edge : face.edges()) {
-				if (used.find(edge) != used.end()) {
-					used_count += 1;
-				}
-			}
-			if (used_count == face.crossings.size()) {
-				continue;
-			}
-
-			used.insert(edges.begin(), edges.end());
-
-			face.computeMatrixRow([&next](const std::pair<CrossingEx,CrossingEx> &edge) {
-				return next.find(edge.first.inversion())->second == edge.second;
-			});
-			faces.push_back(face);
+			stack.push_back(b);
 		}
+		faces.push_back(face);
 	}
 
 	return faces;
@@ -204,22 +168,21 @@ Polynomial AlexanderPolynomial::value(const Diagram &diagram) const {
 
 	std::map<Diagram::Crossing,int> indices;
 
-	auto edge0 = faces[0].edges()[0];
-	auto edge1 = std::make_pair(edge0.second.inversion(), edge0.first.inversion());
+	auto edge0 = faces[0].firstBridge();
+	auto edge1 = std::make_pair(edge0.second, edge0.first);
 	std::vector<std::vector<Polynomial>> rows;
 	std::size_t size = faces.size() - 2;
 
 	for (const auto &face : faces) {
-		const auto edges = face.edges();
-		if (std::find(edges.begin(), edges.end(), edge0) != edges.end() || std::find(edges.begin(), edges.end(), edge1) != edges.end()) {
+		if (face.matches(edge0) || face.matches(edge1)) {
 			continue;
 		}
 		std::vector<Polynomial> row(size, Polynomial::ZERO);
-		for (const auto &[cro, role] : face.matrixRow) {
-			if (indices.find(cro) == indices.end()) {
-				indices.insert(std::make_pair(cro, indices.size()));
+		for (const auto &pair : face.matrixRow) {
+			if (indices.find(pair.first.cro) == indices.end()) {
+				indices.emplace(pair.first.cro, indices.size());
 			}
-			row[indices[cro]] = poly(role);
+			row[indices[pair.first.cro]] = poly(pair.second);
 		}
 		rows.push_back(row);
 	}

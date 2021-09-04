@@ -32,7 +32,7 @@
 
 namespace KE::Qt {
 
-Window::Window() {
+Window::Window(const QString &filename) : _filename(filename) {
 	this->toolbar = new QToolBar(this);
 	this->toolbar->setMovable(false);
 	this->toolbar->setContextMenuPolicy(::Qt::PreventContextMenu);
@@ -92,7 +92,7 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 }
 
 void Window::save() {
-	QString filename = getSaveFileNameEx(this->fileFilter());
+	const QString filename = getSaveFileNameEx(this->fileFilter());
 	if (filename.isEmpty()) {
 		return;
 	}
@@ -105,6 +105,7 @@ void Window::save() {
 
 	saveIt(os);
 	os.close();
+	this->_filename = filename;
 }
 
 void Window::exportPNG() {

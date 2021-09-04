@@ -35,7 +35,7 @@
 
 namespace KE::Qt {
 
-DiagramWindow::DiagramWindow(const rapidjson::Document &doc) {
+DiagramWindow::DiagramWindow(const rapidjson::Document &doc, const QString &filename) : Window(filename) {
 	this->init(new DiagramWidget(this, doc));
 }
 

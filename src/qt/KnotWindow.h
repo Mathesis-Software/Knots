@@ -37,7 +37,7 @@ class KnotWindow : public Window {
 Q_OBJECT
 
 public:
-	KnotWindow(const rapidjson::Document &doc);
+	KnotWindow(const rapidjson::Document &doc, const QString &filename);
 	KnotWindow(const DiagramWidget &diagramWidget);
 
 	KnotWidget *knotWidget() const;

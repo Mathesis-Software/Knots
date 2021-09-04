@@ -19,6 +19,7 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <QtCore/QSettings>
 #include <QtGui/QPainter>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QProxyStyle>
@@ -46,6 +47,8 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 }
 
 int main(int argc, char **argv) {
+	QApplication::setOrganizationName("Knot Editor");
+	QApplication::setApplicationName("Knot Editor");
 	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 	QApplication qa(argc, argv);
 	qa.setFont(QFont("Helvetica", 10));
@@ -57,8 +60,21 @@ int main(int argc, char **argv) {
 
 	int count = 0;
 	for (int i = 1; i < argc; ++i) {
-		if (KE::Qt::StartWindow::openFile(argv[i])) {
+		if (auto window = KE::Qt::StartWindow::openFile(argv[i])) {
+			window->raise();
 			count += 1;
+		}
+	}
+	if (count == 0) {
+		QSettings settings;
+		for (const auto &name : settings.value("OpenWindows").toStringList()) {
+			if (name == "::LIBRARY::") {
+				KE::Qt::StartWindow::library()->raise();
+				count += 1;
+			} else if (auto window = KE::Qt::StartWindow::openFile(name)) {
+				window->raise();
+				count += 1;
+			}
 		}
 	}
 	if (count == 0) {

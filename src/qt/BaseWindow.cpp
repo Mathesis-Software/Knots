@@ -22,6 +22,7 @@
 #include <fstream>
 
 #include <QtCore/QResource>
+#include <QtCore/QSettings>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMenuBar>
@@ -40,13 +41,25 @@
 namespace KE::Qt {
 
 void BaseWindow::exitApplication() {
+	QStringList names;
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<Window*>(widget)) {
-			if (!window->close()) {
+			if (window->close()) {
+				const auto filename = window->filename();
+				if (!filename.isNull()) {
+					names.append(QFileInfo(filename).canonicalFilePath());
+				}
+			} else {
 				return;
 			}
+		} else if (dynamic_cast<LibraryWindow*>(widget)) {
+			names.append("::LIBRARY::");
 		}
 	}
+
+	QSettings settings;
+	settings.setValue("OpenWindows", names);
+	settings.sync();
 
 	qApp->quit();
 }
@@ -123,9 +136,9 @@ QWidget *BaseWindow::openFile(const QString &filename) {
 		if (doc.IsNull()) {
 			throw std::runtime_error("The file is not in JSON format");
 		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
-			window = new DiagramWindow(doc);
+			window = new DiagramWindow(doc, filename);
 		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
-			window = new KnotWindow(doc);
+			window = new KnotWindow(doc, filename);
 		} else {
 			throw std::runtime_error("The file does not represent a knot nor a diagram");
 		}

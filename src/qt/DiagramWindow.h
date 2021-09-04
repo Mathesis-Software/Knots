@@ -51,7 +51,7 @@ private:
 	void showPropertiesDialog();
 
 public:
-	DiagramWindow(const rapidjson::Document &doc);
+	DiagramWindow(const rapidjson::Document &doc, const QString &filename);
 	DiagramWindow();
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }

@@ -32,7 +32,7 @@
 
 namespace KE::Qt {
 
-KnotWindow::KnotWindow(const rapidjson::Document &doc) {
+KnotWindow::KnotWindow(const rapidjson::Document &doc, const QString &filename) : Window(filename) {
 	this->init(new KnotWidget(this, doc));
 }
 

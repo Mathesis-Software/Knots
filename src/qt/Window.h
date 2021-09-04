@@ -32,14 +32,18 @@ Q_OBJECT
 
 private:
 	QToolBar *toolbar;
+	QString _filename;
 
 protected:
-	Window();
+	Window(const QString &filename = QString());
 
 public:
 	void save();
 	virtual void rename() = 0;
 	void exportPNG();
+	QString filename() const {
+		return this->_filename;
+	}
 
 protected:
 	void closeEvent(QCloseEvent*);

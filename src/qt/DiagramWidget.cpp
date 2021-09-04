@@ -71,6 +71,7 @@ void DiagramWidget::updateEditorMode() {
 
 void DiagramWidget::clear() {
 	this->diagram.clear();
+	emit diagramChanged();
 	this->repaint();
 	this->updateEditorMode();
 }
@@ -217,6 +218,7 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 					this->diagram.close();
 					this->updateEditorMode();
 				}
+				emit diagramChanged();
 			}
 			break;
 		}
@@ -232,11 +234,13 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 							this->diagram.removeVertex(this->capturedVertex);
 							this->captureVertex(nullptr);
 							this->updateEditorMode();
+							emit diagramChanged();
 						}
 						break;
 				}
 			} else if (this->capturedCrossing) {
 				this->captureCrossing(this->diagram.flipCrossing(*this->capturedCrossing));
+				emit diagramChanged();
 			} else if (this->capturedEdge) {
 				switch (event->button()) {
 					default:
@@ -244,12 +248,14 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 					case ::Qt::LeftButton:
 						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->pos().x(), event->pos().y()), true);
 						this->captureEdge(nullptr);
+						emit diagramChanged();
 						break;
 					case ::Qt::RightButton:
 						if (this->diagram.canRemoveEdge(this->capturedEdge)) {
 							this->diagram.removeEdge(this->capturedEdge);
 							this->captureEdge(nullptr);
 							this->updateEditorMode();
+							emit diagramChanged();
 						}
 						break;
 				}
@@ -272,14 +278,16 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 			if (this->capturedVertex) {
 				this->diagram.moveVertex(this->capturedVertex, event->pos().x(), event->pos().y(), true);
 				this->captureVertex(nullptr);
-				repaint();
+				emit diagramChanged();
+				this->repaint();
 			}
 			break;
 		case MOVING:
 			if (!this->capturedPoint.isNull()) {
 				this->diagram.shift(event->pos().x() - this->capturedPoint.x(), event->pos().y() - this->capturedPoint.y(), true);
 				this->capturePoint(QPoint());
-				repaint();
+				emit diagramChanged();
+				this->repaint();
 			}
 			break;
 		default:
@@ -341,14 +349,16 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			case EDITING:
 				if (this->capturedVertex) {
 					this->diagram.moveVertex(this->capturedVertex, event->pos().x(), event->pos().y(), false);
-					repaint();
+					emit diagramChanged();
+					this->repaint();
 				}
 				break;
 			case MOVING:
 				if (!this->capturedPoint.isNull()) {
 					this->diagram.shift(event->pos().x() - this->capturedPoint.x(), event->pos().y() - this->capturedPoint.y(), false);
 					this->capturePoint(event->pos());
-					repaint();
+					emit diagramChanged();
+					this->repaint();
 				}
 				break;
 		}

@@ -129,6 +129,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	auto undo = this->registerAction(
 		this->addToolbarAction("undo.svg", "Undo", [this, widget] {
 			widget->diagram.undo();
+			emit widget->diagramChanged();
 			widget->repaint();
 			widget->updateEditorMode();
 			emit this->contentChanged();
@@ -139,6 +140,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	auto redo = this->registerAction(
 		this->addToolbarAction("redo.svg", "Redo", [this, widget] {
 			widget->diagram.redo();
+			emit widget->diagramChanged();
 			widget->repaint();
 			widget->updateEditorMode();
 			emit this->contentChanged();
@@ -193,6 +195,7 @@ void DiagramWindow::saveIt(std::ostream &os) {
 
 void DiagramWindow::simplify() {
 	if (this->diagramWidget()->diagram.simplify()) {
+		emit this->diagramWidget()->diagramChanged();
 		this->centralWidget()->repaint();
 	}
 }

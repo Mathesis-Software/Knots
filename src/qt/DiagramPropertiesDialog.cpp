@@ -25,7 +25,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QLabel>
 
-//#include "KnotWidget.h"
 #include "DiagramWindow.h"
 #include "../math/DiagramProperty.h"
 #include "../math/Polynomial.h"
@@ -96,7 +95,7 @@ DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow &window) {
 			ap->setText(QString());
 		}
 	};
-	QObject::connect(&window, &Window::contentChanged, callback);
+	QObject::connect(window.diagramWidget(), &DiagramWidget::diagramChanged, callback);
 	callback();
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);

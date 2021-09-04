@@ -195,7 +195,7 @@ void BaseWindow::createFileMenu() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }
 
-void BaseWindow::closeEvent(QCloseEvent *event) {
+void BaseWindow::closeEvent(QCloseEvent*) {
 	const QString id = this->identifier();
 	if (!id.isNull()) {
 		QSettings settings;

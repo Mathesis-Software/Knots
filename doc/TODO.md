@@ -8,6 +8,7 @@
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
 * Library window: artifacts on top of tab widget
+* Rare crash in 3d mode
 
 ### Code structure
 

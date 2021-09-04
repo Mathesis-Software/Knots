@@ -20,6 +20,7 @@
  */
 
 #include <map>
+#include <set>
 
 #include "DiagramProperty.h"
 #include "Polynomial.h"
@@ -54,30 +55,40 @@ struct CrossingEx {
 	}
 };
 
-typedef std::pair<CrossingEx,CrossingEx> Bridge;
-struct Face {
-	enum Role {
-		leftBefore,
-		rightBefore,
-		leftAfter,
-		rightAfter
-	};
+struct Bridge {
+	const CrossingEx start;
+	const CrossingEx end;
+	const bool forward;
 
-	std::list<std::pair<CrossingEx,Role>> matrixRow;
+	Bridge(const CrossingEx &start, const CrossingEx &end, bool forward) : start(start), end(end), forward(forward) {}
 
-	Bridge firstBridge() const {
-		return std::make_pair(this->matrixRow.back().first.inversion(), this->matrixRow.front().first);
+	bool operator == (const Bridge &bridge) const {
+		return this->start == bridge.start && this->end == bridge.end && this->forward == bridge.forward;
+	}
+	bool operator < (const Bridge &bridge) const {
+		if (this->start < bridge.start) {
+			return true;
+		} else if (bridge.start < this->start) {
+			return false;
+		} else if (this->end < bridge.end) {
+			return true;
+		} else if (bridge.end < this->end) {
+			return false;
+		} else {
+			return this->forward < bridge.forward;
+		}
 	}
 
+	Bridge inversion() const {
+		return Bridge(this->end, this->start, !this->forward);
+	}
+};
+
+struct Face {
+	std::list<Bridge> bridges;
+
 	bool matches(const Bridge &bridge) const {
-		bool flag = this->matrixRow.back().first.inversion() == bridge.first;
-		for (const auto &pair : this->matrixRow) {
-			if (flag && pair.first == bridge.second) {
-				return true;
-			}
-			flag = pair.first.inversion() == bridge.first;
-		}
-		return false;
+		return std::find(this->bridges.begin(), this->bridges.end(), bridge) != this->bridges.end();
 	}
 };
 
@@ -100,36 +111,27 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 	next.emplace(all.back(), all.front());
 	prev.emplace(all.front(), all.back());
 
-	std::map<Bridge,std::pair<CrossingEx,Face::Role>> angles;
+	std::map<Diagram::Crossing,int> indices;
+	std::set<Bridge> allBridges;
 	for (const auto &crs : all) {
-		Bridge forward(prev.at(crs), crs);
-		Bridge back(next.at(crs), crs);
-		angles.emplace(forward, std::make_pair(
-			crs.clockwise() ? next.at(crs.inversion()) : prev.at(crs.inversion()),
-			crs.over ? Face::rightBefore : (crs.clockwise() ? Face::rightAfter : Face::leftBefore)
-		));
-		angles.emplace(back, std::make_pair(
-			crs.clockwise() ? prev.at(crs.inversion()): next.at(crs.inversion()),
-			crs.over ? Face::leftAfter : (crs.clockwise() ? Face::leftBefore : Face::rightAfter)
-		));
+		allBridges.emplace(prev.at(crs), crs, true);
+		allBridges.emplace(next.at(crs), crs, false);
 	}
 
 	std::vector<Face> faces;
-	while (!angles.empty()) {
+	while (!allBridges.empty()) {
 		Face face;
-		std::list<Bridge> stack;
-		const auto bridge = angles.begin()->first;
-		stack.push_back(bridge);
+		face.bridges.push_back(*allBridges.begin());
 		while (true) {
-			const auto &last = stack.back();
-			const auto &angle = angles.at(last);
-			face.matrixRow.push_back(std::make_pair(last.second, angle.second));
-			Bridge b(last.second.inversion(), angle.first);
-			angles.extract(last);
-			if (b == stack.front()) {
+			const auto &last = face.bridges.back();
+			allBridges.extract(last);
+			const auto inv = last.end.inversion();
+			const bool forward = last.forward == last.end.clockwise();
+			Bridge b(inv, forward ? next.at(inv) : prev.at(inv), forward);
+			if (b == face.bridges.front()) {
 				break;
 			}
-			stack.push_back(b);
+			face.bridges.push_back(b);
 		}
 		faces.push_back(face);
 	}
@@ -137,17 +139,28 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 	return faces;
 }
 
-Polynomial poly(Face::Role role) {
+Polynomial poly(const Bridge &bridge) {
+	enum RoleOfBridgeEnd {
+		LEFT_BEFORE,
+		RIGHT_BEFORE,
+		LEFT_AFTER,
+		RIGHT_AFTER
+	} role;
+
+	if (bridge.forward) {
+		role = bridge.end.over ? RIGHT_BEFORE : (bridge.end.clockwise() ? RIGHT_AFTER : LEFT_BEFORE);
+	} else {
+		role = bridge.end.over ? LEFT_AFTER : (bridge.end.clockwise() ? LEFT_BEFORE : RIGHT_AFTER);
+	}
+
 	switch (role) {
-		default:
-			return Polynomial::ZERO;
-		case Face::leftBefore:
+		case LEFT_BEFORE:
 			return Polynomial::MINUS_T;
-		case Face::rightBefore:
+		case RIGHT_BEFORE:
 			return Polynomial::ONE;
-		case Face::leftAfter:
+		case LEFT_AFTER:
 			return Polynomial::T;
-		case Face::rightAfter:
+		case RIGHT_AFTER:
 			return Polynomial::MINUS_ONE;
 	}
 }
@@ -167,21 +180,22 @@ Polynomial AlexanderPolynomial::value(const Diagram &diagram) const {
 
 	std::map<Diagram::Crossing,int> indices;
 
-	auto edge0 = faces[0].firstBridge();
-	auto edge1 = std::make_pair(edge0.second, edge0.first);
+	const auto skip = faces[0].bridges.front().inversion();
 	std::vector<std::vector<Polynomial>> rows;
 	std::size_t size = faces.size() - 2;
 
+	bool first = true;
 	for (const auto &face : faces) {
-		if (face.matches(edge0) || face.matches(edge1)) {
+		if (first || face.matches(skip)) {
+			first = false;
 			continue;
 		}
 		std::vector<Polynomial> row(size, Polynomial::ZERO);
-		for (const auto &pair : face.matrixRow) {
-			if (indices.find(pair.first.cro) == indices.end()) {
-				indices.emplace(pair.first.cro, indices.size());
+		for (const auto &bridge : face.bridges) {
+			if (indices.find(bridge.end.cro) == indices.end()) {
+				indices.emplace(bridge.end.cro, indices.size());
 			}
-			row[indices[pair.first.cro]] = poly(pair.second);
+			row[indices.at(bridge.end.cro)] = poly(bridge);
 		}
 		rows.push_back(row);
 	}

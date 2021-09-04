@@ -8,7 +8,6 @@
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
 * Library window: artifacts on top of tab widget
-* Alexander Polynomial for single-crossing knot returns 0, should be 1; the problem is in the face collection (founds only two faces of three)
 
 ### Code structure
 

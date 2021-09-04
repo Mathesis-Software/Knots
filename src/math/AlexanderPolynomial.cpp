@@ -68,11 +68,11 @@ struct Bridge {
 	bool operator < (const Bridge &bridge) const {
 		if (this->start < bridge.start) {
 			return true;
-		} else if (bridge.start < this->start) {
+		} else if (this->start != bridge.start) {
 			return false;
 		} else if (this->end < bridge.end) {
 			return true;
-		} else if (bridge.end < this->end) {
+		} else if (this->end != bridge.end) {
 			return false;
 		} else {
 			return this->forward < bridge.forward;
@@ -127,7 +127,7 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 			allBridges.extract(last);
 			const auto inv = last.end.inversion();
 			const bool forward = last.forward == last.end.clockwise();
-			Bridge b(inv, forward ? next.at(inv) : prev.at(inv), forward);
+			const Bridge b(inv, forward ? next.at(inv) : prev.at(inv), forward);
 			if (b == face.bridges.front()) {
 				break;
 			}

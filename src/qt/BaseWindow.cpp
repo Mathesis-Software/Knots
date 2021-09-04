@@ -23,6 +23,7 @@
 
 #include <QtCore/QResource>
 #include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMenuBar>
@@ -65,7 +66,12 @@ void BaseWindow::exitApplication() {
 namespace {
 
 QString getOpenFileNameEx() {
-	QFileDialog dialog(nullptr, "Open file", getenv("KNOTEDITOR_DATA"));
+	QSettings settings;
+	QString dir = settings.value("CustomFilesFolder").toString();
+	if (dir.isEmpty()) {
+		dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+	}
+	QFileDialog dialog(nullptr, "Open file", dir);
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setIconProvider(Qt::FileIconProvider::instance());
 	dialog.setNameFilters({
@@ -75,6 +81,8 @@ QString getOpenFileNameEx() {
 		"Any files (*)"
 	});
 	if (dialog.exec() == QDialog::Accepted) {
+		settings.setValue("CustomFilesFolder", dialog.directory().path());
+		settings.sync();
 		return dialog.selectedUrls().value(0).toLocalFile();
 	}
 	return QString();

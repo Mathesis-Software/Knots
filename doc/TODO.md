@@ -5,6 +5,7 @@
 
 ### Bug fixing
 
+* quit by closing all windows keeps old list of open windows; should be empty instead
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
 * Library window: artifacts on top of tab widget
@@ -26,8 +27,6 @@
 * open windows list
 * knot window: move length & number of points into "Visual options" dialogue
 * create settings dialogue (all the same parameters as in knot visual options dialogue + maybe something els)
-* "save file dialogue": do not use read-only directory by default
-* save latest file directory between runs
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
 * undo/redo in knot window
@@ -40,7 +39,6 @@
 * move invariants (and other params) computations to a separate thread, with progress indication and a way to interrupt
 * replace "msleep(20)" in the smoothing thread with something more clear
 * migrate from OpenGL to Vulkan/Metal/DirectX
-* do not save the app data in QtProject.conf, use own name instead
 
 ### Math feature improvements
 

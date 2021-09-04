@@ -21,6 +21,8 @@
 
 #include <fstream>
 
+#include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
 #include <QtGui/QCloseEvent>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -82,7 +84,12 @@ void Window::closeEvent(QCloseEvent *event) {
 namespace {
 
 QString getSaveFileNameEx(const QString &fileFilter) {
-	QFileDialog dialog(nullptr, "Save file", getenv("KNOTEDITOR_DATA"));
+	QSettings settings;
+	QString dir = settings.value("CustomFilesFolder").toString();
+	if (dir.isEmpty()) {
+		dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+	}
+	QFileDialog dialog(nullptr, "Save file", dir);
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setAcceptMode(QFileDialog::AcceptSave);
 	dialog.setIconProvider(Qt::FileIconProvider::instance());
@@ -91,6 +98,8 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 		"Any files (*)"
 	});
 	if (dialog.exec() == QDialog::Accepted) {
+		settings.setValue("CustomFilesFolder", dialog.directory().path());
+		settings.sync();
 		return dialog.selectedUrls().value(0).toLocalFile();
 	}
 	return QString();

@@ -41,34 +41,22 @@
 namespace KE::Qt {
 
 void BaseWindow::exitApplication() {
-	QStringList names;
-	QMap<QString,QRect> geometries;
+	QStringList ids;
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<Window*>(widget)) {
-			const auto geometry = window->geometry();
+		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
 			if (window->close()) {
-				const auto filename = window->filename();
-				if (!filename.isNull()) {
-					names.append(QFileInfo(filename).canonicalFilePath());
+				const auto id = window->identifier();
+				if (!id.isNull()) {
+					ids.append(id);
 				}
-				geometries[filename] = geometry;
 			} else {
 				return;
 			}
-		} else if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
-			names.append("::LIBRARY::");
-			geometries["::LIBRARY::"] = window->geometry();
-			window->close();
 		}
 	}
 
 	QSettings settings;
-	settings.setValue("OpenWindows", names);
-	for (auto iter = geometries.begin(); iter != geometries.end(); ++iter) {
-		settings.beginGroup("Window:" + iter.key());
-		settings.setValue("geometry", iter.value());
-		settings.endGroup();
-	}
+	settings.setValue("OpenWindows", ids);
 	settings.sync();
 
 	qApp->quit();
@@ -166,6 +154,19 @@ BaseWindow::BaseWindow() {
 	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
 }
 
+void BaseWindow::restoreParameters() {
+	const QString id = this->identifier();
+	if (!id.isNull()) {
+		QSettings settings;
+		settings.beginGroup("Window:" + id);
+		auto geometry = settings.value("geometry").toRect();
+		settings.endGroup();
+		if (geometry.isValid()) {
+			this->setGeometry(geometry);
+		}
+	}
+}
+
 void BaseWindow::createFileMenu() {
 	Window *window = dynamic_cast<Window*>(this);
 
@@ -192,6 +193,17 @@ void BaseWindow::createFileMenu() {
 	close->setShortcut(QKeySequence("Ctrl+W"));
 	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
+}
+
+void BaseWindow::closeEvent(QCloseEvent *event) {
+	const QString id = this->identifier();
+	if (!id.isNull()) {
+		QSettings settings;
+		settings.beginGroup("Window:" + id);
+		settings.setValue("geometry", this->geometry());
+		settings.endGroup();
+		settings.sync();
+	}
 }
 
 }

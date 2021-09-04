@@ -252,6 +252,7 @@ LibraryWindow::LibraryWindow() {
 	this->resize(780, 500);
 
 	this->createFileMenu();
+	this->restoreParameters();
 }
 
 QWidget *LibraryWindow::createList(const QString &suffix) {

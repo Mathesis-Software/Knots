@@ -30,6 +30,9 @@ class LibraryWindow : public BaseWindow {
 
 public:
 	LibraryWindow();
+	QString identifier() const override {
+		return "::LIBRARY::";
+	}
 
 private:
 	QWidget *createList(const QString &suffix);

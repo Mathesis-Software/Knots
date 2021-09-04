@@ -38,17 +38,15 @@ protected:
 	Window(const QString &filename = QString());
 
 public:
+	QString identifier() const override;
 	void save();
 	virtual void rename() = 0;
 	void exportPNG();
-	QString filename() const {
-		return this->_filename;
-	}
 
 protected:
-	void closeEvent(QCloseEvent*);
+	void closeEvent(QCloseEvent *event) override;
 
-	virtual void saveIt(std::ostream&) = 0;
+	virtual void saveIt(std::ostream &os) = 0;
 	virtual bool isSaved() const = 0;
 	bool saveBeforeClosing();
 
@@ -56,7 +54,6 @@ protected:
 
 	QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
 	void addToolbarSeparator();
-	void complete();
 	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
 
 	virtual QString fileFilter() const = 0;

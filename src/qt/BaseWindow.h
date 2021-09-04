@@ -37,7 +37,12 @@ public:
 
 protected:
 	BaseWindow();
+	void restoreParameters(); 
 	void createFileMenu();
+	virtual QString identifier() const {
+		return QString();
+	}
+	void closeEvent(QCloseEvent*) override;
 };
 
 }

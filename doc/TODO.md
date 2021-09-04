@@ -27,11 +27,11 @@
 * create default settings storage and settings dialogue (all the same parameters as in knot visual options dialogue + maybe something els)
 * "save file dialogue": do not use read-only directory by default
 * save latest file directory between runs
-* save window sizes between runs
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
 * undo/redo in knot window
 * export image: "draw background" option
+* (?) restore window geometry (if possible) while opening files from StartWindow
 
 ### Technical feature improvements
 

@@ -56,7 +56,6 @@ void KnotWindow::init(KnotWidget *widget) {
 	});
 
 	initMenu();
-	complete();
 
 	emit this->contentChanged();
 }

@@ -39,6 +39,12 @@ Window::Window(const QString &filename) : _filename(filename) {
 	addToolBar(this->toolbar);
 
 	this->createFileMenu();
+
+	this->toolbar->show();
+	statusBar()->setVisible(true);
+	this->resize(508, 594);
+
+	this->restoreParameters();
 }
 
 bool Window::saveBeforeClosing() {
@@ -69,6 +75,7 @@ void Window::closeEvent(QCloseEvent *event) {
 		return;
 	}
 
+	BaseWindow::closeEvent(event);
 	emit closing();
 }
 
@@ -130,15 +137,16 @@ void Window::addToolbarSeparator() {
 	this->toolbar->addSeparator();
 }
 
-void Window::complete() {
-	this->toolbar->show();
-	statusBar()->setVisible(true);
-	this->resize(508, 594);
-}
-
 QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> controller) {
 	QObject::connect(this, &Window::contentChanged, [action, controller] { controller(*action); });
 	return action;
+}
+
+QString Window::identifier() const {
+	if (this->_filename.isNull()) {
+		return QString();
+	}
+	return QFileInfo(this->_filename).canonicalFilePath();
 }
 
 }

@@ -153,8 +153,6 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	pixmap.setDevicePixelRatio(this->devicePixelRatio());
 	this->setWindowIcon(pixmap);
 
-	complete();
-
 	QObject::connect(this, &Window::contentChanged, [this] {
 		this->setWindowTitle(this->diagramWidget()->diagram.caption().c_str());
 	});

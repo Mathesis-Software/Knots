@@ -20,7 +20,6 @@
  */
 
 #include <map>
-#include <set>
 
 #include "DiagramProperty.h"
 #include "Polynomial.h"

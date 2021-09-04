@@ -42,23 +42,33 @@ namespace KE::Qt {
 
 void BaseWindow::exitApplication() {
 	QStringList names;
+	QMap<QString,QRect> geometries;
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<Window*>(widget)) {
+			const auto geometry = window->geometry();
 			if (window->close()) {
 				const auto filename = window->filename();
 				if (!filename.isNull()) {
 					names.append(QFileInfo(filename).canonicalFilePath());
 				}
+				geometries[filename] = geometry;
 			} else {
 				return;
 			}
-		} else if (dynamic_cast<LibraryWindow*>(widget)) {
+		} else if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
 			names.append("::LIBRARY::");
+			geometries["::LIBRARY::"] = window->geometry();
+			window->close();
 		}
 	}
 
 	QSettings settings;
 	settings.setValue("OpenWindows", names);
+	for (auto iter = geometries.begin(); iter != geometries.end(); ++iter) {
+		settings.beginGroup("Window:" + iter.key());
+		settings.setValue("geometry", iter.value());
+		settings.endGroup();
+	}
 	settings.sync();
 
 	qApp->quit();

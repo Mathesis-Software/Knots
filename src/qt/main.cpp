@@ -68,10 +68,20 @@ int main(int argc, char **argv) {
 	if (count == 0) {
 		QSettings settings;
 		for (const auto &name : settings.value("OpenWindows").toStringList()) {
+			settings.beginGroup("Window:" + name);
+			auto geometry = settings.value("geometry").toRect();
+			settings.endGroup();
 			if (name == "::LIBRARY::") {
-				KE::Qt::StartWindow::library()->raise();
+				auto window = KE::Qt::StartWindow::library();
+				if (geometry.isValid()) {
+					window->setGeometry(geometry);
+				}
+				window->raise();
 				count += 1;
 			} else if (auto window = KE::Qt::StartWindow::openFile(name)) {
+				if (geometry.isValid()) {
+					window->setGeometry(geometry);
+				}
 				window->raise();
 				count += 1;
 			}

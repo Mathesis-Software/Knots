@@ -21,7 +21,6 @@
 * new diagram view (undoable) actions: center, scale
 * knot library: implement search
 * knot and diagram: store extra info, like description or keywords; use it for search in the library
-* save list of opened windows between runs; reopen them
 * recent documents list in the menu
 * open windows list
 * knot window: move length & number of points into "Visual options" dialogue

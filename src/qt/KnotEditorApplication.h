@@ -19,13 +19,19 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include "KnotEditorApplication.h"
+#ifndef __KE_QT_KNOT_EDITOR_APPLICATION_H__
+#define __KE_QT_KNOT_EDITOR_APPLICATION_H__
 
-int main(int argc, char **argv) {
-	QApplication::setOrganizationName("FBReader.ORG Limited");
-	QApplication::setApplicationName("Knot Editor");
-	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
+#include <QtWidgets/QApplication>
 
-	KE::Qt::KnotEditorApplication qa(argc, argv);
-	return qa.exec();
+namespace KE::Qt {
+
+class KnotEditorApplication : public QApplication {
+
+public:
+	KnotEditorApplication(int &argc, char **argv);
+};
+
 }
+
+#endif /* __KE_QT_KNOT_EDITOR_APPLICATION_H__ */

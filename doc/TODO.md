@@ -32,6 +32,7 @@
 * undo/redo in knot window
 * export image: "draw background" option
 * (?) restore window geometry (if possible) while opening files from StartWindow
+* save & restore windows z-order
 
 ### Technical feature improvements
 

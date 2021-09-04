@@ -52,6 +52,6 @@
 
 * DT code => diagram (orthgonal? beautified?)
 * multi-component links
-* combinatorial invariants/params for diagrams
+* more combinatorial invariants/params for diagrams
 * saving 3D scene in VRML (or what is the standard de facto at the moment?)
 * diagram editor: disallow line intersections during vertex moving/deleting

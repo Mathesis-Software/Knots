@@ -105,8 +105,8 @@ rapidjson::Document Diagram::serialize() const {
 		nums[vertex] = index;
 		index += 1;
 		rapidjson::Value point(rapidjson::kArrayType);
-		point.PushBack(vertex->x(), doc.GetAllocator());
-		point.PushBack(vertex->y(), doc.GetAllocator());
+		point.PushBack(vertex->_x, doc.GetAllocator());
+		point.PushBack(vertex->_y, doc.GetAllocator());
 		vertices.PushBack(point, doc.GetAllocator());
 	}
 

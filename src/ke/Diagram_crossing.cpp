@@ -21,19 +21,21 @@
 namespace KE::TwoD {
 
 std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
-	const int d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
+	const float d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
 
 	if (d0 == 0) {
-		return nullptr;
+		throw std::runtime_error("Requested crossing for parallel edges");
 	}
 
-	const int d1 =
-			(this->down.start->y() - this->up.start->y()) * this->down.dx()
-		-	(this->down.start->x() - this->up.start->x()) * this->down.dy();
+	const auto downStart = this->down.start->coords();
+	const auto upStart = this->up.start->coords();
+	const float d1 =
+			(downStart.y - upStart.y) * this->down.dx()
+		-	(downStart.x - upStart.x) * this->down.dy();
 
 	return std::make_shared<FloatPoint>(
-		this->up.start->x() + 1.0 * this->up.dx() * d1 / d0,
-		this->up.start->y() + 1.0 * this->up.dy() * d1 / d0
+		upStart.x + this->up.dx() * d1 / d0,
+		upStart.y + this->up.dy() * d1 / d0
 	);
 }
 

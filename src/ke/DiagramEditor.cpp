@@ -202,8 +202,8 @@ struct MoveDiagramCommand : public DiagramEditor::Command {
 	MoveDiagramCommand(int x, int y) : x(x), y(y) {}
 
 	void play(Diagram &diagram) override {
-		const auto &first = diagram.vertices().front();
-		diagram.shift(x - first->x(), y - first->y());
+		const auto first = diagram.vertices().front()->coords();
+		diagram.shift(x - first.x, y - first.y);
 	}
 };
 
@@ -212,8 +212,8 @@ struct MoveDiagramCommand : public DiagramEditor::Command {
 void DiagramEditor::shift(int dx, int dy, bool storeCommand) {
 	this->currentDiagram->shift(dx, dy);
 	if (storeCommand && !this->currentDiagram->vertices().empty()) {
-		const auto &first = this->currentDiagram->vertices().front();
-		this->addCommand(std::make_shared<MoveDiagramCommand>(first->x(), first->y()), false);
+		const auto first = this->currentDiagram->vertices().front()->coords();
+		this->addCommand(std::make_shared<MoveDiagramCommand>(first.x, first.y), false);
 	}
 }
 

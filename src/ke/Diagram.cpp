@@ -107,13 +107,15 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(const FloatPoint &pt, float max
 			continue;
 		}
 
-		if (((pt.x - edge.start->x()) * dx + (pt.y - edge.start->y()) * dy < 0) ||
-				((pt.x - edge.end->x()) * dx + (pt.y - edge.end->y()) * dy > 0)) {
+		const auto start = edge.start->coords();
+		const auto end = edge.end->coords();
+		if ((pt.x - start.x) * dx + (pt.y - start.y) * dy < 0 ||
+				(pt.x - end.x) * dx + (pt.y - end.y) * dy > 0) {
 			// pt is outside of the perpendicular strip built on the edge segment
 			continue;
 		}
 
-		const float distance = fabs((pt.x - edge.start->x()) * dy - (pt.y - edge.start->y()) * dx) / hypotf(dx, dy);
+		const float distance = fabs((pt.x - start.x) * dy - (pt.y - start.y) * dx) / hypotf(dx, dy);
 		if (distance < best && distance <= maxDistance) {
 			best = distance;
 			found = std::make_shared<Edge>(edge);
@@ -125,7 +127,10 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(const FloatPoint &pt, float max
 
 namespace {
 	int orientation(const Diagram::Vertex &v0, const Diagram::Vertex &v1, const Diagram::Vertex &v2) {
-		const int area = v0.x() * (v1.y() - v2.y()) + v1.x() * (v2.y() - v0.y()) + v2.x() * (v0.y() - v1.y());
+		const auto pt0 = v0.coords();
+		const auto pt1 = v1.coords();
+		const auto pt2 = v2.coords();
+		const float area = pt0.x * (pt1.y - pt2.y) + pt1.x * (pt2.y - pt0.y) + pt2.x * (pt0.y - pt1.y);
 		if (area < 0) {
 			return -1;
 		} else if (area > 0) {

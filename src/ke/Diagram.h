@@ -57,8 +57,6 @@ public:
 		void move(int dx, int dy) { this->_x += dx; this->_y += dy; }
 		void moveTo(int x, int y) { this->_x = x; this->_y = y; }
 
-		int x() const { return this->_x; }
-		int y() const { return this->_y; }
 		FloatPoint coords() const { return FloatPoint(this->_x, this->_y); }
 
 	private:
@@ -75,8 +73,8 @@ public:
 
 		Edge(const std::shared_ptr<Vertex> &start, const std::shared_ptr<Vertex> &end) : start(start), end(end) {
 		}
-		int dx() const { return this->end->x() - this->start->x(); }
-		int dy() const { return this->end->y() - this->start->y(); }
+		float dx() const { return this->end->coords().x - this->start->coords().x; }
+		float dy() const { return this->end->coords().y - this->start->coords().y; }
 		bool intersects(const Edge &edge) const;
 
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }

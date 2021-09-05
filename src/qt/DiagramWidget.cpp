@@ -112,15 +112,17 @@ void DiagramWidget::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge,
 		}
 	}
 
-	float deltaX = edge.end->x() - edge.start->x();
-	float deltaY = edge.end->y() - edge.start->y();
+	const auto start = edge.start->coords();
+	const auto end = edge.end->coords();
+	float deltaX = end.x - start.x;
+	float deltaY = end.y - start.y;
 	float hyp = hypotf(deltaX, deltaY);
 
 	deltaX = 10 * deltaX / hyp;
 	deltaY = 10 * deltaY / hyp;
 
-	float x0 = edge.start->x(),
-				y0 = edge.start->y(),
+	float x0 = start.x,
+				y0 = start.y,
 				x1, y1;
 
 	for (const auto &crs : this->diagram.underCrossings(edge)) {
@@ -139,8 +141,8 @@ void DiagramWidget::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge,
 		y0 = coords->y + deltaY;
 	}
 
-	x1 = edge.end->x();
-	y1 = edge.end->y();
+	x1 = end.x;
+	y1 = end.y;
 
 	if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0) {
 		painter.drawLine(QPointF(x0, y0), QPointF(x1, y1));
@@ -208,7 +210,8 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			auto fakeVertex = this->fakeVertex;
 			if (fakeVertex) {
 				this->setFakeVertex(nullptr);
-				this->captureVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()), true);
+				const auto coords = fakeVertex->coords();
+				this->captureVertex(this->diagram.addVertex(coords.x, coords.y), true);
 				if (event->button() == ::Qt::RightButton) {
 					this->diagram.close();
 					this->updateEditorMode();

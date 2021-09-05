@@ -50,14 +50,18 @@ public:
 	private:
 		std::list<Crossing> crossings;
 		int _x, _y;
+		float xNoise, yNoise;
 
 	public:
-		Vertex(int x, int y) : _x(x), _y(y) {}
+		Vertex(int x, int y);
 
 		void move(int dx, int dy) { this->_x += dx; this->_y += dy; }
 		void moveTo(int x, int y) { this->_x = x; this->_y = y; }
 
-		FloatPoint coords() const { return FloatPoint(this->_x, this->_y); }
+		FloatPoint coords() const { return FloatPoint(this->_x + this->xNoise, this->_y + this->yNoise); }
+
+	private:
+		void renoise();
 
 	private:
 		Vertex(const Vertex&) = delete;
@@ -138,6 +142,7 @@ public:
 		std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
 	private:
+		void ensureNotCollinear(const std::shared_ptr<Vertex> &vertex);
 		std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
 		void removeCrossing(const Edge &edge1, const Edge &edge2);
 		void order();

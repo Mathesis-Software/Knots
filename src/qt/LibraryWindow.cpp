@@ -20,6 +20,7 @@
 
 #include <QtCore/QDirIterator>
 #include <QtCore/QResource>
+#include <QtCore/QSettings>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QListWidget>
@@ -243,6 +244,23 @@ LibraryWindow::LibraryWindow() {
 	this->setCentralWidget(tabs);
 	tabs->addTab(createList(".dgr"), "Diagrams");
 	tabs->addTab(createList(".knt"), "Knots");
+
+	{
+		QSettings settings;
+		settings.beginGroup("Window:" + this->identifier());
+		const int index = settings.value("currentTabIndex").toInt();
+		if (index > 0) {
+			tabs->setCurrentIndex(index);
+		}
+		settings.endGroup();
+	}
+	QObject::connect(tabs, &QTabWidget::currentChanged, [this](int index) {
+		QSettings settings;
+		settings.beginGroup("Window:" + this->identifier());
+		settings.setValue("currentTabIndex", index);
+		settings.endGroup();
+		settings.sync();
+	});
 
 	setWindowTitle("Knot Library");
 	this->resize(780, 500);

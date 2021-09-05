@@ -90,7 +90,7 @@ DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow &window) {
 			ap->setText(QString());
 		}
 	};
-	QObject::connect(window.diagramWidget(), &DiagramWidget::diagramChanged, callback);
+	QObject::connect(window.diagramWidget(), &DiagramWidget::diagramChanged, this, callback);
 	callback();
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);

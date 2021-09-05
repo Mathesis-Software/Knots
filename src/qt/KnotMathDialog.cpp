@@ -82,8 +82,8 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 				value->setText(QString());
 			}
 		};
-		QObject::connect(&window, &Window::contentChanged, callback);
-		QObject::connect(checkbox, &QCheckBox::clicked, callback);
+		QObject::connect(&window, &Window::contentChanged, this, callback);
+		QObject::connect(checkbox, &QCheckBox::clicked, this, callback);
 	}
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);

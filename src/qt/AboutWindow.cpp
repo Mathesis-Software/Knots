@@ -70,7 +70,7 @@ AboutWindow::AboutWindow() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 	QObject::connect(quit, &QAction::triggered, [this] {
 		this->close();
-		KnotEditorApplication::exitApplication();
+		dynamic_cast<KnotEditorApplication*>(qApp)->exitApplication();
 	});
 	this->addAction(quit);
 }

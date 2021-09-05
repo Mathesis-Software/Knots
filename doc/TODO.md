@@ -5,7 +5,6 @@
 
 ### Bug fixing
 
-* quit by closing all windows keeps old list of open windows; should be empty instead
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
 * Library window: artifacts on top of tab widget

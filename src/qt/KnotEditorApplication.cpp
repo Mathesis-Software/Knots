@@ -39,6 +39,8 @@
 #include "StartWindow.h"
 #include "../ke/Util_rapidjson.h"
 
+namespace KE::Qt {
+
 namespace {
 
 class ProxyStyle : public QProxyStyle {
@@ -57,65 +59,6 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 
 };
 
-}
-
-namespace KE::Qt {
-
-KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplication(argc, argv) {
-	this->setFont(QFont("Helvetica", 10));
-	this->setStyle(new ProxyStyle);
-
-	QObject::connect(this, &QApplication::aboutToQuit, [] { qDebug() << "about to quit"; });
-
-	QPixmap pixmap(":images/trefoil.png");
-	pixmap.setDevicePixelRatio(this->devicePixelRatio());
-	this->setWindowIcon(pixmap);
-
-	int count = 0;
-	for (int i = 1; i < argc; ++i) {
-		if (auto window = KnotEditorApplication::openFile(argv[i])) {
-			window->raise();
-			count += 1;
-		}
-	}
-	if (count == 0) {
-		QSettings settings;
-		for (const auto &name : settings.value("OpenWindows").toStringList()) {
-			if (name == "::LIBRARY::") {
-				KnotEditorApplication::library()->raise();
-				count += 1;
-			} else if (auto window = KnotEditorApplication::openFile(name)) {
-				window->raise();
-				count += 1;
-			}
-		}
-	}
-
-	if (count == 0) {
-		(new StartWindow())->show();
-	}
-}
-
-void KnotEditorApplication::exitApplication() {
-	QStringList ids;
-	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
-			if (window->close()) {
-				const auto id = window->identifier();
-				if (!id.isNull()) {
-					ids.append(id);
-				}
-			} else {
-				return;
-			}
-		}
-	}
-
-	QSettings settings;
-	settings.setValue("OpenWindows", ids);
-	settings.sync();
-
-	qApp->quit();
 }
 
 QWidget *KnotEditorApplication::library() {
@@ -210,6 +153,69 @@ QWidget *KnotEditorApplication::openFile(const QString &filename) {
 		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}
+}
+
+KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
+	this->setFont(QFont("Helvetica", 10));
+	this->setStyle(new ProxyStyle);
+
+	QObject::connect(this, &QApplication::aboutToQuit, [this] {
+		if (!this->windowsListSaved) {
+			QSettings settings;
+			settings.setValue("OpenWindows", QStringList());
+			settings.sync();
+		}
+	});
+
+	QPixmap pixmap(":images/trefoil.png");
+	pixmap.setDevicePixelRatio(this->devicePixelRatio());
+	this->setWindowIcon(pixmap);
+
+	int count = 0;
+	for (int i = 1; i < argc; ++i) {
+		if (auto window = KnotEditorApplication::openFile(argv[i])) {
+			window->raise();
+			count += 1;
+		}
+	}
+	if (count == 0) {
+		QSettings settings;
+		for (const auto &name : settings.value("OpenWindows").toStringList()) {
+			if (name == "::LIBRARY::") {
+				KnotEditorApplication::library()->raise();
+				count += 1;
+			} else if (auto window = KnotEditorApplication::openFile(name)) {
+				window->raise();
+				count += 1;
+			}
+		}
+	}
+
+	if (count == 0) {
+		(new StartWindow())->show();
+	}
+}
+
+void KnotEditorApplication::exitApplication() {
+	QStringList ids;
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
+			if (window->close()) {
+				const auto id = window->identifier();
+				if (!id.isNull()) {
+					ids.append(id);
+				}
+			} else {
+				return;
+			}
+		}
+	}
+
+	QSettings settings;
+	settings.setValue("OpenWindows", ids);
+	settings.sync();
+	this->windowsListSaved = true;
+	this->quit();
 }
 
 }

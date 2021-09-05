@@ -71,7 +71,9 @@ void BaseWindow::createFileMenu() {
 	fileMenu->addSeparator();
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
-	auto quit = fileMenu->addAction("Quit", [] { KnotEditorApplication::exitApplication(); });
+	auto quit = fileMenu->addAction("Quit", [] {
+		dynamic_cast<KnotEditorApplication*>(qApp)->exitApplication();
+	});
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }
 

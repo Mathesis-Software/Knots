@@ -25,12 +25,17 @@ Diagram::Vertex::Vertex(int x, int y) : _x(x), _y(y) {
 	this->renoise();
 }
 
+namespace {
+
+std::random_device device;
+std::mt19937 generator(device());
+std::uniform_real_distribution<float> distribution(0.0, 0.01);
+
+}
+
 void Diagram::Vertex::renoise() {
-	std::random_device rd;
-	std::mt19937 gen(rd());
-	std::uniform_real_distribution<float> dis(0.0, 0.01);
-	this->xNoise = dis(gen);
-	this->yNoise = dis(gen);
+	this->xNoise = distribution(generator);
+	this->yNoise = distribution(generator);
 }
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {

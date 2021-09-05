@@ -23,7 +23,7 @@
 * knot library: save selected tab and positions in lists between runs
 * knot and diagram: store extra info, like description or keywords; use it for search in the library
 * recent documents list in the menu
-* open windows list
+* list of open windows
 * knot window: move length & number of points into "Visual options" dialogue
 * create settings dialogue (all the same parameters as in knot visual options dialogue + maybe something els)
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user

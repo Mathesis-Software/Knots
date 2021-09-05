@@ -24,7 +24,7 @@ std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
 	const float d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
 
 	if (d0 == 0) {
-		throw std::runtime_error("Requested crossing for parallel edges");
+		return nullptr;
 	}
 
 	const auto downStart = this->down.start->coords();

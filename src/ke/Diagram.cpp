@@ -127,17 +127,21 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(const FloatPoint &pt, float max
 
 namespace {
 
-bool orientation(const Diagram::Vertex &v0, const Diagram::Vertex &v1, const Diagram::Vertex &v2) {
-	const auto pt0 = v0.coords();
-	const auto pt1 = v1.coords();
-	const auto pt2 = v2.coords();
+bool orientation(const std::shared_ptr<Diagram::Vertex> &v0, const std::shared_ptr<Diagram::Vertex> &v1, const std::shared_ptr<Diagram::Vertex> &v2) {
+	const auto pt0 = v0->coords();
+	const auto pt1 = v1->coords();
+	const auto pt2 = v2->coords();
 	const float area = pt0.x * (pt1.y - pt2.y) + pt1.x * (pt2.y - pt0.y) + pt2.x * (pt0.y - pt1.y);
-	if (area < 0.0) {
+	if (area < 0) {
 		return false;
-	} else if (area > 0.0) {
+	} else if (area > 0) {
 		return true;
 	} else {
-		throw std::runtime_error("Three points on the same line");
+		int count = 0;
+		count += v0 < v1 ? 1 : 0;
+		count += v0 < v2 ? 1 : 0;
+		count += v1 < v2 ? 1 : 0;
+		return count % 2 == 0;
 	}
 }
 
@@ -150,11 +154,11 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 			this->end == edge.end) {
 		return false;
 	}
-	const bool ori = orientation(*this->start, *edge.start, *this->end);
+	const bool ori = orientation(this->start, edge.start, this->end);
 	return
-		ori == orientation(*edge.start, *this->end, *edge.end) &&
-		ori == orientation(*this->end, *edge.end, *this->start) &&
-		ori == orientation(*edge.end, *this->start, *edge.start);
+		ori == orientation(edge.start, this->end, edge.end) &&
+		ori == orientation(this->end, edge.end, this->start) &&
+		ori == orientation(edge.end, this->start, edge.start);
 }
 
 std::map<Diagram::Edge,std::list<Diagram::Crossing>> Diagram::allCrossings() const {

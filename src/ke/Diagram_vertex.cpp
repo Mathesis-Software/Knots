@@ -15,28 +15,10 @@
  */
 
 #include <algorithm>
-#include <random>
 
 #include "Diagram.h"
 
 namespace KE::TwoD {
-
-Diagram::Vertex::Vertex(int x, int y) : _x(x), _y(y) {
-	this->renoise();
-}
-
-namespace {
-
-std::random_device device;
-std::mt19937 generator(device());
-std::uniform_real_distribution<float> distribution(0.0, 0.01);
-
-}
-
-void Diagram::Vertex::renoise() {
-	this->xNoise = distribution(generator);
-	this->yNoise = distribution(generator);
-}
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 	if (this->isClosed()) {
@@ -44,8 +26,6 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 	}
 
 	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
-	this->ensureNotCollinear(new_vertex);
-
 	if (this->_vertices.empty()) {
 		this->_vertices.push_back(new_vertex);
 	} else {
@@ -64,8 +44,6 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(const Edge &edge, int x, int y) {
 	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
-	this->ensureNotCollinear(new_vertex);
-
 	auto iter = std::find(this->_vertices.begin(), this->_vertices.end(), edge.end);
 	this->_vertices.insert(iter, new_vertex);
 
@@ -134,7 +112,6 @@ void Diagram::removeVertex(const std::shared_ptr<Vertex> &vertex) {
 
 void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 	vertex->moveTo(x, y);
-	this->ensureNotCollinear(vertex);
 
 	std::shared_ptr<const Edge> changed1;
 	std::shared_ptr<const Edge> changed2;
@@ -234,33 +211,6 @@ void Diagram::removeEdge(const Edge &edge) {
 		} else if (edge == edges.back()) {
 			this->removeVertex(edge.end);
 		}
-	}
-}
-
-void Diagram::ensureNotCollinear(const std::shared_ptr<Vertex> &vertex) {
-	std::vector<std::shared_ptr<Vertex>> others;
-	for (const auto &v : this->_vertices) {
-		if (v != vertex) {
-			others.push_back(v);
-		}
-	}
-
-	const auto check = [&] {
-		const auto c = vertex->coords();
-		for (std::size_t i = 0; i < others.size(); ++i) {
-			const auto ci = others[i]->coords();
-			for (std::size_t j = i + 1; j < others.size(); ++j) {
-				const auto cj = others[j]->coords();
-				if (c.x * (ci.y - cj.y) + ci.x * (cj.y - c.y) + cj.x * (c.y - ci.y) == 0) {
-					return false;
-				}
-			}
-		}
-		return true;
-	};
-
-	while (!check()) {
-		vertex->renoise();
 	}
 }
 

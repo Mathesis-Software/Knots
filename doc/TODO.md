@@ -11,6 +11,7 @@
 * Multiple scratches in Seifert surfaces
 * Library window: artifacts on top of tab widget
 * Rare crash in 3d mode
+* Build config does not rebuild the main app automatically if a library has been changed
 
 ### Code structure
 

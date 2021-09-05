@@ -19,12 +19,25 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
+#include <fstream>
+
+#include <QtCore/QResource>
 #include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
 #include <QtGui/QPainter>
+#include <QtWidgets/QFileDialog>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QProxyStyle>
 
+#include <rapidjson/istreamwrapper.h>
+
+#include "DiagramWindow.h"
+#include "FileIconProvider.h"
+#include "KnotWindow.h"
 #include "KnotEditorApplication.h"
+#include "LibraryWindow.h"
 #include "StartWindow.h"
+#include "../ke/Util_rapidjson.h"
 
 namespace {
 
@@ -60,7 +73,7 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 
 	int count = 0;
 	for (int i = 1; i < argc; ++i) {
-		if (auto window = KE::Qt::StartWindow::openFile(argv[i])) {
+		if (auto window = KnotEditorApplication::openFile(argv[i])) {
 			window->raise();
 			count += 1;
 		}
@@ -69,9 +82,9 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 		QSettings settings;
 		for (const auto &name : settings.value("OpenWindows").toStringList()) {
 			if (name == "::LIBRARY::") {
-				KE::Qt::StartWindow::library()->raise();
+				KnotEditorApplication::library()->raise();
 				count += 1;
-			} else if (auto window = KE::Qt::StartWindow::openFile(name)) {
+			} else if (auto window = KnotEditorApplication::openFile(name)) {
 				window->raise();
 				count += 1;
 			}
@@ -79,7 +92,123 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 	}
 
 	if (count == 0) {
-		(new KE::Qt::StartWindow())->show();
+		(new StartWindow())->show();
+	}
+}
+
+void KnotEditorApplication::exitApplication() {
+	QStringList ids;
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
+			if (window->close()) {
+				const auto id = window->identifier();
+				if (!id.isNull()) {
+					ids.append(id);
+				}
+			} else {
+				return;
+			}
+		}
+	}
+
+	QSettings settings;
+	settings.setValue("OpenWindows", ids);
+	settings.sync();
+
+	qApp->quit();
+}
+
+QWidget *KnotEditorApplication::library() {
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
+			window->showNormal();
+			window->raise();
+			return window;
+		}
+	}
+
+	auto window = new LibraryWindow();
+	window->show();
+	return window;
+}
+
+QWidget *KnotEditorApplication::newDiagram() {
+	auto window = new DiagramWindow();
+	window->show();
+	return window;
+}
+
+namespace {
+
+QString getOpenFileNameEx() {
+	QSettings settings;
+	QString dir = settings.value("CustomFilesFolder").toString();
+	if (dir.isEmpty()) {
+		dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+	}
+	QFileDialog dialog(nullptr, "Open file", dir);
+	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
+	dialog.setIconProvider(FileIconProvider::instance());
+	dialog.setNameFilters({
+		"Knot Editor files (*.knt *.dgr)",
+		"Knot files only (*.knt)",
+		"Diagram files only (*.dgr)",
+		"Any files (*)"
+	});
+	if (dialog.exec() == QDialog::Accepted) {
+		settings.setValue("CustomFilesFolder", dialog.directory().path());
+		settings.sync();
+		return dialog.selectedUrls().value(0).toLocalFile();
+	}
+	return QString();
+}
+
+}
+
+QWidget *KnotEditorApplication::openFile() {
+	return openFile(getOpenFileNameEx());
+}
+
+QWidget *KnotEditorApplication::openFile(const QString &filename) {
+	if (filename.isEmpty()) {
+		return nullptr;
+	}
+
+	try {
+		rapidjson::Document doc;
+
+		if (filename.startsWith(":")) {
+			QResource resource(filename);
+			if (!resource.isValid() || resource.data() == nullptr || resource.size() == 0) {
+				throw std::runtime_error("Cannot read the resource content");
+			}
+			doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
+		} else {
+			std::ifstream is(filename.toStdString());
+			if (!is) {
+				throw std::runtime_error("Cannot read the file content");
+			}
+			rapidjson::IStreamWrapper wrapper(is);
+			doc.ParseStream(wrapper);
+			is.close();
+		}
+
+		Window *window = nullptr;
+		if (doc.IsNull()) {
+			throw std::runtime_error("The file is not in JSON format");
+		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
+			window = new DiagramWindow(doc, filename);
+		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
+			window = new KnotWindow(doc, filename);
+		} else {
+			throw std::runtime_error("The file does not represent a knot nor a diagram");
+		}
+
+		window->show();
+		return window;
+	} catch (const std::runtime_error &e) {
+		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
+		return nullptr;
 	}
 }
 

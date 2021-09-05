@@ -29,6 +29,12 @@ namespace KE::Qt {
 class KnotEditorApplication : public QApplication {
 
 public:
+	static QWidget *library();
+	static QWidget *newDiagram();
+	static QWidget *openFile();
+	static QWidget *openFile(const QString &filename);
+	static void exitApplication();
+
 	KnotEditorApplication(int &argc, char **argv);
 };
 

@@ -29,6 +29,7 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QListWidget>
 
+#include "KnotEditorApplication.h"
 #include "LibraryWindow.h"
 #include "../ke/Diagram.h"
 #include "../ke/Knot.h"
@@ -236,7 +237,7 @@ private:
 			return;
 		}
 		const DataItem *data = dynamic_cast<const DataItem*>(selected[0]);
-		BaseWindow::openFile(data->fullName);
+		KnotEditorApplication::openFile(data->fullName);
 	}
 };
 
@@ -279,7 +280,7 @@ QWidget *LibraryWindow::createList(const QString &suffix) {
 	});
 	QObject::connect(list, &QListWidget::itemClicked, [](QListWidgetItem *item) {
 		const DataItem *data = dynamic_cast<const DataItem*>(item);
-		BaseWindow::openFile(data->fullName);
+		KnotEditorApplication::openFile(data->fullName);
 	});
 	return list;
 }

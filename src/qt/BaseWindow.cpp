@@ -19,143 +19,15 @@
  * Author: Nikolay Pultsin <geometer@geometer.name>
  */
 
-#include <fstream>
-
-#include <QtCore/QResource>
 #include <QtCore/QSettings>
-#include <QtCore/QStandardPaths>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QMessageBox>
-
-#include <rapidjson/istreamwrapper.h>
 
 #include "AboutWindow.h"
-#include "DiagramWindow.h"
-#include "FileIconProvider.h"
-#include "KnotWindow.h"
-#include "LibraryWindow.h"
+#include "BaseWindow.h"
+#include "KnotEditorApplication.h"
 #include "Window.h"
-#include "../ke/Util_rapidjson.h"
 
 namespace KE::Qt {
-
-void BaseWindow::exitApplication() {
-	QStringList ids;
-	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
-			if (window->close()) {
-				const auto id = window->identifier();
-				if (!id.isNull()) {
-					ids.append(id);
-				}
-			} else {
-				return;
-			}
-		}
-	}
-
-	QSettings settings;
-	settings.setValue("OpenWindows", ids);
-	settings.sync();
-
-	qApp->quit();
-}
-
-namespace {
-
-QString getOpenFileNameEx() {
-	QSettings settings;
-	QString dir = settings.value("CustomFilesFolder").toString();
-	if (dir.isEmpty()) {
-		dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-	}
-	QFileDialog dialog(nullptr, "Open file", dir);
-	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
-	dialog.setIconProvider(Qt::FileIconProvider::instance());
-	dialog.setNameFilters({
-		"Knot Editor files (*.knt *.dgr)",
-		"Knot files only (*.knt)",
-		"Diagram files only (*.dgr)",
-		"Any files (*)"
-	});
-	if (dialog.exec() == QDialog::Accepted) {
-		settings.setValue("CustomFilesFolder", dialog.directory().path());
-		settings.sync();
-		return dialog.selectedUrls().value(0).toLocalFile();
-	}
-	return QString();
-}
-
-}
-
-QWidget *BaseWindow::library() {
-	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
-			window->showNormal();
-			window->raise();
-			return window;
-		}
-	}
-
-	auto window = new LibraryWindow();
-	window->show();
-	return window;
-}
-
-QWidget *BaseWindow::newDiagram() {
-	auto window = new DiagramWindow();
-	window->show();
-	return window;
-}
-
-QWidget *BaseWindow::openFile() {
-	return openFile(getOpenFileNameEx());
-}
-
-QWidget *BaseWindow::openFile(const QString &filename) {
-	if (filename.isEmpty()) {
-		return nullptr;
-	}
-
-	try {
-		rapidjson::Document doc;
-
-		if (filename.startsWith(":")) {
-			QResource resource(filename);
-			if (!resource.isValid() || resource.data() == nullptr || resource.size() == 0) {
-				throw std::runtime_error("Cannot read the resource content");
-			}
-			doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
-		} else {
-			std::ifstream is(filename.toStdString());
-			if (!is) {
-				throw std::runtime_error("Cannot read the file content");
-			}
-			rapidjson::IStreamWrapper wrapper(is);
-			doc.ParseStream(wrapper);
-			is.close();
-		}
-
-		Window *window = nullptr;
-		if (doc.IsNull()) {
-			throw std::runtime_error("The file is not in JSON format");
-		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
-			window = new DiagramWindow(doc, filename);
-		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
-			window = new KnotWindow(doc, filename);
-		} else {
-			throw std::runtime_error("The file does not represent a knot nor a diagram");
-		}
-
-		window->show();
-		return window;
-	} catch (const std::runtime_error &e) {
-		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
-		return nullptr;
-	}
-}
 
 BaseWindow::BaseWindow() {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
@@ -180,11 +52,11 @@ void BaseWindow::createFileMenu() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto library = fileMenu->addAction("Library", [] { Window::library(); });
+	auto library = fileMenu->addAction("Library", [] { KnotEditorApplication::library(); });
 	library->setShortcut(QKeySequence("Ctrl+L"));
-	auto newd = fileMenu->addAction("New diagram", [] { Window::newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [] { KnotEditorApplication::newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [] { Window::openFile(); });
+	auto open = fileMenu->addAction("Open…", [] { KnotEditorApplication::openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	if (window) {
@@ -195,11 +67,11 @@ void BaseWindow::createFileMenu() {
 		fileMenu->addAction("Rename…", window, &Window::rename);
 		fileMenu->addSeparator();
 	}
-	fileMenu->addAction("About", [] { Qt::AboutWindow::showAboutDialog(); });
+	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
 	fileMenu->addSeparator();
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
-	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
+	auto quit = fileMenu->addAction("Quit", [] { KnotEditorApplication::exitApplication(); });
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }
 

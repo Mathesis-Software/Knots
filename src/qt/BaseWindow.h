@@ -28,21 +28,16 @@ namespace KE::Qt {
 
 class BaseWindow : public QMainWindow {
 
-public:
-	static QWidget *library();
-	static QWidget *newDiagram();
-	static QWidget *openFile();
-	static QWidget *openFile(const QString &filename);
-	static void exitApplication();
-
 protected:
 	BaseWindow();
 	void restoreParameters(); 
 	void createFileMenu();
+	void closeEvent(QCloseEvent*) override;
+
+public:
 	virtual QString identifier() const {
 		return QString();
 	}
-	void closeEvent(QCloseEvent*) override;
 };
 
 }

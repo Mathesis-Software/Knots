@@ -2,6 +2,7 @@
 
 * Application icon
 * restore other subdir compilation
+* Tab and hotkeys do not work in QMessageDialog (e.g., saving file on exit)
 
 ### Bug fixing
 

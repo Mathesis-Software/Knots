@@ -41,6 +41,7 @@
 	<file>../../data/trefoil5.dgr</file>
 	<file>../../data/trefoil6.dgr</file>
 	<file>../../data/another_trefoil.dgr</file>
+	<file>../../data/conway.dgr</file>
 	<file>../../data/3_1.knt</file>
 	<file>../../data/4_1.knt</file>
 	<file>../../data/5_1.knt</file>
@@ -81,5 +82,6 @@
 	<file>../../data/17_1.knt</file>
 	<file>../../data/3_1#-3_1.knt</file>
 	<file>../../data/3_1#3_1.knt</file>
+	<file>../../data/conway.knt</file>
 </qresource>
 </RCC>

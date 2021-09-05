@@ -22,6 +22,7 @@
 
 * new diagram view (undoable) actions: center, scale
 * knot library: implement search
+* knot view: auto-scale to fit window size
 * knot library: save selected tab and positions in lists between runs
 * knot and diagram: store extra info, like description or keywords; use it for search in the library
 * recent documents list in the menu

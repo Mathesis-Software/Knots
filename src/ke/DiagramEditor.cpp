@@ -156,13 +156,13 @@ struct MoveVertexCommand : public DiagramEditor::Command {
 }
 
 void DiagramEditor::moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y, bool storeCommand) {
-	if (storeCommand) {
+	const bool makesChanges = this->currentDiagram->moveVertex(vertex, x, y);
+	if (storeCommand || makesChanges) {
 		this->addCommand(
 			std::make_shared<MoveVertexCommand>(indexOf(vertex, this->currentDiagram->vertices()), x, y),
 			false
 		);
 	}
-	this->currentDiagram->moveVertex(vertex, x, y);
 }
 
 namespace {

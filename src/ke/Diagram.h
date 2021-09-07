@@ -123,7 +123,8 @@ public:
 		std::shared_ptr<Vertex> addVertex(int x, int y);
 		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);
 		void removeVertex(const std::shared_ptr<Vertex> &vertex);
-		void moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
+		// returns true if some crossings were changed
+		bool moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
 
 		void removeEdge(const Edge &edge);
 

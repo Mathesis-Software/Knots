@@ -110,8 +110,10 @@ void Diagram::removeVertex(const std::shared_ptr<Vertex> &vertex) {
 	}
 }
 
-void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
+bool Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 	vertex->moveTo(x, y);
+
+	bool changesCrossings = false;
 
 	std::shared_ptr<const Edge> changed1;
 	std::shared_ptr<const Edge> changed2;
@@ -130,6 +132,7 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 		if (changed1) {
 			if (edge.intersects(*changed1)) {
 				if (!changed_crossing1) {
+					changesCrossings = true;
 					if (changed_crossing2 && changed_crossing2->up == edge) {
 						this->addCrossing(edge, *changed1);
 					} else {
@@ -137,12 +140,13 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 					}
 				}
 			} else {
-				this->removeCrossing(edge, *changed1);
+				changesCrossings |= this->removeCrossing(edge, *changed1);
 			}
 		}
 		if (changed2) {
 			if (edge.intersects(*changed2)) {
 				if (!changed_crossing2) {
+					changesCrossings = true;
 					if (changed_crossing1 && changed_crossing1->up == edge) {
 						this->addCrossing(edge, *changed2);
 					} else {
@@ -150,12 +154,14 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 					}
 				}
 			} else {
-				this->removeCrossing(edge, *changed2);
+				changesCrossings |= this->removeCrossing(edge, *changed2);
 			}
 		}
 	}
 
 	this->order();
+
+	return changesCrossings;
 }
 
 void Diagram::close() {

@@ -139,7 +139,8 @@ public:
 
 	private:
 		std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
-		void removeCrossing(const Edge &edge1, const Edge &edge2);
+		// returns true if the crossing has been removed
+		bool removeCrossing(const Edge &edge1, const Edge &edge2);
 		void order();
 
 private:

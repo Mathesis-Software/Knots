@@ -66,9 +66,22 @@ std::shared_ptr<Diagram::Crossing> Diagram::flipCrossing(Crossing &crs) {
 	return this->addCrossing(crs.down, crs.up);
 }
 
-void Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
-	edge1.start->crossings.remove(Crossing(edge2, edge1));
-	edge2.start->crossings.remove(Crossing(edge1, edge2));
+bool Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
+	auto &list1 = edge1.start->crossings;
+	const auto iter1 = std::find(list1.begin(), list1.end(), Crossing(edge2, edge1));
+	if (iter1 != list1.end()) {
+		list1.erase(iter1);
+		return true;
+	}
+
+	auto &list2 = edge2.start->crossings;
+	const auto iter2 = std::find(list2.begin(), list2.end(), Crossing(edge1, edge2));
+	if (iter2 != list2.end()) {
+		list2.erase(iter2);
+		return true;
+	}
+
+	return false;
 }
 
 std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const Edge &edge2) {

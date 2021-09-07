@@ -21,11 +21,19 @@
 namespace KE::TwoD {
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
+	std::size_t newIndex = 0;
+	for (const auto &v : this->_vertices) {
+		newIndex = std::max(newIndex, v->index + 1);
+	}
+	return this->addVertex(x, y, newIndex);
+}
+
+std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y, std::size_t index) {
 	if (this->isClosed()) {
 		return nullptr;
 	}
 
-	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
+	auto new_vertex = std::make_shared<Vertex>(x, y, index);
 	if (this->_vertices.empty()) {
 		this->_vertices.push_back(new_vertex);
 	} else {
@@ -43,7 +51,11 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 }
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(const Edge &edge, int x, int y) {
-	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
+	std::size_t newIndex = 0;
+	for (const auto &v : this->_vertices) {
+		newIndex = std::max(newIndex, v->index + 1);
+	}
+	auto new_vertex = std::make_shared<Vertex>(x, y, newIndex);
 	auto iter = std::find(this->_vertices.begin(), this->_vertices.end(), edge.end);
 	this->_vertices.insert(iter, new_vertex);
 

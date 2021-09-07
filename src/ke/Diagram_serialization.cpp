@@ -50,10 +50,10 @@ Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
 	}
 	for (rapidjson::SizeType i = 0; i < vertices.Size(); ++i) {
 		const auto &point = vertices[i];
-		if (!point.IsArray() || point.Size() != 2 || !point[0].IsInt() || !point[1].IsInt()) {
-			throw std::runtime_error("Each vertex must be an array of two integers");
+		if (!point.IsArray() || point.Size() != 3 || !point[0].IsInt() || !point[1].IsInt()) {
+			throw std::runtime_error("Each vertex must be an array of three integers");
 		}
-		this->addVertex(point[0].GetInt(), point[1].GetInt());
+		this->addVertex(point[1].GetInt(), point[2].GetInt(), point[0].GetInt());
 	}
 	if (first.HasMember("isClosed")) {
 		const auto &closed = first["isClosed"];
@@ -105,6 +105,7 @@ rapidjson::Document Diagram::serialize() const {
 		nums[vertex] = index;
 		index += 1;
 		rapidjson::Value point(rapidjson::kArrayType);
+		point.PushBack((int)vertex->index, doc.GetAllocator());
 		point.PushBack(vertex->_x, doc.GetAllocator());
 		point.PushBack(vertex->_y, doc.GetAllocator());
 		vertices.PushBack(point, doc.GetAllocator());

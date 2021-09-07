@@ -19,6 +19,7 @@
 
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <list>
 #include <map>
 #include <memory>
@@ -52,7 +53,10 @@ public:
 		int _x, _y;
 
 	public:
-		Vertex(int x, int y) : _x(x), _y(y) {}
+		const std::size_t index;
+
+	public:
+		Vertex(int x, int y, std::size_t index) : _x(x), _y(y), index(index) {}
 
 		void move(int dx, int dy) { this->_x += dx; this->_y += dy; }
 		void moveTo(int x, int y) { this->_x = x; this->_y = y; }
@@ -139,6 +143,7 @@ public:
 		std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
 	private:
+		std::shared_ptr<Vertex> addVertex(int x, int y, std::size_t index);
 		std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
 		// returns true if the crossing has been removed
 		bool removeCrossing(const Edge &edge1, const Edge &edge2);

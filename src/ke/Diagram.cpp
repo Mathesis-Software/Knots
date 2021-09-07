@@ -138,9 +138,9 @@ bool orientation(const std::shared_ptr<Diagram::Vertex> &v0, const std::shared_p
 		return true;
 	} else {
 		int count = 0;
-		count += v0 < v1 ? 1 : 0;
-		count += v0 < v2 ? 1 : 0;
-		count += v1 < v2 ? 1 : 0;
+		count += v0->index < v1->index ? 1 : 0;
+		count += v0->index < v2->index ? 1 : 0;
+		count += v1->index < v2->index ? 1 : 0;
 		return count % 2 == 0;
 	}
 }

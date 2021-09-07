@@ -12,6 +12,9 @@
 * Library window: artifacts on top of tab widget
 * Rare crash in 3d mode
 * Build config does not rebuild the main app automatically if a library has been changed
+* Diagram saving/restoring can flip a crossing: if the crossing is "at a vertex", the decision on which edge to use depends on an arbitrary choice that can be different from run to run.
+* Diagram editor undoing/redoing can flip a crossing: we do a sequence of vertex moving in the "real run", but only one move during redoing.
+* Diagram editor undoing/redoing can flip a crossing: adding a vertex twice creates objects on different addresses; as a result, we can have different resolutions of "the collinearity collision".
 
 ### Code structure
 

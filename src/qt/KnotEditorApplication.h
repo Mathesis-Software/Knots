@@ -34,6 +34,7 @@ private:
 
 public:
 	KnotEditorApplication(int &argc, char **argv);
+	bool event(QEvent *event) override;
 	void exitApplication();
 };
 

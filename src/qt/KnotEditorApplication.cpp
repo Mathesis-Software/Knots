@@ -19,6 +19,7 @@
 #include <QtCore/QResource>
 #include <QtCore/QSettings>
 #include <QtCore/QStandardPaths>
+#include <QtGui/QFileOpenEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QMessageBox>
@@ -188,6 +189,15 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 
 	if (count == 0) {
 		(new StartWindow())->show();
+	}
+}
+
+bool KnotEditorApplication::event(QEvent *event) {
+	if (event->type() == QEvent::FileOpen) {
+		const auto file = static_cast<QFileOpenEvent*>(event)->file();
+		return this->openFile(file) != nullptr;
+	} else {
+		return QApplication::event(event);
 	}
 }
 

@@ -4,6 +4,7 @@
 * restore other subdir compilation
 * Tab and hotkeys do not work in QMessageDialog (e.g., saving file on exit)
 * build installation package including qt framework
+* associate the app with extensions .dgr and .knt
 
 ### Bug fixing
 

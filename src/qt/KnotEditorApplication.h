@@ -23,19 +23,21 @@ namespace KE::Qt {
 
 class KnotEditorApplication : public QApplication {
 
-public:
-	static QWidget *library();
-	static QWidget *newDiagram();
-	static QWidget *openFile();
-	static QWidget *openFile(const QString &filename);
-
 private:
 	bool windowsListSaved;
 
 public:
 	KnotEditorApplication(int &argc, char **argv);
 	bool event(QEvent *event) override;
+
+	QWidget *library();
+	QWidget *newDiagram();
+	QWidget *openFile();
+	QWidget *openFile(const QString &filename);
 	void exitApplication();
+
+private:
+	void closeStartWindow();
 };
 
 }

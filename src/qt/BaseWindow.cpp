@@ -47,11 +47,11 @@ void BaseWindow::createFileMenu() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto library = fileMenu->addAction("Library", [] { KnotEditorApplication::library(); });
+	auto library = fileMenu->addAction("Library", [] { dynamic_cast<KnotEditorApplication*>(qApp)->library(); });
 	library->setShortcut(QKeySequence("Ctrl+L"));
-	auto newd = fileMenu->addAction("New diagram", [] { KnotEditorApplication::newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<KnotEditorApplication*>(qApp)->newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [] { KnotEditorApplication::openFile(); });
+	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<KnotEditorApplication*>(qApp)->openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	if (window) {

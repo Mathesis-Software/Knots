@@ -237,7 +237,7 @@ private:
 			return;
 		}
 		const DataItem *data = dynamic_cast<const DataItem*>(selected[0]);
-		KnotEditorApplication::openFile(data->fullName);
+		dynamic_cast<KnotEditorApplication*>(qApp)->openFile(data->fullName);
 	}
 };
 
@@ -297,7 +297,7 @@ QWidget *LibraryWindow::createList(const QString &suffix) {
 	});
 	QObject::connect(list, &QListWidget::itemClicked, [](QListWidgetItem *item) {
 		const DataItem *data = dynamic_cast<const DataItem*>(item);
-		KnotEditorApplication::openFile(data->fullName);
+		dynamic_cast<KnotEditorApplication*>(qApp)->openFile(data->fullName);
 	});
 	return list;
 }

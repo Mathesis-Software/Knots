@@ -35,7 +35,6 @@ QPushButton *createButton(StartWindow *start, const QString &title, std::functio
 			if (window) {
 				window->setGeometry(start->geometry());
 			}
-			start->close();
 		}
 	});
 	return button;
@@ -46,9 +45,9 @@ QPushButton *createButton(StartWindow *start, const QString &title, std::functio
 StartWindow::StartWindow() {
 	this->setCentralWidget(new QWidget);
 	auto layout = new QVBoxLayout(this->centralWidget());
-	layout->addWidget(createButton(this, "Create new diagram", &KnotEditorApplication::newDiagram));
-	layout->addWidget(createButton(this, "Browse the library", &KnotEditorApplication::library));
-	layout->addWidget(createButton(this, "Open your own file", [] { return KnotEditorApplication::openFile(); }));
+	layout->addWidget(createButton(this, "Create new diagram", [] { return dynamic_cast<KnotEditorApplication*>(qApp)->newDiagram(); }));
+	layout->addWidget(createButton(this, "Browse the library", [] { return dynamic_cast<KnotEditorApplication*>(qApp)->library(); }));
+	layout->addWidget(createButton(this, "Open your own file", [] { return dynamic_cast<KnotEditorApplication*>(qApp)->openFile(); }));
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);

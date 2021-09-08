@@ -7,7 +7,7 @@
 * restore other subdir compilation
 * Tab and hotkeys do not work in QMessageDialog (e.g., saving file on exit)
 * build installation package including qt framework
-* do not open old files (and especially StartWindow!) when open an associated file
+* (?) do not open old files when open an associated file
 
 ### Bug fixing
 

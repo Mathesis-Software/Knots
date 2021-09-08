@@ -57,6 +57,14 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 
 }
 
+void KnotEditorApplication::closeStartWindow() {
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<StartWindow*>(widget)) {
+			window->close();
+		}
+	}
+}
+
 QWidget *KnotEditorApplication::library() {
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
@@ -68,12 +76,14 @@ QWidget *KnotEditorApplication::library() {
 
 	auto window = new LibraryWindow();
 	window->show();
+	this->closeStartWindow();
 	return window;
 }
 
 QWidget *KnotEditorApplication::newDiagram() {
 	auto window = new DiagramWindow();
 	window->show();
+	this->closeStartWindow();
 	return window;
 }
 
@@ -144,6 +154,7 @@ QWidget *KnotEditorApplication::openFile(const QString &filename) {
 		}
 
 		window->show();
+		this->closeStartWindow();
 		return window;
 	} catch (const std::runtime_error &e) {
 		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
@@ -195,7 +206,10 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 bool KnotEditorApplication::event(QEvent *event) {
 	if (event->type() == QEvent::FileOpen) {
 		const auto file = static_cast<QFileOpenEvent*>(event)->file();
-		return this->openFile(file) != nullptr;
+		if (this->openFile(file) == nullptr) {
+			this->closeStartWindow();
+		}
+		return true;
 	} else {
 		return QApplication::event(event);
 	}

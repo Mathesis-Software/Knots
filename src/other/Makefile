@@ -40,3 +40,5 @@ distclean: clean
 
 clean:
 	@$(RM) $(TARGETS) *.o
+
+install:

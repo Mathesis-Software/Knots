@@ -32,3 +32,8 @@ HEADERS = *.h
 RESOURCES = *.qrc
 QMAKE_INFO_PLIST = Info.plist
 ICON = ../../images/trefoil.icns
+
+unix:!macx {
+	target.path = $$INSTALL_PREFIX/bin
+	INSTALLS += target
+}

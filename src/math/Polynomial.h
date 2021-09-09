@@ -63,7 +63,7 @@ public:
 
 	const Polynomial &operator *= (int num) {
 		if (num == 0) {
-			this->coefficients.empty();
+			this->coefficients.clear();
 			return *this;
 		}
 		std::transform(this->coefficients.begin(), this->coefficients.end(), this->coefficients.begin(), [num](int co) {return co * num;});

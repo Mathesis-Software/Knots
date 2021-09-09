@@ -17,6 +17,7 @@
 #ifndef __KE_MATH_POLYNOMIAL_H__
 #define __KE_MATH_POLYNOMIAL_H__
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 

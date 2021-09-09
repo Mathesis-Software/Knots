@@ -149,6 +149,7 @@ Polynomial poly(const Bridge &bridge) {
 	}
 
 	switch (role) {
+		default:
 		case LEFT_BEFORE:
 			return Polynomial::MINUS_T;
 		case RIGHT_BEFORE:

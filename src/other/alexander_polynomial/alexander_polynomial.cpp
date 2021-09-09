@@ -19,9 +19,9 @@
 
 #include <rapidjson/istreamwrapper.h>
 
-#include "../ke/Diagram.h"
-#include "../math/DiagramProperty.h"
-#include "../math/Polynomial.h"
+#include "../../ke/Diagram.h"
+#include "../../math/DiagramProperty.h"
+#include "../../math/Polynomial.h"
 
 using namespace KE::TwoD;
 

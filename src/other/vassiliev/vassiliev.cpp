@@ -16,20 +16,17 @@
 
 #include <iostream>
 #include <fstream>
-#include <list>
 
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include "../ke/Util_rapidjson.h"
-#include "../ke/Diagram.h"
-#include "../math/DiagramProperty.h"
-
-using namespace KE::TwoD;
+#include "../../ke/Util_rapidjson.h"
+#include "../../ke/KnotWrapper.h"
+#include "../../math/computables.h"
 
 int main(int argc, const char **argv) {
 	if (argc != 2) {
-		std::cerr << "Usage:\n\t" << argv[0] << " <file.dgr>\n";
+		std::cerr << "Usage:\n\t" << argv[0] << " <file.knt>\n";
 		return 1;
 	}
 
@@ -38,12 +35,11 @@ int main(int argc, const char **argv) {
 	rapidjson::IStreamWrapper wrapper(is);
 	doc.ParseStream(wrapper);
 	is.close();
-	Diagram diagram(doc);
-
-	for (const auto index : Math::DTCode().value(diagram)) {
-		std::cout << index << " ";
+	KE::ThreeD::KnotWrapper knot(doc);
+	for (std::size_t order = 1; order < 10; ++order) {
+		KE::ThreeD::Math::VassilievInvariant invariant(knot, order);
+		std::cout << invariant.name << ": " << invariant.value() << "\n";
 	}
-	std::cout << "\n";
 
 	return 0;
 }

@@ -4,7 +4,6 @@
 * file type icons
 * file type association: check json structure?
 * system file previews
-* restore other subdir compilation
 * Tab and hotkeys do not work in QMessageDialog (e.g., saving file on exit)
 * build installation package including qt framework
 * (?) do not open old files when open an associated file

@@ -22,9 +22,9 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "../ke/Util_rapidjson.h"
-#include "../ke/DiagramEditor.h"
-#include "../ke/KnotWrapper.h"
+#include "../../ke/Util_rapidjson.h"
+#include "../../ke/DiagramEditor.h"
+#include "../../ke/KnotWrapper.h"
 
 void convert(const std::string &filename) {
 	rapidjson::Document doc;

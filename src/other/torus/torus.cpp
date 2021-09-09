@@ -23,7 +23,7 @@
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include "../ke/Knot.h"
+#include "../../ke/Knot.h"
 
 void print_usage(const std::string argv0) {
 	std::cerr << "usage:\n\t" << argv0 << " <number of points> <meredian number> <longitude number>\n";

@@ -18,4 +18,4 @@ torus: torus.cpp ../ke/libke.a
 	@echo ' OK'
 
 clean:
-	@$(RM) vassiliev converter
+	@$(RM) vassiliev converter torus

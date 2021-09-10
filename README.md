@@ -4,7 +4,7 @@
 
 Originally written in 199x. One of my first programming projects.
 
-Partially refurbished in July-September 2021. Special thanks to [@temper8]( https://github.com/temper8 ) for OpenGL smoothing solution.
+Refurbished in July-September 2021. Special thanks to [@temper8]( https://github.com/temper8 ) for OpenGL smoothing solution.
 
 Written in C++/Qt6, tested on Linux (Ubuntu 20.04) + Qt 6.1.3, and MacOSX (Monterey 12.0 beta, Intel) + Qt 6.1.3.
 

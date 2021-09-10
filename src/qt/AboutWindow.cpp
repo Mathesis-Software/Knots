@@ -54,7 +54,7 @@ AboutWindow::AboutWindow() {
 	QFont fnt("Helvetica", 14);
 	text->setFont(fnt);
 	text->setAlignment(::Qt::AlignCenter);
-	text->setText(QString("Knot Editor\nversion ") + VERSION);
+	text->setText(QString("Knot Editor\n") + VERSION);
 
 	auto close = new QAction();
 	close->setShortcut(QKeySequence("Ctrl+W"));

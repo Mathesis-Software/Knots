@@ -92,4 +92,7 @@ After successful build the app is in src/qt folder. Open the folder in Finder an
 ```
 before installation.
 
-![A screenshot](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-08-17.png?raw=true)
+## Screenshots
+
+![Torus 5x2 knot, from a diagram to a smooth image](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-09-10.png?raw=true)
+![Knot library](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-09-10-library.png?raw=true)

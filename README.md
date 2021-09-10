@@ -65,7 +65,7 @@ You can build it from the sources, as described below. Alternatively, you can
 
 #### Build dependencies
 
-C++ compiler clang, Qt6, rapidjson.
+Clang C++ compiler, ccache, Qt6, rapidjson.
 
 To install rapidjson use:
 ```

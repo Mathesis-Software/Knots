@@ -26,15 +26,13 @@ class BaseWindow : public QMainWindow {
 protected:
 	BaseWindow();
 	void restoreParameters(); 
+	void createFileMenu();
 	void closeEvent(QCloseEvent*) override;
 
 public:
 	virtual QString identifier() const {
 		return QString();
 	}
-
-private:
-	void createFileMenu();
 };
 
 }

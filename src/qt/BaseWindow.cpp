@@ -27,7 +27,6 @@ namespace KE::Qt {
 BaseWindow::BaseWindow() {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
-	this->createFileMenu();
 }
 
 void BaseWindow::restoreParameters() {

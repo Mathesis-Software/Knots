@@ -35,6 +35,8 @@ Window::Window(const QString &filename) : _filename(filename) {
 	this->toolbar->setContextMenuPolicy(::Qt::PreventContextMenu);
 	addToolBar(this->toolbar);
 
+	this->createFileMenu();
+
 	this->toolbar->show();
 	statusBar()->setVisible(true);
 	this->resize(508, 594);

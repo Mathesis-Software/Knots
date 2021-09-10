@@ -51,6 +51,8 @@ StartWindow::StartWindow() {
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);
+
+	this->createFileMenu();
 }
 
 }

@@ -269,6 +269,7 @@ LibraryWindow::LibraryWindow() {
 	setWindowTitle("Knot Library");
 	this->resize(780, 500);
 
+	this->createFileMenu();
 	this->restoreParameters();
 }
 

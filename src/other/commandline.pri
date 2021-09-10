@@ -5,7 +5,10 @@ QT -= core gui
 TEMPLATE = app
 
 CONFIG -= qt
-config += console
+macx {
+	CONFIG -= app_bundle
+}
+CONFIG += console
 
 QMAKE_LIBDIR += ../../ke ../../math
 LIBS += -lke -lmath

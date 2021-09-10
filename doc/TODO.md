@@ -1,20 +1,16 @@
 ### Mac specific
 
-* Application icon
-* file type icons
 * file type association: check json structure?
 * system file previews
 * Tab and hotkeys do not work in QMessageDialog (e.g., saving file on exit)
-* build installation package including qt framework
-* (?) do not open old files when open an associated file
+* automatically build an installation package including Qt frameworks
 
 ### Bug fixing
 
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
-* Library window: artifacts on top of tab widget
 * Rare crash in 3d mode
-* Build config does not rebuild the main app automatically if a library has been changed
+* Build config does not rebuild the main app automatically if a library file has been changed
 
 ### Code structure
 

@@ -24,10 +24,25 @@
 			<key>CFBundleTypeExtensions</key>
 			<array>
 				<string>dgr</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Diagram</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_dgr.icns</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>knt</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Knot</string>
+			<key>CFBundleTypeIconFile</key>
+			<string>file_knt.icns</string>
 		</dict>
 	</array>
 </dict>

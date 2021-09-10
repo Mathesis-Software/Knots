@@ -33,6 +33,9 @@ RESOURCES = *.qrc
 
 macx {
 	QMAKE_INFO_PLIST = Info.plist
+	icons.files = ../../images/file_knt.icns ../../images/file_dgr.icns
+	icons.path = Contents/Resources
+	QMAKE_BUNDLE_DATA += icons
 	ICON = ../../images/trefoil.icns
 }
 

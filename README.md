@@ -32,7 +32,7 @@ To install build dependencies on Ubuntu 20.04:
 sudo apt install g++ make ccache libgl-dev rapidjson-dev
 ```
 
-Qt6 is available from [the Qt site](https//www.qt.io/download). KnotEditor is truly open-source, so you free open-source Qt works for this app.
+Qt6 is available from [the Qt site](https//www.qt.io/download). KnotEditor is truly open-source, so feel free to use the open-source Qt edition for this app.
 
 #### To build
 ```
@@ -72,7 +72,7 @@ To install rapidjson use:
 brew install rapidjson
 ```
 
-Qt6 is available from [the Qt site](https//www.qt.io/download). KnotEditor is truly open-source, so you free open-source Qt works for this app.
+Qt6 is available from [the Qt site](https//www.qt.io/download). KnotEditor is truly open-source, so feel free to use the open-source Qt edition for this app.
 
 #### To build
 ```
@@ -86,7 +86,7 @@ make
 
 #### To install
 
-After successful build the app is in src/qt folder. Open the folder in Finder and drag-n-drop the app to the Applications folder. Please note that Qt frameworks are not included in the app. If you plan to delete Qt installation from your Mac, run
+After a successful build, the app is in ```src/qt``` folder. Open the folder in Finder and drag-n-drop the app to the Applications folder. Please note that Qt frameworks are not included in the app. If you plan to delete Qt installation from your Mac, run
 ```
 /<your-path-to-qt6>/<version>/macos/bin/macdeployqt src/qt/KnotEditor.app
 ```

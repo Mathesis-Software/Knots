@@ -32,7 +32,7 @@ To install build dependencies on Ubuntu 20.04:
 sudo apt install g++ make ccache libgl-dev rapidjson-dev
 ```
 
-Qt6 is available from [the Qt site](https//www.qt.io/download). KnotEditor is truly open-source, so you free open-source Qt works for this app.
+Qt6 is available from [the Qt site](https//www.qt.io/download). Qt6 is available from the Qt site. KnotEditor is truly open-source, so feel free to use the open-source Qt edition for this app.
 
 #### To build
 ```
@@ -72,7 +72,7 @@ To install rapidjson use:
 brew install rapidjson
 ```
 
-Qt6 is available from [the Qt site](https//www.qt.io/download). KnotEditor is truly open-source, so you free open-source Qt works for this app.
+Qt6 is available from [the Qt site](https//www.qt.io/download). Qt6 is available from the Qt site. KnotEditor is truly open-source, so feel free to use the open-source Qt edition for this app.
 
 #### To build
 ```

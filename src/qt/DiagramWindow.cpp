@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <iostream>
+
 #include <QtGui/QPainter>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMenuBar>
@@ -28,7 +30,7 @@
 
 namespace KE::Qt {
 
-DiagramWindow::DiagramWindow(const rapidjson::Document &doc) {
+DiagramWindow::DiagramWindow(const rapidjson::Document &doc, const QString &filename) : Window(filename) {
 	this->init(new DiagramWidget(this, doc));
 }
 
@@ -49,17 +51,22 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	});
 	this->connect(widget, &DiagramWidget::actionsUpdated, [this] { emit this->contentChanged(); });
 
-	actionsMenu = this->menuBar()->addMenu("Actions");
+	QMenu *diagramMenu = this->menuBar()->addMenu("Diagram");
 	this->registerAction(
-		actionsMenu->addAction("Convert", [this] { this->convert(); }),
+		diagramMenu->addAction("Properties…", [this] { this->showPropertiesDialog(); }),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
+	);
+	diagramMenu->addSeparator();
+	this->registerAction(
+		diagramMenu->addAction("Convert to knot", [this] { this->convert(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("Simplify", [this] { this->simplify(); }),
+		diagramMenu->addAction("Simplify", [this] { this->simplify(); }),
 		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); }
 	);
 	this->registerAction(
-		actionsMenu->addAction("Clear", [this] { this->clear(); }),
+		diagramMenu->addAction("Clear", [this] { this->clear(); }),
 		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); }
 	);
 
@@ -69,6 +76,14 @@ void DiagramWindow::init(DiagramWidget *widget) {
 			const bool enabled = diagram.isClosed();
 			action.setEnabled(enabled);
 			action.setToolTip(enabled ? "Converting to 3D knot" : "Converting to knot disabled until the diagram is closed.");
+		}
+	);
+	this->registerAction(
+		addToolbarAction("math.svg", "Show properties", [this] { this->showPropertiesDialog(); }),
+		[&diagram](QAction &action) {
+			const bool enabled = diagram.isClosed();
+			action.setEnabled(enabled);
+			action.setToolTip(enabled ? "Diagram properties" : "The properties are not applicable until the diagram is closed.");
 		}
 	);
 
@@ -109,6 +124,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	auto undo = this->registerAction(
 		this->addToolbarAction("undo.svg", "Undo", [this, widget] {
 			widget->diagram.undo();
+			emit widget->diagramChanged();
 			widget->repaint();
 			widget->updateEditorMode();
 			emit this->contentChanged();
@@ -119,6 +135,7 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	auto redo = this->registerAction(
 		this->addToolbarAction("redo.svg", "Redo", [this, widget] {
 			widget->diagram.redo();
+			emit widget->diagramChanged();
 			widget->repaint();
 			widget->updateEditorMode();
 			emit this->contentChanged();
@@ -131,17 +148,11 @@ void DiagramWindow::init(DiagramWidget *widget) {
 	pixmap.setDevicePixelRatio(this->devicePixelRatio());
 	this->setWindowIcon(pixmap);
 
-	complete();
-
 	QObject::connect(this, &Window::contentChanged, [this] {
 		this->setWindowTitle(this->diagramWidget()->diagram.caption().c_str());
 	});
 
 	emit this->contentChanged();
-}
-
-DiagramWindow::~DiagramWindow() {
-	delete actionsMenu;
 }
 
 void DiagramWindow::setMode(DiagramWidget::EditorMode mode) {
@@ -177,6 +188,7 @@ void DiagramWindow::saveIt(std::ostream &os) {
 
 void DiagramWindow::simplify() {
 	if (this->diagramWidget()->diagram.simplify()) {
+		emit this->diagramWidget()->diagramChanged();
 		this->centralWidget()->repaint();
 	}
 }

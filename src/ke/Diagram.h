@@ -19,7 +19,9 @@
 
 #include <cmath>
 #include <functional>
+#include <limits>
 #include <list>
+#include <map>
 #include <memory>
 #include <string>
 
@@ -51,13 +53,14 @@ public:
 		int _x, _y;
 
 	public:
-		Vertex(int x, int y) : _x(x), _y(y) {}
+		const std::size_t index;
+
+	public:
+		Vertex(int x, int y, std::size_t index) : _x(x), _y(y), index(index) {}
 
 		void move(int dx, int dy) { this->_x += dx; this->_y += dy; }
 		void moveTo(int x, int y) { this->_x = x; this->_y = y; }
 
-		int x() const { return this->_x; }
-		int y() const { return this->_y; }
 		FloatPoint coords() const { return FloatPoint(this->_x, this->_y); }
 
 	private:
@@ -66,19 +69,24 @@ public:
 	};
 
 	struct Edge {
-		friend class Diagram;
+
+	friend class Diagram;
 
 		const std::shared_ptr<Vertex> start;
 		const std::shared_ptr<Vertex> end;
 
 		Edge(const std::shared_ptr<Vertex> &start, const std::shared_ptr<Vertex> &end) : start(start), end(end) {
 		}
-		int dx() const { return this->end->x() - this->start->x(); }
-		int dy() const { return this->end->y() - this->start->y(); }
+		float dx() const { return this->end->coords().x - this->start->coords().x; }
+		float dy() const { return this->end->coords().y - this->start->coords().y; }
 		bool intersects(const Edge &edge) const;
-		void orderCrossings(std::list<Crossing> &crossings) const;
 
 		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
+		// for using in maps
+		bool operator < (const Edge &edge) const { return this->start < edge.start || (this->start == edge.start && this->end < edge.end); }
+
+	private:
+		void orderCrossings(std::list<Crossing> &crossings) const;
 	};
 
 	struct Crossing {
@@ -89,6 +97,8 @@ public:
 		std::shared_ptr<FloatPoint> coords() const;
 
 		bool operator == (const Crossing &crs) const { return this->up == crs.up && this->down == crs.down; }
+		// for using in maps
+		bool operator < (const Crossing &crs) const { return this->up < crs.up || (this->up == crs.up && this->down < crs.down); }
 	};
 
 	public:
@@ -110,13 +120,15 @@ public:
 
 		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
 		std::list<Edge> edges() const;
-		const std::list<Crossing> &crossings(const Edge &edge) const { return edge.start->crossings; }
+		const std::list<Crossing> &underCrossings(const Edge &edge) const { return edge.start->crossings; }
+		std::map<Diagram::Edge,std::list<Diagram::Crossing>> allCrossings() const;
 		bool hasCrossings() const;
 
 		std::shared_ptr<Vertex> addVertex(int x, int y);
 		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);
 		void removeVertex(const std::shared_ptr<Vertex> &vertex);
-		void moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
+		// returns true if some crossings were changed
+		bool moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
 
 		void removeEdge(const Edge &edge);
 
@@ -131,8 +143,10 @@ public:
 		std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
 	private:
+		std::shared_ptr<Vertex> addVertex(int x, int y, std::size_t index);
 		std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
-		void removeCrossing(const Edge &edge1, const Edge &edge2);
+		// returns true if the crossing has been removed
+		bool removeCrossing(const Edge &edge1, const Edge &edge2);
 		void order();
 
 private:

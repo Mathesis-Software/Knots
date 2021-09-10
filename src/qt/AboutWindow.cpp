@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-#include <QtWidgets/QAction>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDesktopWidget>
+#include <QtGui/QAction>
+#include <QtGui/QScreen>
 #include <QtWidgets/QLabel>
 
 #include "AboutWindow.h"
-#include "Window.h"
+#include "KnotEditorApplication.h"
 
 namespace KE::Qt {
 
 void AboutWindow::showAboutDialog() {
-	(new AboutWindow())->showMe();
+	auto about = new AboutWindow();
+	const QRect screenGeometry = about->screen()->geometry();
+	const int x = (screenGeometry.width() - 380) / 2;
+	const int y = (screenGeometry.height() - 180) / 2;
+	about->move(x, y);
+	about->show();
 }
 
 AboutWindow::AboutWindow() {
@@ -34,7 +38,7 @@ AboutWindow::AboutWindow() {
 	this->setWindowModality(::Qt::ApplicationModal);
 	setFixedSize(380, 180);
 	QPalette pal = this->palette();
-	pal.setColor(QPalette::Background, ::Qt::white);
+	pal.setColor(QPalette::Window, ::Qt::white);
 	this->setAutoFillBackground(true);
 	this->setPalette(pal);
 
@@ -50,7 +54,7 @@ AboutWindow::AboutWindow() {
 	QFont fnt("Helvetica", 14);
 	text->setFont(fnt);
 	text->setAlignment(::Qt::AlignCenter);
-	text->setText(QString("Knot Editor\nversion ") + VERSION);
+	text->setText(QString("Knot Editor\n") + VERSION);
 
 	auto close = new QAction();
 	close->setShortcut(QKeySequence("Ctrl+W"));
@@ -61,17 +65,9 @@ AboutWindow::AboutWindow() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 	QObject::connect(quit, &QAction::triggered, [this] {
 		this->close();
-		Window::exitApplication();
+		dynamic_cast<KnotEditorApplication*>(qApp)->exitApplication();
 	});
 	this->addAction(quit);
-}
-
-void AboutWindow::showMe() {
-	const QRect screenGeometry = QApplication::desktop()->screenGeometry();
-	const int x = (screenGeometry.width() - 380) / 2;
-	const int y = (screenGeometry.height() - 180) / 2;
-	this->move(x, y);
-	this->show();
 }
 
 void AboutWindow::mousePressEvent(QMouseEvent*) {

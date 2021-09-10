@@ -24,15 +24,24 @@ Surface::~Surface() {
 }
 
 bool Surface::isObsolete() const {
-	return this->points.empty();
+	return this->_points.empty();
 }
 
 void Surface::destroy() {
-	this->points.clear();
+	this->_points.clear();
 }
 
 void Surface::addpoint(const ThreeD::Point &vertex, const ThreeD::Vector &normal) const {
-	this->points.push_back(SurfacePoint(vertex.x, vertex.y, vertex.z, normal.x, normal.y, normal.z));
+	this->_points.push_back(SurfacePoint(vertex.x, vertex.y, vertex.z, normal.x, normal.y, normal.z));
+}
+
+void Surface::prepare() const {
+	if (this->isObsolete()) {
+		this->_points.clear();
+	}
+	if (this->_points.empty()) {
+		this->calculate();
+	}
 }
 
 }

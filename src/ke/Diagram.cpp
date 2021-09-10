@@ -78,7 +78,7 @@ std::shared_ptr<Diagram::Crossing> Diagram::findCrossing(const FloatPoint &pt, f
 	std::shared_ptr<Crossing> found;
 
 	for (const auto &edge : this->edges()) {
-		for (const auto &crs : this->crossings(edge)) {
+		for (const auto &crs : this->underCrossings(edge)) {
 			const auto coords = crs.coords();
 			if (!coords) {
 				continue;
@@ -107,13 +107,15 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(const FloatPoint &pt, float max
 			continue;
 		}
 
-		if (((pt.x - edge.start->x()) * dx + (pt.y - edge.start->y()) * dy < 0) ||
-				((pt.x - edge.end->x()) * dx + (pt.y - edge.end->y()) * dy > 0)) {
+		const auto start = edge.start->coords();
+		const auto end = edge.end->coords();
+		if ((pt.x - start.x) * dx + (pt.y - start.y) * dy < 0 ||
+				(pt.x - end.x) * dx + (pt.y - end.y) * dy > 0) {
 			// pt is outside of the perpendicular strip built on the edge segment
 			continue;
 		}
 
-		const float distance = fabs((pt.x - edge.start->x()) * dy - (pt.y - edge.start->y()) * dx) / hypotf(dx, dy);
+		const float distance = fabs((pt.x - start.x) * dy - (pt.y - start.y) * dx) / hypotf(dx, dy);
 		if (distance < best && distance <= maxDistance) {
 			best = distance;
 			found = std::make_shared<Edge>(edge);
@@ -124,25 +126,56 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(const FloatPoint &pt, float max
 }
 
 namespace {
-	int orientation(const Diagram::Vertex &v0, const Diagram::Vertex &v1, const Diagram::Vertex &v2) {
-		const int area = v0.x() * (v1.y() - v2.y()) + v1.x() * (v2.y() - v0.y()) + v2.x() * (v0.y() - v1.y());
-		if (area < 0) {
-			return -1;
-		} else if (area > 0) {
-			return 1;
-		} else {
-			return 0;
-		}
+
+bool orientation(const std::shared_ptr<Diagram::Vertex> &v0, const std::shared_ptr<Diagram::Vertex> &v1, const std::shared_ptr<Diagram::Vertex> &v2) {
+	const auto pt0 = v0->coords();
+	const auto pt1 = v1->coords();
+	const auto pt2 = v2->coords();
+	const float area = pt0.x * (pt1.y - pt2.y) + pt1.x * (pt2.y - pt0.y) + pt2.x * (pt0.y - pt1.y);
+	if (area < 0) {
+		return false;
+	} else if (area > 0) {
+		return true;
+	} else {
+		int count = 0;
+		count += v0->index < v1->index ? 1 : 0;
+		count += v0->index < v2->index ? 1 : 0;
+		count += v1->index < v2->index ? 1 : 0;
+		return count % 2 == 0;
 	}
 }
 
+}
+
 bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
-	const int ori = orientation(*this->start, *edge.start, *this->end);
+	if (this->start == edge.start ||
+			this->start == edge.end ||
+			this->end == edge.start ||
+			this->end == edge.end) {
+		return false;
+	}
+	const bool ori = orientation(this->start, edge.start, this->end);
 	return
-		ori != 0 &&
-		ori == orientation(*edge.start, *this->end, *edge.end) &&
-		ori == orientation(*this->end, *edge.end, *this->start) &&
-		ori == orientation(*edge.end, *this->start, *edge.start);
+		ori == orientation(edge.start, this->end, edge.end) &&
+		ori == orientation(this->end, edge.end, this->start) &&
+		ori == orientation(edge.end, this->start, edge.start);
+}
+
+std::map<Diagram::Edge,std::list<Diagram::Crossing>> Diagram::allCrossings() const {
+	const auto edges = this->edges();
+	std::map<Diagram::Edge,std::list<Diagram::Crossing>> map;
+	for (const auto &edge : edges) {
+		const auto crossings = this->underCrossings(edge);
+		auto &list = map[edge];
+		list.insert(list.end(), crossings.begin(), crossings.end());
+		for (const auto &crs : crossings) {
+			map[crs.up].push_back(crs);
+		}
+	}
+	for (const auto &edge : edges) {
+		edge.orderCrossings(map[edge]);
+	}
+	return map;
 }
 
 }

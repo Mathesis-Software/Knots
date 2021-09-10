@@ -27,7 +27,7 @@
 
 namespace KE::Qt {
 
-KnotWindow::KnotWindow(const rapidjson::Document &doc) {
+KnotWindow::KnotWindow(const rapidjson::Document &doc, const QString &filename) : Window(filename) {
 	this->init(new KnotWidget(this, doc));
 }
 
@@ -51,13 +51,12 @@ void KnotWindow::init(KnotWidget *widget) {
 	});
 
 	initMenu();
-	complete();
 
 	emit this->contentChanged();
 }
 
 void KnotWindow::initMenu() {
-	knotMenu = menuBar()->addMenu("Knot");
+	QMenu *knotMenu = menuBar()->addMenu("Knot");
 	knotMenu->addAction("Computables…", [this] { this->showMathDialog(); });
 	knotMenu->addSeparator();
 	this->registerAction(
@@ -92,10 +91,6 @@ void KnotWindow::initMenu() {
 		addToolbarAction("minus.svg", "Shift Seifert surface back along the gradient", [this] { this->knotWidget()->moveSeifertBasePoint(-0.02); }),
 		[this](QAction &action) { action.setEnabled(this->knotWidget()->knot.isSeifertSurfaceVisible()); }
 	);
-}
-
-KnotWindow::~KnotWindow() {
-	delete knotMenu;
 }
 
 void KnotWindow::closeEvent(QCloseEvent *event) {

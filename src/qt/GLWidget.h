@@ -20,7 +20,7 @@
 #include <list>
 #include <memory>
 
-#include <QtWidgets/QOpenGLWidget>
+#include <QtOpenGLWidgets/QOpenGLWidget>
 
 #include "../ke/Surface.h"
 
@@ -57,6 +57,8 @@ private:
 
 	void rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers);
 	void selectMouseCursor();
+
+	void paintSurface(const GL::Surface &surface);
 
 	const double* currentMatrix() const;
 	const double* inverseMatrix() const;

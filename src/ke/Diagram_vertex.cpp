@@ -21,11 +21,19 @@
 namespace KE::TwoD {
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
+	std::size_t newIndex = 0;
+	for (const auto &v : this->_vertices) {
+		newIndex = std::max(newIndex, v->index + 1);
+	}
+	return this->addVertex(x, y, newIndex);
+}
+
+std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y, std::size_t index) {
 	if (this->isClosed()) {
 		return nullptr;
 	}
 
-	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
+	auto new_vertex = std::make_shared<Vertex>(x, y, index);
 	if (this->_vertices.empty()) {
 		this->_vertices.push_back(new_vertex);
 	} else {
@@ -43,7 +51,11 @@ std::shared_ptr<Diagram::Vertex> Diagram::addVertex(int x, int y) {
 }
 
 std::shared_ptr<Diagram::Vertex> Diagram::addVertex(const Edge &edge, int x, int y) {
-	std::shared_ptr<Vertex> new_vertex(new Vertex(x, y));
+	std::size_t newIndex = 0;
+	for (const auto &v : this->_vertices) {
+		newIndex = std::max(newIndex, v->index + 1);
+	}
+	auto new_vertex = std::make_shared<Vertex>(x, y, newIndex);
 	auto iter = std::find(this->_vertices.begin(), this->_vertices.end(), edge.end);
 	this->_vertices.insert(iter, new_vertex);
 
@@ -110,8 +122,10 @@ void Diagram::removeVertex(const std::shared_ptr<Vertex> &vertex) {
 	}
 }
 
-void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
+bool Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 	vertex->moveTo(x, y);
+
+	bool changesCrossings = false;
 
 	std::shared_ptr<const Edge> changed1;
 	std::shared_ptr<const Edge> changed2;
@@ -130,6 +144,7 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 		if (changed1) {
 			if (edge.intersects(*changed1)) {
 				if (!changed_crossing1) {
+					changesCrossings = true;
 					if (changed_crossing2 && changed_crossing2->up == edge) {
 						this->addCrossing(edge, *changed1);
 					} else {
@@ -137,12 +152,13 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 					}
 				}
 			} else {
-				this->removeCrossing(edge, *changed1);
+				changesCrossings |= this->removeCrossing(edge, *changed1);
 			}
 		}
 		if (changed2) {
 			if (edge.intersects(*changed2)) {
 				if (!changed_crossing2) {
+					changesCrossings = true;
 					if (changed_crossing1 && changed_crossing1->up == edge) {
 						this->addCrossing(edge, *changed2);
 					} else {
@@ -150,12 +166,14 @@ void Diagram::moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y) {
 					}
 				}
 			} else {
-				this->removeCrossing(edge, *changed2);
+				changesCrossings |= this->removeCrossing(edge, *changed2);
 			}
 		}
 	}
 
 	this->order();
+
+	return changesCrossings;
 }
 
 void Diagram::close() {

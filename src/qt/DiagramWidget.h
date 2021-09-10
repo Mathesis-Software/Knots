@@ -86,6 +86,7 @@ public:
 signals:
 	void setActionTip(const QString &tip);
 	void actionsUpdated();
+	void diagramChanged();
 };
 
 }

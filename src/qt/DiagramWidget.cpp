@@ -66,6 +66,7 @@ void DiagramWidget::updateEditorMode() {
 
 void DiagramWidget::clear() {
 	this->diagram.clear();
+	emit diagramChanged();
 	this->repaint();
 	this->updateEditorMode();
 }
@@ -111,18 +112,20 @@ void DiagramWidget::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge,
 		}
 	}
 
-	float deltaX = edge.end->x() - edge.start->x();
-	float deltaY = edge.end->y() - edge.start->y();
+	const auto start = edge.start->coords();
+	const auto end = edge.end->coords();
+	float deltaX = end.x - start.x;
+	float deltaY = end.y - start.y;
 	float hyp = hypotf(deltaX, deltaY);
 
 	deltaX = 10 * deltaX / hyp;
 	deltaY = 10 * deltaY / hyp;
 
-	float x0 = edge.start->x(),
-				y0 = edge.start->y(),
+	float x0 = start.x,
+				y0 = start.y,
 				x1, y1;
 
-	for (const auto &crs : this->diagram.crossings(edge)) {
+	for (const auto &crs : this->diagram.underCrossings(edge)) {
 		auto coords = crs.coords();
 		if (!coords) {
 			continue;
@@ -138,8 +141,8 @@ void DiagramWidget::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge,
 		y0 = coords->y + deltaY;
 	}
 
-	x1 = edge.end->x();
-	y1 = edge.end->y();
+	x1 = end.x;
+	y1 = end.y;
 
 	if ((x1 - x0) * deltaX + (y1 - y0) * deltaY > 0) {
 		painter.drawLine(QPointF(x0, y0), QPointF(x1, y1));
@@ -207,11 +210,13 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 			auto fakeVertex = this->fakeVertex;
 			if (fakeVertex) {
 				this->setFakeVertex(nullptr);
-				this->captureVertex(this->diagram.addVertex(fakeVertex->x(), fakeVertex->y()), true);
+				const auto coords = fakeVertex->coords();
+				this->captureVertex(this->diagram.addVertex(coords.x, coords.y), true);
 				if (event->button() == ::Qt::RightButton) {
 					this->diagram.close();
 					this->updateEditorMode();
 				}
+				emit diagramChanged();
 			}
 			break;
 		}
@@ -227,24 +232,28 @@ void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 							this->diagram.removeVertex(this->capturedVertex);
 							this->captureVertex(nullptr);
 							this->updateEditorMode();
+							emit diagramChanged();
 						}
 						break;
 				}
 			} else if (this->capturedCrossing) {
 				this->captureCrossing(this->diagram.flipCrossing(*this->capturedCrossing));
+				emit diagramChanged();
 			} else if (this->capturedEdge) {
 				switch (event->button()) {
 					default:
 						break;
 					case ::Qt::LeftButton:
-						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->x(), event->y()), true);
+						this->captureVertex(this->diagram.addVertex(*this->capturedEdge, event->pos().x(), event->pos().y()), true);
 						this->captureEdge(nullptr);
+						emit diagramChanged();
 						break;
 					case ::Qt::RightButton:
 						if (this->diagram.canRemoveEdge(this->capturedEdge)) {
 							this->diagram.removeEdge(this->capturedEdge);
 							this->captureEdge(nullptr);
 							this->updateEditorMode();
+							emit diagramChanged();
 						}
 						break;
 				}
@@ -265,16 +274,18 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 		case QUICK_DRAWING:
 		case EDITING:
 			if (this->capturedVertex) {
-				this->diagram.moveVertex(this->capturedVertex, event->x(), event->y(), true);
+				this->diagram.moveVertex(this->capturedVertex, event->pos().x(), event->pos().y(), true);
 				this->captureVertex(nullptr);
-				repaint();
+				emit diagramChanged();
+				this->repaint();
 			}
 			break;
 		case MOVING:
 			if (!this->capturedPoint.isNull()) {
-				this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), true);
+				this->diagram.shift(event->pos().x() - this->capturedPoint.x(), event->pos().y() - this->capturedPoint.y(), true);
 				this->capturePoint(QPoint());
-				repaint();
+				emit diagramChanged();
+				this->repaint();
 			}
 			break;
 		default:
@@ -297,16 +308,20 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 				}
 				auto fakeVertex = this->fakeVertex;
 				if (fakeVertex) {
-					fakeVertex->moveTo(event->x(), event->y());
+					fakeVertex->moveTo(event->pos().x(), event->pos().y());
 				} else {
-					this->setFakeVertex(std::make_shared<TwoD::Diagram::Vertex>(event->x(), event->y()));
+					this->setFakeVertex(std::make_shared<TwoD::Diagram::Vertex>(
+						event->pos().x(),
+						event->pos().y(),
+						std::numeric_limits<std::size_t>::max()
+					));
 				}
 				this->repaint();
 				break;
 			}
 			case EDITING:
 			{
-				auto vertex = this->diagram.findVertex(TwoD::FloatPoint(event->x(), event->y()), 17);
+				auto vertex = this->diagram.findVertex(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 17);
 				if (vertex) {
 					this->captureEdge(nullptr);
 					this->captureCrossing(nullptr);
@@ -314,7 +329,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 					break;
 				}
 
-				auto crossing = this->diagram.findCrossing(TwoD::FloatPoint(event->x(), event->y()), 17);
+				auto crossing = this->diagram.findCrossing(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 17);
 				if (crossing) {
 					this->captureVertex(nullptr);
 					this->captureEdge(nullptr);
@@ -324,7 +339,7 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 
 				this->captureVertex(nullptr);
 				this->captureCrossing(nullptr);
-				this->captureEdge(this->diagram.findEdge(TwoD::FloatPoint(event->x(), event->y()), 5));
+				this->captureEdge(this->diagram.findEdge(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 5));
 				break;
 			}
 			default:
@@ -335,15 +350,17 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 			case QUICK_DRAWING:
 			case EDITING:
 				if (this->capturedVertex) {
-					this->diagram.moveVertex(this->capturedVertex, event->x(), event->y(), false);
-					repaint();
+					this->diagram.moveVertex(this->capturedVertex, event->pos().x(), event->pos().y(), false);
+					emit diagramChanged();
+					this->repaint();
 				}
 				break;
 			case MOVING:
 				if (!this->capturedPoint.isNull()) {
-					this->diagram.shift(event->x() - this->capturedPoint.x(), event->y() - this->capturedPoint.y(), false);
+					this->diagram.shift(event->pos().x() - this->capturedPoint.x(), event->pos().y() - this->capturedPoint.y(), false);
 					this->capturePoint(event->pos());
-					repaint();
+					emit diagramChanged();
+					this->repaint();
 				}
 				break;
 		}

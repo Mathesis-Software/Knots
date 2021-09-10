@@ -16,82 +16,75 @@
 
 #include <fstream>
 
+#include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
 #include <QtGui/QCloseEvent>
 #include <QtWidgets/QFileDialog>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
 
-#include "AboutWindow.h"
 #include "FileIconProvider.h"
 #include "Window.h"
 
 namespace KE::Qt {
 
-Window::Window() {
-	this->setAttribute(::Qt::WA_DeleteOnClose);
-
-	QMenu *fileMenu = this->menuBar()->addMenu("File");
-
-	auto newd = fileMenu->addAction("New diagram", [] { Window::newDiagram(); });
-	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [] { Window::openFile(); });
-	open->setShortcut(QKeySequence("Ctrl+O"));
-	fileMenu->addSeparator();
-	auto save = fileMenu->addAction("Save as…", [this] { this->save(); });
-	save->setShortcut(QKeySequence("Ctrl+S"));
-	fileMenu->addAction("Export as image…", this, &Window::exportPNG);
-	fileMenu->addSeparator();
-	fileMenu->addAction("Rename…", [this] { this->rename(); });
-	fileMenu->addSeparator();
-	fileMenu->addAction("About", [] { Qt::AboutWindow::showAboutDialog(); });
-	fileMenu->addSeparator();
-	auto close = fileMenu->addAction("Close", [this] { this->close(); });
-	close->setShortcut(QKeySequence("Ctrl+W"));
-	auto quit = fileMenu->addAction("Quit", [] { Window::exitApplication(); });
-	quit->setShortcut(QKeySequence("Ctrl+Q"));
-
-	this->menuBar()->setContextMenuPolicy(::Qt::PreventContextMenu);
+Window::Window(const QString &filename) : _filename(filename) {
 	this->toolbar = new QToolBar(this);
 	this->toolbar->setMovable(false);
 	this->toolbar->setContextMenuPolicy(::Qt::PreventContextMenu);
 	addToolBar(this->toolbar);
+
+	this->createFileMenu();
+
+	this->toolbar->show();
+	statusBar()->setVisible(true);
+	this->resize(508, 594);
+
+	this->restoreParameters();
 }
 
-Window::~Window() {
-	delete this->toolbar;
-}
+bool Window::saveBeforeClosing() {
+	this->show();
+	this->raise();
 
-int Window::askForSave() {
-	show();
-	raise();
+	const QString question = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
 	while (!this->isSaved()) {
-		QString q = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
-		int answer = QMessageBox::warning(
-			this, "Close", q.toStdString().c_str(), "&Yes", "&No", "&Cancel"
+		const int answer = QMessageBox::warning(
+			this, "Closing window", question, QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
 		);
-		if (answer)
-			return answer - 1;
-
-		this->save();
+		switch (answer) {
+			case QMessageBox::Yes:
+				this->save();
+				break;
+			case QMessageBox::No:
+				return true;
+			default:
+				return false;
+		}
 	}
-	return 0;
+	return true;
 }
 
 void Window::closeEvent(QCloseEvent *event) {
-	if (!this->isSaved() && this->askForSave()) {
+	if (!this->isSaved() && !this->saveBeforeClosing()) {
 		event->ignore();
 		return;
 	}
 
+	BaseWindow::closeEvent(event);
 	emit closing();
 }
 
 namespace {
 
 QString getSaveFileNameEx(const QString &fileFilter) {
-	QFileDialog dialog(nullptr, "Save file", getenv("KNOTEDITOR_DATA"));
+	QSettings settings;
+	QString dir = settings.value("CustomFilesFolder").toString();
+	if (dir.isEmpty()) {
+		dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+	}
+	QFileDialog dialog(nullptr, "Save file", dir);
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setAcceptMode(QFileDialog::AcceptSave);
 	dialog.setIconProvider(Qt::FileIconProvider::instance());
@@ -100,6 +93,8 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 		"Any files (*)"
 	});
 	if (dialog.exec() == QDialog::Accepted) {
+		settings.setValue("CustomFilesFolder", dialog.directory().path());
+		settings.sync();
 		return dialog.selectedUrls().value(0).toLocalFile();
 	}
 	return QString();
@@ -108,7 +103,7 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 }
 
 void Window::save() {
-	QString filename = getSaveFileNameEx(this->fileFilter());
+	const QString filename = getSaveFileNameEx(this->fileFilter());
 	if (filename.isEmpty()) {
 		return;
 	}
@@ -121,6 +116,7 @@ void Window::save() {
 
 	saveIt(os);
 	os.close();
+	this->_filename = filename;
 }
 
 void Window::exportPNG() {
@@ -145,15 +141,16 @@ void Window::addToolbarSeparator() {
 	this->toolbar->addSeparator();
 }
 
-void Window::complete() {
-	this->toolbar->show();
-	statusBar()->setVisible(true);
-	this->resize(508, 594);
-}
-
 QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> controller) {
 	QObject::connect(this, &Window::contentChanged, [action, controller] { controller(*action); });
 	return action;
+}
+
+QString Window::identifier() const {
+	if (this->_filename.isNull()) {
+		return QString();
+	}
+	return QFileInfo(this->_filename).canonicalFilePath();
 }
 
 }

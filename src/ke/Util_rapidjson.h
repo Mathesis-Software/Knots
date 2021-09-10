@@ -17,11 +17,9 @@
 #ifndef __KE_UTIL_RAPIDJSON_H__
 #define __KE_UTIL_RAPIDJSON_H__
 
-#include <sstream>
 #include <string>
 
 #include <rapidjson/document.h>
-#include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
 namespace KE::Util::rapidjson {
@@ -37,12 +35,12 @@ inline std::string getString(const ::rapidjson::Value &doc, const std::string &k
 }
 
 inline std::string docToString(const ::rapidjson::Document &doc) {
-	std::stringstream os;
-	::rapidjson::OStreamWrapper wrapper(os);
-	::rapidjson::Writer<::rapidjson::OStreamWrapper> writer(wrapper);
+	::rapidjson::StringBuffer buffer;
+	buffer.Clear();
+	::rapidjson::Writer<::rapidjson::StringBuffer> writer(buffer);
 	writer.SetMaxDecimalPlaces(5);
 	doc.Accept(writer);
-	return os.str();
+	return std::string(buffer.GetString(), buffer.GetSize());
 }
 
 }

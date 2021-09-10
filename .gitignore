@@ -1,5 +1,7 @@
 **/*.d
 **/*.o
 **/*.a
-**/*.moc.cpp
-**/*.qrc.cpp
+**/Makefile
+**/moc_*.h
+**/moc_*.cpp
+**/qrc_*.cpp

@@ -21,19 +21,21 @@
 namespace KE::TwoD {
 
 std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
-	const int d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
+	const float d0 = this->up.dy() * this->down.dx() - this->up.dx() * this->down.dy();
 
 	if (d0 == 0) {
 		return nullptr;
 	}
 
-	const int d1 =
-			(this->down.start->y() - this->up.start->y()) * this->down.dx()
-		-	(this->down.start->x() - this->up.start->x()) * this->down.dy();
+	const auto downStart = this->down.start->coords();
+	const auto upStart = this->up.start->coords();
+	const float d1 =
+			(downStart.y - upStart.y) * this->down.dx()
+		-	(downStart.x - upStart.x) * this->down.dy();
 
 	return std::make_shared<FloatPoint>(
-		this->up.start->x() + 1.0 * this->up.dx() * d1 / d0,
-		this->up.start->y() + 1.0 * this->up.dy() * d1 / d0
+		upStart.x + this->up.dx() * d1 / d0,
+		upStart.y + this->up.dy() * d1 / d0
 	);
 }
 
@@ -64,18 +66,31 @@ std::shared_ptr<Diagram::Crossing> Diagram::flipCrossing(Crossing &crs) {
 	return this->addCrossing(crs.down, crs.up);
 }
 
-void Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
-	edge1.start->crossings.remove(Crossing(edge2, edge1));
-	edge2.start->crossings.remove(Crossing(edge1, edge2));
+bool Diagram::removeCrossing(const Edge &edge1, const Edge &edge2) {
+	auto &list1 = edge1.start->crossings;
+	const auto iter1 = std::find(list1.begin(), list1.end(), Crossing(edge2, edge1));
+	if (iter1 != list1.end()) {
+		list1.erase(iter1);
+		return true;
+	}
+
+	auto &list2 = edge2.start->crossings;
+	const auto iter2 = std::find(list2.begin(), list2.end(), Crossing(edge1, edge2));
+	if (iter2 != list2.end()) {
+		list2.erase(iter2);
+		return true;
+	}
+
+	return false;
 }
 
 std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const Edge &edge2) {
-	for (const auto &crs : this->crossings(edge1)) {
+	for (const auto &crs : this->underCrossings(edge1)) {
 		if (crs.up == edge2) {
 			return std::make_shared<Crossing>(crs);
 		}
 	}
-	for (const auto &crs : this->crossings(edge2)) {
+	for (const auto &crs : this->underCrossings(edge2)) {
 		if (crs.up == edge1) {
 			return std::make_shared<Crossing>(crs);
 		}

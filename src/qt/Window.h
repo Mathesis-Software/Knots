@@ -17,51 +17,45 @@
 #ifndef __KE_QT_WINDOW_H__
 #define __KE_QT_WINDOW_H__
 
-#include <QtWidgets/QMainWindow>
+#include "BaseWindow.h"
 
 namespace KE::Qt {
 
-class Window : public QMainWindow {
+class Window : public BaseWindow {
 
 Q_OBJECT
 
-public:
-	static QWidget *newDiagram();
-	static QWidget *openFile();
-	static QWidget *openFile(const QString &filename);
-	static void exitApplication();
-
 private:
 	QToolBar *toolbar;
+	QString _filename;
 
 protected:
-	void closeEvent(QCloseEvent*);
+	Window(const QString &filename = QString());
 
+public:
+	QString identifier() const override;
 	void save();
-	virtual void saveIt(std::ostream&) = 0;
-	virtual bool isSaved() const = 0;
-	int askForSave();
-
+	virtual void rename() = 0;
 	void exportPNG();
+
+protected:
+	void closeEvent(QCloseEvent *event) override;
+
+	virtual void saveIt(std::ostream &os) = 0;
+	virtual bool isSaved() const = 0;
+	bool saveBeforeClosing();
+
 	virtual QImage exportImage() const = 0;
 
 	QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
 	void addToolbarSeparator();
-	void complete();
+	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
 
-QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
-
-public:
-	Window();
-	virtual ~Window();
 	virtual QString fileFilter() const = 0;
 
 signals:
 	void closing();
 	void contentChanged();
-
-protected:
-	virtual void rename() = 0;
 };
 
 }

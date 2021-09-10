@@ -80,15 +80,7 @@ std::vector<Point> Knot::pointsFromDiagram(const TwoD::Diagram &diagram, std::si
 	std::vector<Point> points;
 
 	const auto edges = diagram.edges();
-	std::map<std::shared_ptr<TwoD::Diagram::Vertex>,std::list<TwoD::Diagram::Crossing>> all_crossings;
-	for (const auto &edge : edges) {
-		const auto crossings = diagram.crossings(edge);
-		auto &list = all_crossings[edge.start];
-		list.insert(list.end(), crossings.begin(), crossings.end());
-		for (const auto &crs : crossings) {
-			all_crossings[crs.up.start].push_back(crs);
-		}
-	}
+	auto all_crossings = diagram.allCrossings();
 
 	for (const auto &edge : edges) {
 		const auto coords = edge.start->coords();
@@ -97,9 +89,7 @@ std::vector<Point> Knot::pointsFromDiagram(const TwoD::Diagram &diagram, std::si
 			1.2 - 2.4 * coords.y / height,
 			0
 		));
-		auto &crossings = all_crossings[edge.start];
-		edge.orderCrossings(crossings);
-		for (const auto &crs : crossings) {
+		for (const auto &crs : all_crossings[edge]) {
 			std::shared_ptr<TwoD::FloatPoint> current = crs.coords();
 			if (!current) {
 				continue;

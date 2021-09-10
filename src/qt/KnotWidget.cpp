@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+#include <iostream>
+
 #include <QtWidgets/QInputDialog>
 
 #include <rapidjson/ostreamwrapper.h>

@@ -14,50 +14,13 @@
  * limitations under the License.
  */
 
-#include <QtGui/QPainter>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QProxyStyle>
-
-#include "ManagerWindow.h"
-#include "Window.h"
-
-class ProxyStyle : public QProxyStyle {
-
-QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override {
-	if (iconMode == QIcon::Disabled) {
-		QPixmap copy(pixmap);
-		QPainter painter(&copy);
-		painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-		painter.fillRect(copy.rect(), 0xc0c0c0);
-		painter.end();
-		return copy;
-	}
-	return QProxyStyle::generatedIconPixmap(iconMode, pixmap, option);
-}
-
-};
+#include "KnotEditorApplication.h"
 
 int main(int argc, char **argv) {
-	QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-	QApplication::setAttribute(Qt::AA_UseHighDpiPixmaps);
+	QApplication::setOrganizationName("FBReader.ORG Limited");
+	QApplication::setApplicationName("Knot Editor");
 	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
-	QApplication qa(argc, argv);
-	qa.setFont(QFont("Helvetica", 10));
-	qa.setStyle(new ProxyStyle);
 
-	QPixmap pixmap(":images/trefoil.png");
-	pixmap.setDevicePixelRatio(qa.devicePixelRatio());
-	qa.setWindowIcon(pixmap);
-
-	int count = 0;
-	for (int i = 1; i < argc; ++i) {
-		if (KE::Qt::Window::openFile(argv[i])) {
-			count += 1;
-		}
-	}
-	if (count == 0) {
-		(new KE::Qt::ManagerWindow())->show();
-	}
-
+	KE::Qt::KnotEditorApplication qa(argc, argv);
 	return qa.exec();
 }

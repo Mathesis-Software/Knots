@@ -31,13 +31,9 @@ class KnotWindow : public Window {
 
 Q_OBJECT
 
-private:
-	QMenu *knotMenu;
-
 public:
-	KnotWindow(const rapidjson::Document &doc);
+	KnotWindow(const rapidjson::Document &doc, const QString &filename);
 	KnotWindow(const DiagramWidget &diagramWidget);
-	~KnotWindow();
 
 	KnotWidget *knotWidget() const;
 

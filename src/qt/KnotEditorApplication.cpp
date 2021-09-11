@@ -94,8 +94,6 @@ void KnotEditorApplication::diagramFromCode() {
 		nullptr, "Creating diagram from code", "Code:", QLineEdit::Normal, QString(), &ok
 	);
 	if (ok) {
-		code.replace(" ", ",");
-		code = "DT:[(" + code + ")]";
 		this->diagramFromCode(code);
 	}
 }

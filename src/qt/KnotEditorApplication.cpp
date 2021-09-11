@@ -21,8 +21,6 @@
 #include <QtCore/QStandardPaths>
 #include <QtGui/QFileOpenEvent>
 #include <QtGui/QPainter>
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 #include <QtWidgets/QFileDialog>
 #include <QtWidgets/QInputDialog>
 #include <QtWidgets/QMessageBox>
@@ -95,30 +93,10 @@ void KnotEditorApplication::diagramFromCode() {
 	QString code = QInputDialog::getText(
 		nullptr, "Creating diagram from code", "Code:", QLineEdit::Normal, QString(), &ok
 	);
-	code.replace(" ", ",");
-	code = "DT:[(" + code + ")]";
 	if (ok) {
-		QUrl url("https://knots.geometer.name/converter/" + code);
-		QNetworkRequest request;
-		request.setUrl(url);
-		QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-		QObject::connect(manager, &QNetworkAccessManager::finished, this, [this, code](QNetworkReply *reply) {
-			try {
-				rapidjson::Document doc;
-				const auto data = reply->readAll();
-				doc.Parse(data.constData(), data.size());
-				if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
-					auto window = new DiagramWindow(doc, QString());
-					window->show();
-					this->closeStartWindow();
-				} else {
-					throw std::runtime_error(("Incorrect code: " + code).toStdString());
-				}
-			} catch (const std::runtime_error &e) {
-				QMessageBox::critical(nullptr, "Code conversion error", QString("\n") + e.what() + "\n");
-			}
-		});
-		manager->get(request);
+		code.replace(" ", ",");
+		code = "DT:[(" + code + ")]";
+		this->diagramFromCode(code);
 	}
 }
 

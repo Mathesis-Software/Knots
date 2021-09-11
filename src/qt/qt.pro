@@ -19,6 +19,7 @@ SOURCES = \
 	FileIconProvider.cpp \
 	GLWidget.cpp \
 	KnotEditorApplication.cpp \
+	KnotEditorApplication_network.cpp \
 	KnotMathDialog.cpp \
 	KnotOptionsDialog.cpp \
 	KnotWidget.cpp \

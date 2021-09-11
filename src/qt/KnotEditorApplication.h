@@ -33,6 +33,7 @@ public:
 	QWidget *library();
 	QWidget *newDiagram();
 	void diagramFromCode();
+	void diagramFromCode(const QString &code);
 	QWidget *openFile();
 	QWidget *openFile(const QString &filename);
 	void exitApplication();

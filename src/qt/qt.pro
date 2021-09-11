@@ -1,6 +1,6 @@
 include (../qmake.pri)
 
-QT += core gui widgets openglwidgets
+QT += core gui widgets openglwidgets network
 
 TARGET = KnotEditor
 TEMPLATE = app

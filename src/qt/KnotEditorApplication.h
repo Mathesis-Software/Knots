@@ -32,6 +32,7 @@ public:
 
 	QWidget *library();
 	QWidget *newDiagram();
+	void diagramFromCode();
 	QWidget *openFile();
 	QWidget *openFile(const QString &filename);
 	void exitApplication();

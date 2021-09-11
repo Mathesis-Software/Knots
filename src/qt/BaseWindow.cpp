@@ -51,6 +51,7 @@ void BaseWindow::createFileMenu() {
 	library->setShortcut(QKeySequence("Ctrl+L"));
 	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<KnotEditorApplication*>(qApp)->newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
+	fileMenu->addAction("Diagram from code", [] { dynamic_cast<KnotEditorApplication*>(qApp)->diagramFromCode(); });
 	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<KnotEditorApplication*>(qApp)->openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();

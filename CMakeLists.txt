@@ -10,6 +10,7 @@ include("${CMAKE_SOURCE_DIR}/vendor/rapidjson.cmake")
 include_directories(${RAPIDJSON_INCLUDE_DIR})
 
 
-add_subdirectory( src/ke )
-add_subdirectory( src/math )
-add_subdirectory( src/other )
+add_subdirectory(src/ke)
+add_subdirectory(src/math)
+add_subdirectory(src/other)
+add_subdirectory(src/qt)

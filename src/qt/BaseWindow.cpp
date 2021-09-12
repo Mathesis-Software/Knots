@@ -77,6 +77,7 @@ void BaseWindow::closeEvent(QCloseEvent*) {
 	const QString id = this->identifier();
 	if (!id.isNull()) {
 		QSettings settings;
+		settings.setValue("LastClosedWindow", id);
 		settings.beginGroup("Window:" + id);
 		settings.setValue("geometry", this->geometry());
 		settings.endGroup();

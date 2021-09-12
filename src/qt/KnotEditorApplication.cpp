@@ -198,11 +198,18 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 	}
 	if (count == 0) {
 		QSettings settings;
-		for (const auto &name : settings.value("OpenWindows").toStringList()) {
-			if (name == "::LIBRARY::") {
+		auto ids = settings.value("OpenWindows").toStringList();
+		if (ids.isEmpty()) {
+			const auto last = settings.value("LastClosedWindow").toString();
+			if (!last.isEmpty()) {
+				ids.append(last);
+			}
+		}
+		for (const auto &id : ids) {
+			if (id == "::LIBRARY::") {
 				KnotEditorApplication::library()->raise();
 				count += 1;
-			} else if (auto window = KnotEditorApplication::openFile(name)) {
+			} else if (auto window = KnotEditorApplication::openFile(id)) {
 				window->raise();
 				count += 1;
 			}

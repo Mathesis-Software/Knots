@@ -7,8 +7,9 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets REQUIRED)
 
-#file(READ <filename> <out-var> [...])
-add_definitions(-DVERSION="1.0.20210910")
+file(STRINGS "../VERSION" ver)
+set(ver "\"${ver}\"")
+add_definitions(-DVERSION=${ver})
 
 set(SOURCES AboutWindow.cpp
             BaseWindow.cpp

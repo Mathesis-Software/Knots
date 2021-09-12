@@ -102,7 +102,7 @@ std::shared_ptr<Diagram::Edge> Diagram::findEdge(const FloatPoint &pt, float max
 		const float dx = edge.dx();
 		const float dy = edge.dy();
 
-		if (dx == 0 and dy == 0) {
+		if (dx == 0 && dy == 0) {
 			// the edge has zero length
 			continue;
 		}

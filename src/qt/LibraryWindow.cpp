@@ -24,6 +24,7 @@
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QVBoxLayout>
 
@@ -254,12 +255,17 @@ LibraryWindow::LibraryWindow() {
 	vlayout->addLayout(top);
 
 	auto tabs = new QTabBar;
+	tabs->setDocumentMode(true);
 	auto diagrams = createList(".dgr");
 	auto knots = createList(".knt");
 	tabs->addTab("Diagrams");
 	tabs->addTab("Knots");
 	top->addWidget(tabs);
 	top->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
+	auto searchLine = new QLineEdit;
+	searchLine->setMaximumWidth(200);
+	top->addWidget(searchLine);
+	top->addItem(new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum));
 	vlayout->addWidget(diagrams);
 	vlayout->addWidget(knots);
 

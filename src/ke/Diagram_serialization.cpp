@@ -16,6 +16,8 @@
 
 #include <map>
 #include <vector>
+#include <stdexcept>
+#include <cmath>
 
 #include "Util_rapidjson.h"
 #include "Diagram.h"

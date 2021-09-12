@@ -263,15 +263,6 @@ LibraryWindow::LibraryWindow() {
 	vlayout->addWidget(diagrams);
 	vlayout->addWidget(knots);
 
-	QObject::connect(tabs, &QTabBar::currentChanged, [=](int index) {
-		diagrams->setVisible(index == 0);	
-		knots->setVisible(index == 1);	
-		QSettings settings;
-		settings.beginGroup("Window:" + this->identifier());
-		settings.setValue("currentTabIndex", index);
-		settings.endGroup();
-		settings.sync();
-	});
 	{
 		QSettings settings;
 		settings.beginGroup("Window:" + this->identifier());
@@ -281,6 +272,16 @@ LibraryWindow::LibraryWindow() {
 		}
 		settings.endGroup();
 	}
+	QObject::connect(tabs, &QTabBar::currentChanged, [=](int index) {
+		diagrams->setVisible(index == 0);	
+		knots->setVisible(index == 1);	
+		QSettings settings;
+		settings.beginGroup("Window:" + this->identifier());
+		settings.setValue("currentTabIndex", index);
+		settings.endGroup();
+		settings.sync();
+	});
+	emit tabs->currentChanged(tabs->currentIndex());
 
 	setWindowTitle("Knot Library");
 	this->resize(780, 500);

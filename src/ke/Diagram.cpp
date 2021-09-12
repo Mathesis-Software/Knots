@@ -16,6 +16,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <stdexcept>
 
 #include "Diagram.h"
 

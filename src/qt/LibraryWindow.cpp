@@ -222,6 +222,18 @@ public:
 
 class LibraryListWidget : public QListWidget {
 
+public:
+	LibraryListWidget() {
+		this->setMouseTracking(true);
+		this->setViewMode(QListWidget::IconMode);
+		this->setResizeMode(QListWidget::Adjust);
+		this->setContentsMargins(0, 0, 0, 0);
+		this->setIconSize(QSize(100, 100));
+		this->setSpacing(5);
+		this->setUniformItemSizes(true);
+		this->setStyleSheet("QListWidget{background:#d8d8d8;} QListWidget::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListWidget::item::selected{border:2px solid #404040;}");
+	}
+
 private:
 	void leaveEvent(QEvent*) override {
 		const auto selected = this->selectedItems();
@@ -260,8 +272,11 @@ LibraryWindow::LibraryWindow() {
 	tabs->setDocumentMode(true);
 	auto diagrams = createList(".dgr");
 	auto knots = createList(".knt");
+	auto searchResults = new LibraryListWidget();
 	tabs->addTab("Diagrams");
 	tabs->addTab("Knots");
+	auto fakeIndex = tabs->addTab(QString());
+	tabs->setTabVisible(fakeIndex, false);
 	top->addWidget(tabs);
 	top->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
 	auto searchLine = new QLineEdit;
@@ -275,10 +290,21 @@ LibraryWindow::LibraryWindow() {
 	QObject::connect(searchLine, &QLineEdit::textChanged, [clearAction](const QString &text) {
 		clearAction->setVisible(!text.isEmpty());
 	});
+	QObject::connect(searchLine, &QLineEdit::returnPressed, [=]() {
+		const auto pattern = searchLine->text();
+		// TODO: validate input
+		if (!pattern.isEmpty()) {
+			tabs->setCurrentIndex(fakeIndex);
+			diagrams->setVisible(false);
+			knots->setVisible(false);
+			searchResults->setVisible(true);
+		}
+	});
 	top->addWidget(searchLine);
 	top->addItem(new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum));
 	vlayout->addWidget(diagrams);
 	vlayout->addWidget(knots);
+	vlayout->addWidget(searchResults);
 
 	{
 		QSettings settings;
@@ -289,16 +315,17 @@ LibraryWindow::LibraryWindow() {
 		}
 		settings.endGroup();
 	}
-	QObject::connect(tabs, &QTabBar::currentChanged, [=](int index) {
-		diagrams->setVisible(index == 0);	
-		knots->setVisible(index == 1);	
+	QObject::connect(tabs, &QTabBar::tabBarClicked, [=](int index) {
+		diagrams->setVisible(index == 0);
+		knots->setVisible(index == 1);
+		searchResults->setVisible(false);
 		QSettings settings;
 		settings.beginGroup("Window:" + this->identifier());
 		settings.setValue("currentTabIndex", index);
 		settings.endGroup();
 		settings.sync();
 	});
-	emit tabs->currentChanged(tabs->currentIndex());
+	emit tabs->tabBarClicked(tabs->currentIndex());
 
 	setWindowTitle("Knot Library");
 	this->resize(780, 500);
@@ -309,15 +336,6 @@ LibraryWindow::LibraryWindow() {
 
 QWidget *LibraryWindow::createList(const QString &suffix) {
 	auto list = new LibraryListWidget();
-	list->setMouseTracking(true);
-	list->setViewMode(QListWidget::IconMode);
-	list->setResizeMode(QListWidget::Adjust);
-	list->setContentsMargins(0, 0, 0, 0);
-	list->setIconSize(QSize(100, 100));
-	list->setSpacing(5);
-	list->setUniformItemSizes(true);
-	list->setStyleSheet("QListWidget{background:#d8d8d8;} QListWidget::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListWidget::item::selected{border:2px solid #404040;}");
-
 	for (QDirIterator it(":data", QDirIterator::Subdirectories); it.hasNext(); ) {
 		const auto fileName = it.next();
 		if (!fileName.endsWith(suffix)) {

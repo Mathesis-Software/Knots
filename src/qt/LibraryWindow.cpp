@@ -23,7 +23,9 @@
 #include <QtCore/QSettings>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QListWidget>
+#include <QtWidgets/QVBoxLayout>
 
 #include "KnotEditorApplication.h"
 #include "LibraryWindow.h"
@@ -244,11 +246,32 @@ private:
 }
 
 LibraryWindow::LibraryWindow() {
-	auto tabs = new QTabWidget(this);
-	this->setCentralWidget(tabs);
-	tabs->addTab(createList(".dgr"), "Diagrams");
-	tabs->addTab(createList(".knt"), "Knots");
+	this->setCentralWidget(new QWidget);
+	auto vlayout = new QVBoxLayout(this->centralWidget());
+	vlayout->setSpacing(0);
+	vlayout->setContentsMargins(0, 0, 0, 0);
+	auto top = new QHBoxLayout;
+	vlayout->addLayout(top);
 
+	auto tabs = new QTabBar;
+	auto diagrams = createList(".dgr");
+	auto knots = createList(".knt");
+	tabs->addTab("Diagrams");
+	tabs->addTab("Knots");
+	top->addWidget(tabs);
+	top->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
+	vlayout->addWidget(diagrams);
+	vlayout->addWidget(knots);
+
+	QObject::connect(tabs, &QTabBar::currentChanged, [=](int index) {
+		diagrams->setVisible(index == 0);	
+		knots->setVisible(index == 1);	
+		QSettings settings;
+		settings.beginGroup("Window:" + this->identifier());
+		settings.setValue("currentTabIndex", index);
+		settings.endGroup();
+		settings.sync();
+	});
 	{
 		QSettings settings;
 		settings.beginGroup("Window:" + this->identifier());
@@ -258,13 +281,6 @@ LibraryWindow::LibraryWindow() {
 		}
 		settings.endGroup();
 	}
-	QObject::connect(tabs, &QTabWidget::currentChanged, [this](int index) {
-		QSettings settings;
-		settings.beginGroup("Window:" + this->identifier());
-		settings.setValue("currentTabIndex", index);
-		settings.endGroup();
-		settings.sync();
-	});
 
 	setWindowTitle("Knot Library");
 	this->resize(780, 500);

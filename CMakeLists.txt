@@ -9,6 +9,7 @@ project(KnotEditor)
 include("${CMAKE_SOURCE_DIR}/vendor/rapidjson.cmake")
 include_directories(${RAPIDJSON_INCLUDE_DIR})
 
+include (cmake/msvc.cmake)
 
 add_subdirectory(src/ke)
 add_subdirectory(src/math)

@@ -74,15 +74,15 @@ void BaseWindow::createFileMenu() {
 }
 
 void BaseWindow::closeEvent(QCloseEvent*) {
+	QSettings settings;
 	const QString id = this->identifier();
+	settings.setValue("LastClosedWindow", id);
 	if (!id.isNull()) {
-		QSettings settings;
-		settings.setValue("LastClosedWindow", id);
 		settings.beginGroup("Window:" + id);
 		settings.setValue("geometry", this->geometry());
 		settings.endGroup();
-		settings.sync();
 	}
+	settings.sync();
 }
 
 }

@@ -71,12 +71,15 @@ QWidget *KnotEditorApplication::library() {
 		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
 			window->showNormal();
 			window->raise();
+			window->activateWindow();
 			return window;
 		}
 	}
 
 	auto window = new LibraryWindow();
 	window->show();
+	window->raise();
+	window->activateWindow();
 	this->closeStartWindow();
 	return window;
 }
@@ -193,6 +196,7 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 	for (int i = 1; i < argc; ++i) {
 		if (auto window = KnotEditorApplication::openFile(argv[i])) {
 			window->raise();
+			window->activateWindow();
 			count += 1;
 		}
 	}
@@ -207,10 +211,11 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 		}
 		for (const auto &id : ids) {
 			if (id == "::LIBRARY::") {
-				KnotEditorApplication::library()->raise();
+				KnotEditorApplication::library();
 				count += 1;
 			} else if (auto window = KnotEditorApplication::openFile(id)) {
 				window->raise();
+				window->activateWindow();
 				count += 1;
 			}
 		}

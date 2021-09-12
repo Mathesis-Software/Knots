@@ -5,7 +5,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets REQUIRED)
+find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets Network REQUIRED)
 
 file(STRINGS "../VERSION" ver)
 set(ver "\"${ver}\"")
@@ -19,6 +19,7 @@ set(SOURCES AboutWindow.cpp
             FileIconProvider.cpp
             GLWidget.cpp
             KnotEditorApplication.cpp
+            KnotEditorApplication_network.cpp
             KnotMathDialog.cpp
             KnotOptionsDialog.cpp
             KnotWidget.cpp
@@ -35,5 +36,5 @@ set(SOURCES AboutWindow.cpp
 add_executable( ${PROJECT_NAME} ${SOURCES})
 add_dependencies( ${PROJECT_NAME} rapidjson)
 
-target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets)
+target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)
 

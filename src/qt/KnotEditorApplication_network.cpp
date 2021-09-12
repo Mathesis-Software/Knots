@@ -47,7 +47,7 @@ void KnotEditorApplication::diagramFromCode(const QString &code) {
 				throw std::runtime_error(QString(data).toStdString());
 			}
 		} catch (const std::runtime_error &e) {
-			QMessageBox::critical(nullptr, "Code conversion error", QString("\n") + e.what() + "\n");
+			QMessageBox::critical(nullptr, "Error for " + code, QString("\n") + e.what() + "\n");
 		}
 	});
 	QJsonObject data;

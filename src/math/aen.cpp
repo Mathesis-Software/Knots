@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <cmath>
 #include "computables.h"
 #include "../ke/KnotWrapper.h"
 

@@ -21,6 +21,7 @@
 #include <QtCore/QDirIterator>
 #include <QtCore/QResource>
 #include <QtCore/QSettings>
+#include <QtGui/QAction>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QHBoxLayout>
@@ -252,6 +253,7 @@ LibraryWindow::LibraryWindow() {
 	vlayout->setSpacing(0);
 	vlayout->setContentsMargins(0, 0, 0, 0);
 	auto top = new QHBoxLayout;
+	top->setContentsMargins(0, 6, 0, 0);
 	vlayout->addLayout(top);
 
 	auto tabs = new QTabBar;
@@ -263,7 +265,16 @@ LibraryWindow::LibraryWindow() {
 	top->addWidget(tabs);
 	top->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
 	auto searchLine = new QLineEdit;
+	searchLine->setMinimumHeight(24);
 	searchLine->setMaximumWidth(200);
+	searchLine->setAttribute(::Qt::WA_MacShowFocusRect, 0);
+	searchLine->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
+	auto clearAction = searchLine->addAction(QIcon(":images/clear.svg"), QLineEdit::TrailingPosition);
+	QObject::connect(clearAction, &QAction::triggered, [searchLine] { searchLine->setText(QString()); });
+	clearAction->setVisible(false);
+	QObject::connect(searchLine, &QLineEdit::textChanged, [clearAction](const QString &text) {
+		clearAction->setVisible(!text.isEmpty());
+	});
 	top->addWidget(searchLine);
 	top->addItem(new QSpacerItem(20, 0, QSizePolicy::Minimum, QSizePolicy::Minimum));
 	vlayout->addWidget(diagrams);

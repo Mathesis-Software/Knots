@@ -12,5 +12,7 @@
 	<file>../../images/redo.svg</file>
 	<file>../../images/trefoil.png</file>
 	<file>../../images/undo.svg</file>
+	<file>../../images/search.svg</file>
+	<file>../../images/clear.svg</file>
 </qresource>
 </RCC>

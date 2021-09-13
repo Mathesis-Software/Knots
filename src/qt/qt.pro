@@ -12,14 +12,14 @@ DEFINES += 'VERSION=\\"`cat ../VERSION`\\"'
 
 SOURCES = \
 	AboutWindow.cpp \
+	Application.cpp \
+	Application_network.cpp \
 	BaseWindow.cpp \
 	DiagramPropertiesDialog.cpp \
 	DiagramWidget.cpp \
 	DiagramWindow.cpp \
 	FileIconProvider.cpp \
 	GLWidget.cpp \
-	KnotEditorApplication.cpp \
-	KnotEditorApplication_network.cpp \
 	KnotMathDialog.cpp \
 	KnotOptionsDialog.cpp \
 	KnotWidget.cpp \

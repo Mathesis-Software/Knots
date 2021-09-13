@@ -17,7 +17,7 @@
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QPushButton>
 
-#include "KnotEditorApplication.h"
+#include "Application.h"
 #include "StartWindow.h"
 #include "Window.h"
 
@@ -45,9 +45,9 @@ QPushButton *createButton(StartWindow *start, const QString &title, std::functio
 StartWindow::StartWindow() {
 	this->setCentralWidget(new QWidget);
 	auto layout = new QVBoxLayout(this->centralWidget());
-	layout->addWidget(createButton(this, "Create new diagram", [] { return dynamic_cast<KnotEditorApplication*>(qApp)->newDiagram(); }));
-	layout->addWidget(createButton(this, "Browse the library", [] { return dynamic_cast<KnotEditorApplication*>(qApp)->library(); }));
-	layout->addWidget(createButton(this, "Open your own file", [] { return dynamic_cast<KnotEditorApplication*>(qApp)->openFile(); }));
+	layout->addWidget(createButton(this, "Create new diagram", [] { return dynamic_cast<Application*>(qApp)->newDiagram(); }));
+	layout->addWidget(createButton(this, "Browse the library", [] { return dynamic_cast<Application*>(qApp)->library(); }));
+	layout->addWidget(createButton(this, "Open your own file", [] { return dynamic_cast<Application*>(qApp)->openFile(); }));
 
 	setWindowTitle("Knot Editor");
 	this->resize(508, 594);

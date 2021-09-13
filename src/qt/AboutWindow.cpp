@@ -19,7 +19,7 @@
 #include <QtWidgets/QLabel>
 
 #include "AboutWindow.h"
-#include "KnotEditorApplication.h"
+#include "Application.h"
 
 namespace KE::Qt {
 
@@ -65,7 +65,7 @@ AboutWindow::AboutWindow() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 	QObject::connect(quit, &QAction::triggered, [this] {
 		this->close();
-		dynamic_cast<KnotEditorApplication*>(qApp)->exitApplication();
+		dynamic_cast<Application*>(qApp)->exitApplication();
 	});
 	this->addAction(quit);
 }

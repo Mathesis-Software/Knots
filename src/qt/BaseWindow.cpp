@@ -18,8 +18,8 @@
 #include <QtWidgets/QMenuBar>
 
 #include "AboutWindow.h"
+#include "Application.h"
 #include "BaseWindow.h"
-#include "KnotEditorApplication.h"
 #include "Window.h"
 
 namespace KE::Qt {
@@ -47,12 +47,12 @@ void BaseWindow::createFileMenu() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto library = fileMenu->addAction("Library", [] { dynamic_cast<KnotEditorApplication*>(qApp)->library(); });
+	auto library = fileMenu->addAction("Library", [] { dynamic_cast<Application*>(qApp)->library(); });
 	library->setShortcut(QKeySequence("Ctrl+L"));
-	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<KnotEditorApplication*>(qApp)->newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<Application*>(qApp)->newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	fileMenu->addAction("Diagram from code", [] { dynamic_cast<KnotEditorApplication*>(qApp)->diagramFromCode(); });
-	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<KnotEditorApplication*>(qApp)->openFile(); });
+	fileMenu->addAction("Diagram from code", [] { dynamic_cast<Application*>(qApp)->diagramFromCode(); });
+	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<Application*>(qApp)->openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	if (window) {
@@ -68,7 +68,7 @@ void BaseWindow::createFileMenu() {
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
 	auto quit = fileMenu->addAction("Quit", [] {
-		dynamic_cast<KnotEditorApplication*>(qApp)->exitApplication();
+		dynamic_cast<Application*>(qApp)->exitApplication();
 	});
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }

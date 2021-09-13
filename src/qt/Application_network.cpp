@@ -20,13 +20,13 @@
 #include <QtNetwork/QNetworkReply>
 #include <QtWidgets/QMessageBox>
 
+#include "Application.h"
 #include "DiagramWindow.h"
-#include "KnotEditorApplication.h"
 #include "../ke/Util_rapidjson.h"
 
 namespace KE::Qt {
 
-void KnotEditorApplication::diagramFromCode(const QString &code) {
+void Application::diagramFromCode(const QString &code) {
 	QUrl url("https://knots.geometer.name/api/diagram4code");
 	QNetworkRequest request;
 	request.setUrl(url);

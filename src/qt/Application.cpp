@@ -28,10 +28,10 @@
 
 #include <rapidjson/istreamwrapper.h>
 
+#include "Application.h"
 #include "DiagramWindow.h"
 #include "FileIconProvider.h"
 #include "KnotWindow.h"
-#include "KnotEditorApplication.h"
 #include "LibraryWindow.h"
 #include "StartWindow.h"
 #include "../ke/Util_rapidjson.h"
@@ -58,7 +58,7 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 
 }
 
-void KnotEditorApplication::closeStartWindow() {
+void Application::closeStartWindow() {
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<StartWindow*>(widget)) {
 			window->close();
@@ -66,7 +66,7 @@ void KnotEditorApplication::closeStartWindow() {
 	}
 }
 
-QWidget *KnotEditorApplication::library() {
+QWidget *Application::library() {
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
 			window->showNormal();
@@ -84,14 +84,14 @@ QWidget *KnotEditorApplication::library() {
 	return window;
 }
 
-QWidget *KnotEditorApplication::newDiagram() {
+QWidget *Application::newDiagram() {
 	auto window = new DiagramWindow();
 	window->show();
 	this->closeStartWindow();
 	return window;
 }
 
-void KnotEditorApplication::diagramFromCode() {
+void Application::diagramFromCode() {
 	bool ok;
 	QString code = QInputDialog::getText(
 		nullptr, "Creating diagram from code", "Code:", QLineEdit::Normal, QString(), &ok
@@ -128,11 +128,11 @@ QString getOpenFileNameEx() {
 
 }
 
-QWidget *KnotEditorApplication::openFile() {
+QWidget *Application::openFile() {
 	return openFile(getOpenFileNameEx());
 }
 
-QWidget *KnotEditorApplication::openFile(const QString &filename) {
+QWidget *Application::openFile(const QString &filename) {
 	if (filename.isEmpty()) {
 		return nullptr;
 	}
@@ -176,7 +176,7 @@ QWidget *KnotEditorApplication::openFile(const QString &filename) {
 	}
 }
 
-KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
+Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
 	this->setFont(QFont("Helvetica", 10));
 	this->setStyle(new ProxyStyle);
 
@@ -194,7 +194,7 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 
 	int count = 0;
 	for (int i = 1; i < argc; ++i) {
-		if (auto window = KnotEditorApplication::openFile(argv[i])) {
+		if (auto window = Application::openFile(argv[i])) {
 			window->raise();
 			window->activateWindow();
 			count += 1;
@@ -211,9 +211,9 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 		}
 		for (const auto &id : ids) {
 			if (id == "::LIBRARY::") {
-				KnotEditorApplication::library();
+				Application::library();
 				count += 1;
-			} else if (auto window = KnotEditorApplication::openFile(id)) {
+			} else if (auto window = Application::openFile(id)) {
 				window->raise();
 				window->activateWindow();
 				count += 1;
@@ -226,7 +226,7 @@ KnotEditorApplication::KnotEditorApplication(int &argc, char **argv) : QApplicat
 	}
 }
 
-bool KnotEditorApplication::event(QEvent *event) {
+bool Application::event(QEvent *event) {
 	if (event->type() == QEvent::FileOpen) {
 		const auto file = static_cast<QFileOpenEvent*>(event)->file();
 		if (this->openFile(file) == nullptr) {
@@ -238,7 +238,7 @@ bool KnotEditorApplication::event(QEvent *event) {
 	}
 }
 
-void KnotEditorApplication::exitApplication() {
+void Application::exitApplication() {
 	QStringList ids;
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<BaseWindow*>(widget)) {

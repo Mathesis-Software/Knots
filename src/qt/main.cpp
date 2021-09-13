@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-#include "KnotEditorApplication.h"
+#include "Application.h"
 
 int main(int argc, char **argv) {
 	QApplication::setOrganizationName("FBReader.ORG Limited");
 	QApplication::setApplicationName("Knot Editor");
 	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 
-	KE::Qt::KnotEditorApplication qa(argc, argv);
+	KE::Qt::Application qa(argc, argv);
 	return qa.exec();
 }

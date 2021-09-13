@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-#ifndef __KE_QT_KNOT_EDITOR_APPLICATION_H__
-#define __KE_QT_KNOT_EDITOR_APPLICATION_H__
+#ifndef __KE_QT_APPLICATION_H__
+#define __KE_QT_APPLICATION_H__
 
 #include <QtWidgets/QApplication>
 
 namespace KE::Qt {
 
-class KnotEditorApplication : public QApplication {
+class Application : public QApplication {
 
 private:
 	bool windowsListSaved;
 
 public:
-	KnotEditorApplication(int &argc, char **argv);
+	Application(int &argc, char **argv);
 	bool event(QEvent *event) override;
 
 	QWidget *library();
@@ -44,4 +44,4 @@ private:
 
 }
 
-#endif /* __KE_QT_KNOT_EDITOR_APPLICATION_H__ */
+#endif /* __KE_QT_APPLICATION_H__ */

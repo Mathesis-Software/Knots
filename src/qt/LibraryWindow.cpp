@@ -27,7 +27,6 @@
 #include <QtGui/QPainter>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QListWidget>
 #include <QtWidgets/QVBoxLayout>
 
 #include "Application.h"
@@ -266,12 +265,18 @@ public:
 		this->setSpacing(5);
 		this->setUniformItemSizes(true);
 		this->setStyleSheet("QListWidget{background:#d8d8d8;} QListWidget::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListWidget::item::selected{border:2px solid #404040;}");
+		this->setSelectionMode(QListWidget::SingleSelection);
 
-		QObject::connect(this, &QListWidget::itemEntered, [](QListWidgetItem *item) {
-			item->setSelected(true);
+		QObject::connect(this, &QListWidget::itemEntered, [this](QListWidgetItem *item) {
+			this->setCurrentItem(item);
 		});
 		QObject::connect(this, &QListWidget::itemClicked, [](QListWidgetItem *item) {
 			dynamic_cast<const DataItem*>(item)->open();
+		});
+		QObject::connect(this, &QListWidget::currentItemChanged, [](QListWidgetItem *current, QListWidgetItem *previous) {
+			if (current) {
+				current->setSelected(true);
+			}
 		});
 	}
 
@@ -281,6 +286,7 @@ private:
 		for (const auto &item : selected) {
 			item->setSelected(false);
 		}
+		this->setCurrentItem(nullptr);
 	}
 
 	void keyPressEvent(QKeyEvent *event) override {
@@ -289,11 +295,10 @@ private:
 			return;
 		}
 
-		const auto selected = this->selectedItems();
-		if (selected.size() != 1) {
-			return;
+		const auto current = this->currentItem();
+		if (current) {
+			dynamic_cast<const DataItem*>(current)->open();
 		}
-		dynamic_cast<const DataItem*>(selected[0])->open();
 	}
 };
 
@@ -358,6 +363,9 @@ LibraryWindow::LibraryWindow() {
 				} catch (const std::runtime_error &e) {
 					// TODO: show error message
 				}
+				if (searchResults->count() > 0) {
+					searchResults->setFocus();
+				}
 			});
 			tabs->setCurrentIndex(fakeTabIndex);
 			diagrams->setVisible(false);
@@ -401,7 +409,7 @@ LibraryWindow::LibraryWindow() {
 	this->restoreParameters();
 }
 
-QWidget *LibraryWindow::createList(const QString &suffix) {
+QListWidget *LibraryWindow::createList(const QString &suffix) {
 	auto list = new LibraryListWidget();
 	for (QDirIterator iter(":data", QDirIterator::Subdirectories); iter.hasNext(); ) {
 		const auto fileName = iter.next();

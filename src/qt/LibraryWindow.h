@@ -17,6 +17,8 @@
 #ifndef __KE_QT_LIBRARY_WINDOW_H_
 #define __KE_QT_LIBRARY_WINDOW_H_
 
+#include <QtWidgets/QListWidget>
+
 #include "BaseWindow.h"
 
 namespace KE::Qt {
@@ -30,7 +32,7 @@ public:
 	}
 
 private:
-	QWidget *createList(const QString &suffix);
+	QListWidget *createList(const QString &suffix);
 };
 
 }

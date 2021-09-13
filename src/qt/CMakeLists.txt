@@ -12,23 +12,23 @@ set(ver "\"${ver}\"")
 add_definitions(-DVERSION=${ver})
 
 set(SOURCES AboutWindow.cpp
+            Application.cpp
             BaseWindow.cpp
             DiagramPropertiesDialog.cpp
             DiagramWidget.cpp 
             DiagramWindow.cpp
             FileIconProvider.cpp
             GLWidget.cpp
-            KnotEditorApplication.cpp
-            KnotEditorApplication_network.cpp
             KnotMathDialog.cpp
             KnotOptionsDialog.cpp
             KnotWidget.cpp
             KnotWidget_smooth.cpp
             KnotWindow.cpp
             LibraryWindow.cpp
+            main.cpp
+            NetworkManager.cpp
             StartWindow.cpp
             Window.cpp
-            main.cpp
             data.qrc
             images.qrc
 )

@@ -326,7 +326,7 @@ LibraryWindow::LibraryWindow() {
 	searchLine->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
 	auto helpAction = searchLine->addAction(QIcon(":images/question.svg"), QLineEdit::TrailingPosition);
 	QObject::connect(helpAction, &QAction::triggered, [=] {
-		QDesktopServices::openUrl(QUrl("https://knots.geometer.name/help/pattern-format"));
+		QDesktopServices::openUrl(QUrl("https://knots.geometer.name/help/syntax"));
 	});
 	auto clearAction = searchLine->addAction(QIcon(":images/clear.svg"), QLineEdit::TrailingPosition);
 	QObject::connect(clearAction, &QAction::triggered, [=] {

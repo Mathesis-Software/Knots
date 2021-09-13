@@ -22,6 +22,7 @@
 #include <QtCore/QResource>
 #include <QtCore/QSettings>
 #include <QtGui/QAction>
+#include <QtGui/QDesktopServices>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QHBoxLayout>
@@ -323,6 +324,10 @@ LibraryWindow::LibraryWindow() {
 	searchLine->setMaximumWidth(200);
 	searchLine->setAttribute(::Qt::WA_MacShowFocusRect, 0);
 	searchLine->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
+	auto helpAction = searchLine->addAction(QIcon(":images/question.svg"), QLineEdit::TrailingPosition);
+	QObject::connect(helpAction, &QAction::triggered, [=] {
+		QDesktopServices::openUrl(QUrl("https://knots.geometer.name/help/pattern-format"));
+	});
 	auto clearAction = searchLine->addAction(QIcon(":images/clear.svg"), QLineEdit::TrailingPosition);
 	QObject::connect(clearAction, &QAction::triggered, [=] {
 		searchLine->setText(QString());

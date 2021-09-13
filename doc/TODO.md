@@ -6,6 +6,8 @@
 * Search history (a popup) 
 * TODOs in the code
 * The site: acknowledgements section
+* Help action: hilite if under mouse
+* Help action: write text on the site
 
 ### Mac specific
 

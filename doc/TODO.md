@@ -5,6 +5,7 @@
 * Pattern format description
 * Search history (a popup) 
 * TODOs in the code
+* The site: acknowledgements section
 
 ### Mac specific
 

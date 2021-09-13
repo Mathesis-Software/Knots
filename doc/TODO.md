@@ -1,3 +1,11 @@
+### Network search
+
+* Allow multiple result
+* Show some description/comments in tooltip over the item
+* Pattern format description
+* Search history (a popup) 
+* TODOs in the code
+
 ### Mac specific
 
 * file type association: check json structure?

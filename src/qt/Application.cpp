@@ -91,16 +91,6 @@ QWidget *Application::newDiagram() {
 	return window;
 }
 
-void Application::diagramFromCode() {
-	bool ok;
-	QString code = QInputDialog::getText(
-		nullptr, "Creating diagram from code", "Code:", QLineEdit::Normal, QString(), &ok
-	);
-	if (ok) {
-		this->diagramFromCode(code);
-	}
-}
-
 namespace {
 
 QString getOpenFileNameEx() {
@@ -156,24 +146,28 @@ QWidget *Application::openFile(const QString &filename) {
 			is.close();
 		}
 
-		Window *window = nullptr;
-		if (doc.IsNull()) {
-			throw std::runtime_error("The file is not in JSON format");
-		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
-			window = new DiagramWindow(doc, filename);
-		} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
-			window = new KnotWindow(doc, filename);
-		} else {
-			throw std::runtime_error("The file does not represent a knot nor a diagram");
-		}
-
-		window->show();
-		this->closeStartWindow();
-		return window;
+		return this->openDocument(doc, filename);
 	} catch (const std::runtime_error &e) {
 		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}
+}
+
+QWidget *Application::openDocument(const rapidjson::Document &doc, const QString &identifier) {
+	Window *window = nullptr;
+	if (doc.IsNull()) {
+		throw std::runtime_error("The data are not in JSON format");
+	} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
+		window = new DiagramWindow(doc, identifier);
+	} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
+		window = new KnotWindow(doc, identifier);
+	} else {
+		throw std::runtime_error("The data do not represent a knot nor a diagram");
+	}
+
+	window->show();
+	this->closeStartWindow();
+	return window;
 }
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {

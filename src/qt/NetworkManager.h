@@ -14,35 +14,24 @@
  * limitations under the License.
  */
 
-#ifndef __KE_QT_APPLICATION_H__
-#define __KE_QT_APPLICATION_H__
+#ifndef __KE_QT_NETWORK_MANAGER_H__
+#define __KE_QT_NETWORK_MANAGER_H__
 
-#include <rapidjson/document.h>
+#include <functional>
 
-#include <QtWidgets/QApplication>
+#include <QtCore/QString>
+#include <QtNetwork/QNetworkAccessManager>
 
 namespace KE::Qt {
 
-class Application : public QApplication {
-
-private:
-	bool windowsListSaved;
+class NetworkManager : public QNetworkAccessManager {
 
 public:
-	Application(int &argc, char **argv);
-	bool event(QEvent *event) override;
+	NetworkManager(QObject *parent) : QNetworkAccessManager(parent) {}
 
-	QWidget *library();
-	QWidget *newDiagram();
-	QWidget *openFile();
-	QWidget *openFile(const QString &filename);
-	QWidget *openDocument(const rapidjson::Document &doc, const QString &identifier);
-	void exitApplication();
-
-private:
-	void closeStartWindow();
+	void searchDiagram(const QString &code, const std::function<void(const QByteArray &response)> callback);
 };
 
 }
 
-#endif /* __KE_QT_APPLICATION_H__ */
+#endif /* __KE_QT_NETWORK_MANAGER_H__ */

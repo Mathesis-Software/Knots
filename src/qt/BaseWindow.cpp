@@ -51,7 +51,6 @@ void BaseWindow::createFileMenu() {
 	library->setShortcut(QKeySequence("Ctrl+L"));
 	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<Application*>(qApp)->newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	fileMenu->addAction("Diagram from code", [] { dynamic_cast<Application*>(qApp)->diagramFromCode(); });
 	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<Application*>(qApp)->openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();

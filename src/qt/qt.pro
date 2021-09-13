@@ -13,7 +13,6 @@ DEFINES += 'VERSION=\\"`cat ../VERSION`\\"'
 SOURCES = \
 	AboutWindow.cpp \
 	Application.cpp \
-	Application_network.cpp \
 	BaseWindow.cpp \
 	DiagramPropertiesDialog.cpp \
 	DiagramWidget.cpp \
@@ -26,6 +25,7 @@ SOURCES = \
 	KnotWidget_smooth.cpp \
 	KnotWindow.cpp \
 	LibraryWindow.cpp \
+	NetworkManager.cpp \
 	StartWindow.cpp \
 	Window.cpp \
 	main.cpp

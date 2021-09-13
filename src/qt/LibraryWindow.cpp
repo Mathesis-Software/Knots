@@ -31,6 +31,7 @@
 
 #include "Application.h"
 #include "LibraryWindow.h"
+#include "NetworkManager.h"
 #include "../ke/Diagram.h"
 #include "../ke/Knot.h"
 #include "../ke/Util_rapidjson.h"
@@ -176,22 +177,10 @@ private:
 class DataItem : public QListWidgetItem {
 
 public:
-	const QString fullName;
+	virtual void open() const = 0;
 
-private:
-	int index;
-
-public:
-	DataItem(const QDirIterator &iter) : fullName(iter.filePath()), index(1000000) {
-		QRegularExpression re("^(\\d+)_(\\d+)\\....$");
-		QRegularExpressionMatch match = re.match(iter.fileName());
-		if (match.hasMatch()) {
-			this->index = 1000 * match.captured(1).toInt() + 1 * match.captured(2).toInt();
-		}
-
-		QResource resource(this->fullName);
-		rapidjson::Document doc;
-		doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
+protected:
+	void init(const rapidjson::Document &doc) {
 		const std::string type = KE::Util::rapidjson::getString(doc, "type");
 		std::string name;
 		QPixmap pixmap(400, 400);
@@ -204,6 +193,8 @@ public:
 			const TwoD::Diagram diagram(doc);
 			this->setText(diagram.caption.c_str());
 			DiagramPreview(diagram).paint(pixmap);
+		} else {
+			throw std::runtime_error("The data do not represent a knot nor a diagram");
 		}
 
 		this->setTextAlignment(::Qt::AlignCenter);
@@ -213,10 +204,52 @@ public:
 		icon.addPixmap(pixmap, QIcon::Selected);
 		this->setIcon(icon);
 	}
+};
+
+class FileDataItem : public DataItem {
+
+private:
+	const QString path;
+	const int index;
+
+public:
+	FileDataItem(const QString &path, int index) : path(path), index(index) {
+		QResource resource(this->path);
+		rapidjson::Document doc;
+		doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
+		this->init(doc);
+	}
 
 	bool operator < (const QListWidgetItem &other) const override {
-		const DataItem &data = dynamic_cast<const DataItem&>(other);
-		return this->index < data.index || (this->index == data.index && this->fullName < data.fullName);
+		const FileDataItem &data = dynamic_cast<const FileDataItem&>(other);
+		return this->index < data.index || (this->index == data.index && this->path < data.path);
+	}
+
+private:
+	void open() const override {
+		dynamic_cast<Application*>(qApp)->openFile(this->path);
+	}
+};
+
+class DataDataItem : public DataItem {
+
+private:
+	const QByteArray data;
+
+public:
+	DataDataItem(const QByteArray &data) : data(data) {
+		this->init(this->document());
+	}
+
+private:
+	rapidjson::Document document() const {
+		rapidjson::Document doc;
+		doc.Parse(reinterpret_cast<const char*>(this->data.data()), this->data.size());
+		return doc;
+	}
+
+	void open() const override {
+		dynamic_cast<Application*>(qApp)->openDocument(this->document(), QString());
 	}
 };
 
@@ -232,6 +265,13 @@ public:
 		this->setSpacing(5);
 		this->setUniformItemSizes(true);
 		this->setStyleSheet("QListWidget{background:#d8d8d8;} QListWidget::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListWidget::item::selected{border:2px solid #404040;}");
+
+		QObject::connect(this, &QListWidget::itemEntered, [](QListWidgetItem *item) {
+			item->setSelected(true);
+		});
+		QObject::connect(this, &QListWidget::itemClicked, [](QListWidgetItem *item) {
+			dynamic_cast<const DataItem*>(item)->open();
+		});
 	}
 
 private:
@@ -252,8 +292,7 @@ private:
 		if (selected.size() != 1) {
 			return;
 		}
-		const DataItem *data = dynamic_cast<const DataItem*>(selected[0]);
-		dynamic_cast<Application*>(qApp)->openFile(data->fullName);
+		dynamic_cast<const DataItem*>(selected[0])->open();
 	}
 };
 
@@ -305,6 +344,16 @@ LibraryWindow::LibraryWindow() {
 		const auto pattern = searchLine->text();
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
+			auto manager = new NetworkManager(this);
+			// TODO: show some waiting indicator
+			manager->searchDiagram(pattern, [searchResults] (const QByteArray &data) {
+				searchResults->clear();
+				try {
+					searchResults->addItem(new DataDataItem(data));
+				} catch (const std::runtime_error &e) {
+					// TODO: show error message
+				}
+			});
 			tabs->setCurrentIndex(fakeTabIndex);
 			diagrams->setVisible(false);
 			knots->setVisible(false);
@@ -349,21 +398,21 @@ LibraryWindow::LibraryWindow() {
 
 QWidget *LibraryWindow::createList(const QString &suffix) {
 	auto list = new LibraryListWidget();
-	for (QDirIterator it(":data", QDirIterator::Subdirectories); it.hasNext(); ) {
-		const auto fileName = it.next();
+	for (QDirIterator iter(":data", QDirIterator::Subdirectories); iter.hasNext(); ) {
+		const auto fileName = iter.next();
 		if (!fileName.endsWith(suffix)) {
 			continue;
 		}
-		list->addItem(new DataItem(it));
+
+		QRegularExpression re("^(\\d+)_(\\d+)\\....$");
+		QRegularExpressionMatch match = re.match(iter.fileName());
+		int index = std::numeric_limits<int>::max();
+		if (match.hasMatch()) {
+			index = 1000 * match.captured(1).toInt() + 1 * match.captured(2).toInt();
+		}
+		list->addItem(new FileDataItem(iter.filePath(), index));
 	}
 	list->sortItems();
-	QObject::connect(list, &QListWidget::itemEntered, [](QListWidgetItem *item) {
-		item->setSelected(true);
-	});
-	QObject::connect(list, &QListWidget::itemClicked, [](QListWidgetItem *item) {
-		const DataItem *data = dynamic_cast<const DataItem*>(item);
-		dynamic_cast<Application*>(qApp)->openFile(data->fullName);
-	});
 	return list;
 }
 

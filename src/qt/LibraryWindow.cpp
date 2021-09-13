@@ -275,8 +275,8 @@ LibraryWindow::LibraryWindow() {
 	auto searchResults = new LibraryListWidget();
 	tabs->addTab("Diagrams");
 	tabs->addTab("Knots");
-	auto fakeIndex = tabs->addTab(QString());
-	tabs->setTabVisible(fakeIndex, false);
+	const auto fakeTabIndex = tabs->addTab(QString());
+	tabs->setTabVisible(fakeTabIndex, false);
 	top->addWidget(tabs);
 	top->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
 	auto searchLine = new QLineEdit;
@@ -285,16 +285,27 @@ LibraryWindow::LibraryWindow() {
 	searchLine->setAttribute(::Qt::WA_MacShowFocusRect, 0);
 	searchLine->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
 	auto clearAction = searchLine->addAction(QIcon(":images/clear.svg"), QLineEdit::TrailingPosition);
-	QObject::connect(clearAction, &QAction::triggered, [searchLine] { searchLine->setText(QString()); });
+	QObject::connect(clearAction, &QAction::triggered, [=] {
+		searchLine->setText(QString());
+		if (tabs->currentIndex() == fakeTabIndex) {
+			QSettings settings;
+			settings.beginGroup("Window:" + this->identifier());
+			const auto index = settings.value("currentTabIndex").toInt();
+			tabs->setCurrentIndex(index);
+			emit tabs->tabBarClicked(index);
+			settings.endGroup();
+		}
+		clearAction->setVisible(false);
+	});
 	clearAction->setVisible(false);
-	QObject::connect(searchLine, &QLineEdit::textChanged, [clearAction](const QString &text) {
-		clearAction->setVisible(!text.isEmpty());
+	QObject::connect(searchLine, &QLineEdit::textChanged, [=](const QString &text) {
+		clearAction->setVisible(tabs->currentIndex() == fakeTabIndex || !text.isEmpty());
 	});
 	QObject::connect(searchLine, &QLineEdit::returnPressed, [=]() {
 		const auto pattern = searchLine->text();
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
-			tabs->setCurrentIndex(fakeIndex);
+			tabs->setCurrentIndex(fakeTabIndex);
 			diagrams->setVisible(false);
 			knots->setVisible(false);
 			searchResults->setVisible(true);
@@ -309,15 +320,17 @@ LibraryWindow::LibraryWindow() {
 	{
 		QSettings settings;
 		settings.beginGroup("Window:" + this->identifier());
-		const int index = settings.value("currentTabIndex").toInt();
-		if (index > 0) {
-			tabs->setCurrentIndex(index);
-		}
+		tabs->setCurrentIndex(settings.value("currentTabIndex").toInt());
 		settings.endGroup();
 	}
 	QObject::connect(tabs, &QTabBar::tabBarClicked, [=](int index) {
 		diagrams->setVisible(index == 0);
 		knots->setVisible(index == 1);
+		if (index == 0) {
+			diagrams->setFocus();
+		} else if (index == 1) {
+			knots->setFocus();
+		}
 		searchResults->setVisible(false);
 		QSettings settings;
 		settings.beginGroup("Window:" + this->identifier());

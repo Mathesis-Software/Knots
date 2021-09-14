@@ -45,6 +45,7 @@ AboutDialog::AboutDialog() {
 	this->setPalette(pal);
 
 	auto main = new QVBoxLayout(this);
+	main->setSpacing(0);
 	auto hlayout = new QHBoxLayout;
 	hlayout->setContentsMargins(10, 5, 30, 0);
 	hlayout->setSpacing(15);
@@ -62,11 +63,12 @@ AboutDialog::AboutDialog() {
 	hlayout->addLayout(vlayout);
 
 	auto title = new QLabel(QString("Knot Editor<br/>") + VERSION, this);
-	title->setFont(QFont("Helvetica", 14));
+	auto font = title->font();
+	font.setPointSize(font.pointSize() * 1.5);
+	title->setFont(font);
 	title->setAlignment(::Qt::AlignHCenter);
 	vlayout->addWidget(title);
 	auto link = new QLabel("<a href='https://knots.geometer.name/'>knots.geometer.name</a>", this);
-	link->setFont(QFont("Helvetica", 10));
 	link->setAlignment(::Qt::AlignHCenter);
 	link->setOpenExternalLinks(true);
 	vlayout->addWidget(link);

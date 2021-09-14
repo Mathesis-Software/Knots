@@ -171,7 +171,7 @@ QWidget *Application::openDocument(const rapidjson::Document &doc, const QString
 }
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
-	this->setFont(QFont("Helvetica"));
+	this->setFont(QFont("Helvetica", 10));
 	this->setStyle(new ProxyStyle);
 
 	QObject::connect(this, &QApplication::aboutToQuit, [this] {

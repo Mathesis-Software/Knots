@@ -419,9 +419,12 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
 			// TODO: show some waiting indicator
-			this->networkManager->searchDiagram(pattern, [this, searchResults] (const QByteArray &data) {
+			this->networkManager->searchDiagram(pattern, [this, searchResults] (int errorCode, const QByteArray &data) {
 				searchResults->clear();
 				try {
+					if (errorCode != 0) {
+						throw std::runtime_error("Network error");
+					}
 					searchResults->addItem(new DataDataItem(data));
 				} catch (const std::runtime_error &e) {
 					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");

@@ -213,7 +213,6 @@ void Diagram::removeEdge(const Edge &edge) {
 		for (auto it = edges.begin(); it != loc; ++it) {
 			new_list.push_back(it->end);
 		}
-		// TODO: remove crossings
 		new_list.back()->crossings.clear();
 		for (const auto &vertex : new_list) {
 			vertex->crossings.remove_if([edge](const Crossing &crossing) { return crossing.up == edge; });

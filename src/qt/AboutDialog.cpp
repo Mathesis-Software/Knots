@@ -45,7 +45,7 @@ AboutDialog::AboutDialog() {
 	this->setPalette(pal);
 
 	auto main = new QVBoxLayout(this);
-	main->setSpacing(0);
+	main->setSpacing(5);
 	auto hlayout = new QHBoxLayout;
 	hlayout->setContentsMargins(10, 5, 30, 0);
 	hlayout->setSpacing(15);
@@ -54,11 +54,9 @@ AboutDialog::AboutDialog() {
 	const auto dpr = this->devicePixelRatio();
 	pixmap.setDevicePixelRatio(dpr);
 	auto icon = new QLabel;
-	icon->setFixedSize(128, 128);
-	icon->setPixmap(pixmap.scaled(128 * dpr, 128 * dpr, ::Qt::IgnoreAspectRatio, ::Qt::SmoothTransformation));
 	hlayout->addWidget(icon);
 	auto vlayout = new QVBoxLayout;
-	vlayout->setContentsMargins(0, 15, 0, 0);
+	vlayout->setContentsMargins(0, 10, 0, 0);
 	vlayout->setSpacing(10);
 	hlayout->addLayout(vlayout);
 
@@ -72,6 +70,9 @@ AboutDialog::AboutDialog() {
 	link->setAlignment(::Qt::AlignHCenter);
 	link->setOpenExternalLinks(true);
 	vlayout->addWidget(link);
+
+	const int height = vlayout->sizeHint().height() * 1.2 * dpr;
+	icon->setPixmap(pixmap.scaled(height, height, ::Qt::IgnoreAspectRatio, ::Qt::SmoothTransformation));
 
 	auto box = new QDialogButtonBox(QDialogButtonBox::Ok, this);
 	QObject::connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);

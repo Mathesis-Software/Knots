@@ -21,10 +21,12 @@
 #include <QtCore/QDirIterator>
 #include <QtCore/QResource>
 #include <QtCore/QSettings>
+#include <QtCore/QStringListModel>
 #include <QtGui/QAction>
 #include <QtGui/QDesktopServices>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
+#include <QtWidgets/QCompleter>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QVBoxLayout>
@@ -302,6 +304,44 @@ private:
 	}
 };
 
+class SearchBar : public QLineEdit {
+
+private:
+	QStringListModel *historyModel;
+
+public:
+	SearchBar() {
+		const QSettings settings;
+		const QStringList history = settings.value("NetworkSearchHistory").toStringList();
+		this->historyModel = new QStringListModel(history, this);
+		this->setCompleter(new QCompleter(this->historyModel, this));
+
+		this->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
+		auto helpAction = this->addAction(QIcon(":images/question.svg"), QLineEdit::TrailingPosition);
+		QObject::connect(helpAction, &QAction::triggered, [=] {
+			QDesktopServices::openUrl(QUrl("https://knots.geometer.name/help/search"));
+		});
+	}
+
+	void addPattern(const QString &pattern) {
+		if (pattern.isEmpty()) {
+			return;
+		}
+
+		const auto index = this->historyModel->stringList().indexOf(pattern);
+		if (index > 0) {
+			this->historyModel->removeRows(index, 1);
+		}
+		if (index != 0) {
+			this->historyModel->insertRows(0, 1);
+			this->historyModel->setData(this->historyModel->index(0), pattern);
+			QSettings settings;
+			settings.setValue("NetworkSearchHistory", this->historyModel->stringList().mid(0, 100));
+			settings.sync();
+		}
+	}
+};
+
 }
 
 LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
@@ -324,15 +364,10 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 	tabs->setTabVisible(fakeTabIndex, false);
 	top->addWidget(tabs);
 	top->addItem(new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum));
-	auto searchLine = new QLineEdit;
+	auto searchLine = new SearchBar;
 	searchLine->setMinimumHeight(24);
 	searchLine->setMaximumWidth(200);
 	searchLine->setAttribute(::Qt::WA_MacShowFocusRect, 0);
-	searchLine->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
-	auto helpAction = searchLine->addAction(QIcon(":images/question.svg"), QLineEdit::TrailingPosition);
-	QObject::connect(helpAction, &QAction::triggered, [=] {
-		QDesktopServices::openUrl(QUrl("https://knots.geometer.name/help/search"));
-	});
 	auto clearAction = searchLine->addAction(QIcon(":images/clear.svg"), QLineEdit::TrailingPosition);
 	QObject::connect(clearAction, &QAction::triggered, [=] {
 		searchLine->setText(QString());
@@ -370,6 +405,7 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 			diagrams->setVisible(false);
 			knots->setVisible(false);
 			searchResults->setVisible(true);
+			searchLine->addPattern(pattern);
 		}
 	});
 	top->addWidget(searchLine);

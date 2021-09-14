@@ -29,7 +29,7 @@ class NetworkManager : public QNetworkAccessManager {
 public:
 	NetworkManager(QObject *parent) : QNetworkAccessManager(parent) {}
 
-	void searchDiagram(const QString &code, const std::function<void(const QByteArray &response)> callback);
+	void searchDiagram(const QString &code, const std::function<void(int errorCode, const QByteArray &response)> callback);
 };
 
 }

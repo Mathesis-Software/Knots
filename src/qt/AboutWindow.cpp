@@ -17,6 +17,7 @@
 #include <QtGui/QAction>
 #include <QtGui/QScreen>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 
 #include "AboutWindow.h"
 #include "Application.h"
@@ -36,25 +37,34 @@ AboutWindow::AboutWindow() {
 	this->setWindowFlags(::Qt::Window | ::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 	this->setWindowModality(::Qt::ApplicationModal);
-	setFixedSize(380, 180);
+	setFixedSize(380, 200);
 	QPalette pal = this->palette();
 	pal.setColor(QPalette::Window, ::Qt::white);
 	this->setAutoFillBackground(true);
 	this->setPalette(pal);
 
 	auto icon = new QLabel(this);
-	icon->setGeometry(36, 26, 128, 128);
+	icon->setGeometry(36, 36, 128, 128);
 	QPixmap pixmap(":images/trefoil.png");
 	const auto dpr = this->devicePixelRatio();
 	pixmap.setDevicePixelRatio(dpr);
 	icon->setPixmap(pixmap.scaled(128 * dpr, 128 * dpr, ::Qt::IgnoreAspectRatio, ::Qt::SmoothTransformation));
 
-	auto text = new QLabel(this);
-	text->setGeometry(180, 30, 150, 120);
-	QFont fnt("Helvetica", 14);
-	text->setFont(fnt);
-	text->setAlignment(::Qt::AlignCenter);
-	text->setText(QString("Knot Editor\n") + VERSION);
+	auto title = new QLabel(QString("Knot Editor<br/>") + VERSION, this);
+	title->setGeometry(180, 10, 150, 120);
+	title->setFont(QFont("Helvetica", 14));
+	title->setAlignment(::Qt::AlignCenter);
+	auto link = new QLabel("<a href='https://knots.geometer.name/'>knots.geometer.name</a>", this);
+	link->setGeometry(180, 60, 150, 120);
+	link->setFont(QFont("Helvetica", 10));
+	link->setAlignment(::Qt::AlignCenter);
+	link->setOpenExternalLinks(true);
+
+	auto button = new QPushButton("Ok", this);
+	button->move(280, 160);
+	button->setFocus();
+	button->setDefault(true);
+	QObject::connect(button, &QPushButton::clicked, [this] { this->close(); });
 
 	auto close = new QAction();
 	close->setShortcut(QKeySequence("Ctrl+W"));
@@ -68,10 +78,6 @@ AboutWindow::AboutWindow() {
 		dynamic_cast<Application*>(qApp)->exitApplication();
 	});
 	this->addAction(quit);
-}
-
-void AboutWindow::mousePressEvent(QMouseEvent*) {
-	this->close();
 }
 
 }

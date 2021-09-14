@@ -28,9 +28,6 @@ public:
 
 public:
 	AboutWindow();
-
-private:
-	void mousePressEvent(QMouseEvent *event) override;
 };
 
 }

@@ -24,7 +24,7 @@ namespace KE::Qt {
 
 // TODO: add network error callback
 void NetworkManager::searchDiagram(const QString &code, const std::function<void(const QByteArray &response)> callback) {
-	QUrl url("https://knots.geometer.name/api/diagram4code");
+	QUrl url("https://knots.geometer.name/api/diagram");
 	QNetworkRequest request;
 	request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

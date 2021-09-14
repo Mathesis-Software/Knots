@@ -29,6 +29,7 @@
 #include <QtWidgets/QCompleter>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QVBoxLayout>
 
 #include "Application.h"
@@ -323,6 +324,19 @@ public:
 		});
 	}
 
+	void contextMenuEvent(QContextMenuEvent *event) override {
+    QMenu *menu = createStandardContextMenu();
+    menu->addSeparator();
+    auto cleaning = menu->addAction(QIcon(":images/cleaning.svg"), "Clear History");
+		QObject::connect(cleaning, &QAction::triggered, [this] {
+			this->historyModel->setStringList(QStringList());
+			this->saveHistory();
+		});
+		cleaning->setEnabled(!this->historyModel->stringList().isEmpty());
+    menu->exec(event->globalPos());
+    delete menu;
+	}
+
 	void addPattern(const QString &pattern) {
 		if (pattern.isEmpty()) {
 			return;
@@ -335,10 +349,15 @@ public:
 		if (index != 0) {
 			this->historyModel->insertRows(0, 1);
 			this->historyModel->setData(this->historyModel->index(0), pattern);
-			QSettings settings;
-			settings.setValue("NetworkSearchHistory", this->historyModel->stringList().mid(0, 100));
-			settings.sync();
+			this->saveHistory();
 		}
+	}
+
+private:
+	void saveHistory() {
+		QSettings settings;
+		settings.setValue("NetworkSearchHistory", this->historyModel->stringList().mid(0, 100));
+		settings.sync();
 	}
 };
 

@@ -17,7 +17,7 @@
 #include <QtCore/QSettings>
 #include <QtWidgets/QMenuBar>
 
-#include "AboutWindow.h"
+#include "AboutDialog.h"
 #include "Application.h"
 #include "BaseWindow.h"
 #include "Window.h"
@@ -62,7 +62,7 @@ void BaseWindow::createFileMenu() {
 		fileMenu->addAction("Rename…", window, &Window::rename);
 		fileMenu->addSeparator();
 	}
-	fileMenu->addAction("About", [] { AboutWindow::showAboutDialog(); });
+	fileMenu->addAction("About", [] { AboutDialog::showAboutDialog(); });
 	fileMenu->addSeparator();
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));

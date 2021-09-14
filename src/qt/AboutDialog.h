@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-#ifndef __KE_QT_ABOUT_WINDOW_H__
-#define __KE_QT_ABOUT_WINDOW_H__
+#ifndef __KE_QT_ABOUT_DIALOG_H__
+#define __KE_QT_ABOUT_DIALOG_H__
 
-#include <QtWidgets/QWidget>
+#include <QtWidgets/QDialog>
 
 namespace KE::Qt {
 
-class AboutWindow : public QWidget {
+class AboutDialog : public QDialog {
 
 public:
 	static void showAboutDialog();
 
 public:
-	AboutWindow();
+	AboutDialog();
 };
 
 }
 
-#endif /* __KE_QT_ABOUT_WINDOW_H__ */
+#endif /* __KE_QT_ABOUT_DIALOG_H__ */

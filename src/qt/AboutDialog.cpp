@@ -16,55 +16,65 @@
 
 #include <QtGui/QAction>
 #include <QtGui/QScreen>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
+#include <QtWidgets/QVBoxLayout>
 
-#include "AboutWindow.h"
+#include "AboutDialog.h"
 #include "Application.h"
 
 namespace KE::Qt {
 
-void AboutWindow::showAboutDialog() {
-	auto about = new AboutWindow();
-	const QRect screenGeometry = about->screen()->geometry();
-	const int x = (screenGeometry.width() - 380) / 2;
-	const int y = (screenGeometry.height() - 180) / 2;
-	about->move(x, y);
+void AboutDialog::showAboutDialog() {
+	auto about = new AboutDialog();
 	about->show();
+	const QRect screenGeometry = about->screen()->geometry();
+	const int x = (screenGeometry.width() - about->width()) / 2;
+	const int y = (screenGeometry.height() - about->height()) / 2;
+	about->move(x, y);
 }
 
-AboutWindow::AboutWindow() {
-	this->setWindowFlags(::Qt::Window | ::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
+AboutDialog::AboutDialog() {
+	this->setWindowFlags(::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
 	this->setAttribute(::Qt::WA_DeleteOnClose);
-	this->setWindowModality(::Qt::ApplicationModal);
-	setFixedSize(380, 200);
+	this->setModal(true);
 	QPalette pal = this->palette();
 	pal.setColor(QPalette::Window, ::Qt::white);
 	this->setAutoFillBackground(true);
 	this->setPalette(pal);
 
-	auto icon = new QLabel(this);
-	icon->setGeometry(36, 36, 128, 128);
+	auto main = new QVBoxLayout(this);
+	auto hlayout = new QHBoxLayout;
+	hlayout->setContentsMargins(10, 5, 30, 0);
+	hlayout->setSpacing(15);
+	main->addLayout(hlayout);
 	QPixmap pixmap(":images/trefoil.png");
 	const auto dpr = this->devicePixelRatio();
 	pixmap.setDevicePixelRatio(dpr);
+	auto icon = new QLabel;
+	icon->setFixedSize(128, 128);
 	icon->setPixmap(pixmap.scaled(128 * dpr, 128 * dpr, ::Qt::IgnoreAspectRatio, ::Qt::SmoothTransformation));
+	hlayout->addWidget(icon);
+	auto vlayout = new QVBoxLayout;
+	vlayout->setContentsMargins(0, 15, 0, 0);
+	vlayout->setSpacing(10);
+	hlayout->addLayout(vlayout);
 
 	auto title = new QLabel(QString("Knot Editor<br/>") + VERSION, this);
-	title->setGeometry(180, 10, 150, 120);
 	title->setFont(QFont("Helvetica", 14));
-	title->setAlignment(::Qt::AlignCenter);
+	title->setAlignment(::Qt::AlignHCenter);
+	vlayout->addWidget(title);
 	auto link = new QLabel("<a href='https://knots.geometer.name/'>knots.geometer.name</a>", this);
-	link->setGeometry(180, 60, 150, 120);
 	link->setFont(QFont("Helvetica", 10));
-	link->setAlignment(::Qt::AlignCenter);
+	link->setAlignment(::Qt::AlignHCenter);
 	link->setOpenExternalLinks(true);
+	vlayout->addWidget(link);
 
-	auto button = new QPushButton("Ok", this);
-	button->move(280, 160);
-	button->setFocus();
-	button->setDefault(true);
-	QObject::connect(button, &QPushButton::clicked, [this] { this->close(); });
+	auto box = new QDialogButtonBox(QDialogButtonBox::Ok, this);
+	QObject::connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);
+	main->addWidget(box);
+	main->setSizeConstraint(QLayout::SetFixedSize);
 
 	auto close = new QAction();
 	close->setShortcut(QKeySequence("Ctrl+W"));

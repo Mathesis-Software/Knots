@@ -11,7 +11,7 @@ LIBS += -lke -lmath
 DEFINES += 'VERSION=\\"`cat ../VERSION`\\"'
 
 SOURCES = \
-	AboutWindow.cpp \
+	AboutDialog.cpp \
 	Application.cpp \
 	BaseWindow.cpp \
 	DiagramPropertiesDialog.cpp \

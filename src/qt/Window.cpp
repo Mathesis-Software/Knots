@@ -50,7 +50,7 @@ bool Window::saveBeforeClosing() {
 
 	const QString question = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
 	while (!this->isSaved()) {
-		const int answer = QMessageBox::warning(
+		const int answer = QMessageBox::question(
 			this, "Closing window", question, QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
 		);
 		switch (answer) {
@@ -110,7 +110,7 @@ void Window::save() {
 
 	std::ofstream os(filename.toStdString());
 	if (!os) {
-		QMessageBox::critical(this, "Error", "\nCannot open file \"" + filename + "\" for writing\n");
+		QMessageBox::warning(this, "Error", "\nCannot open file \"" + filename + "\" for writing\n");
 		return;
 	}
 
@@ -122,7 +122,7 @@ void Window::save() {
 void Window::exportPNG() {
 	auto image = this->exportImage();
 	if (image.isNull()) {
-		QMessageBox::critical(this, "Error", "\nCannot grab image\n");
+		QMessageBox::warning(this, "Error", "\nCannot grab image\n");
 		return;
 	}
 

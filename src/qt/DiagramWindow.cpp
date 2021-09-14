@@ -167,12 +167,12 @@ void DiagramWindow::clear() {
 
 void DiagramWindow::convert() {
 	if (!this->diagramWidget()->diagram.isClosed()) {
-		QMessageBox::critical(this, "Error", "\nCannot convert non-closed diagram.\n");
+		QMessageBox::warning(this, "Error", "\nCannot convert non-closed diagram.\n");
 		return;
 	}
 
 	if (this->diagramWidget()->diagram.vertices().size() <= 2) {
-		QMessageBox::critical(this, "Error", "\nCannot convert diagram with less than three points.\n");
+		QMessageBox::warning(this, "Error", "\nCannot convert diagram with less than three points.\n");
 		return;
 	}
 

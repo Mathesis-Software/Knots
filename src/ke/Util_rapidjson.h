@@ -25,7 +25,7 @@
 namespace KE::Util::rapidjson {
 
 inline std::string getString(const ::rapidjson::Value &doc, const std::string &key) {
-	if (doc.HasMember(key.c_str())) {
+	if (doc.IsObject() && doc.HasMember(key.c_str())) {
 		const auto &obj = doc[key.c_str()];
 		if (obj.IsString()) {
 			return std::string(obj.GetString(), obj.GetStringLength());

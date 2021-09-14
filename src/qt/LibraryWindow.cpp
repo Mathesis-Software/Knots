@@ -30,6 +30,7 @@
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMenu>
+#include <QtWidgets/QMessageBox>
 #include <QtWidgets/QVBoxLayout>
 
 #include "Application.h"
@@ -184,6 +185,10 @@ public:
 
 protected:
 	void init(const rapidjson::Document &doc) {
+		if (doc.IsNull()) {
+			throw std::runtime_error("The data are not in JSON format");
+		}
+
 		const std::string type = KE::Util::rapidjson::getString(doc, "type");
 		std::string name;
 		QPixmap pixmap(400, 400);
@@ -197,7 +202,12 @@ protected:
 			this->setText(diagram.caption.c_str());
 			DiagramPreview(diagram).paint(pixmap);
 		} else {
-			throw std::runtime_error("The data do not represent a knot nor a diagram");
+			const std::string error = KE::Util::rapidjson::getString(doc, "error");
+			if (!error.empty()) {
+				throw std::runtime_error(error.c_str());
+			} else {
+				throw std::runtime_error("The data do not represent a knot nor a diagram");
+			}
 		}
 
 		this->setTextAlignment(::Qt::AlignCenter);
@@ -409,12 +419,12 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
 			// TODO: show some waiting indicator
-			this->networkManager->searchDiagram(pattern, [searchResults] (const QByteArray &data) {
+			this->networkManager->searchDiagram(pattern, [this, searchResults] (const QByteArray &data) {
 				searchResults->clear();
 				try {
 					searchResults->addItem(new DataDataItem(data));
 				} catch (const std::runtime_error &e) {
-					// TODO: show error message
+					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");
 				}
 				if (searchResults->count() > 0) {
 					searchResults->setFocus();

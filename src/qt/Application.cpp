@@ -148,7 +148,7 @@ QWidget *Application::openFile(const QString &filename) {
 
 		return this->openDocument(doc, filename);
 	} catch (const std::runtime_error &e) {
-		QMessageBox::critical(nullptr, "File opening error", QString("\n") + e.what() + "\n");
+		QMessageBox::warning(nullptr, "File opening error", QString("\n") + e.what() + "\n");
 		return nullptr;
 	}
 }
@@ -157,9 +157,9 @@ QWidget *Application::openDocument(const rapidjson::Document &doc, const QString
 	Window *window = nullptr;
 	if (doc.IsNull()) {
 		throw std::runtime_error("The data are not in JSON format");
-	} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "diagram") {
+	} else if (Util::rapidjson::getString(doc, "type") == "diagram") {
 		window = new DiagramWindow(doc, identifier);
-	} else if (doc.IsObject() && Util::rapidjson::getString(doc, "type") == "link") {
+	} else if (Util::rapidjson::getString(doc, "type") == "link") {
 		window = new KnotWindow(doc, identifier);
 	} else {
 		throw std::runtime_error("The data do not represent a knot nor a diagram");

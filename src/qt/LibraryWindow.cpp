@@ -273,7 +273,7 @@ public:
 		QObject::connect(this, &QListWidget::itemClicked, [](QListWidgetItem *item) {
 			dynamic_cast<const DataItem*>(item)->open();
 		});
-		QObject::connect(this, &QListWidget::currentItemChanged, [](QListWidgetItem *current, QListWidgetItem *previous) {
+		QObject::connect(this, &QListWidget::currentItemChanged, [](QListWidgetItem *current, QListWidgetItem* /*previous*/) {
 			if (current) {
 				current->setSelected(true);
 			}
@@ -304,7 +304,7 @@ private:
 
 }
 
-LibraryWindow::LibraryWindow() {
+LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 	this->setCentralWidget(new QWidget);
 	auto vlayout = new QVBoxLayout(this->centralWidget());
 	vlayout->setSpacing(0);
@@ -354,9 +354,8 @@ LibraryWindow::LibraryWindow() {
 		const auto pattern = searchLine->text();
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
-			auto manager = new NetworkManager(this);
 			// TODO: show some waiting indicator
-			manager->searchDiagram(pattern, [searchResults] (const QByteArray &data) {
+			this->networkManager->searchDiagram(pattern, [searchResults] (const QByteArray &data) {
 				searchResults->clear();
 				try {
 					searchResults->addItem(new DataDataItem(data));

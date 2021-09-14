@@ -23,7 +23,12 @@
 
 namespace KE::Qt {
 
+class NetworkManager;
+
 class LibraryWindow : public BaseWindow {
+
+private:
+	NetworkManager *networkManager;
 
 public:
 	LibraryWindow();

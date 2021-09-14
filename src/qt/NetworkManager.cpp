@@ -28,15 +28,14 @@ void NetworkManager::searchDiagram(const QString &code, const std::function<void
 	QNetworkRequest request;
 	request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-	QObject::connect(this, &QNetworkAccessManager::finished, this->parent(), [callback](QNetworkReply *reply) {
-		// TODO: veerify request id
-		// TODO: disconnect this callback
-		callback(reply->readAll());
-	});
 	QJsonObject data;
 	data["code"] = code;
 	data["debug"] = true;
-	this->post(request, QJsonDocument(data).toJson());
+	auto reply = this->post(request, QJsonDocument(data).toJson());
+	QObject::connect(reply, &QNetworkReply::finished, this->parent(), [callback, reply]() {
+		callback(reply->readAll());
+		reply->deleteLater();
+	});
 }
 
 }

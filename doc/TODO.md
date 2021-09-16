@@ -4,6 +4,7 @@
 * TODOs in the code
 * The site: acknowledgements section
 * Help action: hilite if under mouse
+* Pattern search (like 9_\* or T(2,\*))
 
 ### Mac specific
 
@@ -14,6 +15,7 @@
 
 ### Bug fixing
 
+* Parameters window for T(3,16) hangs the app
 * GL: widget resizing blinks in black; probably, setBackgroundColor for something helps
 * Multiple scratches in Seifert surfaces
 * Rare crash in 3d mode

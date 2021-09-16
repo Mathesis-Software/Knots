@@ -71,7 +71,7 @@ private:
 	void selectMouseCursor();
 
 public:
-	DiagramWidget(QWidget *parent, const rapidjson::Document &doc);
+	DiagramWidget(QWidget *parent, const rapidjson::Value &doc);
 	DiagramWidget(QWidget *parent);
 
 	void drawIt(QPainter &painter);

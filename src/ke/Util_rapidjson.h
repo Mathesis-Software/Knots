@@ -34,7 +34,7 @@ inline std::string getString(const ::rapidjson::Value &doc, const std::string &k
 	return "";
 }
 
-inline std::string docToString(const ::rapidjson::Document &doc) {
+inline std::string docToString(const ::rapidjson::Value &doc) {
 	::rapidjson::StringBuffer buffer;
 	buffer.Clear();
 	::rapidjson::Writer<::rapidjson::StringBuffer> writer(buffer);

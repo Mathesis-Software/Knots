@@ -153,7 +153,7 @@ QWidget *Application::openFile(const QString &filename) {
 	}
 }
 
-QWidget *Application::openDocument(const rapidjson::Document &doc, const QString &identifier) {
+QWidget *Application::openDocument(const rapidjson::Value &doc, const QString &identifier) {
 	Window *window = nullptr;
 	if (doc.IsNull()) {
 		throw std::runtime_error("The data are not in JSON format");

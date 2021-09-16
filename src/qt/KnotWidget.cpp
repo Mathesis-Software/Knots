@@ -28,7 +28,7 @@
 
 namespace KE::Qt {
 
-KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Document &doc) : GLWidget(parent), knot(doc), smoothingThread(this) {
+KnotWidget::KnotWidget(QWidget *parent, const rapidjson::Value &doc) : GLWidget(parent), knot(doc), smoothingThread(this) {
 	this->init();
 }
 

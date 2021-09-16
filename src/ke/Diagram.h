@@ -110,7 +110,7 @@ public:
 
 	public:
 		Diagram();
-		Diagram(const rapidjson::Document &doc);
+		Diagram(const rapidjson::Value &doc);
 
 		rapidjson::Document serialize() const;
 

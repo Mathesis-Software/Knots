@@ -22,7 +22,7 @@
 
 namespace KE::TwoD {
 
-Diagram::Diagram(const rapidjson::Document &doc) : _isClosed(false) {
+Diagram::Diagram(const rapidjson::Value &doc) : _isClosed(false) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}

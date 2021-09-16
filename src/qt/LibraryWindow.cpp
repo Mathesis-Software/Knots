@@ -184,7 +184,7 @@ public:
 	virtual void open() const = 0;
 
 protected:
-	void init(const rapidjson::Document &doc) {
+	void init(const rapidjson::Value &doc) {
 		if (doc.IsNull()) {
 			throw std::runtime_error("The data are not in JSON format");
 		}

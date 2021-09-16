@@ -61,7 +61,7 @@ private:
 	SmoothingThread smoothingThread;
 
 public:
-	KnotWidget(QWidget *parent, const rapidjson::Document &doc);
+	KnotWidget(QWidget *parent, const rapidjson::Value &doc);
 	KnotWidget(QWidget *parent, const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
 
 private:

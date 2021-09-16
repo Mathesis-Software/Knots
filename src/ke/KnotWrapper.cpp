@@ -47,7 +47,7 @@ KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::s
 	this->init();
 }
 
-KnotWrapper::KnotWrapper(const rapidjson::Document &doc) : knot(doc) {
+KnotWrapper::KnotWrapper(const rapidjson::Value &doc) : knot(doc) {
 	initUnitaryMatrix(this->rotationMatrix);
 	this->readUiOptions(doc);
 	this->init();
@@ -66,7 +66,7 @@ rapidjson::Document KnotWrapper::serialize() const {
 	return doc;
 }
 
-void KnotWrapper::setSaveCheckpoint(const rapidjson::Document &doc) {
+void KnotWrapper::setSaveCheckpoint(const rapidjson::Value &doc) {
 	this->saveCheckpoint = Util::rapidjson::docToString(doc);
 }
 
@@ -131,7 +131,7 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 	doc.AddMember("ui", globalUi, doc.GetAllocator());
 }
 
-void KnotWrapper::readUiOptions(const rapidjson::Document &doc) {
+void KnotWrapper::readUiOptions(const rapidjson::Value &doc) {
 	const auto &component = doc["components"][0];
 	if (component.HasMember("ui") && component["ui"].IsObject()) {
 		const auto &ui = component["ui"];

@@ -19,7 +19,7 @@
 
 namespace KE::ThreeD {
 
-Knot::Knot(const rapidjson::Document &doc) : generation(1), lockCount(0) {
+Knot::Knot(const rapidjson::Value &doc) : generation(1), lockCount(0) {
 	if (doc.IsNull()) {
 		throw std::runtime_error("The file is not in JSON format");
 	}

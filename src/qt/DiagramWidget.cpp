@@ -26,7 +26,7 @@ DiagramWidget::DiagramWidget(QWidget *parent) : QWidget(parent), _editorMode(QUI
 	this->setMouseTracking(true);
 }
 
-DiagramWidget::DiagramWidget(QWidget *parent, const rapidjson::Document &doc) : QWidget(parent), diagram(doc), _editorMode(EDITING) {
+DiagramWidget::DiagramWidget(QWidget *parent, const rapidjson::Value &doc) : QWidget(parent), diagram(doc), _editorMode(EDITING) {
 	this->setMouseTracking(true);
 }
 

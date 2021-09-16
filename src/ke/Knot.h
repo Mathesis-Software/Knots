@@ -103,7 +103,7 @@ private:
 	mutable std::shared_ptr<Snapshot> latest;
 
 public:
-	Knot(const rapidjson::Document &doc);
+	Knot(const rapidjson::Value &doc);
 	Knot(const std::vector<Point> &points, const std::string &caption);
 	//Knot(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
 

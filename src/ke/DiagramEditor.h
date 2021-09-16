@@ -43,7 +43,7 @@ public:
 	DiagramEditor() : currentDiagram(new Diagram), indexInLog(0) {
 		this->serialize();
 	}
-	DiagramEditor(const rapidjson::Document &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)), indexInLog(0) {
+	DiagramEditor(const rapidjson::Value &doc) : initialDiagram(doc), currentDiagram(new Diagram(doc)), indexInLog(0) {
 		this->serialize();
 	}
 

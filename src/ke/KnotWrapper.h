@@ -50,7 +50,7 @@ private:
 
 public:
 	KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height);
-	KnotWrapper(const rapidjson::Document &doc);
+	KnotWrapper(const rapidjson::Value &doc);
 
 	Knot::Snapshot snapshot() const { return this->knot.snapshot(); }
 	const std::string &caption() const { return this->knot.caption; }
@@ -84,13 +84,13 @@ public:
 	void rotate(double dx, double dy, double dz);
 
 	rapidjson::Document serialize() const;
-	void setSaveCheckpoint(const rapidjson::Document &doc);
+	void setSaveCheckpoint(const rapidjson::Value &doc);
 	bool isSaved() const;
 
 private:
 	void init();
 	void saveUiOptions(rapidjson::Document &doc) const;
-	void readUiOptions(const rapidjson::Document &doc);
+	void readUiOptions(const rapidjson::Value &doc);
 };
 
 }

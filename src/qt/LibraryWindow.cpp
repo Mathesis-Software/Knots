@@ -244,20 +244,21 @@ private:
 	}
 };
 
-class DataDataItem : public DataItem {
+class JsonDataItem : public DataItem {
 
 private:
-	rapidjson::Document document;
+	const std::string json;
 
 public:
-	DataDataItem(const QByteArray &data) {
-		this->document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
-		this->init(this->document);
+	JsonDataItem(const rapidjson::Value &value) : json(Util::rapidjson::docToString(value)) {
+		this->init(value);
 	}
 
 private:
 	void open() const override {
-		dynamic_cast<Application*>(qApp)->openDocument(this->document, QString());
+		rapidjson::Document doc;
+		doc.Parse(json.data(), json.size());
+		dynamic_cast<Application*>(qApp)->openDocument(doc, QString());
 	}
 };
 
@@ -420,7 +421,9 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 					if (errorCode != 0) {
 						throw std::runtime_error("Network error");
 					}
-					searchResults->addItem(new DataDataItem(data));
+					rapidjson::Document document;
+					document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
+					searchResults->addItem(new JsonDataItem(document));
 				} catch (const std::runtime_error &e) {
 					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");
 				}

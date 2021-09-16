@@ -247,22 +247,17 @@ private:
 class DataDataItem : public DataItem {
 
 private:
-	const QByteArray data;
+	rapidjson::Document document;
 
 public:
-	DataDataItem(const QByteArray &data) : data(data) {
-		this->init(this->document());
+	DataDataItem(const QByteArray &data) {
+		this->document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
+		this->init(this->document);
 	}
 
 private:
-	rapidjson::Document document() const {
-		rapidjson::Document doc;
-		doc.Parse(reinterpret_cast<const char*>(this->data.data()), this->data.size());
-		return doc;
-	}
-
 	void open() const override {
-		dynamic_cast<Application*>(qApp)->openDocument(this->document(), QString());
+		dynamic_cast<Application*>(qApp)->openDocument(this->document, QString());
 	}
 };
 

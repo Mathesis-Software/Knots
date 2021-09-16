@@ -29,6 +29,7 @@
 #include <QtWidgets/QCompleter>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QListWidgetItem>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMessageBox>
 #include <QtWidgets/QVBoxLayout>
@@ -257,51 +258,100 @@ private:
 	}
 };
 
-class LibraryListWidget : public QListWidget {
+class LibraryListModel : public QAbstractListModel {
+
+private:
+	QList<DataItem*> items;
 
 public:
-	LibraryListWidget() {
+	LibraryListModel(const QList<DataItem*> &items, QObject *parent) : QAbstractListModel(parent), items(items) {
+	}
+
+	~LibraryListModel() {
+		this->clear();
+	}
+
+	const DataItem *item(const QModelIndex &index) const {
+		return this->items.at(index.row());
+	}
+
+	void addItem(DataItem *item) {
+		this->items.push_back(item);
+	}
+
+	void clear() {
+		this->beginResetModel();
+		for (int i = 0; i < this->items.count(); ++i) {
+			if (this->items.at(i)) {
+				delete this->items.at(i);
+			}
+		}
+		this->items.clear();
+		this->endResetModel();
+	}
+
+private:
+	int rowCount(const QModelIndex &parent = QModelIndex()) const override {
+		return parent.isValid() ? 0 : this->items.count();
+	}
+
+	QVariant data(const QModelIndex &index, int role) const override {
+		if (!index.isValid() || index.row() >= this->items.count()) {
+			return QVariant();
+		}
+		return this->items.at(index.row())->data(role);
+	}
+};
+
+class LibraryListView : public QListView {
+
+public:
+	LibraryListView(const QList<DataItem*> &items = QList<DataItem*>()) {
+		this->setModel(new LibraryListModel(items, this));
 		this->setMouseTracking(true);
-		this->setViewMode(QListWidget::IconMode);
-		this->setResizeMode(QListWidget::Adjust);
+		this->setViewMode(QListView::IconMode);
+		this->setResizeMode(QListView::Adjust);
 		this->setContentsMargins(0, 0, 0, 0);
 		this->setIconSize(QSize(100, 100));
 		this->setSpacing(5);
 		this->setUniformItemSizes(true);
-		this->setStyleSheet("QListWidget{background:#d8d8d8;} QListWidget::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListWidget::item::selected{border:2px solid #404040;}");
-		this->setSelectionMode(QListWidget::SingleSelection);
+		this->setStyleSheet("QListView{background:#d8d8d8;} QListView::item{background:white;border:1px solid #c0c0c0;color:#808080;} QListView::item::selected{border:2px solid #404040;}");
+		this->setSelectionMode(QListView::SingleSelection);
 
-		QObject::connect(this, &QListWidget::itemEntered, [this](QListWidgetItem *item) {
-			this->setCurrentItem(item);
+		QObject::connect(this, &QListWidget::entered, [this](const QModelIndex &index) {
+			this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
 		});
-		QObject::connect(this, &QListWidget::itemClicked, [](QListWidgetItem *item) {
-			dynamic_cast<const DataItem*>(item)->open();
+		QObject::connect(this, &QListWidget::clicked, [this](const QModelIndex &index) {
+			if (index.isValid()) {
+				static_cast<const LibraryListModel*>(this->model())->item(index)->open();
+			}
 		});
-		QObject::connect(this, &QListWidget::currentItemChanged, [](QListWidgetItem *current, QListWidgetItem* /*previous*/) {
-			if (current) {
-				current->setSelected(true);
+		QObject::connect(this->selectionModel(), &QItemSelectionModel::currentChanged, [this](const QModelIndex &current, const QModelIndex &/*previous*/) {
+			if (current.isValid() && !this->selectionModel()->isSelected(current)) {
+				this->selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
 			}
 		});
 	}
 
+	void clear() {
+		this->selectionModel()->clear();
+		static_cast<LibraryListModel*>(this->model())->clear();
+	}
+
 private:
 	void leaveEvent(QEvent*) override {
-		const auto selected = this->selectedItems();
-		for (const auto &item : selected) {
-			item->setSelected(false);
-		}
-		this->setCurrentItem(nullptr);
+		this->selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
 	}
 
 	void keyPressEvent(QKeyEvent *event) override {
 		if (event->key() != ::Qt::Key_Enter && event->key() != ::Qt::Key_Return) {
-			QListWidget::keyPressEvent(event);
+			QListView::keyPressEvent(event);
 			return;
 		}
 
-		const auto current = this->currentItem();
-		if (current) {
-			dynamic_cast<const DataItem*>(current)->open();
+		const auto current = this->currentIndex();
+		if (current.isValid()) {
+			static_cast<const LibraryListModel*>(this->model())->item(current)->open();
 		}
 	}
 };
@@ -377,7 +427,7 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 	tabs->setDocumentMode(true);
 	auto diagrams = createList(".dgr");
 	auto knots = createList(".knt");
-	auto searchResults = new LibraryListWidget();
+	auto searchResults = new LibraryListView();
 	tabs->addTab("Diagrams");
 	tabs->addTab("Knots");
 	const auto fakeTabIndex = tabs->addTab(QString());
@@ -428,7 +478,7 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 					if (document.HasMember("layouts") && document["layouts"].IsArray()) {
 						const auto &layouts = document["layouts"];
 						for (std::size_t i = 0; i < layouts.Size(); i += 1) {
-							searchResults->addItem(new JsonDataItem(layouts[i]));
+							static_cast<LibraryListModel*>(searchResults->model())->addItem(new JsonDataItem(layouts[i]));
 						}
 					} else {
 						throw std::runtime_error("No layouts in the response");
@@ -436,7 +486,7 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 				} catch (const std::runtime_error &e) {
 					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");
 				}
-				if (searchResults->count() > 0) {
+				if (searchResults->model()->rowCount() > 0) {
 					searchResults->setFocus();
 				}
 			});
@@ -483,8 +533,8 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 	this->restoreParameters();
 }
 
-QListWidget *LibraryWindow::createList(const QString &suffix) {
-	auto list = new LibraryListWidget();
+QListView *LibraryWindow::createList(const QString &suffix) {
+	QList<DataItem*> items;
 	for (QDirIterator iter(":data", QDirIterator::Subdirectories); iter.hasNext(); ) {
 		const auto fileName = iter.next();
 		if (!fileName.endsWith(suffix)) {
@@ -497,10 +547,12 @@ QListWidget *LibraryWindow::createList(const QString &suffix) {
 		if (match.hasMatch()) {
 			index = 1000 * match.captured(1).toInt() + 1 * match.captured(2).toInt();
 		}
-		list->addItem(new FileDataItem(iter.filePath(), index));
+		items.push_back(new FileDataItem(iter.filePath(), index));
 	}
-	list->sortItems();
-	return list;
+	std::sort(items.begin(), items.end(), [](const DataItem *it0, const DataItem *it1) {
+		return *it0 < *it1;
+	});
+	return new LibraryListView(items);
 }
 
 }

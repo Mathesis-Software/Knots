@@ -202,12 +202,7 @@ protected:
 			this->setText(diagram.caption.c_str());
 			DiagramPreview(diagram).paint(pixmap);
 		} else {
-			const std::string error = KE::Util::rapidjson::getString(doc, "error");
-			if (!error.empty()) {
-				throw std::runtime_error(error.c_str());
-			} else {
-				throw std::runtime_error("The data do not represent a knot nor a diagram");
-			}
+			throw std::runtime_error("The data do not represent a knot nor a diagram");
 		}
 
 		this->setTextAlignment(::Qt::AlignCenter);
@@ -423,12 +418,20 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 					}
 					rapidjson::Document document;
 					document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
-					if (document.IsArray()) {
-						for (int i = 0; i < document.Size(); i += 1) {
-							searchResults->addItem(new JsonDataItem(document[i]));
+					if (!document.IsObject()) {
+						throw std::runtime_error("Invalid response format");
+					}
+					const std::string error = KE::Util::rapidjson::getString(document, "error");
+					if (!error.empty()) {
+						throw std::runtime_error(error.c_str());
+					}
+					if (document.HasMember("layouts") && document["layouts"].IsArray()) {
+						const auto &layouts = document["layouts"];
+						for (std::size_t i = 0; i < layouts.Size(); i += 1) {
+							searchResults->addItem(new JsonDataItem(layouts[i]));
 						}
 					} else {
-						// TODO: show error
+						throw std::runtime_error("No layouts in the response");
 					}
 				} catch (const std::runtime_error &e) {
 					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");

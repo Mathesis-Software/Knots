@@ -423,7 +423,13 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 					}
 					rapidjson::Document document;
 					document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
-					searchResults->addItem(new JsonDataItem(document));
+					if (document.IsArray()) {
+						for (int i = 0; i < document.Size(); i += 1) {
+							searchResults->addItem(new JsonDataItem(document[i]));
+						}
+					} else {
+						// TODO: show error
+					}
 				} catch (const std::runtime_error &e) {
 					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");
 				}

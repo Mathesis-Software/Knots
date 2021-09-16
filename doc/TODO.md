@@ -1,6 +1,5 @@
 ### Network search
 
-* Allow multiple result
 * Show some description/comments in tooltip over the item
 * TODOs in the code
 * The site: acknowledgements section

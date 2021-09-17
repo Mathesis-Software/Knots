@@ -89,7 +89,7 @@ void DiagramPreview::paint(QPixmap &pixmap) {
 	for (const auto &edge : this->diagram.edges()) {
 		drawEdge(painter, edge, scale, deltaX, deltaY);
 	}
-	const auto radius = 6 * scale;
+	const auto radius = 4 * scale;
 	for (const auto &vertex : this->diagram.vertices()) {
 		const auto coords = vertex->coords();
 		const QPointF center(scale * coords.x + deltaX, scale * coords.y + deltaY);

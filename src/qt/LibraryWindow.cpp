@@ -319,6 +319,9 @@ public:
 
 	void removeItem(QListWidgetItem *item) {
 		const auto position = this->items.indexOf(item);
+		if (position == -1) {
+			return;
+		}
 		this->beginRemoveRows(QModelIndex(), position, position);
 		this->items.removeAt(position);
 		delete item;

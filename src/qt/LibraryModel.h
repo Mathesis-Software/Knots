@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#ifndef __LIBRARY_MODEL_H__
-#define __LIBRARY_MODEL_H__
+#ifndef __KE_QT_LIBRARY_MODEL_H__
+#define __KE_QT_LIBRARY_MODEL_H__
 
 #include <rapidjson/document.h>
 
@@ -90,4 +90,4 @@ private:
 
 }
 
-#endif /* __LIBRARY_MODEL_H__ */
+#endif /* __KE_QT_LIBRARY_MODEL_H__ */

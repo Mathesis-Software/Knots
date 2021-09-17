@@ -27,6 +27,7 @@ SOURCES = \
 	LibraryModel.cpp \
 	LibraryWindow.cpp \
 	NetworkManager.cpp \
+	Preview.cpp \
 	StartWindow.cpp \
 	Window.cpp \
 	main.cpp

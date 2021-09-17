@@ -24,6 +24,7 @@
 #include <QtCore/QStringListModel>
 #include <QtGui/QAction>
 #include <QtGui/QDesktopServices>
+#include <QtGui/QMovie>
 #include <QtGui/QKeyEvent>
 #include <QtGui/QPainter>
 #include <QtWidgets/QCompleter>
@@ -240,6 +241,32 @@ private:
 	}
 };
 
+class WaitingItem : public QListWidgetItem {
+
+private:
+	QAbstractItemModel *model;
+	const int position;
+	QMovie movie;
+
+public:
+	WaitingItem(QAbstractItemModel *model, int position) : model(model), position(position), movie(":images/loader.gif") {
+		QObject::connect(&this->movie, &QMovie::frameChanged, [this] {
+			QPixmap pixmap(this->movie.currentPixmap());
+			QIcon icon;
+			icon.addPixmap(pixmap, QIcon::Normal);
+			icon.addPixmap(pixmap, QIcon::Selected);
+			this->setIcon(icon);
+			const auto index = this->model->index(this->position, 0);
+			emit this->model->dataChanged(index, index);
+		});
+		if (this->movie.loopCount() != -1) {
+			QObject::connect(&this->movie, &QMovie::finished, &this->movie, &QMovie::start);
+		}
+		this->movie.start();
+		this->setText("Loading…");
+	}
+};
+
 class JsonDataItem : public DataItem {
 
 private:
@@ -261,24 +288,41 @@ private:
 class LibraryModel : public QAbstractListModel {
 
 private:
-	QList<DataItem*> items;
+	QList<QListWidgetItem*> items;
 
 public:
-	LibraryModel(const QList<DataItem*> &items) : items(items) {
+	LibraryModel(const QList<QListWidgetItem*> &items) : items(items) {
 	}
 
 	~LibraryModel() {
 		this->clear();
 	}
 
-	const DataItem *item(const QModelIndex &index) const {
-		return this->items.at(index.row());
+	const DataItem *dataItem(const QModelIndex &index) const {
+		if (!index.isValid()) {
+			return nullptr;
+		}
+		return dynamic_cast<DataItem*>(this->items.at(index.row()));
 	}
 
-	void addItems(QList<DataItem*> items) {
+	void addItems(QList<QListWidgetItem*> items) {
 		this->beginInsertRows(QModelIndex(), this->items.count(), this->items.count() + items.count() - 1);
 		this->items.append(items);
 		this->endInsertRows();
+	}
+
+	void addItem(QListWidgetItem* item) {
+		this->beginInsertRows(QModelIndex(), this->items.count(), this->items.count());
+		this->items.append(item);
+		this->endInsertRows();
+	}
+
+	void removeItem(QListWidgetItem *item) {
+		const auto position = this->items.indexOf(item);
+		this->beginRemoveRows(QModelIndex(), position, position);
+		this->items.removeAt(position);
+		delete item;
+		this->endRemoveRows();
 	}
 
 	void clear() {
@@ -292,11 +336,12 @@ public:
 		this->endResetModel();
 	}
 
-private:
+protected:
 	int rowCount(const QModelIndex &parent = QModelIndex()) const override {
 		return parent.isValid() ? 0 : this->items.count();
 	}
 
+private:
 	QVariant data(const QModelIndex &index, int role) const override {
 		if (!index.isValid() || index.row() >= this->items.count()) {
 			return QVariant();
@@ -308,7 +353,7 @@ private:
 class LibraryListView : public QListView {
 
 public:
-	LibraryListView(const QList<DataItem*> &items = QList<DataItem*>()) {
+	LibraryListView(const QList<QListWidgetItem*> &items = QList<QListWidgetItem*>()) {
 		this->setModel(new LibraryModel(items));
 		this->setMouseTracking(true);
 		this->setViewMode(QListView::IconMode);
@@ -324,8 +369,8 @@ public:
 			this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
 		});
 		QObject::connect(this, &QListWidget::clicked, [this](const QModelIndex &index) {
-			if (index.isValid()) {
-				static_cast<const LibraryModel*>(this->model())->item(index)->open();
+			if (auto item = static_cast<const LibraryModel*>(this->model())->dataItem(index)) {
+				item->open();
 			}
 		});
 		QObject::connect(this->selectionModel(), &QItemSelectionModel::currentChanged, [this](const QModelIndex &current, const QModelIndex &/*previous*/) {
@@ -362,9 +407,8 @@ private:
 			return;
 		}
 
-		const auto current = this->currentIndex();
-		if (current.isValid()) {
-			static_cast<const LibraryModel*>(this->model())->item(current)->open();
+		if (auto item = static_cast<const LibraryModel*>(this->model())->dataItem(this->currentIndex())) {
+			item->open();
 		}
 	}
 };
@@ -377,7 +421,7 @@ private:
 	volatile int nextPage;
 
 public:
-	NetworkLibraryModel(LibraryWindow *window, const QString &pattern) : LibraryModel(QList<DataItem*>()), window(window), pattern(pattern), nextPage(0) {}
+	NetworkLibraryModel(LibraryWindow *window, const QString &pattern) : LibraryModel(QList<QListWidgetItem*>()), window(window), pattern(pattern), nextPage(0) {}
 
 private:
 	bool canFetchMore(const QModelIndex&) const override {
@@ -388,8 +432,9 @@ private:
 		const auto page = this->nextPage;
 		this->nextPage = -1;
 
-		// TODO: show some waiting indicator
-		this->window->networkManager()->searchDiagram(pattern, page, [this, page] (int errorCode, const QByteArray &data) {
+		auto waitingItem = new WaitingItem(this, this->rowCount());
+		this->addItem(waitingItem);
+		this->window->networkManager()->searchDiagram(pattern, page, [=] (int errorCode, const QByteArray &data) {
 			try {
 				if (errorCode != 0) {
 					throw std::runtime_error("Network error");
@@ -405,10 +450,11 @@ private:
 				}
 				if (document.HasMember("layouts") && document["layouts"].IsArray()) {
 					const auto &layouts = document["layouts"];
-					QList<DataItem*> items;
+					QList<QListWidgetItem*> items;
 					for (std::size_t i = 0; i < layouts.Size(); i += 1) {
 						items.append(new JsonDataItem(layouts[i]));
 					}
+					this->removeItem(waitingItem);
 					this->addItems(items);
 				} else {
 					throw std::runtime_error("No layouts in the response");
@@ -422,6 +468,7 @@ private:
 			} catch (const std::runtime_error &e) {
 				// TODO: better way to report error
 				QMessageBox::warning(this->window, "Error", QString("\n") + e.what() + "\n");
+				this->removeItem(waitingItem);
 			}
 		});
 	}
@@ -575,7 +622,7 @@ LibraryWindow::LibraryWindow() : _networkManager(new NetworkManager(this)) {
 }
 
 QListView *LibraryWindow::createList(const QString &suffix) {
-	QList<DataItem*> items;
+	QList<QListWidgetItem*> items;
 	for (QDirIterator iter(":data", QDirIterator::Subdirectories); iter.hasNext(); ) {
 		const auto fileName = iter.next();
 		if (!fileName.endsWith(suffix)) {
@@ -590,7 +637,7 @@ QListView *LibraryWindow::createList(const QString &suffix) {
 		}
 		items.append(new FileDataItem(iter.filePath(), index));
 	}
-	std::sort(items.begin(), items.end(), [](const DataItem *it0, const DataItem *it1) {
+	std::sort(items.begin(), items.end(), [](const QListWidgetItem *it0, const QListWidgetItem *it1) {
 		return *it0 < *it1;
 	});
 	return new LibraryListView(items);

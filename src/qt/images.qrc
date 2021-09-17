@@ -16,5 +16,6 @@
 	<file>../../images/clear.svg</file>
 	<file>../../images/question.svg</file>
 	<file>../../images/cleaning.svg</file>
+	<file>../../images/loader.gif</file>
 </qresource>
 </RCC>

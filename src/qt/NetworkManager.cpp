@@ -22,14 +22,15 @@
 
 namespace KE::Qt {
 
-void NetworkManager::searchDiagram(const QString &code, const std::function<void(int errorCode, const QByteArray &response)> callback) {
+void NetworkManager::searchDiagram(const QString &code, int page, const std::function<void(int errorCode, const QByteArray &response)> callback) {
 	QUrl url("https://knots.geometer.name/api/diagram");
 	QNetworkRequest request;
 	request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 	QJsonObject data;
 	data["code"] = code;
-	data["debug"] = true;
+	data["debug"] = false;
+	data["page"] = page;
 	auto reply = this->post(request, QJsonDocument(data).toJson());
 	QObject::connect(reply, &QNetworkReply::finished, this->parent(), [callback, reply]() {
 		callback(reply->error(), reply->readAll());

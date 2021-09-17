@@ -385,10 +385,11 @@ private:
 	}
 
 	void fetchMore(const QModelIndex&) override {
+		const auto page = this->nextPage;
 		this->nextPage = -1;
 
 		// TODO: show some waiting indicator
-		this->window->networkManager()->searchDiagram(pattern, [this] (int errorCode, const QByteArray &data) {
+		this->window->networkManager()->searchDiagram(pattern, page, [this, page] (int errorCode, const QByteArray &data) {
 			try {
 				if (errorCode != 0) {
 					throw std::runtime_error("Network error");
@@ -411,6 +412,12 @@ private:
 					this->addItems(items);
 				} else {
 					throw std::runtime_error("No layouts in the response");
+				}
+				if (document.HasMember("hasNextPage")) {
+					const auto &hnp = document["hasNextPage"];
+					if (hnp.IsBool() && hnp.GetBool()) {
+						this->nextPage = page + 1;
+					}
 				}
 			} catch (const std::runtime_error &e) {
 				// TODO: better way to report error

@@ -441,7 +441,7 @@ private:
 
 		auto waitingItem = new WaitingItem(this, this->rowCount());
 		this->addItem(waitingItem);
-		this->window->networkManager()->searchDiagram(pattern, page, [=] (int errorCode, const QByteArray &data) {
+		this->window->networkManager()->searchDiagram(pattern, page, this, [=] (int errorCode, const QByteArray &data) {
 			try {
 				if (errorCode != 0) {
 					throw std::runtime_error("Network error");

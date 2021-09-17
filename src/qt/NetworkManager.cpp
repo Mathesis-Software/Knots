@@ -22,7 +22,7 @@
 
 namespace KE::Qt {
 
-void NetworkManager::searchDiagram(const QString &code, int page, const std::function<void(int errorCode, const QByteArray &response)> callback) {
+void NetworkManager::searchDiagram(const QString &code, int page, QObject *context, const std::function<void(int errorCode, const QByteArray &response)> callback) {
 	QUrl url("https://knots.geometer.name/api/diagram");
 	QNetworkRequest request;
 	request.setUrl(url);
@@ -32,7 +32,7 @@ void NetworkManager::searchDiagram(const QString &code, int page, const std::fun
 	data["debug"] = false;
 	data["page"] = page;
 	auto reply = this->post(request, QJsonDocument(data).toJson());
-	QObject::connect(reply, &QNetworkReply::finished, this->parent(), [callback, reply]() {
+	QObject::connect(reply, &QNetworkReply::finished, context, [callback, reply]() {
 		callback(reply->error(), reply->readAll());
 		reply->deleteLater();
 	});

@@ -461,8 +461,10 @@ private:
 					for (std::size_t i = 0; i < layouts.Size(); i += 1) {
 						items.append(new JsonDataItem(layouts[i]));
 					}
-					this->removeItem(waitingItem);
-					this->addItems(items);
+					QMetaObject::invokeMethod(this, [this, waitingItem, items] {
+						this->removeItem(waitingItem);
+						this->addItems(items);
+					});
 				} else {
 					throw std::runtime_error("No layouts in the response");
 				}
@@ -474,8 +476,10 @@ private:
 				}
 			} catch (const std::runtime_error &e) {
 				// TODO: better way to report error
-				QMessageBox::warning(this->window, "Error", QString("\n") + e.what() + "\n");
-				this->removeItem(waitingItem);
+				QMetaObject::invokeMethod(this, [this, waitingItem, e] {
+					this->removeItem(waitingItem);
+					QMessageBox::warning(this->window, "Error", QString("\n") + e.what() + "\n");
+				});
 			}
 		});
 	}

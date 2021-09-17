@@ -68,6 +68,10 @@ public:
 		this->model()->deleteLater();
 	}
 
+	bool isEmpty() const {
+		return this->model()->rowCount() == 0;
+	}
+
 	void setModel(QAbstractItemModel *model) override {
 		auto sele = this->selectionModel();
 		if (sele) {
@@ -100,6 +104,7 @@ private:
 class SearchBar : public QLineEdit {
 
 private:
+	QString _latestPattern;
 	QStringListModel *historyModel;
 
 public:
@@ -129,10 +134,15 @@ public:
     delete menu;
 	}
 
+	const QString &latestPattern() const {
+		return this->_latestPattern;
+	}
+
 	void addPattern(const QString &pattern) {
-		if (pattern.isEmpty()) {
+		if (pattern.isEmpty() || pattern == this->_latestPattern) {
 			return;
 		}
+		this->_latestPattern = pattern;
 
 		const auto index = this->historyModel->stringList().indexOf(pattern);
 		if (index > 0) {
@@ -200,7 +210,9 @@ LibraryWindow::LibraryWindow() : _networkManager(new NetworkManager(this)) {
 		const auto pattern = searchLine->text();
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
-			searchResults->setModel(new NetworkLibraryModel(this, pattern));
+			if (pattern != searchLine->latestPattern() || searchResults->isEmpty()) {
+				searchResults->setModel(new NetworkLibraryModel(this, pattern));
+			}
 			tabs->setCurrentIndex(fakeTabIndex);
 			diagrams->setVisible(false);
 			knots->setVisible(false);

@@ -24,6 +24,7 @@ SOURCES = \
 	KnotWidget.cpp \
 	KnotWidget_smooth.cpp \
 	KnotWindow.cpp \
+	LibraryModel.cpp \
 	LibraryWindow.cpp \
 	NetworkManager.cpp \
 	StartWindow.cpp \

@@ -264,6 +264,7 @@ public:
 		}
 		this->movie.start();
 		this->setText("Loading…");
+		this->setSizeHint(QSize(120, 145));
 	}
 };
 
@@ -318,14 +319,17 @@ public:
 	}
 
 	void removeItem(QListWidgetItem *item) {
-		const auto position = this->items.indexOf(item);
-		if (position == -1) {
+		if (item == nullptr) {
 			return;
 		}
-		this->beginRemoveRows(QModelIndex(), position, position);
-		this->items.removeAt(position);
+
+		const auto position = this->items.indexOf(item);
+		if (position != -1) {
+			this->beginRemoveRows(QModelIndex(), position, position);
+			this->items.removeAt(position);
+			this->endRemoveRows();
+		}
 		delete item;
-		this->endRemoveRows();
 	}
 
 	void clear() {

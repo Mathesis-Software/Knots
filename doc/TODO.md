@@ -1,10 +1,11 @@
 ### Network search
 
 * Show some description/comments in tooltip over the item
-* TODOs in the code
 * The site: acknowledgements section
 * Help action: hilite if under mouse
-* Pattern search (like 9_\* or T(2,\*))
+* Show total number of matches
+* Better way to display network errors
+* Pattern search for 9_*
 
 ### Mac specific
 

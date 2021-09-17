@@ -258,16 +258,16 @@ private:
 	}
 };
 
-class LibraryListModel : public QAbstractListModel {
+class LibraryModel : public QAbstractListModel {
 
 private:
 	QList<DataItem*> items;
 
 public:
-	LibraryListModel(const QList<DataItem*> &items, QObject *parent) : QAbstractListModel(parent), items(items) {
+	LibraryModel(const QList<DataItem*> &items) : items(items) {
 	}
 
-	~LibraryListModel() {
+	~LibraryModel() {
 		this->clear();
 	}
 
@@ -275,8 +275,10 @@ public:
 		return this->items.at(index.row());
 	}
 
-	void addItem(DataItem *item) {
-		this->items.push_back(item);
+	void addItems(QList<DataItem*> items) {
+		this->beginInsertRows(QModelIndex(), this->items.count(), this->items.count() + items.count() - 1);
+		this->items.append(items);
+		this->endInsertRows();
 	}
 
 	void clear() {
@@ -307,7 +309,7 @@ class LibraryListView : public QListView {
 
 public:
 	LibraryListView(const QList<DataItem*> &items = QList<DataItem*>()) {
-		this->setModel(new LibraryListModel(items, this));
+		this->setModel(new LibraryModel(items));
 		this->setMouseTracking(true);
 		this->setViewMode(QListView::IconMode);
 		this->setResizeMode(QListView::Adjust);
@@ -323,7 +325,7 @@ public:
 		});
 		QObject::connect(this, &QListWidget::clicked, [this](const QModelIndex &index) {
 			if (index.isValid()) {
-				static_cast<const LibraryListModel*>(this->model())->item(index)->open();
+				static_cast<const LibraryModel*>(this->model())->item(index)->open();
 			}
 		});
 		QObject::connect(this->selectionModel(), &QItemSelectionModel::currentChanged, [this](const QModelIndex &current, const QModelIndex &/*previous*/) {
@@ -333,9 +335,20 @@ public:
 		});
 	}
 
-	void clear() {
-		this->selectionModel()->clear();
-		static_cast<LibraryListModel*>(this->model())->clear();
+	~LibraryListView() {
+		this->model()->deleteLater();
+	}
+
+	void setModel(QAbstractItemModel *model) override {
+		auto sele = this->selectionModel();
+		if (sele) {
+			sele->clear();
+		}
+		auto old = this->model();
+		QListView::setModel(model);
+		if (old) {
+			old->deleteLater();
+		}
 	}
 
 private:
@@ -351,8 +364,59 @@ private:
 
 		const auto current = this->currentIndex();
 		if (current.isValid()) {
-			static_cast<const LibraryListModel*>(this->model())->item(current)->open();
+			static_cast<const LibraryModel*>(this->model())->item(current)->open();
 		}
+	}
+};
+
+class NetworkLibraryModel : public LibraryModel {
+
+private:
+	LibraryWindow *window;
+	const QString pattern;
+	volatile int nextPage;
+
+public:
+	NetworkLibraryModel(LibraryWindow *window, const QString &pattern) : LibraryModel(QList<DataItem*>()), window(window), pattern(pattern), nextPage(0) {}
+
+private:
+	bool canFetchMore(const QModelIndex&) const override {
+		return this->nextPage >= 0;
+	}
+
+	void fetchMore(const QModelIndex&) override {
+		this->nextPage = -1;
+
+		// TODO: show some waiting indicator
+		this->window->networkManager()->searchDiagram(pattern, [this] (int errorCode, const QByteArray &data) {
+			try {
+				if (errorCode != 0) {
+					throw std::runtime_error("Network error");
+				}
+				rapidjson::Document document;
+				document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
+				if (!document.IsObject()) {
+					throw std::runtime_error("Invalid response format");
+				}
+				const std::string error = KE::Util::rapidjson::getString(document, "error");
+				if (!error.empty()) {
+					throw std::runtime_error(error.c_str());
+				}
+				if (document.HasMember("layouts") && document["layouts"].IsArray()) {
+					const auto &layouts = document["layouts"];
+					QList<DataItem*> items;
+					for (std::size_t i = 0; i < layouts.Size(); i += 1) {
+						items.append(new JsonDataItem(layouts[i]));
+					}
+					this->addItems(items);
+				} else {
+					throw std::runtime_error("No layouts in the response");
+				}
+			} catch (const std::runtime_error &e) {
+				// TODO: better way to report error
+				QMessageBox::warning(this->window, "Error", QString("\n") + e.what() + "\n");
+			}
+		});
 	}
 };
 
@@ -414,7 +478,7 @@ private:
 
 }
 
-LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
+LibraryWindow::LibraryWindow() : _networkManager(new NetworkManager(this)) {
 	this->setCentralWidget(new QWidget);
 	auto vlayout = new QVBoxLayout(this->centralWidget());
 	vlayout->setSpacing(0);
@@ -459,37 +523,7 @@ LibraryWindow::LibraryWindow() : networkManager(new NetworkManager(this)) {
 		const auto pattern = searchLine->text();
 		// TODO: validate input
 		if (!pattern.isEmpty()) {
-			// TODO: show some waiting indicator
-			this->networkManager->searchDiagram(pattern, [this, searchResults] (int errorCode, const QByteArray &data) {
-				searchResults->clear();
-				try {
-					if (errorCode != 0) {
-						throw std::runtime_error("Network error");
-					}
-					rapidjson::Document document;
-					document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
-					if (!document.IsObject()) {
-						throw std::runtime_error("Invalid response format");
-					}
-					const std::string error = KE::Util::rapidjson::getString(document, "error");
-					if (!error.empty()) {
-						throw std::runtime_error(error.c_str());
-					}
-					if (document.HasMember("layouts") && document["layouts"].IsArray()) {
-						const auto &layouts = document["layouts"];
-						for (std::size_t i = 0; i < layouts.Size(); i += 1) {
-							static_cast<LibraryListModel*>(searchResults->model())->addItem(new JsonDataItem(layouts[i]));
-						}
-					} else {
-						throw std::runtime_error("No layouts in the response");
-					}
-				} catch (const std::runtime_error &e) {
-					QMessageBox::warning(this, "Error", QString("\n") + e.what() + "\n");
-				}
-				if (searchResults->model()->rowCount() > 0) {
-					searchResults->setFocus();
-				}
-			});
+			searchResults->setModel(new NetworkLibraryModel(this, pattern));
 			tabs->setCurrentIndex(fakeTabIndex);
 			diagrams->setVisible(false);
 			knots->setVisible(false);
@@ -547,7 +581,7 @@ QListView *LibraryWindow::createList(const QString &suffix) {
 		if (match.hasMatch()) {
 			index = 1000 * match.captured(1).toInt() + 1 * match.captured(2).toInt();
 		}
-		items.push_back(new FileDataItem(iter.filePath(), index));
+		items.append(new FileDataItem(iter.filePath(), index));
 	}
 	std::sort(items.begin(), items.end(), [](const DataItem *it0, const DataItem *it1) {
 		return *it0 < *it1;

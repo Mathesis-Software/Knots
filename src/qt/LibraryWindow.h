@@ -28,13 +28,14 @@ class NetworkManager;
 class LibraryWindow : public BaseWindow {
 
 private:
-	NetworkManager *networkManager;
+	NetworkManager *_networkManager;
 
 public:
 	LibraryWindow();
 	QString identifier() const override {
 		return "::LIBRARY::";
 	}
+	NetworkManager *networkManager() { return this->_networkManager; }
 
 private:
 	QListView *createList(const QString &suffix);

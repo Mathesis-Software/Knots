@@ -51,13 +51,13 @@ bool Window::saveBeforeClosing() {
 	const QString question = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
 	while (!this->isSaved()) {
 		const int answer = QMessageBox::question(
-			this, "Closing window", question, QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel
+			this, "Closing window", question, QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
 		);
 		switch (answer) {
-			case QMessageBox::Yes:
+			case QMessageBox::Save:
 				this->save();
 				break;
-			case QMessageBox::No:
+			case QMessageBox::Discard:
 				return true;
 			default:
 				return false;

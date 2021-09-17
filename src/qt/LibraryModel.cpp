@@ -198,6 +198,7 @@ void NetworkLibraryModel::fetchMore(const QModelIndex&) {
 	this->addItem(waitingItem);
 	this->window->networkManager()->searchDiagram(pattern, page, this, [=] (int errorCode, const QByteArray &data) {
 		try {
+			this->removeItem(waitingItem);
 			if (errorCode != 0) {
 				throw std::runtime_error("Network error");
 			}
@@ -216,7 +217,6 @@ void NetworkLibraryModel::fetchMore(const QModelIndex&) {
 				for (std::size_t i = 0; i < layouts.Size(); i += 1) {
 					items.append(new JsonDataItem(layouts[i]));
 				}
-				this->removeItem(waitingItem);
 				this->addItems(items);
 			} else {
 				throw std::runtime_error("No layouts in the response");
@@ -229,7 +229,6 @@ void NetworkLibraryModel::fetchMore(const QModelIndex&) {
 			}
 		} catch (const std::runtime_error &e) {
 			// TODO: better way to report error
-			this->removeItem(waitingItem);
 			QMessageBox::warning(this->window, "Error", QString("\n") + e.what() + "\n");
 		}
 	});

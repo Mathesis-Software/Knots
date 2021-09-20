@@ -11,7 +11,7 @@ file(STRINGS "../VERSION" ver)
 set(ver "\"${ver}\"")
 add_definitions(-DVERSION=${ver})
 
-set(SOURCES AboutWindow.cpp
+set(SOURCES AboutDialog.cpp
             Application.cpp
             BaseWindow.cpp
             DiagramPropertiesDialog.cpp
@@ -24,9 +24,11 @@ set(SOURCES AboutWindow.cpp
             KnotWidget.cpp
             KnotWidget_smooth.cpp
             KnotWindow.cpp
+            LibraryModel.cpp
             LibraryWindow.cpp
             main.cpp
             NetworkManager.cpp
+            Preview.cpp
             StartWindow.cpp
             Window.cpp
             data.qrc

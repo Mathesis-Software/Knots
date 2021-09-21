@@ -1,12 +1,3 @@
-### Network search
-
-* Show some description/comments in tooltip over the item
-* The site: acknowledgements section
-* Help action: hilite if under mouse
-* Show total number of matches
-* Better way to display network errors
-* Pattern search for 9_*
-
 ### Mac specific
 
 * file type association: check json structure?
@@ -30,21 +21,29 @@
 
 ### User interface
 
+#### High priority
+* update the site: main page, dowloads section, acknowledgements
+* "recent documents" tab in the library
 * new diagram view (undoable) actions: center, scale
-* knot library: implement search
-* knot view: auto-scale to fit window size
-* knot library: save positions in lists between runs
-* knot and diagram: store extra info, like description or keywords; use it for search in the library
-* recent documents list in the menu
-* list of open windows
-* knot window: move length & number of points into "Visual options" dialogue
-* create settings dialogue (all the same parameters as in knot visual options dialogue + maybe something els)
 * re-think "+" and "-" buttons for Seifert surface movement: it is currently absolutely unclear for a user
+* network search: show total number of matches
+* network search: better way to display network errors
+
+#### Medium priority
+* knot view: auto-scale to fit window size
+* knot and diagram: store extra info, like description or keywords; use it for search in the library
+* library view: show some description/comments in tooltip over the item
+* list of open windows (in menu?)
 * disclose "Shift" and "Alt" magic for knot (mouse) movements to a user; maybe, there is a "standard" solution?
 * undo/redo in knot window
 * export image: "draw background" option
-* (?) restore window geometry (if possible) while opening files from StartWindow
 * save & restore windows z-order
+
+#### Low priority
+* search help action: hilite icon if under mouse
+* knot library: save positions in lists between runs
+* knot window: move length & number of points into "Visual options" dialogue
+* create settings dialogue (all the same parameters as in knot visual options dialogue + maybe something els)
 
 ### Technical feature improvements
 

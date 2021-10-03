@@ -43,7 +43,8 @@ if (APPLE)
             MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
             MACOSX_BUNDLE_BUNDLE_VERSION ${ver}
             MACOSX_BUNDLE_SHORT_VERSION_STRING ${ver}
-            MACOSX_BUNDLE_INFO_PLIST Info.plist)
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+            )
 else()
     add_executable( ${PROJECT_NAME} ${SOURCES})
 endif()

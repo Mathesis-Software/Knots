@@ -25,27 +25,31 @@ For possible improvements list please refer [the TODO](https://github.com/geomet
 
 #### Build dependencies
 
-C++ compiler (the code uses some C++17 features), Qt6, OpenGL, rapidjson.
+C++ compiler (the code uses some C++17 features), git, make, cmake >= 3.19, Qt6, OpenGL.
 
 To install build dependencies on Ubuntu 20.04:
 ```
-sudo apt install g++ make ccache libgl-dev rapidjson-dev
+sudo apt install g++ make git ccache libgl-dev
 ```
 
 Qt6 is available from [the Qt site](https://www.qt.io/download). KnotEditor is truly open-source, so feel free to use the open-source Qt edition for this app.
 
+Recent cmake can be obtained from [CMake site](https://cmake.org/download/) 
+
 #### To build
 ```
 cd KnotEditor
-/<your-path-to-qt6>/<version>/gcc_64/bin/qmake
+mkdir build
+cd build
+cmake -DCMAKE_PREFIX_PATH=//<your-path-to-qt6>/  ..
 ```
-(e.g., `~/Qt6/6.1.3/gcc_64/bin/qmake`)
+(e.g., `~/Qt6`)
 ```
 make
 ```
 
 #### To install
-By default, the app is installed to `/usr/local/bin/KnotEditor`. Single binary, no additional files. Alternatively, you can change the `INSTALL_PREFIX` var in `src/qmake.pri`.
+By default, the app is installed to `/usr/local/bin/KnotEditor`. Single binary, no additional files. Alternatively, you can change the `CMAKE_INSTALL_PREFIX` var in `src/qt/CMakeLists.txt`.
 ```
 sudo make install
 ```
@@ -65,21 +69,19 @@ You can build it from the sources, as described below. Alternatively, you can
 
 #### Build dependencies
 
-Clang C++ compiler, ccache, Qt6, rapidjson.
-
-To install rapidjson use:
-```
-brew install rapidjson
-```
+Clang C++ compiler, ccache, make, git, cmake >= 3.16, Qt6.
 
 Qt6 is available from [the Qt site](https://www.qt.io/download). KnotEditor is truly open-source, so feel free to use the open-source Qt edition for this app.
+CMake is available from: [CMake site](https://cmake.org/download/)
 
 #### To build
 ```
 cd KnotEditor
-/<your-path-to-qt6>/<version>/macos/bin/qmake
+mkdir build
+cd build
+/path/to/your/CMake.app/Contents/bin/cmake -DCMAKE_PREFIX_PATH=/Path/to/your/Qt6/<version>/macos ..
 ```
-(e.g., `~/Qt6/6.1.3/macos/bin/qmake`)
+(e.g., `/Applications/CMake.app/Contents/bin/cmake -DCMAKE_PREFIX_PATH=/Users/me/Qt/6.1.3/macos/ ..`)
 ```
 make
 ```

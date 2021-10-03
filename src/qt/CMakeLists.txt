@@ -35,7 +35,19 @@ set(SOURCES AboutDialog.cpp
             images.qrc
 )
 
-add_executable( ${PROJECT_NAME} ${SOURCES})
+if (APPLE)
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            BUNDLE True
+            MACOSX_BUNDLE_GUI_IDENTIFIER com.fbreader.${PROJECT_NAME}
+            MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
+            MACOSX_BUNDLE_BUNDLE_VERSION ${ver}
+            MACOSX_BUNDLE_SHORT_VERSION_STRING ${ver}
+            MACOSX_BUNDLE_INFO_PLIST Info.plist)
+else()
+    add_executable( ${PROJECT_NAME} ${SOURCES})
+endif()
+
 add_dependencies( ${PROJECT_NAME} rapidjson)
 
 target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)

@@ -40,3 +40,6 @@ add_dependencies( ${PROJECT_NAME} rapidjson)
 
 target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)
 
+# If you don't like default install location, uncomment next line and set it to desired value
+#set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "..." FORCE)
+install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)

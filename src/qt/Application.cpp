@@ -31,6 +31,7 @@
 #include "Application.h"
 #include "DiagramWindow.h"
 #include "FileIconProvider.h"
+#include "IPCController.h"
 #include "KnotWindow.h"
 #include "LibraryWindow.h"
 #include "StartWindow.h"
@@ -170,7 +171,44 @@ QWidget *Application::openDocument(const rapidjson::Value &doc, const QString &i
 	return window;
 }
 
+namespace {
+
+namespace Message {
+
+QString OpenLibrary = "openLibrary";
+
+}
+
+}
+
 Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
+	bool openLibrary = false;
+	for (int i = 1; i < argc; ++i) {
+		const QString argument = argv[i];
+		if (argument == "-L") {
+			openLibrary = true;
+		}
+	}
+
+	this->ipcController = new IPC::Controller("KnotEditor", this);
+	switch (this->ipcController->role()) {
+		case IPC::Controller::Role::primary:
+			QObject::connect(this->ipcController, &IPC::Controller::messageReceived, this, [this](const QString &message) {
+				if (message == Message::OpenLibrary) {
+					this->library();
+				}
+			});
+			break;
+		case IPC::Controller::Role::secondary:
+			if (openLibrary) {
+				this->ipcController->sendMessage(Message::OpenLibrary);
+			}
+			return;
+		case IPC::Controller::Role::unknown:
+			// unexpected error; should never happen
+			return;
+	}
+
 	this->setFont(QFont("Helvetica", 10));
 	this->setStyle(new ProxyStyle);
 
@@ -188,11 +226,15 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 
 	int count = 0;
 	for (int i = 1; i < argc; ++i) {
-		if (auto window = Application::openFile(argv[i])) {
+		if (auto window = this->openFile(argv[i])) {
 			window->raise();
 			window->activateWindow();
 			count += 1;
 		}
+	}
+	if (openLibrary) {
+		this->library();
+		count += 1;
 	}
 	if (count == 0) {
 		QSettings settings;
@@ -205,9 +247,9 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 		}
 		for (const auto &id : ids) {
 			if (id == "::LIBRARY::") {
-				Application::library();
+				this->library();
 				count += 1;
-			} else if (auto window = Application::openFile(id)) {
+			} else if (auto window = this->openFile(id)) {
 				window->raise();
 				window->activateWindow();
 				count += 1;
@@ -218,6 +260,10 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 	if (count == 0) {
 		(new StartWindow())->show();
 	}
+}
+
+bool Application::doNotRun() {
+	return this->ipcController->role() != IPC::Controller::Role::primary;
 }
 
 bool Application::event(QEvent *event) {

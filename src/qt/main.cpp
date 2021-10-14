@@ -22,5 +22,9 @@ int main(int argc, char **argv) {
 	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 
 	KE::Qt::Application qa(argc, argv);
+	if (qa.doNotRun()) {
+		qDebug() << "Already running";
+		return 0;
+	}
 	return qa.exec();
 }

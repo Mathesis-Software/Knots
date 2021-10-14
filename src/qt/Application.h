@@ -21,16 +21,25 @@
 
 #include <QtWidgets/QApplication>
 
+namespace IPC {
+
+class Controller;
+
+}
+
 namespace KE::Qt {
 
 class Application : public QApplication {
 
 private:
 	bool windowsListSaved;
+	IPC::Controller *ipcController;
 
 public:
 	Application(int &argc, char **argv);
 	bool event(QEvent *event) override;
+
+	bool doNotRun();
 
 	QWidget *library();
 	QWidget *newDiagram();

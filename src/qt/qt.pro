@@ -18,6 +18,7 @@ SOURCES = \
 	DiagramWidget.cpp \
 	DiagramWindow.cpp \
 	FileIconProvider.cpp \
+	IPCController.cpp \
 	GLWidget.cpp \
 	KnotMathDialog.cpp \
 	KnotOptionsDialog.cpp \

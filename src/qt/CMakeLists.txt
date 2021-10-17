@@ -19,6 +19,7 @@ set(SOURCES AboutDialog.cpp
             DiagramWindow.cpp
             FileIconProvider.cpp
             GLWidget.cpp
+            IPCController.cpp
             KnotMathDialog.cpp
             KnotOptionsDialog.cpp
             KnotWidget.cpp

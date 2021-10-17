@@ -21,6 +21,7 @@
 
 #include <QtCore/QSharedMemory>
 #include <QtCore/QSystemSemaphore>
+#include <QtCore/QThread>
 
 namespace IPC {
 

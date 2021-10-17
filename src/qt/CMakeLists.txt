@@ -46,6 +46,9 @@ if (APPLE)
             MACOSX_BUNDLE_SHORT_VERSION_STRING ${ver}
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
+
+    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
+    install(CODE  "execute_process(COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app -dmg WORKING_DIRECTORY ${CPACK_PACKAGE_DIRECTORY} -always-overwrite)")
 else()
     add_executable( ${PROJECT_NAME} ${SOURCES})
 endif()

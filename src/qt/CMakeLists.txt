@@ -47,8 +47,7 @@ if (APPLE)
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
 
-    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
-    install(CODE  "execute_process(COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app -dmg WORKING_DIRECTORY ${CPACK_PACKAGE_DIRECTORY} -always-overwrite)")
+
 else()
     add_executable( ${PROJECT_NAME} ${SOURCES})
 endif()
@@ -59,6 +58,12 @@ target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt
 
 # If you don't like default install location, uncomment next line and set it to desired value
 #set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "..." FORCE)
-install(TARGETS ${PROJECT_NAME}
-        RUNTIME DESTINATION bin
-        BUNDLE	DESTINATION bin )
+
+if (APPLE)
+    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
+    install(CODE  "execute_process(COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app -dmg WORKING_DIRECTORY ${CPACK_PACKAGE_DIRECTORY} -always-overwrite)")
+else()
+    install(TARGETS ${PROJECT_NAME}
+            RUNTIME DESTINATION bin
+            BUNDLE	DESTINATION bin )
+endif()

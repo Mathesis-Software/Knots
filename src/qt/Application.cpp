@@ -183,10 +183,14 @@ QString OpenLibrary = "openLibrary";
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
 	bool openLibrary = false;
+	QStringList filesToOpen;
 	for (int i = 1; i < argc; ++i) {
 		const QString argument = argv[i];
 		if (argument == "-L") {
 			openLibrary = true;
+		} else {
+			// TODO: check if it looks like a file path
+			filesToOpen.push_back(argument);
 		}
 	}
 
@@ -225,8 +229,8 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 	this->setWindowIcon(pixmap);
 
 	int count = 0;
-	for (int i = 1; i < argc; ++i) {
-		if (auto window = this->openFile(argv[i])) {
+	for (const auto &path : filesToOpen) {
+		if (auto window = this->openFile(path)) {
 			window->raise();
 			window->activateWindow();
 			count += 1;

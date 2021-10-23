@@ -8,8 +8,12 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets Network REQUIRED)
 
 file(STRINGS "../VERSION" ver)
-set(ver "\"${ver}\"")
-add_definitions(-DVERSION=${ver})
+set(PROJECT_VERSION "\"${ver}\"")
+
+include (version)
+setup_package_version_variables(PROJECT)
+
+add_definitions(-DVERSION=${PROJECT_VERSION})
 
 set(SOURCES AboutDialog.cpp
             Application.cpp
@@ -42,8 +46,8 @@ if (APPLE)
             BUNDLE True
             MACOSX_BUNDLE_GUI_IDENTIFIER com.fbreader.${PROJECT_NAME}
             MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
-            MACOSX_BUNDLE_BUNDLE_VERSION ${ver}
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${ver}
+            MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+            MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
 

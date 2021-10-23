@@ -116,7 +116,7 @@ elseif(APPLE)
     if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
         set(CPACK_GENERATOR "External;${CPACK_GENERATOR}")
         message(STATUS "   + macdeployqt -dmg                     YES ")
-        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/CPackMacDeployQt.cmake.in "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
+        configure_file(${CMAKE_SOURCE_DIR}/cmake/CPackMacDeployQt.cmake.in "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
         set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
     endif()
 

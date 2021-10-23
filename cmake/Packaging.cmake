@@ -74,7 +74,7 @@ if(WIN32 AND NOT UNIX)
     message(STATUS "Package generation - Windows")
     message(STATUS "   + ZIP                                  YES ")
     
-    set(PACKAGE_ICON "${CMAKE_SOURCE_DIR}/resources/icon.ico")
+    set(PACKAGE_ICON "${CMAKE_SOURCE_DIR}/images/icon.ico")
 
     # NSIS windows installer
     find_program(NSIS_PATH nsis PATH_SUFFIXES nsis)
@@ -123,22 +123,9 @@ elseif(APPLE)
 else()
     #-----------------------------------------------------------------------------
     # Linux specific
-    list(APPEND CPACK_GENERATOR TBZ2 TXZ)
-    message(STATUS "Package generation - UNIX")
-    message(STATUS "   + TBZ2                                 YES ")
-    message(STATUS "   + TXZ                                  YES ")
 
-    find_program(RPMBUILD_PATH rpmbuild)
-    if(RPMBUILD_PATH)
-        message(STATUS "   + RPM                                  YES ")
-        set(CPACK_GENERATOR "${CPACK_GENERATOR};RPM")
-        set(CPACK_RPM_PACKAGE_LICENSE "MIT")
-    else()
-        message(STATUS "   + RPM                                  NO ")
-    endif()
-
-    # list(APPEND CPACK_GENERATOR DEB)
-    message(STATUS "   + DEB                                  NO ")
+    list(APPEND CPACK_GENERATOR DEB)
+    message(STATUS "   + DEB                                  YES ")
     set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
     set(CPACK_DEBIAN_PACKAGE_CONTROL_STRICT_PERMISSION TRUE)
     set(CPACK_DEBIAN_PACKAGE_HOMEPAGE "${PROJECT_URL}")

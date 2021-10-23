@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.19)
 set(CMAKE_VERBOSE_MAKEFILE on)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH on)
+set(CMAKE_INSTALL_RPATH_USE_LINK_PATH on)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_SOURCE_DIR}/cmake)
 
 find_program(CCACHE_EXECUTABLE ccache)
 
@@ -16,7 +17,7 @@ project(KnotEditor)
 include("${CMAKE_SOURCE_DIR}/vendor/rapidjson.cmake")
 include_directories(${RAPIDJSON_INCLUDE_DIR})
 
-include (cmake/win32.cmake)
+include (win32)
 
 add_subdirectory(src/ke)
 add_subdirectory(src/math)

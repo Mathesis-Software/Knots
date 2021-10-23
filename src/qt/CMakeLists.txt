@@ -40,34 +40,47 @@ set(SOURCES AboutDialog.cpp
             images.qrc
 )
 
-if (APPLE)
-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES})
-    set_target_properties(${PROJECT_NAME} PROPERTIES
-            BUNDLE True
-            MACOSX_BUNDLE_GUI_IDENTIFIER com.fbreader.${PROJECT_NAME}
-            MACOSX_BUNDLE_BUNDLE_NAME ${PROJECT_NAME}
-            MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-            MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}
-            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
-            )
-
-
-else()
-    add_executable( ${PROJECT_NAME} ${SOURCES})
+if(WIN32)
+    set(CMAKE_WIN32_EXECUTABLE ON)
+elseif(APPLE)
+    set(CMAKE_MACOSX_BUNDLE ON)
 endif()
 
+add_executable( ${PROJECT_NAME} ${SOURCES})
 add_dependencies( ${PROJECT_NAME} rapidjson)
-
 target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)
 
-# If you don't like default install location, uncomment next line and set it to desired value
-#set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "..." FORCE)
+set(target ${PROJECT_NAME})
 
-if (APPLE)
-    find_program(MACDEPLOYQT_EXECUTABLE macdeployqt HINTS "${_qt_bin_dir}")
-    install(CODE  "execute_process(COMMAND ${MACDEPLOYQT_EXECUTABLE} ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.app -dmg WORKING_DIRECTORY ${CPACK_PACKAGE_DIRECTORY} -always-overwrite)")
-else()
-    install(TARGETS ${PROJECT_NAME}
-            RUNTIME DESTINATION bin
-            BUNDLE	DESTINATION bin )
+if(UNIX AND NOT APPLE)
+    install(TARGETS ${target} RUNTIME DESTINATION bin)
+elseif(WIN32)
+    install(TARGETS ${target} RUNTIME DESTINATION bin)
+elseif(APPLE)
+    set(CMAKE_MACOSX_BUNDLE ON)
+    set(CMAKE_MACOSX_RPATH ON)
+    install(TARGETS ${target} BUNDLE DESTINATION .
+            RUNTIME DESTINATION .)
+    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/trefoil.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(${target}
+            PROPERTIES
+            MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
+            MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} Copyright (c) 2021 geometer@fbreader.org"
+            MACOSX_BUNDLE_ICON_FILE trefoil.icns
+            MACOSX_BUNDLE_GUI_IDENTIFIER "${PROJECT_NAME}"
+            MACOSX_BUNDLE_LONG_VERSION_STRING "${PROJECT_VERSION}"
+            MACOSX_BUNDLE_SHORT_VERSION_STRING "${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}"
+            MACOSX_BUNDLE_BUNDLE_VERSION "${PROJECT_VERSION}"
+            MACOSX_BUNDLE_COPYRIGHT "Copyright (c) 2021 geometer@fbreader.org"
+            MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
+            )
 endif()
+
+# Components:
+if(CMAKE_BUILD_TYPE_UPPER MATCHES "^(DEBUG|RELWITHDEBINFO)$")
+    set(CPACK_STRIP_FILES FALSE)
+else()
+    set(CPACK_STRIP_FILES TRUE)
+endif()
+
+include(Packaging)

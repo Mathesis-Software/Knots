@@ -98,27 +98,21 @@ elseif(APPLE)
     #--------------------------------------------------------------------------
     # Apple specific
     message(STATUS "Package generation - Mac OS X")
-    message(STATUS "   + TBZ2                                 YES ")
-
-    list(APPEND CPACK_GENERATOR TBZ2)
-    set(CPACK_PACKAGE_ICON ${CMAKE_SOURCE_DIR}/resources/Icon.icns)
+    set(CPACK_PACKAGE_ICON ${CMAKE_SOURCE_DIR}/images/trefoil.icns)
     set(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks")
-    macdeployqt("${PROJECT_NAME}.app" "${PROJECT_NAME}-${PROJECT_VERSION}-Darwin" "TBZ")
 
     # XXX: not working settings for bundle and dragndrop generator
     set(CPACK_BUNDLE_NAME "${PROJECT_NAME}" )
-    set(CPACK_BUNDLE_PLIST "${CMAKE_BINARY_DIR}/Info.plist")
-    set(CPACK_BUNDLE_ICON ${CMAKE_PACKAGE_ICON})
+    set(CPACK_BUNDLE_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist)
+    set(CPACK_BUNDLE_ICON ${CPACK_PACKAGE_ICON})
     set(CPACK_DMG_VOLUME_NAME "${PROJECT_NAME}")
     set(CPACK_DMG_FORMAT "UDBZ")
-    set(CPACK_DMG_BACKGROUND_IMAGE "${CMAKE_SOURCE_DIR}/resources/icon64.png")
+    #set(CPACK_DMG_BACKGROUND_IMAGE "${CMAKE_SOURCE_DIR}/resources/icon64.png")
 
-    if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.13)
-        set(CPACK_GENERATOR "External;${CPACK_GENERATOR}")
-        message(STATUS "   + macdeployqt -dmg                     YES ")
-        configure_file(${CMAKE_SOURCE_DIR}/cmake/CPackMacDeployQt.cmake.in "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
-        set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
-    endif()
+    set(CPACK_GENERATOR "External;${CPACK_GENERATOR}")
+    message(STATUS "   + macdeployqt -dmg                     YES ")
+    configure_file(${CMAKE_SOURCE_DIR}/cmake/CPackMacDeployQt.cmake.in "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
+    set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
 
 else()
     #-----------------------------------------------------------------------------

@@ -64,6 +64,8 @@ elseif(APPLE)
     set_source_files_properties(${CMAKE_SOURCE_DIR}/images/trefoil.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set_target_properties(${target}
             PROPERTIES
+            BUNDLE True
+            MACOSX_BUNDLE_GUI_IDENTIFIER com.fbreader.${PROJECT_NAME}
             MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
             MACOSX_BUNDLE_INFO_STRING "${PROJECT_NAME} Copyright (c) 2021 geometer@fbreader.org"
             MACOSX_BUNDLE_ICON_FILE trefoil.icns

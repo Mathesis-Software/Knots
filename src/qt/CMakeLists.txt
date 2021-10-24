@@ -46,14 +46,10 @@ set(PROJECT_DESCRIPTION "An app for drawing knot diagrams, converting them to 3d
 
 if (APPLE)
     set(CMAKE_MACOSX_RPATH ON)
-    set(APP_ICON_MACOSX ${CMAKE_SOURCE_DIR}/images/trefoil.icns)
-    set_source_files_properties(${APP_ICON_MACOSX} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
-    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES} $APP_ICON_MACOSX)
+    file(GLOB RES_ICONS " ${CMAKE_SOURCE_DIR}/images/*.icns")
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES} ${RES_ICONS})
+    set_source_files_properties(${RES_ICONS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION . RUNTIME DESTINATION .)
-
-    #    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/trefoil.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    #    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_dgr.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    #    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_knt.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
     set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE ON

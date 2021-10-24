@@ -7,13 +7,10 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets Network REQUIRED)
 
-file(STRINGS "../VERSION" ver)
-set(PROJECT_VERSION "\"${ver}\"")
-
+file(STRINGS "../VERSION" PROJECT_VERSION)
+add_definitions(-DVERSION="${PROJECT_VERSION}")
 include(version)
 setup_package_version_variables(PROJECT)
-
-add_definitions(-DVERSION=${PROJECT_VERSION})
 
 set(SOURCES AboutDialog.cpp
         Application.cpp

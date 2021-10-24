@@ -58,6 +58,8 @@ elseif (APPLE)
     set(CMAKE_MACOSX_RPATH ON)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION . RUNTIME DESTINATION .)
     set_source_files_properties(${CMAKE_SOURCE_DIR}/images/trefoil.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_dgr.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_knt.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE ON
             MACOSX_BUNDLE_GUI_IDENTIFIER com.fbreader.${PROJECT_NAME}

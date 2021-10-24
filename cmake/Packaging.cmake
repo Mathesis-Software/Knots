@@ -39,9 +39,9 @@ function(macdeployqt bundle targetdir _PACKAGER)
     include(InstallRequiredSystemLibraries)
 endfunction()
 
-set(CPACK_PACKAGE_VENDOR "Fbreader.org")
+set(CPACK_PACKAGE_VENDOR "${VENDOR}")
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
-set(CPACK_PACKAGE_CONTACT "<geometer@fbreader.org>")
+set(CPACK_PACKAGE_CONTACT "${EMAIL}")
 set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
@@ -113,7 +113,6 @@ elseif(APPLE)
     message(STATUS "   + macdeployqt -dmg                     YES ")
     configure_file(${CMAKE_SOURCE_DIR}/cmake/CPackMacDeployQt.cmake.in "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
     set(CPACK_EXTERNAL_PACKAGE_SCRIPT "${CMAKE_BINARY_DIR}/CPackExternal.cmake")
-
 else()
     #-----------------------------------------------------------------------------
     # Linux specific

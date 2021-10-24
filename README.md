@@ -94,6 +94,13 @@ After a successful build, the app is in ```src/qt``` folder. Open the folder in 
 ```
 before installation.
 
+#### To create *.dmg file
+After build run
+```bash
+cpack --config BundleConfig.cmake
+```
+The file KnotEditor-VERSION.dmg will be created in build directory.
+
 ## Screenshots
 
 ![Torus 5x2 knot, from a diagram to a smooth image](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-09-10.png?raw=true)

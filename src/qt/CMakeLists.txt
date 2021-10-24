@@ -37,10 +37,6 @@ set(SOURCES AboutDialog.cpp
         images.qrc
         )
 
-add_executable(${PROJECT_NAME} ${SOURCES})
-add_dependencies(${PROJECT_NAME} rapidjson)
-target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)
-
 # If you don't like default install location, uncomment next line and set it to desired value
 #set(CMAKE_INSTALL_PREFIX "/usr/local" CACHE PATH "..." FORCE)
 
@@ -57,9 +53,13 @@ elseif (WIN32)
 elseif (APPLE)
     set(CMAKE_MACOSX_RPATH ON)
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION . RUNTIME DESTINATION .)
-    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/trefoil.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_dgr.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_knt.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set(APP_ICON_MACOSX ${CMAKE_SOURCE_DIR}/images/trefoil.icns)
+    set_source_files_properties(${APP_ICON_MACOSX} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+
+#    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/trefoil.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+#    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_dgr.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+#    set_source_files_properties(${CMAKE_SOURCE_DIR}/images/file_knt.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+
     set_target_properties(${PROJECT_NAME} PROPERTIES
             MACOSX_BUNDLE ON
             MACOSX_BUNDLE_GUI_IDENTIFIER com.fbreader.${PROJECT_NAME}
@@ -73,4 +73,10 @@ elseif (APPLE)
             MACOSX_BUNDLE_INFO_PLIST ${CMAKE_CURRENT_SOURCE_DIR}/Info.plist
             )
     include(Packaging)
+    add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES} $APP_ICON_MACOSX)
+else()
+    add_executable(${PROJECT_NAME} ${SOURCES})
 endif ()
+
+add_dependencies(${PROJECT_NAME} rapidjson)
+target_link_libraries(${PROJECT_NAME} ke math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)

@@ -1,8 +1,1 @@
-**/*.d
-**/*.o
-**/*.a
-**/Makefile
-**/moc_*.h
-**/moc_*.cpp
-**/qrc_*.cpp
 build/

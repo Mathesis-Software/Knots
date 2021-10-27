@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-#include <map>
-#include <vector>
-#include <stdexcept>
 #include <cmath>
+#include <map>
+#include <stdexcept>
+#include <vector>
 
 #include "Util_rapidjson.h"
 #include "Diagram.h"

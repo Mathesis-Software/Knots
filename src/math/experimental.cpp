@@ -15,6 +15,7 @@
  */
 
 #include <cmath>
+
 #include "experimental.h"
 #include "../ke/KnotWrapper.h"
 

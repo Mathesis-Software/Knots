@@ -19,7 +19,7 @@ include_directories(${RAPIDJSON_INCLUDE_DIR})
 
 include (win32)
 
-add_subdirectory(src/ke)
-add_subdirectory(src/math)
-add_subdirectory(src/other)
-add_subdirectory(src/qt)
+add_subdirectory(modules/core)
+add_subdirectory(modules/math)
+add_subdirectory(modules/other)
+add_subdirectory(modules/qt)

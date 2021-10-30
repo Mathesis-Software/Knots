@@ -36,6 +36,8 @@ private:
 
 	QPoint capturedPoint;
 
+        float scaleFactor;
+
 public:
 	GLWidget(QWidget *parent);
 	virtual const Color &backgroundColor() const = 0;
@@ -54,6 +56,7 @@ private:
 	void mousePressEvent(QMouseEvent *event) override;
 	void mouseReleaseEvent(QMouseEvent *event) override;
 	void mouseMoveEvent(QMouseEvent *event) override;
+        void wheelEvent(QWheelEvent *event) override;
 
 	void rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers);
 	void selectMouseCursor();

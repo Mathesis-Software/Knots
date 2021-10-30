@@ -15,7 +15,6 @@ endif()
 project(KnotEditor)
 
 include(rapidjson)
-include_directories(${RAPIDJSON_INCLUDE_DIRS})
 include (win32)
 
 add_subdirectory(modules/core)

@@ -51,7 +51,7 @@ void GLWidget::initializeGL() {
 	glLightfv(GL_LIGHT0, GL_POSITION, pos);
 	glEnable(GL_LIGHT0);
 	glEnable(GL_LIGHTING);
-        glEnable(GL_RESCALE_NORMAL);
+	glEnable(GL_RESCALE_NORMAL);
 }
 
 void GLWidget::paintGL() {
@@ -81,15 +81,15 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 static const float SCALE_STEP = 1.05f;
 
 void GLWidget::wheelEvent(QWheelEvent *event)  {
-        auto delta = event->angleDelta();
+	auto delta = event->angleDelta();
 
-        if (delta.y() < 0)  {
-                scaleFactor /= SCALE_STEP;
-        } else if (delta.y() > 0)  {
-                scaleFactor *= SCALE_STEP;
-        }
+	if (delta.y() < 0)  {
+		scaleFactor /= SCALE_STEP;
+	} else if (delta.y() > 0)  {
+		scaleFactor *= SCALE_STEP;
+	}
 
-        this->update();
+	this->update();
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
@@ -163,7 +163,7 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 	// Двусторонняя ли поверхность?
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, surface.showBackSide);
 
-        glScalef(scaleFactor, scaleFactor, scaleFactor);
+	glScalef(scaleFactor, scaleFactor, scaleFactor);
 	// Связаны ли треугольники?
 	glBegin(surface.stripped ? GL_TRIANGLE_STRIP : GL_TRIANGLES);
 
@@ -174,7 +174,7 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 
 	glEnd();
 
-        glScalef(1.0/scaleFactor, 1.0/scaleFactor, 1.0/scaleFactor);
+	glScalef(1.0 / scaleFactor, 1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
 }

@@ -49,7 +49,7 @@ make
 ```
 
 #### To install
-By default, the app is installed to `/usr/local/bin/KnotEditor`. Single binary, no additional files. Alternatively, you can change the `CMAKE_INSTALL_PREFIX` var in `modules/qt/CMakeLists.txt`.
+By default, the app is installed to `/usr/local/bin/KnotEditor`. Single binary, no additional files. Alternatively, you can change the `CMAKE_INSTALL_PREFIX` var in `modules/app/CMakeLists.txt`.
 ```
 sudo make install
 ```
@@ -88,9 +88,9 @@ make
 
 #### To install
 
-After a successful build, the app is in ```modules/qt``` folder. Open the folder in Finder and drag-n-drop the app to the Applications folder. Please note that Qt frameworks are not included in the app. If you plan to delete Qt installation from your Mac, run
+After a successful build, the app is in ```modules/app``` folder. Open the folder in Finder and drag-n-drop the app to the Applications folder. Please note that Qt frameworks are not included in the app. If you plan to delete Qt installation from your Mac, run
 ```
-/<your-path-to-qt6>/<version>/macos/bin/macdeployqt modules/qt/KnotEditor.app
+/<your-path-to-qt6>/<version>/macos/bin/macdeployqt modules/app/KnotEditor.app
 ```
 before installation.
 

@@ -25,4 +25,6 @@ if (NOT ${RapidJSON_FOUND})
     set(RAPIDJSON_INCLUDE_DIRS ${source_dir}/include)
 endif()
 
+include_directories(${RAPIDJSON_INCLUDE_DIRS})
+
 

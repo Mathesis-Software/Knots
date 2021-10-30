@@ -27,7 +27,7 @@ set(PROJECT_DESCRIPTION "A tool for drawing 2d diagrams, 3d knots, Seifert surfa
 
 if (APPLE)
     set(CMAKE_MACOSX_RPATH ON)
-    file(GLOB RES_ICONS "${CMAKE_SOURCE_DIR}/images/*.icns")
+    file(GLOB RES_ICONS "${CMAKE_CURRENT_SOURCE_DIR}/res/images/*.icns")
     add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SOURCES} ${RES_ICONS})
     set_source_files_properties(${RES_ICONS} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
     install(TARGETS ${PROJECT_NAME} BUNDLE DESTINATION . RUNTIME DESTINATION .)

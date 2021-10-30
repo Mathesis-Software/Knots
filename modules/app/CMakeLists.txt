@@ -49,7 +49,6 @@ else ()
     add_executable(${PROJECT_NAME} ${SOURCES})
 endif ()
 
-add_dependencies(${PROJECT_NAME} rapidjson)
 target_link_libraries(${PROJECT_NAME} core math Qt6::Core Qt6::Gui Qt6::Widgets Qt6::OpenGLWidgets Qt6::Network)
 
 # If you don't like default install location, uncomment next line and set it to desired value

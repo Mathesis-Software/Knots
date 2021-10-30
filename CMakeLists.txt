@@ -14,8 +14,8 @@ endif()
 
 project(KnotEditor)
 
-include("${CMAKE_SOURCE_DIR}/vendor/rapidjson.cmake")
-
+include(rapidjson)
+include_directories(${RAPIDJSON_INCLUDE_DIRS})
 include (win32)
 
 add_subdirectory(modules/core)

@@ -7,12 +7,18 @@ Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor %F
 Terminal=false
 Type=Application
 Icon=/home/geometer/src/KnotEditor/modules/app/res/images/trefoil.png
+MimeType=application/x-knot-3d;application/x-knot-diagram;
 Categories=Math;
 StartupWMClass=knoteditor
 Keywords=math;knot;diagram;
-Actions=OpenLibrary;
+Actions=OpenLibrary;NewDiagram;
 
 [Desktop Action OpenLibrary]
 Name=Open the Library
 Name[ru]=Открыть библиотеку
 Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor -L
+
+[Desktop Action NewDiagram]
+Name=New Diagram
+Name[ru]=Создать новую диаграмму
+Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor -N

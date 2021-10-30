@@ -46,10 +46,16 @@ void MessageReceiver::run() {
 			break;
 		}
 
-		QString message;
+		QStringList message;
 		controller->memorySemaphore.acquire();
 		if (controller->sharedMemory.lock()) {
-			message = QString(reinterpret_cast<char*>(controller->sharedMemory.data()));
+			const std::size_t maxSize = controller->sharedMemory.size();
+			const char *start = reinterpret_cast<const char*>(controller->sharedMemory.data());
+			for (const char *ptr = start; ptr < start + maxSize && *ptr != '\0'; ) {
+				const std::string word(ptr);
+				message.push_back(QString::fromStdString(word));
+				ptr += word.size() + 1;
+			}
 			std::memset(controller->sharedMemory.data(), 0, controller->sharedMemory.size());
 			controller->sharedMemory.unlock();
 		}
@@ -104,18 +110,19 @@ Controller::~Controller() {
 	this->memorySemaphore.release();
 }
 
-bool Controller::sendMessage(const QString &message) {
+bool Controller::sendMessage(const QStringList &message) {
 	if (message.isEmpty()) {
 		return false;
 	}
-	const std::string data = message.toStdString();
+	const std::string data = message.join('\0').toStdString();
 
 	bool sent = false;
 	this->memorySemaphore.acquire();
 	if (this->sharedMemory.attach()) {
 		if (data.size() < static_cast<std::size_t>(this->sharedMemory.size())) {
 			this->sharedMemory.lock();
-			std::strcpy(reinterpret_cast<char*>(this->sharedMemory.data()), message.toStdString().c_str());
+			std::memset(this->sharedMemory.data(), 0, this->sharedMemory.size());
+			std::memcpy(this->sharedMemory.data(), data.data(), data.size());
 			this->sharedMemory.unlock();
 			this->sharedMemory.detach();
 			this->messageSemaphore.release(1);

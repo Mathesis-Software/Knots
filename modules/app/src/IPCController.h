@@ -60,10 +60,10 @@ public:
 
 	Role role() const { return this->_role; }
 
-	bool sendMessage(const QString &message);
+	bool sendMessage(const QStringList &message);
 
 signals:
-	void messageReceived(const QString &message);
+	void messageReceived(const QStringList &message);
 
 private:
 	Controller(const Controller&) = delete;

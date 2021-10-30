@@ -36,7 +36,6 @@
 #include "IPCController.h"
 #include "KnotWindow.h"
 #include "LibraryWindow.h"
-#include "StartWindow.h"
 
 namespace KE::Qt {
 
@@ -60,15 +59,7 @@ QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const Q
 
 }
 
-void Application::closeStartWindow() {
-	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<StartWindow*>(widget)) {
-			window->close();
-		}
-	}
-}
-
-QWidget *Application::library() {
+QWidget *Application::openLibrary() {
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
 			window->showNormal();
@@ -82,14 +73,12 @@ QWidget *Application::library() {
 	window->show();
 	window->raise();
 	window->activateWindow();
-	this->closeStartWindow();
 	return window;
 }
 
 QWidget *Application::newDiagram() {
 	auto window = new DiagramWindow();
 	window->show();
-	this->closeStartWindow();
 	return window;
 }
 
@@ -127,6 +116,17 @@ QWidget *Application::openFile() {
 QWidget *Application::openFile(const QString &filename) {
 	if (filename.isEmpty()) {
 		return nullptr;
+	}
+
+	for (auto widget : QApplication::topLevelWidgets()) {
+		if (auto window = dynamic_cast<Window*>(widget)) {
+			if (window->identifier() == QFileInfo(filename).canonicalFilePath()) {
+				window->showNormal();
+				window->raise();
+				window->activateWindow();
+				return window;
+			}
+		}
 	}
 
 	try {
@@ -168,46 +168,29 @@ QWidget *Application::openDocument(const rapidjson::Value &doc, const QString &i
 	}
 
 	window->show();
-	this->closeStartWindow();
 	return window;
 }
 
-namespace {
-
-namespace Message {
-
-QString OpenLibrary = "openLibrary";
-
-}
-
-}
-
 Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
-	bool openLibrary = false;
-	QStringList filesToOpen;
-	for (int i = 1; i < argc; ++i) {
-		const QString argument = argv[i];
-		if (argument == "-L") {
-			openLibrary = true;
-		} else {
-			// TODO: check if it looks like a file path
-			filesToOpen.push_back(argument);
-		}
-	}
-
-	this->ipcController = new IPC::Controller("KnotEditor", this);
+	this->ipcController = new IPC::Controller("org.geometer.KnotEditor", this);
 	switch (this->ipcController->role()) {
 		case IPC::Controller::Role::primary:
-			QObject::connect(this->ipcController, &IPC::Controller::messageReceived, this, [this](const QString &message) {
-				if (message == Message::OpenLibrary) {
-					this->library();
+			QObject::connect(this->ipcController, &IPC::Controller::messageReceived, this, [this](const QStringList &messageList) {
+				for (const auto &arg : messageList) {
+					if (arg == "-L") {
+						this->openLibrary();
+					} else if (arg == "-N") {
+						this->newDiagram();
+					} else if (arg.startsWith("-")) {
+            qDebug() << QString("Unknown command line key %1").arg(arg);
+          } else {
+						this->openFile(arg);
+					}
 				}
 			});
 			break;
 		case IPC::Controller::Role::secondary:
-			if (openLibrary) {
-				this->ipcController->sendMessage(Message::OpenLibrary);
-			}
+			this->ipcController->sendMessage(this->arguments().mid(1));
 			return;
 		case IPC::Controller::Role::unknown:
 			// unexpected error; should never happen
@@ -230,17 +213,20 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 	this->setWindowIcon(pixmap);
 
 	int count = 0;
-	for (const auto &path : filesToOpen) {
-		if (auto window = this->openFile(path)) {
-			window->raise();
-			window->activateWindow();
+	for (const auto &arg : this->arguments().mid(1)) {
+		if (arg == "-L") {
+			this->openLibrary();
 			count += 1;
+		} else if (arg == "-N") {
+			this->newDiagram();
+			count += 1;
+		} else {
+			if (auto window = this->openFile(arg)) {
+				count += 1;
+			}
 		}
 	}
-	if (openLibrary) {
-		this->library();
-		count += 1;
-	}
+
 	if (count == 0) {
 		QSettings settings;
 		auto ids = settings.value("OpenWindows").toStringList();
@@ -252,18 +238,16 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 		}
 		for (const auto &id : ids) {
 			if (id == "::LIBRARY::") {
-				this->library();
+				this->openLibrary();
 				count += 1;
 			} else if (auto window = this->openFile(id)) {
-				window->raise();
-				window->activateWindow();
 				count += 1;
 			}
 		}
 	}
 
 	if (count == 0) {
-		(new StartWindow())->show();
+		this->openLibrary();
 	}
 }
 
@@ -274,9 +258,7 @@ bool Application::doNotRun() {
 bool Application::event(QEvent *event) {
 	if (event->type() == QEvent::FileOpen) {
 		const auto file = static_cast<QFileOpenEvent*>(event)->file();
-		if (this->openFile(file) == nullptr) {
-			this->closeStartWindow();
-		}
+		this->openFile(file);
 		return true;
 	} else {
 		return QApplication::event(event);

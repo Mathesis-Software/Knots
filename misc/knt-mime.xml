@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="application/x-knot-3d">
+    <comment>Knot file of KnotEditor</comment>
+    <glob pattern="*.knt"/>
+  </mime-type>
+</mime-info>

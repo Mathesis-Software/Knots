@@ -47,7 +47,7 @@ void BaseWindow::createFileMenu() {
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto library = fileMenu->addAction("Library", [] { dynamic_cast<Application*>(qApp)->library(); });
+	auto library = fileMenu->addAction("Library", [] { dynamic_cast<Application*>(qApp)->openLibrary(); });
 	library->setShortcut(QKeySequence("Ctrl+L"));
 	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<Application*>(qApp)->newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));

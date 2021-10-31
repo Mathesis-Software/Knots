@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/ostreamwrapper.h>
 #include <rapidjson/writer.h>
 
-#include <Util_rapidjson.h>
 #include <DiagramEditor.h>
 #include <KnotWrapper.h>
+#include <Util_rapidjson.h>
 
 void convert(const std::string &filename) {
 	rapidjson::Document doc;

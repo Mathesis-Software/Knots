@@ -51,9 +51,21 @@ struct Vector {
 	}
 
 	void swap(Vector &v) {
-		{ double swap = this->x; this->x = v.x; v.x = swap; }
-		{ double swap = this->y; this->y = v.y; v.y = swap; }
-		{ double swap = this->z; this->z = v.z; v.z = swap; }
+		{
+			double swap = this->x;
+			this->x = v.x;
+			v.x = swap;
+		}
+		{
+			double swap = this->y;
+			this->y = v.y;
+			v.y = swap;
+		}
+		{
+			double swap = this->z;
+			this->z = v.z;
+			v.z = swap;
+		}
 	}
 
 	void normalize() {
@@ -65,10 +77,9 @@ struct Vector {
 
 	static Vector linear(const Vector &v0, double coef0, const Vector &v1, double coef1) {
 		return Vector(
-			coef0 * v0.x + coef1 * v1.x,
-			coef0 * v0.y + coef1 * v1.y,
-			coef0 * v0.z + coef1 * v1.z
-		);
+						coef0 * v0.x + coef1 * v1.x,
+						coef0 * v0.y + coef1 * v1.y,
+						coef0 * v0.z + coef1 * v1.z);
 	}
 };
 
@@ -82,6 +93,6 @@ inline double Point::distanceTo(const Point &pt) const {
 	return Vector(pt, *this).length();
 }
 
-}
+}// namespace KE::ThreeD
 
 #endif /* __POINT_H__ */

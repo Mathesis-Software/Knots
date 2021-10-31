@@ -30,4 +30,4 @@ bool DiagramEditor::isSaved() const {
 	return this->saveCheckpoint == Util::rapidjson::docToString(doc);
 }
 
-}
+}// namespace KE::TwoD

@@ -103,8 +103,7 @@ void DiagramWidget::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge,
 		case fake:
 			painter.setPen(::Qt::lightGray);
 			break;
-		case fake2:
-		{
+		case fake2: {
 			QPen pen(0xe0e0e0);
 			pen.setDashPattern({6.0, 10.0});
 			painter.setPen(pen);
@@ -183,7 +182,7 @@ void DiagramWidget::drawIt(QPainter &painter) {
 	}
 }
 
-void DiagramWidget::paintEvent(QPaintEvent*) {
+void DiagramWidget::paintEvent(QPaintEvent *) {
 	QPainter pnt;
 	pnt.begin(this);
 	pnt.setRenderHint(QPainter::Antialiasing);
@@ -192,7 +191,7 @@ void DiagramWidget::paintEvent(QPaintEvent*) {
 	pnt.end();
 }
 
-void DiagramWidget::leaveEvent(QEvent*) {
+void DiagramWidget::leaveEvent(QEvent *) {
 	if (this->fakeVertex) {
 		this->setFakeVertex(nullptr);
 		this->repaint();
@@ -201,8 +200,7 @@ void DiagramWidget::leaveEvent(QEvent*) {
 
 void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 	switch (this->_editorMode) {
-		case QUICK_DRAWING:
-		{
+		case QUICK_DRAWING: {
 			if (this->diagram.isClosed()) {
 				this->setFakeVertex(nullptr);
 				break;
@@ -300,8 +298,7 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 	if (event->buttons() == 0) {
 		switch (this->_editorMode) {
-			case QUICK_DRAWING:
-			{
+			case QUICK_DRAWING: {
 				if (this->diagram.isClosed()) {
 					this->setFakeVertex(nullptr);
 					break;
@@ -311,16 +308,14 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 					fakeVertex->moveTo(event->pos().x(), event->pos().y());
 				} else {
 					this->setFakeVertex(std::make_shared<TwoD::Diagram::Vertex>(
-						event->pos().x(),
-						event->pos().y(),
-						std::numeric_limits<std::size_t>::max()
-					));
+									event->pos().x(),
+									event->pos().y(),
+									std::numeric_limits<std::size_t>::max()));
 				}
 				this->repaint();
 				break;
 			}
-			case EDITING:
-			{
+			case EDITING: {
 				auto vertex = this->diagram.findVertex(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 17);
 				if (vertex) {
 					this->captureEdge(nullptr);
@@ -458,4 +453,4 @@ void DiagramWidget::selectMouseCursor() {
 	}
 }
 
-}
+}// namespace KE::Qt

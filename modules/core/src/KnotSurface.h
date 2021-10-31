@@ -46,10 +46,10 @@ private:
 	void calculate() const override;
 
 private:
-	KnotSurface(const KnotSurface&) = delete;
-	KnotSurface& operator = (const KnotSurface&) = delete;
+	KnotSurface(const KnotSurface &) = delete;
+	KnotSurface &operator=(const KnotSurface &) = delete;
 };
 
-}
+}// namespace KE::GL
 
 #endif /* __KNOT_SURFACE_H__ */

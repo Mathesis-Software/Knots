@@ -44,7 +44,7 @@ private:
 public:
 	FileDataItem(const QString &path, int index);
 
-	bool operator < (const QListWidgetItem &other) const override;
+	bool operator<(const QListWidgetItem &other) const override;
 
 private:
 	void open() const override;
@@ -53,16 +53,16 @@ private:
 class LibraryModel : public QAbstractListModel {
 
 private:
-	QList<QListWidgetItem*> items;
+	QList<QListWidgetItem *> items;
 
 public:
-	LibraryModel(const QList<QListWidgetItem*> &items);
+	LibraryModel(const QList<QListWidgetItem *> &items);
 	~LibraryModel();
 
 	const DataItem *dataItem(const QModelIndex &index) const;
 
-	void addItems(QList<QListWidgetItem*> items);
-	void addItem(QListWidgetItem* item);
+	void addItems(QList<QListWidgetItem *> items);
+	void addItem(QListWidgetItem *item);
 	void removeItem(QListWidgetItem *item);
 	void clear();
 
@@ -84,10 +84,10 @@ public:
 	NetworkLibraryModel(LibraryWindow *window, const QString &pattern);
 
 private:
-	bool canFetchMore(const QModelIndex&) const override;
-	void fetchMore(const QModelIndex&) override;
+	bool canFetchMore(const QModelIndex &) const override;
+	void fetchMore(const QModelIndex &) override;
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_LIBRARY_MODEL_H__ */

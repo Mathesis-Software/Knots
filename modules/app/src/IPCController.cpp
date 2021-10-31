@@ -26,20 +26,20 @@ namespace IPC {
 
 namespace {
 
-QString generateKey(const QString& key, const QString& salt) {
+QString generateKey(const QString &key, const QString &salt) {
 	QByteArray data;
 	data.append(key.toUtf8());
 	data.append(salt.toUtf8());
 	return QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
 }
 
-}
+}// namespace
 
 MessageReceiver::MessageReceiver(Controller *controller) : QThread(controller) {
 }
 
 void MessageReceiver::run() {
-	Controller *controller = static_cast<Controller*>(this->parent());
+	Controller *controller = static_cast<Controller *>(this->parent());
 	while (true) {
 		controller->messageSemaphore.acquire();
 		if (this->isInterruptionRequested()) {
@@ -50,8 +50,8 @@ void MessageReceiver::run() {
 		controller->memorySemaphore.acquire();
 		if (controller->sharedMemory.lock()) {
 			const std::size_t maxSize = controller->sharedMemory.size();
-			const char *start = reinterpret_cast<const char*>(controller->sharedMemory.data());
-			for (const char *ptr = start; ptr < start + maxSize && *ptr != '\0'; ) {
+			const char *start = reinterpret_cast<const char *>(controller->sharedMemory.data());
+			for (const char *ptr = start; ptr < start + maxSize && *ptr != '\0';) {
 				const std::string word(ptr);
 				message.push_back(QString::fromStdString(word));
 				ptr += word.size() + 1;
@@ -66,14 +66,12 @@ void MessageReceiver::run() {
 	}
 }
 
-Controller::Controller(const QString& key, QObject *parent) :
-	QObject(parent),
- 	sharedMemory(generateKey(key, "sharedMemory")),
-	memorySemaphore(generateKey(key, "memorySemaphore"), 1),
-	messageSemaphore(generateKey(key, "messageSemaphore"), 0, QSystemSemaphore::Create),
-	_role(Role::unknown),
-	receiver(nullptr)
-{
+Controller::Controller(const QString &key, QObject *parent) : QObject(parent),
+																															sharedMemory(generateKey(key, "sharedMemory")),
+																															memorySemaphore(generateKey(key, "memorySemaphore"), 1),
+																															messageSemaphore(generateKey(key, "messageSemaphore"), 0, QSystemSemaphore::Create),
+																															_role(Role::unknown),
+																															receiver(nullptr) {
 	this->memorySemaphore.acquire();
 
 	// fix Linux issue: these two lines drop sharedMemory lock acquired by crashed app
@@ -135,4 +133,4 @@ bool Controller::sendMessage(const QStringList &message) {
 	return sent;
 }
 
-}
+}// namespace IPC

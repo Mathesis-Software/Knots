@@ -40,13 +40,13 @@ struct CrossingEx {
 	CrossingEx inversion() const {
 		return CrossingEx(this->cro, !this->over);
 	}
-	bool operator == (const CrossingEx &ex) const {
+	bool operator==(const CrossingEx &ex) const {
 		return this->cro == ex.cro && this->over == ex.over;
 	}
-	bool operator != (const CrossingEx &ex) const {
+	bool operator!=(const CrossingEx &ex) const {
 		return !(*this == ex);
 	}
-	bool operator < (const CrossingEx &ex) const {
+	bool operator<(const CrossingEx &ex) const {
 		return this->cro < ex.cro || (this->cro == ex.cro && this->over < ex.over);
 	}
 };
@@ -58,10 +58,10 @@ struct Bridge {
 
 	Bridge(const CrossingEx &start, const CrossingEx &end, bool forward) : start(start), end(end), forward(forward) {}
 
-	bool operator == (const Bridge &bridge) const {
+	bool operator==(const Bridge &bridge) const {
 		return this->start == bridge.start && this->end == bridge.end && this->forward == bridge.forward;
 	}
-	bool operator < (const Bridge &bridge) const {
+	bool operator<(const Bridge &bridge) const {
 		if (this->start < bridge.start) {
 			return true;
 		} else if (this->start != bridge.start) {
@@ -98,8 +98,8 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 			all.push_back(CrossingEx(cro, cro.up == edge));
 		}
 	}
-	std::map<CrossingEx,CrossingEx> next;
-	std::map<CrossingEx,CrossingEx> prev;
+	std::map<CrossingEx, CrossingEx> next;
+	std::map<CrossingEx, CrossingEx> prev;
 	for (std::size_t i = 0; i < all.size() - 1; i += 1) {
 		next.emplace(all[i], all[i + 1]);
 		prev.emplace(all[i + 1], all[i]);
@@ -107,7 +107,7 @@ std::vector<Face> collectFaces(const Diagram &diagram) {
 	next.emplace(all.back(), all.front());
 	prev.emplace(all.front(), all.back());
 
-	std::map<Diagram::Crossing,int> indices;
+	std::map<Diagram::Crossing, int> indices;
 	std::set<Bridge> allBridges;
 	for (const auto &crs : all) {
 		allBridges.emplace(prev.at(crs), crs, true);
@@ -162,7 +162,7 @@ Polynomial poly(const Bridge &bridge) {
 	}
 }
 
-}
+}// namespace
 
 bool AlexanderPolynomial::isApplicable(const Diagram &diagram) const {
 	return diagram.isClosed();
@@ -175,7 +175,7 @@ Polynomial AlexanderPolynomial::value(const Diagram &diagram) const {
 
 	const auto faces = collectFaces(diagram);
 
-	std::map<Diagram::Crossing,int> indices;
+	std::map<Diagram::Crossing, int> indices;
 
 	const auto skip = faces[0].bridges.front().inversion();
 	std::vector<std::vector<Polynomial>> rows;
@@ -201,4 +201,4 @@ Polynomial AlexanderPolynomial::value(const Diagram &diagram) const {
 	return matrix.determinant().reduced();
 }
 
-}
+}// namespace KE::TwoD::Math

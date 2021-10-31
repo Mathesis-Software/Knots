@@ -30,6 +30,6 @@ public:
 	AboutDialog();
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_ABOUT_DIALOG_H__ */

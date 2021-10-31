@@ -25,9 +25,9 @@ class BaseWindow : public QMainWindow {
 
 protected:
 	BaseWindow();
-	void restoreParameters(); 
+	void restoreParameters();
 	void createFileMenu();
-	void closeEvent(QCloseEvent*) override;
+	void closeEvent(QCloseEvent *) override;
 
 public:
 	virtual QString identifier() const {
@@ -35,6 +35,6 @@ public:
 	}
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_BASE_WINDOW_H__ */

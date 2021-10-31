@@ -26,7 +26,7 @@ class Surface;
 class KnotSurface;
 class SeifertSurface;
 
-}
+}// namespace KE::GL
 
 namespace KE::ThreeD {
 
@@ -93,6 +93,6 @@ private:
 	void readUiOptions(const rapidjson::Value &doc);
 };
 
-}
+}// namespace KE::ThreeD
 
 #endif /* __KE_KNOT_WRAPPER_H__ */

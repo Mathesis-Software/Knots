@@ -42,12 +42,12 @@ void KnotPreview::paint(QPixmap &pixmap) {
 	const double deltaX = (pixmap.width() - scale * (minX + maxX)) / 2;
 	const double deltaY = (pixmap.height() - scale * (minY + maxY)) / 2;
 
-	typedef std::pair<ThreeD::Point,ThreeD::Point> Pair;
+	typedef std::pair<ThreeD::Point, ThreeD::Point> Pair;
 	std::vector<Pair> edges;
 	for (std::size_t i = 0; i < snapshot.size(); i += 1) {
 		edges.push_back(std::make_pair(snapshot[i], snapshot[snapshot.next(i)]));
 	}
-	std::sort(edges.begin(), edges.end(), [](const Pair &p0, const Pair &p1){ return p0.first.z < p1.first.z; });
+	std::sort(edges.begin(), edges.end(), [](const Pair &p0, const Pair &p1) { return p0.first.z < p1.first.z; });
 	for (const auto &pair : edges) {
 		QPointF start(pair.first.x * scale + deltaX, pixmap.height() - pair.first.y * scale - deltaY);
 		QPointF end(pair.second.x * scale + deltaX, pixmap.height() / pixmap.devicePixelRatio() - pair.second.y * scale - deltaY);
@@ -137,4 +137,4 @@ void DiagramPreview::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge
 	}
 }
 
-}
+}// namespace KE::Qt

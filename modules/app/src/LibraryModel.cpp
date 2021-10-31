@@ -60,17 +60,17 @@ void DataItem::init(const rapidjson::Value &doc) {
 FileDataItem::FileDataItem(const QString &path, int index) : path(path), index(index) {
 	QResource resource(this->path);
 	rapidjson::Document doc;
-	doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
+	doc.Parse(reinterpret_cast<const char *>(resource.data()), resource.size());
 	this->init(doc);
 }
 
-bool FileDataItem::operator < (const QListWidgetItem &other) const {
-	const FileDataItem &data = dynamic_cast<const FileDataItem&>(other);
+bool FileDataItem::operator<(const QListWidgetItem &other) const {
+	const FileDataItem &data = dynamic_cast<const FileDataItem &>(other);
 	return this->index < data.index || (this->index == data.index && this->path < data.path);
 }
 
 void FileDataItem::open() const {
-	dynamic_cast<Application*>(qApp)->openFile(this->path);
+	dynamic_cast<Application *>(qApp)->openFile(this->path);
 }
 
 namespace {
@@ -116,13 +116,13 @@ private:
 	void open() const override {
 		rapidjson::Document doc;
 		doc.Parse(json.data(), json.size());
-		dynamic_cast<Application*>(qApp)->openDocument(doc, QString());
+		dynamic_cast<Application *>(qApp)->openDocument(doc, QString());
 	}
 };
 
-}
+}// namespace
 
-LibraryModel::LibraryModel(const QList<QListWidgetItem*> &items) : items(items) {
+LibraryModel::LibraryModel(const QList<QListWidgetItem *> &items) : items(items) {
 }
 
 LibraryModel::~LibraryModel() {
@@ -133,16 +133,16 @@ const DataItem *LibraryModel::dataItem(const QModelIndex &index) const {
 	if (!index.isValid()) {
 		return nullptr;
 	}
-	return dynamic_cast<DataItem*>(this->items.at(index.row()));
+	return dynamic_cast<DataItem *>(this->items.at(index.row()));
 }
 
-void LibraryModel::addItems(QList<QListWidgetItem*> items) {
+void LibraryModel::addItems(QList<QListWidgetItem *> items) {
 	this->beginInsertRows(QModelIndex(), this->items.count(), this->items.count() + items.count() - 1);
 	this->items.append(items);
 	this->endInsertRows();
 }
 
-void LibraryModel::addItem(QListWidgetItem* item) {
+void LibraryModel::addItem(QListWidgetItem *item) {
 	this->beginInsertRows(QModelIndex(), this->items.count(), this->items.count());
 	this->items.append(item);
 	this->endInsertRows();
@@ -184,27 +184,27 @@ QVariant LibraryModel::data(const QModelIndex &index, int role) const {
 	return this->items.at(index.row())->data(role);
 }
 
-NetworkLibraryModel::NetworkLibraryModel(LibraryWindow *window, const QString &pattern) : LibraryModel(QList<QListWidgetItem*>()), window(window), pattern(pattern), nextPage(0) {
+NetworkLibraryModel::NetworkLibraryModel(LibraryWindow *window, const QString &pattern) : LibraryModel(QList<QListWidgetItem *>()), window(window), pattern(pattern), nextPage(0) {
 }
 
-bool NetworkLibraryModel::canFetchMore(const QModelIndex&) const {
+bool NetworkLibraryModel::canFetchMore(const QModelIndex &) const {
 	return this->nextPage >= 0;
 }
 
-void NetworkLibraryModel::fetchMore(const QModelIndex&) {
+void NetworkLibraryModel::fetchMore(const QModelIndex &) {
 	const auto page = this->nextPage;
 	this->nextPage = -1;
 
 	auto waitingItem = new WaitingItem(this, this->rowCount());
 	this->addItem(waitingItem);
-	this->window->networkManager()->searchDiagram(pattern, page, this, [=] (int errorCode, const QByteArray &data) {
+	this->window->networkManager()->searchDiagram(pattern, page, this, [=](int errorCode, const QByteArray &data) {
 		try {
 			this->removeItem(waitingItem);
 			if (errorCode != 0) {
 				throw std::runtime_error("Network error");
 			}
 			rapidjson::Document document;
-			document.Parse(reinterpret_cast<const char*>(data.data()), data.size());
+			document.Parse(reinterpret_cast<const char *>(data.data()), data.size());
 			if (!document.IsObject()) {
 				throw std::runtime_error("Invalid response format");
 			}
@@ -214,7 +214,7 @@ void NetworkLibraryModel::fetchMore(const QModelIndex&) {
 			}
 			if (document.HasMember("layouts") && document["layouts"].IsArray()) {
 				const auto &layouts = document["layouts"];
-				QList<QListWidgetItem*> items;
+				QList<QListWidgetItem *> items;
 				for (std::size_t i = 0; i < layouts.Size(); i += 1) {
 					items.append(new JsonDataItem(layouts[i]));
 				}
@@ -235,4 +235,4 @@ void NetworkLibraryModel::fetchMore(const QModelIndex&) {
 	});
 }
 
-}
+}// namespace KE::Qt

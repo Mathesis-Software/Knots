@@ -25,17 +25,14 @@ namespace KE::ThreeD::Math {
 namespace {
 
 double det(const double *v1, const double *v2, const double *v3) {
-	return
-			v1[0] * (v2[1] * v3[2] - v2[2] * v3[1])
-		+ v1[1] * (v2[2] * v3[0] - v2[0] * v3[2])
-		+ v1[2] * (v2[0] * v3[1] - v2[1] * v3[0]);
+	return v1[0] * (v2[1] * v3[2] - v2[2] * v3[1]) + v1[1] * (v2[2] * v3[0] - v2[0] * v3[2]) + v1[2] * (v2[0] * v3[1] - v2[1] * v3[0]);
 }
 
 double vector_square(const double *v) {
 	return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
 
-}
+}// namespace
 
 double Experimental2::compute(const Knot::Snapshot &snapshot) {
 	double value = 0.0;
@@ -44,7 +41,7 @@ double Experimental2::compute(const Knot::Snapshot &snapshot) {
 	int o;
 
 	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[snapshot.size()];
+	double **tangs = new double *[snapshot.size()];
 	for (i1 = 0; i1 < snapshot.size(); i1++) {
 		tangs[i1] = new double[3];
 		tangs[i1][0] = snapshot[snapshot.next(i1)].x - snapshot[i1].x;
@@ -54,21 +51,24 @@ double Experimental2::compute(const Knot::Snapshot &snapshot) {
 
 	// Вычисляем ``гауссовы произведения''.
 	double chord[3], chord_len;
-	double **gauss = new double*[snapshot.size()];
+	double **gauss = new double *[snapshot.size()];
 
 	for (i1 = 0; i1 < snapshot.size(); i1++) {
 		gauss[i1] = new double[snapshot.size()];
 		gauss[i1][i1] = 0.0;
 		for (i2 = 0; i2 < i1; i2++) {
-			chord[0] = ( snapshot[i1].x + snapshot[snapshot.next(i1)].x -
-										snapshot[i2].x - snapshot[snapshot.next(i2)].x ) / 2;
-			chord[1] = ( snapshot[i1].y + snapshot[snapshot.next(i1)].y -
-										snapshot[i2].y - snapshot[snapshot.next(i2)].y ) / 2;
-			chord[2] = ( snapshot[i1].z + snapshot[snapshot.next(i1)].z -
-										snapshot[i2].z - snapshot[snapshot.next(i2)].z ) / 2;
-			chord_len = sqrt (vector_square (chord));
-			gauss[i1][i2] = det (tangs[i1], tangs[i2], chord) /
-												(chord_len * chord_len * chord_len);
+			chord[0] = (snapshot[i1].x + snapshot[snapshot.next(i1)].x -
+									snapshot[i2].x - snapshot[snapshot.next(i2)].x) /
+								 2;
+			chord[1] = (snapshot[i1].y + snapshot[snapshot.next(i1)].y -
+									snapshot[i2].y - snapshot[snapshot.next(i2)].y) /
+								 2;
+			chord[2] = (snapshot[i1].z + snapshot[snapshot.next(i1)].z -
+									snapshot[i2].z - snapshot[snapshot.next(i2)].z) /
+								 2;
+			chord_len = sqrt(vector_square(chord));
+			gauss[i1][i2] = det(tangs[i1], tangs[i2], chord) /
+											(chord_len * chord_len * chord_len);
 			gauss[i2][i1] = gauss[i1][i2];
 		}
 	}
@@ -77,7 +77,7 @@ double Experimental2::compute(const Knot::Snapshot &snapshot) {
 
 	// В gauss_sum[i1][i2] находится сумма ``гауссовых произведений''
 	// для всех хорд с началом в i1 и концом от snapshot.next(i1) до i2.
-	double **gauss_sum = new double*[snapshot.size()];
+	double **gauss_sum = new double *[snapshot.size()];
 
 	for (i1 = 0; i1 < snapshot.size(); i1++) {
 		gauss_sum[i1] = new double[snapshot.size()];
@@ -112,4 +112,4 @@ double Experimental2::compute(const Knot::Snapshot &snapshot) {
 	return value / (4 * M_PI * M_PI);
 }
 
-}
+}// namespace KE::ThreeD::Math

@@ -21,13 +21,13 @@ namespace KE::TwoD {
 namespace {
 
 struct SavePointCommand : public DiagramEditor::Command {
-	void play(Diagram&) override {
+	void play(Diagram &) override {
 	}
 };
 
 std::shared_ptr<DiagramEditor::Command> savePointCommand(new SavePointCommand());
 
-}
+}// namespace
 
 void DiagramEditor::savePoint() {
 	if (this->indexInLog > 0 && this->log[this->indexInLog - 1] != savePointCommand) {
@@ -87,4 +87,4 @@ void DiagramEditor::redo() {
 	}
 }
 
-}
+}// namespace KE::TwoD

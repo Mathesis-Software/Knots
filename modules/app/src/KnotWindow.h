@@ -30,7 +30,7 @@ class DiagramWidget;
 
 class KnotWindow : public Window {
 
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	KnotWindow(const rapidjson::Value &doc, const QString &filename);
@@ -45,7 +45,7 @@ private:
 	QImage exportImage() const override;
 
 	bool isSaved() const override;
-	void saveIt(std::ostream&) override;
+	void saveIt(std::ostream &) override;
 
 	void closeEvent(QCloseEvent *event) override;
 
@@ -72,6 +72,6 @@ public:
 	KnotOptionsDialog(KnotWindow &window);
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_KNOT_WINDOW_H__ */

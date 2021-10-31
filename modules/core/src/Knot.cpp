@@ -32,7 +32,7 @@ Knot::Knot(const std::vector<Point> &points, const std::string &caption) : capti
 		min = std::min(min, dist);
 		total += dist;
 	}
-	this->normalize(std::max(5 * this->_points.size(), 3 * (std::size_t)std::round(total / min)));
+	this->normalize(std::max(5 * this->_points.size(), 3 * (std::size_t) std::round(total / min)));
 	this->center();
 }
 
@@ -85,24 +85,22 @@ std::vector<Point> Knot::pointsFromDiagram(const TwoD::Diagram &diagram, std::si
 	for (const auto &edge : edges) {
 		const auto coords = edge.start->coords();
 		points.push_back(Point(
-			2.4 * coords.x / width - 1.2,
-			1.2 - 2.4 * coords.y / height,
-			0
-		));
+						2.4 * coords.x / width - 1.2,
+						1.2 - 2.4 * coords.y / height,
+						0));
 		for (const auto &crs : all_crossings[edge]) {
 			std::shared_ptr<TwoD::FloatPoint> current = crs.coords();
 			if (!current) {
 				continue;
 			}
 			points.push_back(Point(
-				2.4 * current->x / width - 1.2,
-				1.2 - 2.4 * current->y / height,
-				crs.up == edge ? 0.2 : -0.2
-			));
+							2.4 * current->x / width - 1.2,
+							1.2 - 2.4 * current->y / height,
+							crs.up == edge ? 0.2 : -0.2));
 		}
 	}
 
 	return points;
 }
 
-}
+}// namespace KE::ThreeD

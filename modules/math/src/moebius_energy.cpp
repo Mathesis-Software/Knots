@@ -51,10 +51,9 @@ double MoebiusEnergy::compute(const Knot::Snapshot &snapshot) {
 	middles.reserve(snapshot.size());
 	for (std::size_t i = 0; i < snapshot.size(); i++) {
 		middles.push_back(Point(
-			(snapshot[i].x + snapshot[snapshot.next(i)].x) / 2,
-			(snapshot[i].y + snapshot[snapshot.next(i)].y) / 2,
-			(snapshot[i].z + snapshot[snapshot.next(i)].z) / 2
-		));
+						(snapshot[i].x + snapshot[snapshot.next(i)].x) / 2,
+						(snapshot[i].y + snapshot[snapshot.next(i)].y) / 2,
+						(snapshot[i].z + snapshot[snapshot.next(i)].z) / 2));
 	}
 
 	for (std::size_t i = 0; i < snapshot.size(); i++) {
@@ -67,7 +66,7 @@ double MoebiusEnergy::compute(const Knot::Snapshot &snapshot) {
 			if (2 * l < len) {
 				r2 -= 2 / (l * l);
 			} else {
-				r2 -= 2 / ( (len - l) * (len - l) );
+				r2 -= 2 / ((len - l) * (len - l));
 			}
 
 			value += edgeLengths[i] * edgeLengths[j] * r2;
@@ -79,4 +78,4 @@ double MoebiusEnergy::compute(const Knot::Snapshot &snapshot) {
 	return value;
 }
 
-}
+}// namespace KE::ThreeD::Math

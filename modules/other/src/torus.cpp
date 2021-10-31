@@ -55,10 +55,9 @@ int main(int argc, char **argv) {
 		const double lonAngle = 2 * M_PI * longitude * i / numberOfPoints;
 		const double merAngle = 2 * M_PI * meridian * i / numberOfPoints;
 		points.push_back(KE::ThreeD::Point(
-			sin(lonAngle) * (0.7 + 0.3 * cos(merAngle)),
-			cos(lonAngle) * (0.7 + 0.3 * cos(merAngle)),
-			0.3 * sin(merAngle)
-		));
+						sin(lonAngle) * (0.7 + 0.3 * cos(merAngle)),
+						cos(lonAngle) * (0.7 + 0.3 * cos(merAngle)),
+						0.3 * sin(merAngle)));
 	}
 
 	std::stringstream name;

@@ -146,7 +146,7 @@ bool orientation(const std::shared_ptr<Diagram::Vertex> &v0, const std::shared_p
 	}
 }
 
-}
+}// namespace
 
 bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 	if (this->start == edge.start ||
@@ -156,15 +156,14 @@ bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 		return false;
 	}
 	const bool ori = orientation(this->start, edge.start, this->end);
-	return
-		ori == orientation(edge.start, this->end, edge.end) &&
-		ori == orientation(this->end, edge.end, this->start) &&
-		ori == orientation(edge.end, this->start, edge.start);
+	return ori == orientation(edge.start, this->end, edge.end) &&
+				 ori == orientation(this->end, edge.end, this->start) &&
+				 ori == orientation(edge.end, this->start, edge.start);
 }
 
-std::map<Diagram::Edge,std::list<Diagram::Crossing>> Diagram::allCrossings() const {
+std::map<Diagram::Edge, std::list<Diagram::Crossing>> Diagram::allCrossings() const {
 	const auto edges = this->edges();
-	std::map<Diagram::Edge,std::list<Diagram::Crossing>> map;
+	std::map<Diagram::Edge, std::list<Diagram::Crossing>> map;
 	for (const auto &edge : edges) {
 		const auto crossings = this->underCrossings(edge);
 		auto &list = map[edge];
@@ -179,4 +178,4 @@ std::map<Diagram::Edge,std::list<Diagram::Crossing>> Diagram::allCrossings() con
 	return map;
 }
 
-}
+}// namespace KE::TwoD

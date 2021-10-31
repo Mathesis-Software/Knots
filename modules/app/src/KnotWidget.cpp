@@ -115,4 +115,4 @@ void KnotWidget::setNumberOfPoints() {
 	}
 }
 
-}
+}// namespace KE::Qt

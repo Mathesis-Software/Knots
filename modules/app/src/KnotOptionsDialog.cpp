@@ -39,13 +39,13 @@ private:
 	const int _height = 20;
 	const int _delta = 10;
 
-	const std::function<void(const Color&)> setter;
+	const std::function<void(const Color &)> setter;
 
 public:
 	QColor currentColor;
 
 public:
-	ColorButton(const QString &title, const Color &initialColor, std::function<void(const Color&)> setter) : setter(setter) {
+	ColorButton(const QString &title, const Color &initialColor, std::function<void(const Color &)> setter) : setter(setter) {
 		this->setColor(QColor(initialColor.red(), initialColor.green(), initialColor.blue()));
 		this->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 		this->setMinimumSize(_width + _delta, _height + _delta);
@@ -87,7 +87,8 @@ public:
 	}
 };
 
-template<class W> struct WidgetWithLabel {
+template<class W>
+struct WidgetWithLabel {
 	W *widget;
 	QLabel *label;
 
@@ -106,11 +107,11 @@ template<class W> struct WidgetWithLabel {
 	}
 };
 
-WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &initialColor, std::function<void(const Color&)> setter) {
+WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &initialColor, std::function<void(const Color &)> setter) {
 	return WidgetWithLabel(new ColorButton(title, initialColor, setter), title);
 }
 
-}
+}// namespace
 
 void KnotWindow::showOptionsDialog() {
 	if (this->isSignalConnected(QMetaMethod::fromSignal(&KnotWindow::raiseOptionsDialog))) {
@@ -236,4 +237,4 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	QObject::connect(&window, &KnotWindow::raiseOptionsDialog, this, &QDialog::raise);
 }
 
-}
+}// namespace KE::Qt

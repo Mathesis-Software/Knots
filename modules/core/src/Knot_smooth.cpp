@@ -89,9 +89,8 @@ void Knot::decreaseEnergy() {
 		// Вычисляем общие коэффициенты для всех слагаемых в p_i.
 		const double lt = lengths[i] + lengths[snapshot.prev(i)];
 		const Vector local = Vector::linear(
-			edges[i], - 1 / lengths[i],
-			edges[snapshot.prev(i)], 1 / lengths[snapshot.prev(i)]
-		);
+						edges[i], -1 / lengths[i],
+						edges[snapshot.prev(i)], 1 / lengths[snapshot.prev(i)]);
 
 		for (std::size_t j = snapshot.next(i); j != snapshot.prev(i); j = snapshot.next(j)) {
 			// Ищем ближайшую к p_i точку на ребре p_jp_{j+1}:
@@ -159,11 +158,11 @@ void Knot::decreaseEnergy() {
 		shift.z += pt.z;
 	}
 	for (auto &pt : points) {
-		pt.move(shift, - 1.0 / points.size());
+		pt.move(shift, -1.0 / points.size());
 	}
 
 	counting_lock guard(*this);
 	this->_points.swap(points);
 }
 
-}
+}// namespace KE::ThreeD

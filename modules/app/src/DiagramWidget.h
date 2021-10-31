@@ -25,7 +25,7 @@ namespace KE::Qt {
 
 class DiagramWidget : public QWidget {
 
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	enum EditorMode {
@@ -52,21 +52,21 @@ private:
 	void captureCrossing(const std::shared_ptr<TwoD::Diagram::Crossing> &crossing);
 	void capturePoint(const QPoint &point);
 
-	void drawVertex(QPainter&, const TwoD::Diagram::Vertex &vertex, bool highlight);
+	void drawVertex(QPainter &, const TwoD::Diagram::Vertex &vertex, bool highlight);
 	enum EdgeMode {
 		normal,
 		highlighted,
 		fake,
 		fake2
 	};
-	void drawEdge(QPainter&, const TwoD::Diagram::Edge &edge, EdgeMode mode);
+	void drawEdge(QPainter &, const TwoD::Diagram::Edge &edge, EdgeMode mode);
 	void highlightCrossing(QPainter &painter, const TwoD::Diagram::Crossing &crossing);
 
-	void paintEvent(QPaintEvent*) override;
-	void leaveEvent(QEvent*) override;
-	void mousePressEvent(QMouseEvent*) override;
-	void mouseReleaseEvent(QMouseEvent*) override;
-	void mouseMoveEvent(QMouseEvent*) override;
+	void paintEvent(QPaintEvent *) override;
+	void leaveEvent(QEvent *) override;
+	void mousePressEvent(QMouseEvent *) override;
+	void mouseReleaseEvent(QMouseEvent *) override;
+	void mouseMoveEvent(QMouseEvent *) override;
 
 	void selectMouseCursor();
 
@@ -89,6 +89,6 @@ signals:
 	void diagramChanged();
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __DIAGRAMWIDGET_H__ */

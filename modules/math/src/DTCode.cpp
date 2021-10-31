@@ -66,7 +66,7 @@ std::list<int> DTCode::value(const Diagram &diagram) const {
 			}
 		}
 	};
-	std::map<Diagram::Crossing,Index> indices;
+	std::map<Diagram::Crossing, Index> indices;
 	int count = 1;
 	for (const auto &ex : all) {
 		if (count % 2 == 0 && ex.over) {
@@ -91,4 +91,4 @@ std::list<int> DTCode::value(const Diagram &diagram) const {
 	return code;
 }
 
-}
+}// namespace KE::TwoD::Math

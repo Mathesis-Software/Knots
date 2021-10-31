@@ -19,8 +19,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Util_rapidjson.h"
 #include "Diagram.h"
+#include "Util_rapidjson.h"
 
 namespace KE::TwoD {
 
@@ -101,13 +101,13 @@ rapidjson::Document Diagram::serialize() const {
 	doc.AddMember("name", caption, doc.GetAllocator());
 
 	rapidjson::Value vertices(rapidjson::kArrayType);
-	std::map<std::shared_ptr<Vertex>,std::size_t> nums;
+	std::map<std::shared_ptr<Vertex>, std::size_t> nums;
 	int index = 0;
 	for (const auto &vertex : this->vertices()) {
 		nums[vertex] = index;
 		index += 1;
 		rapidjson::Value point(rapidjson::kArrayType);
-		point.PushBack((int)vertex->index, doc.GetAllocator());
+		point.PushBack((int) vertex->index, doc.GetAllocator());
 		point.PushBack(vertex->_x, doc.GetAllocator());
 		point.PushBack(vertex->_y, doc.GetAllocator());
 		vertices.PushBack(point, doc.GetAllocator());
@@ -117,8 +117,8 @@ rapidjson::Document Diagram::serialize() const {
 	for (const auto &edge : this->edges()) {
 		for (const auto &crs : this->underCrossings(edge)) {
 			rapidjson::Value c(rapidjson::kObjectType);
-			c.AddMember("down", (int)nums[edge.start], doc.GetAllocator());
-			c.AddMember("up", (int)nums[crs.up.start], doc.GetAllocator());
+			c.AddMember("down", (int) nums[edge.start], doc.GetAllocator());
+			c.AddMember("up", (int) nums[crs.up.start], doc.GetAllocator());
 			crossings.PushBack(c, doc.GetAllocator());
 		}
 	}
@@ -134,4 +134,4 @@ rapidjson::Document Diagram::serialize() const {
 	return doc;
 }
 
-}
+}// namespace KE::TwoD

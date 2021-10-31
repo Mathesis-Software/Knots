@@ -25,9 +25,9 @@ namespace KE {
 std::string Color::stringValue() const {
 	std::stringstream os;
 	os
-		<< std::hex << std::setfill('0') << std::setw(2) << (int)round(this->rgb[0] * 255)
-		<< std::hex << std::setfill('0') << std::setw(2) << (int)round(this->rgb[1] * 255)
-		<< std::hex << std::setfill('0') << std::setw(2) << (int)round(this->rgb[2] * 255);
+					<< std::hex << std::setfill('0') << std::setw(2) << (int) round(this->rgb[0] * 255)
+					<< std::hex << std::setfill('0') << std::setw(2) << (int) round(this->rgb[1] * 255)
+					<< std::hex << std::setfill('0') << std::setw(2) << (int) round(this->rgb[2] * 255);
 	return os.str();
 }
 
@@ -44,4 +44,4 @@ std::shared_ptr<Color> Color::parse(const std::string &stringValue) {
 	return std::make_shared<Color>((value >> 16) & 0xff, (value >> 8) & 0xff, value & 0xff);
 }
 
-}
+}// namespace KE

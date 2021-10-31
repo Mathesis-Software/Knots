@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "Util_rapidjson.h"
 #include "Knot.h"
+#include "Util_rapidjson.h"
 
 namespace KE::ThreeD {
 
@@ -82,4 +82,4 @@ rapidjson::Document Knot::serialize() const {
 	return doc;
 }
 
-}
+}// namespace KE::ThreeD

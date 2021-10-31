@@ -16,30 +16,30 @@
 
 #include <cmath>
 
-#include "seifert.h"
 #include "SeifertSurface.h"
+#include "seifert.h"
 
 namespace KE::GL {
 
 namespace {
 
-const int MAX_ITERATION_NUMBER = 20; // Максимальное число итераций при
-																		 // добавлении новой точки в заданном
-						 // направлении.
-const double MIN_TAU = 0.0001;			 // Итерации при добавлении точки в
-																		 // заданном направлении прекращаются,
-																		 // если скалярное произведение вектора
-						 // сдвига и суммы градиентов на его
-						 // концах не превосходит этого числа.
-const int MAX_POINTS_NUMBER = 8000;	// Максимальное число точек поверхности.
+const int MAX_ITERATION_NUMBER = 20;// Максимальное число итераций при
+																		// добавлении новой точки в заданном
+																		// направлении.
+const double MIN_TAU = 0.0001;			// Итерации при добавлении точки в
+																		// заданном направлении прекращаются,
+																		// если скалярное произведение вектора
+																		// сдвига и суммы градиентов на его
+																		// концах не превосходит этого числа.
+const int MAX_POINTS_NUMBER = 8000; // Максимальное число точек поверхности.
 const double MIN_EPS = 0.024;				// Минимальное и максимальное значения
-const double MAX_EPS = 0.04;				 // допустимого сдвига.
-const double NEAR = 1.5;						 // Соседними считаются точки, находящиеся
-																		 // друг от друга
-						 // на расстоянии <= NEAR * Eps.
+const double MAX_EPS = 0.04;				// допустимого сдвига.
+const double NEAR = 1.5;						// Соседними считаются точки, находящиеся
+																		// друг от друга
+																		// на расстоянии <= NEAR * Eps.
 const double TIMES = 2.0;						// Значение допустимого сдвига не
-																		 // превосходит расстояния до узла,
-						 // деленного на TIMES.
+																		// превосходит расстояния до узла,
+																		// деленного на TIMES.
 
 
 int counter = 0;
@@ -53,7 +53,7 @@ double distance2(const ThreeD::Point &point, const ThreeD::Point &pt0, const Thr
 	const double xr = x.scalar_product(r);
 	const double x2 = x.square();
 	const double r2 = r.square();
-	const double tau = - xr / r2;
+	const double tau = -xr / r2;
 
 	if (tau < 0.0) {
 		return x2;
@@ -74,7 +74,7 @@ double distance(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapsh
 	return sqrt(d2);
 }
 
-}
+}// namespace
 
 void seifert::addPoint(const ThreeD::Vector &direction) {
 	// mutable version of direction
@@ -138,7 +138,7 @@ void seifert::searchForNeighbor() {
 		grad.add(o->value->gradient);
 		const double dist2 = coor.square();
 		const double grad2 = grad.square();
-		const double scal	= coor.scalar_product(grad);
+		const double scal = coor.scalar_product(grad);
 
 		// Проверяем расстояние и ``почти перпендикулярность'' градиенту,
 		// добавляем точки в окрестности друг друга, если нужно.
@@ -156,7 +156,7 @@ void seifert::searchForNeighbor() {
 		grad.add(o->value->gradient);
 		const double dist2 = coor.square();
 		const double grad2 = grad.square();
-		const double scal	= coor.scalar_product(grad);
+		const double scal = coor.scalar_product(grad);
 
 		// Проверяем расстояние и ``почти перпендикулярность'' градиенту,
 		// добавляем точки в окрестности друг друга, если нужно.
@@ -178,9 +178,9 @@ void seifert::checkNeighborhood() {
 	// то создаем первую точку в направлении, перпендикулярном градиенту.
 	if (!neighborhood->value) {
 		if (fabs(gradient.x) > fabs(gradient.y) && fabs(gradient.x) > fabs(gradient.z)) {
-			this->addPoint(ThreeD::Vector(- gradient.y, gradient.x, 0));
+			this->addPoint(ThreeD::Vector(-gradient.y, gradient.x, 0));
 		} else {
-			this->addPoint(ThreeD::Vector(0, - gradient.z, gradient.y));
+			this->addPoint(ThreeD::Vector(0, -gradient.z, gradient.y));
 		}
 	}
 
@@ -219,7 +219,7 @@ void seifert::checkNeighborhood() {
 }
 
 seifert_list *seifert::hasNeighbor(seifert *n) {
-	for (seifert_list *sl = neighborhood; ; sl = sl->next) {
+	for (seifert_list *sl = neighborhood;; sl = sl->next) {
 		if (sl->value == n)
 			return sl;
 		if (sl->next == neighborhood)
@@ -228,11 +228,11 @@ seifert_list *seifert::hasNeighbor(seifert *n) {
 }
 
 void seifert::markUsed(seifert *start, seifert *end) {
-	seifert_list *sl_start = hasNeighbor (start);
+	seifert_list *sl_start = hasNeighbor(start);
 	if (!sl_start)
 		return;
 
-	seifert_list *sl_end = hasNeighbor (end);
+	seifert_list *sl_end = hasNeighbor(end);
 	if (!sl_end)
 		return;
 
@@ -244,7 +244,7 @@ void seifert::correction_local() {
 	if (!neighborhood->value)
 		return;
 
-	for (seifert_list *sl = neighborhood; ; sl = sl->next) {
+	for (seifert_list *sl = neighborhood;; sl = sl->next) {
 		sl->value->neighborhood->insert(sl->next->value);
 		sl->next->value->neighborhood->insert(sl->value);
 		if (sl->next == neighborhood)
@@ -269,8 +269,8 @@ void seifert::correction() {
 }
 
 seifert::seifert(const ThreeD::Knot::Snapshot &snapshot, const ThreeD::Point &point, seifert *neighbor) : snapshot(snapshot), point(point), gradient(SeifertSurface::gradient(point, snapshot)) {
-	counter ++;
-//	cerr << "Point " << counter << '\n';
+	counter++;
+	//	cerr << "Point " << counter << '\n';
 
 	localEps = std::min(distance(this->point, this->snapshot) / TIMES, MAX_EPS);
 
@@ -282,7 +282,7 @@ seifert::seifert(const ThreeD::Knot::Snapshot &snapshot, const ThreeD::Point &po
 	neighborhood = new seifert_list(this, neighbor);
 	if (neighbor) {
 		neighbor->neighborhood->insert_after(this);
-		searchForNeighbor ();
+		searchForNeighbor();
 	}
 
 	if (localEps > MIN_EPS) {
@@ -304,7 +304,7 @@ seifert::~seifert() {
 	delete sord;
 	delete neighborhood;
 
-	counter --;
+	counter--;
 }
 
-}
+}// namespace KE::GL

@@ -32,6 +32,6 @@ public:
 	void searchDiagram(const QString &code, int page, QObject *context, const std::function<void(int errorCode, const QByteArray &response)> callback);
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_NETWORK_MANAGER_H__ */

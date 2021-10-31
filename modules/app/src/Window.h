@@ -23,7 +23,7 @@ namespace KE::Qt {
 
 class Window : public BaseWindow {
 
-Q_OBJECT
+	Q_OBJECT
 
 private:
 	QToolBar *toolbar;
@@ -49,7 +49,7 @@ protected:
 
 	QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
 	void addToolbarSeparator();
-	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
+	QAction *registerAction(QAction *action, std::function<void(QAction &)> controller);
 
 	virtual QString fileFilter() const = 0;
 
@@ -58,6 +58,6 @@ signals:
 	void contentChanged();
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_WINDOW_H__ */

@@ -67,10 +67,10 @@ public:
 	virtual const Color &backColor() const = 0;
 
 private:
-	Surface(const Surface&) = delete;
-	Surface& operator = (const Surface&) = delete;
+	Surface(const Surface &) = delete;
+	Surface &operator=(const Surface &) = delete;
 };
 
-}
+}// namespace KE::GL
 
 #endif /* __SURFACE_H__ */

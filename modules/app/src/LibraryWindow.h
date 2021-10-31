@@ -41,6 +41,6 @@ private:
 	QListView *createList(const QString &suffix);
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_LIBRARY_WINDOW_H_ */

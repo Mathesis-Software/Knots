@@ -57,6 +57,6 @@ public:
 	Experimental2(const KnotWrapper &knot, int order);
 };
 
-}
+}// namespace KE::ThreeD::Math
 
 #endif /* __EXPERIMENTAL_H__ */

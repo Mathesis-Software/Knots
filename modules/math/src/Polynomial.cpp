@@ -41,7 +41,7 @@ Polynomial Polynomial::reduced() const {
 	return result;
 }
 
-std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
+std::ostream &operator<<(std::ostream &os, const Polynomial &poly) {
 	if (poly.coefficients.empty()) {
 		os << 0;
 		return os;
@@ -57,7 +57,7 @@ std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
 			case 0:
 				continue;
 			case 1:
-				if (index != (int)poly.coefficients.size() - 1) {
+				if (index != (int) poly.coefficients.size() - 1) {
 					os << " + ";
 				}
 				if (index == 0) {
@@ -72,7 +72,7 @@ std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
 				}
 				break;
 			default:
-				if (index != (int)poly.coefficients.size() - 1) {
+				if (index != (int) poly.coefficients.size() - 1) {
 					if (coef > 0) {
 						os << " + ";
 					} else {
@@ -96,4 +96,4 @@ std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
 	return os;
 }
 
-}
+}// namespace KE::TwoD::Math

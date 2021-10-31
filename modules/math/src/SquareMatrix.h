@@ -96,6 +96,6 @@ T SquareMatrix<T>::determinant() const {
 	}
 }
 
-}
+}// namespace KE::TwoD::Math
 
 #endif /* __KE_MATH_SQUARE_MATRIX_H__ */

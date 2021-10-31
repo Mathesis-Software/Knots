@@ -47,6 +47,6 @@ private:
 	void drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge, float scale, float dX, float dY);
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_PREVIEW_H__ */

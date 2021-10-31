@@ -26,23 +26,23 @@ namespace KE {
 struct Color {
 	float rgb[3];
 
-	Color(int red, int green, int blue) : rgb {red / 255.0f, green / 255.0f, blue / 255.0f} {}
+	Color(int red, int green, int blue) : rgb{red / 255.0f, green / 255.0f, blue / 255.0f} {}
 
 	std::string stringValue() const;
 
-	int red() const { return (int)round(255 * rgb[0]); }
-	int green() const { return (int)round(255 * rgb[1]); }
-	int blue() const { return (int)round(255 * rgb[2]); }
+	int red() const { return (int) round(255 * rgb[0]); }
+	int green() const { return (int) round(255 * rgb[1]); }
+	int blue() const { return (int) round(255 * rgb[2]); }
 
 	static std::shared_ptr<Color> parse(const std::string &stringValue);
 	static const Color white;
 
-	bool operator == (const Color &color) const {
+	bool operator==(const Color &color) const {
 		return this->red() == color.red() && this->green() == color.green() && this->blue() == color.blue();
 	}
-	bool operator != (const Color &color) const { return !(*this == color); }
+	bool operator!=(const Color &color) const { return !(*this == color); }
 };
 
-}
+}// namespace KE
 
 #endif /* __KE_COLOR_H__ */

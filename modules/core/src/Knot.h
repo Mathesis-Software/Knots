@@ -39,7 +39,7 @@ class Knot {
 public:
 	class Snapshot {
 
-	friend class Knot;
+		friend class Knot;
 
 	private:
 		const Knot &knot;
@@ -53,7 +53,7 @@ public:
 	public:
 		bool isObsolete() const { return this->generation < this->knot.generation; }
 
-		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
+		const Point &operator[](std::size_t index) const { return (*this->points)[index]; }
 		std::size_t size() const { return this->points->size(); }
 
 		std::size_t next(std::size_t index) const {
@@ -117,10 +117,10 @@ public:
 	rapidjson::Document serialize() const;
 
 private:
-	Knot(const Knot&) = delete;
-	Knot& operator = (const Knot&) = delete;
+	Knot(const Knot &) = delete;
+	Knot &operator=(const Knot &) = delete;
 };
 
-}
+}// namespace KE::ThreeD
 
 #endif /* __KNOT_H__ */

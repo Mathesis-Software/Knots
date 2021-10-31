@@ -14,24 +14,18 @@
  * limitations under the License.
  */
 
-#include "seifert.h"
 #include "SeifertSurface.h"
+#include "seifert.h"
 
 namespace KE::GL {
 
 namespace {
 
 double det(const ThreeD::Point &pt0, const ThreeD::Point &pt1, const ThreeD::Point &pt2, const ThreeD::Vector &orth) {
-  return
-      (pt1.x - pt0.x) * (pt2.y - pt0.y) * orth.z
-    - (pt1.x - pt0.x) * (pt2.z - pt0.z) * orth.y
-    - (pt1.y - pt0.y) * (pt2.x - pt0.x) * orth.z
-    + (pt1.y - pt0.y) * (pt2.z - pt0.z) * orth.x
-    + (pt1.z - pt0.z) * (pt2.x - pt0.x) * orth.y
-    - (pt1.z - pt0.z) * (pt2.y - pt0.y) * orth.x;
+	return (pt1.x - pt0.x) * (pt2.y - pt0.y) * orth.z - (pt1.x - pt0.x) * (pt2.z - pt0.z) * orth.y - (pt1.y - pt0.y) * (pt2.x - pt0.x) * orth.z + (pt1.y - pt0.y) * (pt2.z - pt0.z) * orth.x + (pt1.z - pt0.z) * (pt2.x - pt0.x) * orth.y - (pt1.z - pt0.z) * (pt2.y - pt0.y) * orth.x;
 }
 
-}
+}// namespace
 
 ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot) {
 	ThreeD::Vector gradient(0.0, 0.0, 0.0);
@@ -43,9 +37,9 @@ ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD
 		const double xr = x.scalar_product(r);
 		const double x2 = x.square();
 		const double r2 = r.square();
-		const double tau = - xr / r2;
+		const double tau = -xr / r2;
 		const double a2 = x2 + tau * xr;
-		const double coeff = ((tau - 1) / sqrt (x2 + r2 + xr + xr) - tau / sqrt(x2)) / a2;
+		const double coeff = ((tau - 1) / sqrt(x2 + r2 + xr + xr) - tau / sqrt(x2)) / a2;
 
 		gradient.x += (r.y * x.z - r.z * x.y) * coeff;
 		gradient.y += (r.z * x.x - r.x * x.z) * coeff;
@@ -72,49 +66,47 @@ const Color &SeifertSurface::backColor() const {
 }
 
 void SeifertSurface::addTriangles(seifert *s) const {
-  // Это оч. убогая версия создания поверхности из графа.
-  // Просто в каждой вершине для любых двух ``соседних соседей''
-  // создается новый треугольник, треугольники НИКАК не связаны.
-  // Единственное, что отсекается -- многократное покрытие одного
-  // и того же куска поверхности.
-  // ?? -- !!
+	// Это оч. убогая версия создания поверхности из графа.
+	// Просто в каждой вершине для любых двух ``соседних соседей''
+	// создается новый треугольник, треугольники НИКАК не связаны.
+	// Единственное, что отсекается -- многократное покрытие одного
+	// и того же куска поверхности.
+	// ?? -- !!
 
-  // И если это единственная вершина -- ничего не делаем.
-  if (!s->neighborhood->value)
-    return;
+	// И если это единственная вершина -- ничего не делаем.
+	if (!s->neighborhood->value)
+		return;
 
-  seifert_list *sl = s->neighborhood;
-  for (;;)
-  {
-    // Не нужно добавлять треугольник, если в этом месте уже есть поверхность.
-    if (sl->label)
-    {
-      sl = sl->next;
-      if (sl == s->neighborhood)
-        break;
-      continue;
-    }
+	seifert_list *sl = s->neighborhood;
+	for (;;) {
+		// Не нужно добавлять треугольник, если в этом месте уже есть поверхность.
+		if (sl->label) {
+			sl = sl->next;
+			if (sl == s->neighborhood)
+				break;
+			continue;
+		}
 
-    // Помечаем в соседних вершинах, какие треугольники не потребуются.
-    sl->value->markUsed (sl->next->value, s);
-    sl->next->value->markUsed (s, sl->value);
+		// Помечаем в соседних вершинах, какие треугольники не потребуются.
+		sl->value->markUsed(sl->next->value, s);
+		sl->next->value->markUsed(s, sl->value);
 
-    // Добавляем треугольник.
-    addpoint(s->point, s->gradient);
-    // Правильно ориентируем треугольник.
-    if (det(s->point, sl->value->point, sl->next->value->point, s->gradient) < 0) {
-      addpoint(sl->next->value->point, sl->next->value->gradient);
-      addpoint(sl->value->point, sl->value->gradient);
-    } else {
-      addpoint(sl->value->point, sl->value->gradient);
-      addpoint(sl->next->value->point, sl->next->value->gradient);
-    }
+		// Добавляем треугольник.
+		addpoint(s->point, s->gradient);
+		// Правильно ориентируем треугольник.
+		if (det(s->point, sl->value->point, sl->next->value->point, s->gradient) < 0) {
+			addpoint(sl->next->value->point, sl->next->value->gradient);
+			addpoint(sl->value->point, sl->value->gradient);
+		} else {
+			addpoint(sl->value->point, sl->value->gradient);
+			addpoint(sl->next->value->point, sl->next->value->gradient);
+		}
 
-    // Следующий сосед.
-    sl = sl->next;
-    if (sl == s->neighborhood)
-      break;
-  }
+		// Следующий сосед.
+		sl = sl->next;
+		if (sl == s->neighborhood)
+			break;
+	}
 }
 
 bool SeifertSurface::isObsolete() const {
@@ -125,26 +117,26 @@ void SeifertSurface::calculate() const {
 	const auto snapshot = this->base.snapshot();
 	this->stored = std::make_shared<ThreeD::Knot::Snapshot>(snapshot);
 
-  // Создаем граф поверхности.
-  seifert *s = new seifert(snapshot, this->base.seifertBasePoint());
-  s->correction();
+	// Создаем граф поверхности.
+	seifert *s = new seifert(snapshot, this->base.seifertBasePoint());
+	s->correction();
 
-  // Создаем поверхность.
+	// Создаем поверхность.
 
-  addTriangles(s);
-  seifert_ord *so = s->sord;
-  while (so->prev) {
-    so = so->prev;
-    addTriangles(so->value);
-  }
-  so = s->sord;
-  while (so->next) {
-    so = so->next;
-    addTriangles(so->value);
-  }
+	addTriangles(s);
+	seifert_ord *so = s->sord;
+	while (so->prev) {
+		so = so->prev;
+		addTriangles(so->value);
+	}
+	so = s->sord;
+	while (so->next) {
+		so = so->next;
+		addTriangles(so->value);
+	}
 
-  // Удаляем граф.
-  delete s;
+	// Удаляем граф.
+	delete s;
 }
 
-}
+}// namespace KE::GL

@@ -51,8 +51,7 @@ bool Window::saveBeforeClosing() {
 	const QString question = "\nSave \"" + this->windowTitle() + "\" before closing?\n";
 	while (!this->isSaved()) {
 		const int answer = QMessageBox::question(
-			this, "Closing window", question, QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel
-		);
+						this, "Closing window", question, QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 		switch (answer) {
 			case QMessageBox::Save:
 				this->save();
@@ -88,10 +87,8 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setAcceptMode(QFileDialog::AcceptSave);
 	dialog.setIconProvider(Qt::FileIconProvider::instance());
-	dialog.setNameFilters({
-		fileFilter,
-		"Any files (*)"
-	});
+	dialog.setNameFilters({fileFilter,
+												 "Any files (*)"});
 	if (dialog.exec() == QDialog::Accepted) {
 		settings.setValue("CustomFilesFolder", dialog.directory().path());
 		settings.sync();
@@ -100,7 +97,7 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 	return QString();
 }
 
-}
+}// namespace
 
 void Window::save() {
 	const QString filename = getSaveFileNameEx(this->fileFilter());
@@ -141,7 +138,7 @@ void Window::addToolbarSeparator() {
 	this->toolbar->addSeparator();
 }
 
-QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> controller) {
+QAction *Window::registerAction(QAction *action, std::function<void(QAction &)> controller) {
 	QObject::connect(this, &Window::contentChanged, [action, controller] { controller(*action); });
 	return action;
 }
@@ -153,4 +150,4 @@ QString Window::identifier() const {
 	return QFileInfo(this->_filename).canonicalFilePath();
 }
 
-}
+}// namespace KE::Qt

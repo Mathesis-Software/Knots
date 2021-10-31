@@ -27,9 +27,8 @@ FileIconProvider *FileIconProvider::instance() {
 	return _instance;
 }
 
-FileIconProvider::FileIconProvider() :
-	diagramIcon(":images/diagram.svg"),
-	knotIcon(":images/trefoil.png") {
+FileIconProvider::FileIconProvider() : diagramIcon(":images/diagram.svg"),
+																			 knotIcon(":images/trefoil.png") {
 }
 
 QIcon FileIconProvider::icon(const QFileInfo &finfo) const {
@@ -42,4 +41,4 @@ QIcon FileIconProvider::icon(const QFileInfo &finfo) const {
 	return QFileIconProvider::icon(finfo);
 }
 
-}
+}// namespace KE::Qt

@@ -36,9 +36,9 @@ public:
 
 class Controller : public QObject {
 
-friend class MessageReceiver;
+	friend class MessageReceiver;
 
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	enum Role {
@@ -55,7 +55,7 @@ private:
 	MessageReceiver *receiver;
 
 public:
-	Controller(const QString& key, QObject *parent);
+	Controller(const QString &key, QObject *parent);
 	~Controller();
 
 	Role role() const { return this->_role; }
@@ -66,10 +66,10 @@ signals:
 	void messageReceived(const QStringList &message);
 
 private:
-	Controller(const Controller&) = delete;
-	void operator= (const Controller&) = delete;
+	Controller(const Controller &) = delete;
+	void operator=(const Controller &) = delete;
 };
 
-}
+}// namespace IPC
 
 #endif /* __QT_IPC_CONTROLLER_H__ */

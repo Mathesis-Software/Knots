@@ -73,4 +73,4 @@ bool Diagram::simplify(std::size_t depth) {
 	return size != edges.size();
 }
 
-}
+}// namespace KE::TwoD

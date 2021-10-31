@@ -68,9 +68,9 @@ void KnotSurface::calculate() const {
 		ThreeD::Vector v(points[points.prev(i)], points[points.next(i)]);
 		v.normalize();
 
-		ThreeD::Vector norm1(0.0, - v.z, v.y);
+		ThreeD::Vector norm1(0.0, -v.z, v.y);
 		if (fabs(v.y) < fabs(v.x)) {
-			norm1 = ThreeD::Vector(v.z, 0.0, - v.x);
+			norm1 = ThreeD::Vector(v.z, 0.0, -v.x);
 		}
 		ThreeD::Vector norm2 = v.vector_product(norm1);
 		norm1.normalize();
@@ -86,9 +86,8 @@ void KnotSurface::calculate() const {
 		scalars.clear();
 		for (std::size_t rotation = 0; rotation < this->sines.size() - 1; ++rotation) {
 			const ThreeD::Vector no = ThreeD::Vector::linear(
-				normal1[points.next(i)], this->cosines[rotation],
-				normal2[points.next(i)], - this->sines[rotation]
-			);
+							normal1[points.next(i)], this->cosines[rotation],
+							normal2[points.next(i)], -this->sines[rotation]);
 			scalars.push_back(normal1[i].scalar_product(no));
 		}
 		const double last = scalars.back();
@@ -117,9 +116,8 @@ void KnotSurface::calculate() const {
 			const std::size_t ix = i < points.size() ? i : 0;
 			for (auto jx : {j1, j2}) {
 				const ThreeD::Vector n = ThreeD::Vector::linear(
-					normal1[ix], this->sines[jx],
-					normal2[ix], this->cosines[jx]
-				);
+								normal1[ix], this->sines[jx],
+								normal2[ix], this->cosines[jx]);
 				ThreeD::Point new_point(points[ix]);
 				new_point.move(n, thickness);
 				addpoint(new_point, n);
@@ -133,4 +131,4 @@ void KnotSurface::calculate() const {
 	}
 }
 
-}
+}// namespace KE::GL

@@ -30,13 +30,11 @@ std::shared_ptr<FloatPoint> Diagram::Crossing::coords() const {
 	const auto downStart = this->down.start->coords();
 	const auto upStart = this->up.start->coords();
 	const float d1 =
-			(downStart.y - upStart.y) * this->down.dx()
-		-	(downStart.x - upStart.x) * this->down.dy();
+					(downStart.y - upStart.y) * this->down.dx() - (downStart.x - upStart.x) * this->down.dy();
 
 	return std::make_shared<FloatPoint>(
-		upStart.x + this->up.dx() * d1 / d0,
-		upStart.y + this->up.dy() * d1 / d0
-	);
+					upStart.x + this->up.dx() * d1 / d0,
+					upStart.y + this->up.dy() * d1 / d0);
 }
 
 bool Diagram::hasCrossings() const {
@@ -100,7 +98,7 @@ std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const
 }
 
 void Diagram::Edge::orderCrossings(std::list<Crossing> &crossings) const {
-	std::function<bool(const Crossing&,const Crossing&)> comparator;
+	std::function<bool(const Crossing &, const Crossing &)> comparator;
 	if (abs(this->dx()) > abs(this->dy())) {
 		if (this->dx() > 0) {
 			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->x < c1.coords()->x; };
@@ -117,4 +115,4 @@ void Diagram::Edge::orderCrossings(std::list<Crossing> &crossings) const {
 	crossings.sort(comparator);
 }
 
-}
+}// namespace KE::TwoD

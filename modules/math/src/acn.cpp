@@ -22,9 +22,8 @@
 
 namespace KE::ThreeD::Math {
 
-AverageCrossingNumber::AverageCrossingNumber(const KnotWrapper &knot, bool withSign) :
-	Computable(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
-	withSign(withSign) {
+AverageCrossingNumber::AverageCrossingNumber(const KnotWrapper &knot, bool withSign) : Computable(knot, withSign ? "Average signed crossing number" : "Average crossing number"),
+																																											 withSign(withSign) {
 }
 
 double AverageCrossingNumber::compute(const Knot::Snapshot &snapshot) {
@@ -39,10 +38,9 @@ double AverageCrossingNumber::compute(const Knot::Snapshot &snapshot) {
 	for (std::size_t i = 0; i < snapshot.size(); ++i) {
 		for (std::size_t j = 0; j < i; ++j) {
 			const Vector chord(
-				(snapshot[i].x + snapshot[snapshot.next(i)].x - snapshot[j].x - snapshot[snapshot.next(j)].x) / 2,
-				(snapshot[i].y + snapshot[snapshot.next(i)].y - snapshot[j].y - snapshot[snapshot.next(j)].y) / 2,
-				(snapshot[i].z + snapshot[snapshot.next(i)].z - snapshot[j].z - snapshot[snapshot.next(j)].z) / 2
-			);
+							(snapshot[i].x + snapshot[snapshot.next(i)].x - snapshot[j].x - snapshot[snapshot.next(j)].x) / 2,
+							(snapshot[i].y + snapshot[snapshot.next(i)].y - snapshot[j].y - snapshot[snapshot.next(j)].y) / 2,
+							(snapshot[i].z + snapshot[snapshot.next(i)].z - snapshot[j].z - snapshot[snapshot.next(j)].z) / 2);
 			const double chord_len = chord.length();
 			const double summand = tangents[i].scalar_product(tangents[j].vector_product(chord)) / (chord_len * chord_len * chord_len);
 			if (this->withSign) {
@@ -56,4 +54,4 @@ double AverageCrossingNumber::compute(const Knot::Snapshot &snapshot) {
 	return value / (2 * M_PI);
 }
 
-}
+}// namespace KE::ThreeD::Math

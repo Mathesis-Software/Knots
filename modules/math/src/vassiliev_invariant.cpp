@@ -22,9 +22,8 @@
 
 namespace KE::ThreeD::Math {
 
-VassilievInvariant::VassilievInvariant(const KnotWrapper &knot, int order) :
-	Computable(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),
-	order(order) {
+VassilievInvariant::VassilievInvariant(const KnotWrapper &knot, int order) : Computable(knot, "Order " + std::to_string(order) + " Vassiliev invariant"),
+																																						 order(order) {
 }
 
 double VassilievInvariant::compute(const Knot::Snapshot &snapshot) {
@@ -44,10 +43,9 @@ double VassilievInvariant::compute(const Knot::Snapshot &snapshot) {
 	for (std::size_t i = 0; i < snapshot.size(); ++i) {
 		for (std::size_t j = 0; j < i; j++) {
 			const Vector chord(
-				(snapshot[i].x + snapshot[snapshot.next(i)].x - snapshot[j].x - snapshot[snapshot.next(j)].x) / 2,
-				(snapshot[i].y + snapshot[snapshot.next(i)].y - snapshot[j].y - snapshot[snapshot.next(j)].y) / 2,
-				(snapshot[i].z + snapshot[snapshot.next(i)].z - snapshot[j].z - snapshot[snapshot.next(j)].z) / 2
-			);
+							(snapshot[i].x + snapshot[snapshot.next(i)].x - snapshot[j].x - snapshot[snapshot.next(j)].x) / 2,
+							(snapshot[i].y + snapshot[snapshot.next(i)].y - snapshot[j].y - snapshot[snapshot.next(j)].y) / 2,
+							(snapshot[i].z + snapshot[snapshot.next(i)].z - snapshot[j].z - snapshot[snapshot.next(j)].z) / 2);
 			double chord_len = chord.length();
 			gauss[i][j] = tangents[i].scalar_product(tangents[j].vector_product(chord)) / (chord_len * chord_len * chord_len);
 			gauss[j][i] = gauss[i][j];
@@ -84,4 +82,4 @@ double VassilievInvariant::compute(const Knot::Snapshot &snapshot) {
 	return value / (4 * M_PI * M_PI);
 }
 
-}
+}// namespace KE::ThreeD::Math

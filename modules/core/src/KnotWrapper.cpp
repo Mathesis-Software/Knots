@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "Diagram.h"
 #include "KnotWrapper.h"
+#include "Diagram.h"
 #include "KnotSurface.h"
 #include "SeifertSurface.h"
 #include "Util_rapidjson.h"
@@ -40,7 +40,7 @@ void rotateMatrix(double matrix[3][3], int axis0, int axis1, double angleDelta) 
 	}
 }
 
-}
+}// namespace
 
 KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(Knot::pointsFromDiagram(diagram, width, height), diagram.caption) {
 	initUnitaryMatrix(this->rotationMatrix);
@@ -187,8 +187,7 @@ Point KnotWrapper::seifertBasePoint() const {
 void KnotWrapper::moveSeifertBasePoint(double distance) {
 	Point basePoint = this->seifertBasePoint();
 	basePoint.move(
-		GL::SeifertSurface::gradient(basePoint, this->snapshot()), distance
-	);
+					GL::SeifertSurface::gradient(basePoint, this->snapshot()), distance);
 	this->_seifertBasePoint = std::make_shared<Point>(basePoint);
 	this->_seifertSurface->destroy();
 }
@@ -274,4 +273,4 @@ void KnotWrapper::rotate(double dx, double dy, double dz) {
 	}
 }
 
-}
+}// namespace KE::ThreeD

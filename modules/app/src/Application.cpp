@@ -43,25 +43,24 @@ namespace {
 
 class ProxyStyle : public QProxyStyle {
 
-QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override {
-	if (iconMode == QIcon::Disabled) {
-		QPixmap copy(pixmap);
-		QPainter painter(&copy);
-		painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-		painter.fillRect(copy.rect(), 0xc0c0c0);
-		painter.end();
-		return copy;
+	QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override {
+		if (iconMode == QIcon::Disabled) {
+			QPixmap copy(pixmap);
+			QPainter painter(&copy);
+			painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+			painter.fillRect(copy.rect(), 0xc0c0c0);
+			painter.end();
+			return copy;
+		}
+		return QProxyStyle::generatedIconPixmap(iconMode, pixmap, option);
 	}
-	return QProxyStyle::generatedIconPixmap(iconMode, pixmap, option);
-}
-
 };
 
-}
+}// namespace
 
 QWidget *Application::openLibrary() {
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
+		if (auto window = dynamic_cast<LibraryWindow *>(widget)) {
 			window->showNormal();
 			window->raise();
 			window->activateWindow();
@@ -93,12 +92,10 @@ QString getOpenFileNameEx() {
 	QFileDialog dialog(nullptr, "Open file", dir);
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setIconProvider(FileIconProvider::instance());
-	dialog.setNameFilters({
-		"Mathesis Knots files (*.knt *.dgr)",
-		"Knot files only (*.knt)",
-		"Diagram files only (*.dgr)",
-		"Any files (*)"
-	});
+	dialog.setNameFilters({"Mathesis Knots files (*.knt *.dgr)",
+												 "Knot files only (*.knt)",
+												 "Diagram files only (*.dgr)",
+												 "Any files (*)"});
 	if (dialog.exec() == QDialog::Accepted) {
 		settings.setValue("CustomFilesFolder", dialog.directory().path());
 		settings.sync();
@@ -107,7 +104,7 @@ QString getOpenFileNameEx() {
 	return QString();
 }
 
-}
+}// namespace
 
 QWidget *Application::openFile() {
 	return openFile(getOpenFileNameEx());
@@ -119,7 +116,7 @@ QWidget *Application::openFile(const QString &filename) {
 	}
 
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<Window*>(widget)) {
+		if (auto window = dynamic_cast<Window *>(widget)) {
 			if (window->identifier() == QFileInfo(filename).canonicalFilePath()) {
 				window->showNormal();
 				window->raise();
@@ -137,7 +134,7 @@ QWidget *Application::openFile(const QString &filename) {
 			if (!resource.isValid() || resource.data() == nullptr || resource.size() == 0) {
 				throw std::runtime_error("Cannot read the resource content");
 			}
-			doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
+			doc.Parse(reinterpret_cast<const char *>(resource.data()), resource.size());
 		} else {
 			std::ifstream is(filename.toStdString());
 			if (!is) {
@@ -182,8 +179,8 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 					} else if (arg == "-N") {
 						this->newDiagram();
 					} else if (arg.startsWith("-")) {
-            qDebug() << QString("Unknown command line key %1").arg(arg);
-          } else {
+						qDebug() << QString("Unknown command line key %1").arg(arg);
+					} else {
 						this->openFile(arg);
 					}
 				}
@@ -257,7 +254,7 @@ bool Application::doNotRun() {
 
 bool Application::event(QEvent *event) {
 	if (event->type() == QEvent::FileOpen) {
-		const auto file = static_cast<QFileOpenEvent*>(event)->file();
+		const auto file = static_cast<QFileOpenEvent *>(event)->file();
 		this->openFile(file);
 		return true;
 	} else {
@@ -268,7 +265,7 @@ bool Application::event(QEvent *event) {
 void Application::exitApplication() {
 	QStringList ids;
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
+		if (auto window = dynamic_cast<BaseWindow *>(widget)) {
 			if (window->close()) {
 				const auto id = window->identifier();
 				if (!id.isNull()) {
@@ -287,4 +284,4 @@ void Application::exitApplication() {
 	this->quit();
 }
 
-}
+}// namespace KE::Qt

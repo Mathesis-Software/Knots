@@ -33,13 +33,13 @@ private:
 	FileIconProvider();
 
 public:
-	QIcon icon(const QFileInfo&) const override;
+	QIcon icon(const QFileInfo &) const override;
 
 private:
 	const QIcon diagramIcon;
 	const QIcon knotIcon;
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_FILE_ICON_PROVIDER_H__ */

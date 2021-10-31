@@ -43,6 +43,6 @@ inline std::string docToString(const ::rapidjson::Value &doc) {
 	return std::string(buffer.GetString(), buffer.GetSize());
 }
 
-}
+}// namespace KE::Util::rapidjson
 
 #endif /* __KE_UTIL_RAPIDJSON_H__ */

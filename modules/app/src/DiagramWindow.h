@@ -26,7 +26,7 @@ namespace KE::Qt {
 
 class DiagramWindow : public Window {
 
-Q_OBJECT
+	Q_OBJECT
 
 private:
 	void init(DiagramWidget *widget);
@@ -49,9 +49,9 @@ public:
 	DiagramWindow(const rapidjson::Value &doc, const QString &filename);
 	DiagramWindow();
 
-	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
+	DiagramWidget *diagramWidget() const { return (DiagramWidget *) this->centralWidget(); }
 
-	void saveIt(std::ostream&) override;
+	void saveIt(std::ostream &) override;
 	bool isSaved() const override;
 
 signals:
@@ -64,6 +64,6 @@ public:
 	DiagramPropertiesDialog(DiagramWindow &window);
 };
 
-}
+}// namespace KE::Qt
 
 #endif /* __KE_QT_DIAGRAM_WINDOW_H__ */

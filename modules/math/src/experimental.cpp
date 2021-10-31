@@ -34,7 +34,7 @@ void vector_product(const double *v1, const double *v2, double *m) {
 	m[2] = v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-}
+}// namespace
 
 Experimental::Experimental(const KnotWrapper &knot) : Computable(knot, "Experimental") {
 }
@@ -134,7 +134,7 @@ double Experimental::compute(const Knot::Snapshot &snapshot) {
 	double value = 0.0;
 
 	// Вычисляем заранее касательные векторы.
-	double **tangs = new double*[snapshot.size()];
+	double **tangs = new double *[snapshot.size()];
 	for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
 		tangs[i1] = new double[3];
 		tangs[i1][0] = snapshot[snapshot.next(i1)].x - snapshot[i1].x;
@@ -144,13 +144,13 @@ double Experimental::compute(const Knot::Snapshot &snapshot) {
 
 	// Вычисляем ``гауссовы произведения''.
 	double chord_len;
-	double ***chord = new double**[snapshot.size()];
-	double ***vector = new double**[snapshot.size()];
-	double **sum = new double*[snapshot.size()];
+	double ***chord = new double **[snapshot.size()];
+	double ***vector = new double **[snapshot.size()];
+	double **sum = new double *[snapshot.size()];
 
 	for (std::size_t i1 = 0; i1 < snapshot.size(); i1++) {
-		chord[i1] = new double*[snapshot.size()];
-		vector[i1] = new double*[snapshot.size()];
+		chord[i1] = new double *[snapshot.size()];
+		vector[i1] = new double *[snapshot.size()];
 		sum[i1] = new double[snapshot.size()];
 		for (std::size_t i2 = 0; i2 < snapshot.size(); i2++) {
 			chord[i1][i2] = new double[3];
@@ -158,27 +158,30 @@ double Experimental::compute(const Knot::Snapshot &snapshot) {
 		}
 
 		for (std::size_t i2 = 0; i2 < i1; i2++) {
-			chord[i1][i2][0] = ( snapshot[i1].x + snapshot[snapshot.next(i1)].x -
-										snapshot[i2].x - snapshot[snapshot.next(i2)].x ) / 2;
-			chord[i1][i2][1] = ( snapshot[i1].y + snapshot[snapshot.next(i1)].y -
-										snapshot[i2].y - snapshot[snapshot.next(i2)].y ) / 2;
-			chord[i1][i2][2] = ( snapshot[i1].z + snapshot[snapshot.next(i1)].z -
-										snapshot[i2].z - snapshot[snapshot.next(i2)].z ) / 2;
-			chord_len = sqrt (vector_square (chord[i1][i2]));
+			chord[i1][i2][0] = (snapshot[i1].x + snapshot[snapshot.next(i1)].x -
+													snapshot[i2].x - snapshot[snapshot.next(i2)].x) /
+												 2;
+			chord[i1][i2][1] = (snapshot[i1].y + snapshot[snapshot.next(i1)].y -
+													snapshot[i2].y - snapshot[snapshot.next(i2)].y) /
+												 2;
+			chord[i1][i2][2] = (snapshot[i1].z + snapshot[snapshot.next(i1)].z -
+													snapshot[i2].z - snapshot[snapshot.next(i2)].z) /
+												 2;
+			chord_len = sqrt(vector_square(chord[i1][i2]));
 			chord[i1][i2][0] /= chord_len;
 			chord[i1][i2][1] /= chord_len;
 			chord[i1][i2][2] /= chord_len;
-			chord[i2][i1][0] = - chord[i1][i2][0];
-			chord[i2][i1][1] = - chord[i1][i2][1];
-			chord[i2][i1][2] = - chord[i1][i2][2];
-			vector_product (tangs[i1], tangs[i2], vector[i1][i2]);
+			chord[i2][i1][0] = -chord[i1][i2][0];
+			chord[i2][i1][1] = -chord[i1][i2][1];
+			chord[i2][i1][2] = -chord[i1][i2][2];
+			vector_product(tangs[i1], tangs[i2], vector[i1][i2]);
 			chord_len *= chord_len;
 			vector[i1][i2][0] /= chord_len;
 			vector[i1][i2][1] /= chord_len;
 			vector[i1][i2][2] /= chord_len;
-			vector[i2][i1][0] = - vector[i1][i2][0];
-			vector[i2][i1][1] = - vector[i1][i2][1];
-			vector[i2][i1][2] = - vector[i1][i2][2];
+			vector[i2][i1][0] = -vector[i1][i2][0];
+			vector[i2][i1][1] = -vector[i1][i2][1];
+			vector[i2][i1][2] = -vector[i1][i2][2];
 		}
 	}
 
@@ -222,4 +225,4 @@ double Experimental::compute(const Knot::Snapshot &snapshot) {
 	return value / (64 * M_PI);
 }
 
-}
+}// namespace KE::ThreeD::Math

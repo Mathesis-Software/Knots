@@ -22,8 +22,7 @@
 
 namespace KE::ThreeD::Math {
 
-AverageExtremumNumber::AverageExtremumNumber(const KnotWrapper &knot) :
-	Computable(knot, "Average extremum number") {
+AverageExtremumNumber::AverageExtremumNumber(const KnotWrapper &knot) : Computable(knot, "Average extremum number") {
 }
 
 double AverageExtremumNumber::compute(const Knot::Snapshot &snapshot) {
@@ -41,7 +40,7 @@ double AverageExtremumNumber::compute(const Knot::Snapshot &snapshot) {
 	for (std::size_t i = 0; i < snapshot.size(); ++i) {
 		const auto &forward = edges[i];
 		const auto &back = edges[snapshot.prev(i)];
-		double angle_cos = - forward.scalar_product(back) / (edgeLengths[snapshot.prev(i)] * edgeLengths[i]);
+		double angle_cos = -forward.scalar_product(back) / (edgeLengths[snapshot.prev(i)] * edgeLengths[i]);
 
 		if (angle_cos < -1) {
 			value -= M_PI;
@@ -53,4 +52,4 @@ double AverageExtremumNumber::compute(const Knot::Snapshot &snapshot) {
 	return value / M_PI + snapshot.size();
 }
 
-}
+}// namespace KE::ThreeD::Math

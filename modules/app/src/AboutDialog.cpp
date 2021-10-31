@@ -66,7 +66,7 @@ AboutDialog::AboutDialog() {
 	title->setFont(font);
 	title->setAlignment(::Qt::AlignHCenter);
 	vlayout->addWidget(title);
-	auto link = new QLabel("<a href='https://knots.geometer.name/'>knots.geometer.name</a>", this);
+	auto link = new QLabel("<a href='https://knots.mathesis.fun/'>knots.mathesis.fun</a>", this);
 	link->setAlignment(::Qt::AlignHCenter);
 	link->setOpenExternalLinks(true);
 	vlayout->addWidget(link);

@@ -19,9 +19,9 @@ file(GLOB QRC_SOURCES res/*.qrc)
 set(SOURCES ${CXX_SOURCES} ${QRC_SOURCES})
 
 # Project meta info
-set(COPYRIGHT "Copyright (c) 1995-2021, Nikolay Pultsin")
-set(VENDOR "FBReader.ORG")
-set(EMAIL "geometer@geometer.name")
+set(COPYRIGHT "Copyright (c) 1995-2021, Mathesis Software")
+set(VENDOR "Mathesis Software")
+set(EMAIL "mad@mathesis.fun")
 set(PROJECT_DESCRIPTION "A tool for drawing 2d diagrams, 3d knots, Seifert surfaces. Computes some knot properties and invariants. Provides access to a network database of knots with <= 16 crossings.")
 
 

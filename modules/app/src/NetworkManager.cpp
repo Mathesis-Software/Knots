@@ -23,7 +23,7 @@
 namespace KE::Qt {
 
 void NetworkManager::searchDiagram(const QString &code, int page, QObject *context, const std::function<void(int errorCode, const QByteArray &response)> callback) {
-	QUrl url("https://knots.geometer.name/api/diagram");
+	QUrl url("https://knots.mathesis.fun/api/diagram");
 	QNetworkRequest request;
 	request.setUrl(url);
 	request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");

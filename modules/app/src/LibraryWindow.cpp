@@ -117,7 +117,7 @@ public:
 		this->addAction(QIcon(":images/search.svg"), QLineEdit::LeadingPosition);
 		auto helpAction = this->addAction(QIcon(":images/question.svg"), QLineEdit::TrailingPosition);
 		QObject::connect(helpAction, &QAction::triggered, [=] {
-			QDesktopServices::openUrl(QUrl("https://knots.geometer.name/help/search"));
+			QDesktopServices::openUrl(QUrl("https://knots.mathesis.fun/help/search"));
 		});
 	}
 

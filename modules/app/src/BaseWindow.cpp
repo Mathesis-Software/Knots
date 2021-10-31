@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1995-2021, Nikolay Pultsin <geometer@geometer.name>
+ * Copyright (c) 1995-2021, Mathesis Software <mad@mathesis.fun>
  *
  * Licensed under the Apache License, Version 2.0 the "License";
  * you may not use this file except in compliance with the License.

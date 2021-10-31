@@ -39,13 +39,13 @@ private:
 	float scaleFactor;
 
 public:
-	GLWidget(QWidget* parent);
-	virtual const Color& backgroundColor() const = 0;
+	GLWidget(QWidget *parent);
+	virtual const Color &backgroundColor() const = 0;
 
 	void addSurface(std::shared_ptr<const GL::Surface> surface) { this->surfaces.push_back(surface); };
 
 protected:
-	virtual void prepareMatrix(double* matrix, bool inverse) const = 0;
+	virtual void prepareMatrix(double *matrix, bool inverse) const = 0;
 	virtual void rotate(double dx, double dy, double dz) = 0;
 
 private:
@@ -53,18 +53,18 @@ private:
 	void resizeGL(int, int) override;
 	void paintGL() override;
 
-	void mousePressEvent(QMouseEvent* event) override;
-	void mouseReleaseEvent(QMouseEvent* event) override;
-	void mouseMoveEvent(QMouseEvent* event) override;
-	void wheelEvent(QWheelEvent* event) override;
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
+	void wheelEvent(QWheelEvent *event) override;
 
-	void rotate(const QPoint& start, const QPoint& end, ::Qt::KeyboardModifiers modifiers);
+	void rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers);
 	void selectMouseCursor();
 
-	void paintSurface(const GL::Surface& surface);
+	void paintSurface(const GL::Surface &surface);
 
-	const double* currentMatrix() const;
-	const double* inverseMatrix() const;
+	const double *currentMatrix() const;
+	const double *inverseMatrix() const;
 };
 
 }// namespace KE::Qt

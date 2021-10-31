@@ -20,7 +20,7 @@
 
 namespace KE::Qt {
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), scaleFactor(1.0f) {
+GLWidget::GLWidget(QWidget* parent) : QOpenGLWidget(parent), scaleFactor(1.0f) {
 	for (int i = 0; i < 16; ++i) {
 		this->_currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
 		this->_inverseMatrix[i] = (i % 5) ? 0.0 : 1.0;
@@ -59,19 +59,19 @@ void GLWidget::paintGL() {
 	glClearColor(bg->rgb[0], bg->rgb[1], bg->rgb[2], 1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	for (const auto &surface : this->surfaces) {
+	for (const auto& surface : this->surfaces) {
 		this->paintSurface(*surface);
 	}
 
 	glFlush();
 }
 
-void GLWidget::mousePressEvent(QMouseEvent *event) {
+void GLWidget::mousePressEvent(QMouseEvent* event) {
 	this->capturedPoint = event->pos();
 	this->selectMouseCursor();
 }
 
-void GLWidget::mouseMoveEvent(QMouseEvent *event) {
+void GLWidget::mouseMoveEvent(QMouseEvent* event) {
 	if (!this->capturedPoint.isNull()) {
 		this->rotate(this->capturedPoint, event->pos(), event->modifiers());
 		this->capturedPoint = event->pos();
@@ -80,19 +80,19 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 
 static const float SCALE_STEP = 1.05f;
 
-void GLWidget::wheelEvent(QWheelEvent *event)  {
+void GLWidget::wheelEvent(QWheelEvent* event) {
 	auto delta = event->angleDelta();
 
-	if (delta.y() < 0)  {
+	if (delta.y() < 0) {
 		scaleFactor /= SCALE_STEP;
-	} else if (delta.y() > 0)  {
+	} else if (delta.y() > 0) {
 		scaleFactor *= SCALE_STEP;
 	}
 
 	this->update();
 }
 
-void GLWidget::mouseReleaseEvent(QMouseEvent *event) {
+void GLWidget::mouseReleaseEvent(QMouseEvent* event) {
 	if (!this->capturedPoint.isNull()) {
 		this->rotate(this->capturedPoint, event->pos(), event->modifiers());
 	}
@@ -108,17 +108,17 @@ void GLWidget::selectMouseCursor() {
 	}
 }
 
-const double *GLWidget::currentMatrix() const {
+const double* GLWidget::currentMatrix() const {
 	this->prepareMatrix(this->_currentMatrix, false);
 	return this->_currentMatrix;
 }
 
-const double *GLWidget::inverseMatrix() const {
+const double* GLWidget::inverseMatrix() const {
 	this->prepareMatrix(this->_inverseMatrix, true);
 	return this->_inverseMatrix;
 }
 
-void GLWidget::rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers) {
+void GLWidget::rotate(const QPoint& start, const QPoint& end, ::Qt::KeyboardModifiers modifiers) {
 	this->makeCurrent();
 	glMultMatrixd(this->inverseMatrix());
 
@@ -147,7 +147,7 @@ void GLWidget::rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModi
 	this->update();
 }
 
-void GLWidget::paintSurface(const GL::Surface &surface) {
+void GLWidget::paintSurface(const GL::Surface& surface) {
 	// Поверхность перерисовывается, если она видима.
 	if (!surface.isVisible()) {
 		return;
@@ -167,7 +167,7 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 	// Связаны ли треугольники?
 	glBegin(surface.stripped ? GL_TRIANGLE_STRIP : GL_TRIANGLES);
 
-	for (const auto &pt : surface.points()) {
+	for (const auto& pt : surface.points()) {
 		glNormal3fv(pt.normal);
 		glVertex3fv(pt.vertex);
 	}
@@ -177,4 +177,4 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 	glScalef(1.0 / scaleFactor, 1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
-}
+}// namespace KE::Qt

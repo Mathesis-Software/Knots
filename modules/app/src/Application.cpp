@@ -94,7 +94,7 @@ QString getOpenFileNameEx() {
 	dialog.setSupportedSchemes(QStringList(QStringLiteral("file")));
 	dialog.setIconProvider(FileIconProvider::instance());
 	dialog.setNameFilters({
-		"Knot Editor files (*.knt *.dgr)",
+		"Mathesis Knots files (*.knt *.dgr)",
 		"Knot files only (*.knt)",
 		"Diagram files only (*.dgr)",
 		"Any files (*)"
@@ -172,7 +172,7 @@ QWidget *Application::openDocument(const rapidjson::Value &doc, const QString &i
 }
 
 Application::Application(int &argc, char **argv) : QApplication(argc, argv), windowsListSaved(false) {
-	this->ipcController = new IPC::Controller("org.geometer.KnotEditor", this);
+	this->ipcController = new IPC::Controller("fun.mathesis.Knots", this);
 	switch (this->ipcController->role()) {
 		case IPC::Controller::Role::primary:
 			QObject::connect(this->ipcController, &IPC::Controller::messageReceived, this, [this](const QStringList &messageList) {

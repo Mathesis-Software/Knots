@@ -60,7 +60,7 @@ AboutDialog::AboutDialog() {
 	vlayout->setSpacing(10);
 	hlayout->addLayout(vlayout);
 
-	auto title = new QLabel(QString("Knot Editor<br/>") + VERSION, this);
+	auto title = new QLabel(QString("Mathesis Knots<br/>") + VERSION, this);
 	auto font = title->font();
 	font.setPointSize(font.pointSize() * 1.5);
 	title->setFont(font);

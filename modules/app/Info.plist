@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleExecutable</key>
-	<string>KnotEditor</string>
+	<string>Knots</string>
 	<key>CFBundleIconFile</key>
 	<string>trefoil.icns</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.fbreader.KnotEditor</string>
+	<string>fun.mathesis.Knots</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleSignature</key>

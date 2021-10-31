@@ -17,8 +17,8 @@
 #include "Application.h"
 
 int main(int argc, char **argv) {
-	QApplication::setOrganizationName("FBReader.ORG Limited");
-	QApplication::setApplicationName("Knot Editor");
+	QApplication::setOrganizationName("Mathesis Software");
+	QApplication::setApplicationName("Knots");
 	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 
 	KE::Qt::Application qa(argc, argv);

@@ -1,15 +1,15 @@
 [Desktop Entry]
 X-SnapInstanceName=fbreader
 Version=1.0
-Name=Knot Editor
-Name[ru]=Редактор узлов
+Name=Knots
+Name[ru]=Узлы
 Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor %F
 Terminal=false
 Type=Application
 Icon=/home/geometer/src/KnotEditor/modules/app/res/images/trefoil.png
 MimeType=application/x-knot-3d;application/x-knot-diagram;
 Categories=Math;
-StartupWMClass=knoteditor
+StartupWMClass=mathesisknots
 Keywords=math;knot;diagram;
 Actions=OpenLibrary;NewDiagram;
 

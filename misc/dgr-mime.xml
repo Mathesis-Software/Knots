@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
   <mime-type type="application/x-knot-diagram">
-    <comment>Knot diagram file of KnotEditor</comment>
+    <comment>Knot diagram file of Mathesis Knots</comment>
     <glob pattern="*.dgr"/>
   </mime-type>
 </mime-info>

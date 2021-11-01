@@ -12,10 +12,10 @@ if(CCACHE_EXECUTABLE)
     set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE_EXECUTABLE} CACHE STRING "")
 endif()
 
-project(KnotEditor)
+project(Knots)
 
 include(rapidjson)
-include (win32)
+include(win32)
 
 add_subdirectory(modules/core)
 add_subdirectory(modules/math)

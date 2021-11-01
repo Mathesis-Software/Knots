@@ -3,10 +3,10 @@ X-SnapInstanceName=knots
 Version=1.0
 Name=Knots
 Name[ru]=Узлы
-Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor %F
+Exec=/home/geometer/src/projects/Knots/build/modules/app/Knots %F
 Terminal=false
 Type=Application
-Icon=/home/geometer/src/KnotEditor/modules/app/res/images/trefoil.png
+Icon=/home/geometer/src/projects/Knots/modules/app/res/images/trefoil.png
 MimeType=application/x-knot-3d;application/x-knot-diagram;
 Categories=Math;
 StartupWMClass=mathesisknots
@@ -16,9 +16,9 @@ Actions=OpenLibrary;NewDiagram;
 [Desktop Action OpenLibrary]
 Name=Open the Library
 Name[ru]=Открыть библиотеку
-Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor -L
+Exec=/home/geometer/src/projects/Knots/build/modules/app/Knots -L
 
 [Desktop Action NewDiagram]
 Name=New Diagram
 Name[ru]=Создать новую диаграмму
-Exec=/home/geometer/src/KnotEditor/build/modules/app/KnotEditor -N
+Exec=/home/geometer/src/projects/Knots/build/modules/app/Knots -N

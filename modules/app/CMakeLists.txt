@@ -1,4 +1,4 @@
-project(KnotEditor)
+project(Knots)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)

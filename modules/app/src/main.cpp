@@ -19,7 +19,6 @@
 int main(int argc, char **argv) {
 	QApplication::setOrganizationName("Mathesis Software");
 	QApplication::setApplicationName("Knots");
-	QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
 
 	KE::Qt::Application qa(argc, argv);
 	if (qa.doNotRun()) {

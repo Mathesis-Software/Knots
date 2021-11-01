@@ -17,7 +17,7 @@ An app for
 * computing some knot invariants
 * etc.
 
-For possible improvements list please refer [the TODO](https://github.com/geometer/KnotEditor/blob/master/doc/TODO.md). Please, note: this is not a roadmap. Just a collection of thoughts. Maybe I implement something from the list in the future, maybe not.
+For possible improvements list please refer [the TODO](https://github.com/Mathesis-Software/KnotEditor/blob/master/doc/TODO.md). Please, note: this is not a roadmap. Just a collection of thoughts. Maybe I implement something from the list in the future, maybe not.
 
 ## Build & installation instructions
 
@@ -65,7 +65,7 @@ You can build it from the sources, as described below. Alternatively, you can
 
 #### Download disk image with precompiled app
 
-[DMG Image: KnotEditor for MacOS Monterey (Intel)](https://github.com/geometer/KnotEditor/blob/master/pre-built/KnotEditor-1.0.20210910.dmg?raw=true)
+[DMG Image: KnotEditor for MacOS Monterey (Intel)](https://github.com/Mathesis-Software/KnotEditor/blob/master/pre-built/KnotEditor-1.0.20210910.dmg?raw=true)
 
 #### Build dependencies
 
@@ -103,5 +103,5 @@ The file KnotEditor-VERSION.dmg will be created in build directory.
 
 ## Screenshots
 
-![Torus 5x2 knot, from a diagram to a smooth image](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-09-10.png?raw=true)
-![Knot library](https://github.com/geometer/KnotEditor/blob/master/screenshots/2021-09-10-library.png?raw=true)
+![Torus 5x2 knot, from a diagram to a smooth image](https://github.com/Mathesis-Software/KnotEditor/blob/master/screenshots/2021-09-10.png?raw=true)
+![Knot library](https://github.com/Mathesis-Software/KnotEditor/blob/master/screenshots/2021-09-10-library.png?raw=true)

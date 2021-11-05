@@ -22,7 +22,12 @@ namespace KE::GL {
 namespace {
 
 double det(const ThreeD::Point &pt0, const ThreeD::Point &pt1, const ThreeD::Point &pt2, const ThreeD::Vector &orth) {
-	return (pt1.x - pt0.x) * (pt2.y - pt0.y) * orth.z - (pt1.x - pt0.x) * (pt2.z - pt0.z) * orth.y - (pt1.y - pt0.y) * (pt2.x - pt0.x) * orth.z + (pt1.y - pt0.y) * (pt2.z - pt0.z) * orth.x + (pt1.z - pt0.z) * (pt2.x - pt0.x) * orth.y - (pt1.z - pt0.z) * (pt2.y - pt0.y) * orth.x;
+	return (pt1.x - pt0.x) * (pt2.y - pt0.y) * orth.z
+				 - (pt1.x - pt0.x) * (pt2.z - pt0.z) * orth.y
+				 - (pt1.y - pt0.y) * (pt2.x - pt0.x) * orth.z
+				 + (pt1.y - pt0.y) * (pt2.z - pt0.z) * orth.x
+				 + (pt1.z - pt0.z) * (pt2.x - pt0.x) * orth.y
+				 - (pt1.z - pt0.z) * (pt2.y - pt0.y) * orth.x;
 }
 
 }

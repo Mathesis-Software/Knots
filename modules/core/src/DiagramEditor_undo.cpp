@@ -21,7 +21,7 @@ namespace KE::TwoD {
 namespace {
 
 struct SavePointCommand : public DiagramEditor::Command {
-	void play(Diagram &) override {
+	void play(Diagram&) override {
 	}
 };
 

@@ -98,7 +98,7 @@ std::shared_ptr<Diagram::Crossing> Diagram::getCrossing(const Edge &edge1, const
 }
 
 void Diagram::Edge::orderCrossings(std::list<Crossing> &crossings) const {
-	std::function<bool(const Crossing &, const Crossing &)> comparator;
+	std::function<bool(const Crossing&, const Crossing&)> comparator;
 	if (abs(this->dx()) > abs(this->dy())) {
 		if (this->dx() > 0) {
 			comparator = [](const Crossing &c0, const Crossing &c1) { return c0.coords()->x < c1.coords()->x; };

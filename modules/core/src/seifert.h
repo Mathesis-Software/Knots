@@ -33,10 +33,10 @@ private:
 	seifert_list *prev, *next;
 	bool label;
 
-	void insert(seifert *);
-	void insert_after(seifert *);
+	void insert(seifert*);
+	void insert_after(seifert*);
 
-	seifert_list(seifert *, seifert *);
+	seifert_list(seifert*, seifert*);
 	~seifert_list();
 
 	friend class seifert;
@@ -49,9 +49,9 @@ private:
 	seifert *value;
 	seifert_ord *prev, *next;
 
-	seifert_ord *insert(seifert *);
+	seifert_ord *insert(seifert*);
 
-	seifert_ord(seifert *);
+	seifert_ord(seifert*);
 	~seifert_ord();
 
 	friend class seifert;
@@ -73,8 +73,8 @@ private:
 	void checkNeighborhood();
 	void addPoint(const ThreeD::Vector &direction);
 	void addPoint60(const ThreeD::Vector &direction);
-	seifert_list *hasNeighbor(seifert *);
-	void markUsed(seifert *, seifert *);
+	seifert_list *hasNeighbor(seifert*);
+	void markUsed(seifert*, seifert*);
 	void correction_local();
 	void correction();
 

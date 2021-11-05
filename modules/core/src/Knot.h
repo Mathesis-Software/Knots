@@ -117,8 +117,8 @@ public:
 	rapidjson::Document serialize() const;
 
 private:
-	Knot(const Knot &) = delete;
-	Knot &operator=(const Knot &) = delete;
+	Knot(const Knot&) = delete;
+	Knot &operator=(const Knot&) = delete;
 };
 
 }

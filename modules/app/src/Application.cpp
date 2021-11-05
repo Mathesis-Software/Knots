@@ -182,8 +182,8 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 					} else if (arg == "-N") {
 						this->newDiagram();
 					} else if (arg.startsWith("-")) {
-            qDebug() << QString("Unknown command line key %1").arg(arg);
-          } else {
+						qDebug() << QString("Unknown command line key %1").arg(arg);
+					} else {
 						this->openFile(arg);
 					}
 				}

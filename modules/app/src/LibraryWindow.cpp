@@ -122,16 +122,16 @@ public:
 	}
 
 	void contextMenuEvent(QContextMenuEvent *event) override {
-    QMenu *menu = createStandardContextMenu();
-    menu->addSeparator();
-    auto cleaning = menu->addAction(QIcon(":images/cleaning.svg"), "Clear History");
+		QMenu *menu = createStandardContextMenu();
+		menu->addSeparator();
+		auto cleaning = menu->addAction(QIcon(":images/cleaning.svg"), "Clear History");
 		QObject::connect(cleaning, &QAction::triggered, [this] {
 			this->historyModel->setStringList(QStringList());
 			this->saveHistory();
 		});
 		cleaning->setEnabled(!this->historyModel->stringList().isEmpty());
-    menu->exec(event->globalPos());
-    delete menu;
+		menu->exec(event->globalPos());
+		delete menu;
 	}
 
 	const QString &latestPattern() const {

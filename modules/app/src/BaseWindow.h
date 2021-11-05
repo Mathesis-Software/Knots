@@ -25,7 +25,7 @@ class BaseWindow : public QMainWindow {
 
 protected:
 	BaseWindow();
-	void restoreParameters(); 
+	void restoreParameters();
 	void createFileMenu();
 	void closeEvent(QCloseEvent*) override;
 

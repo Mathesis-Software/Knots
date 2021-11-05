@@ -49,9 +49,9 @@ public:
 	DiagramWindow(const rapidjson::Value &doc, const QString &filename);
 	DiagramWindow();
 
-	DiagramWidget *diagramWidget() const { return (DiagramWidget *) this->centralWidget(); }
+	DiagramWidget *diagramWidget() const { return (DiagramWidget*) this->centralWidget(); }
 
-	void saveIt(std::ostream &) override;
+	void saveIt(std::ostream&) override;
 	bool isSaved() const override;
 
 signals:

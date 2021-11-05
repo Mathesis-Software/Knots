@@ -138,7 +138,7 @@ void seifert::searchForNeighbor() {
 		grad.add(o->value->gradient);
 		const double dist2 = coor.square();
 		const double grad2 = grad.square();
-		const double scal	= coor.scalar_product(grad);
+		const double scal = coor.scalar_product(grad);
 
 		// Проверяем расстояние и ``почти перпендикулярность'' градиенту,
 		// добавляем точки в окрестности друг друга, если нужно.
@@ -156,7 +156,7 @@ void seifert::searchForNeighbor() {
 		grad.add(o->value->gradient);
 		const double dist2 = coor.square();
 		const double grad2 = grad.square();
-		const double scal	= coor.scalar_product(grad);
+		const double scal = coor.scalar_product(grad);
 
 		// Проверяем расстояние и ``почти перпендикулярность'' градиенту,
 		// добавляем точки в окрестности друг друга, если нужно.
@@ -228,11 +228,11 @@ seifert_list *seifert::hasNeighbor(seifert *n) {
 }
 
 void seifert::markUsed(seifert *start, seifert *end) {
-	seifert_list *sl_start = hasNeighbor (start);
+	seifert_list *sl_start = hasNeighbor(start);
 	if (!sl_start)
 		return;
 
-	seifert_list *sl_end = hasNeighbor (end);
+	seifert_list *sl_end = hasNeighbor(end);
 	if (!sl_end)
 		return;
 
@@ -282,7 +282,7 @@ seifert::seifert(const ThreeD::Knot::Snapshot &snapshot, const ThreeD::Point &po
 	neighborhood = new seifert_list(this, neighbor);
 	if (neighbor) {
 		neighbor->neighborhood->insert_after(this);
-		searchForNeighbor ();
+		searchForNeighbor();
 	}
 
 	if (localEps > MIN_EPS) {
@@ -304,7 +304,7 @@ seifert::~seifert() {
 	delete sord;
 	delete neighborhood;
 
-	counter --;
+	counter--;
 }
 
 }

@@ -42,7 +42,7 @@ bool inside(const double *a, const double *b, const double *c, const double *d, 
 	return (det(b, c, x) > 0) == sign && (det(c, d, x) > 0) == sign && (det(d, a, x) > 0) == sign;
 }
 
-/*static int intersected (const double *a, const double *b, const double *c, const double *d) {
+/*static int intersected(const double *a, const double *b, const double *c, const double *d) {
 	if (det(a, b, c) * det(a, b, d) > 0)
 		return 0;
 	if (det(a, c, d) * det(b, c, d) > 0)
@@ -70,7 +70,7 @@ double Singular::compute(const Knot::Snapshot &snapshot) {
 			chord[i1][i2][0] = snapshot[i1].x - snapshot[i2].x;
 			chord[i1][i2][1] = snapshot[i1].y - snapshot[i2].y;
 			chord[i1][i2][2] = snapshot[i1].z - snapshot[i2].z;
-			chord_len = sqrt (vector_square (chord[i1][i2]));
+			chord_len = sqrt(vector_square(chord[i1][i2]));
 			chord[i1][i2][0] /= chord_len;
 			chord[i1][i2][1] /= chord_len;
 			chord[i1][i2][2] /= chord_len;
@@ -83,7 +83,7 @@ double Singular::compute(const Knot::Snapshot &snapshot) {
 	double curr_cos, min_cos = 1.0;
 	for (i1 = 0; i1 < snapshot.size(); i1++)
 		for (i2 = snapshot.next(i1); i2 != snapshot.prev(i1); i2 = snapshot.next(i2)) {
-			curr_cos = fabs (scalar_product (chord[i1][i2], chord[i1][snapshot.next(i2)]));
+			curr_cos = fabs(scalar_product(chord[i1][i2], chord[i1][snapshot.next(i2)]));
 			if (min_cos > curr_cos)
 				min_cos = curr_cos;
 		}
@@ -93,57 +93,57 @@ double Singular::compute(const Knot::Snapshot &snapshot) {
 		for (i2 = i1 + 1; i2 < snapshot.size() - 2; i2++)
 			for (i3 = i2 + 1; i3 < snapshot.size() - 1; i3++)
 				for (i4 = i3 + 1; i4 < snapshot.size(); i4++) {
-		if (fabs (scalar_product (chord[i1][i3], chord[i2][i4])) < min_cos)
+		if (fabs(scalar_product(chord[i1][i3], chord[i2][i4])) < min_cos)
 			continue;
 //					value += 1;
-//		if (intersected (chord[i1][i3],
+//		if (intersected(chord[i1][i3],
 //										 chord[i1][snapshot.next(i3)],
 //										 chord[i2][i4],
 //				 chord[i2][snapshot.next(i4)])
 //						value += 1;
-		if (inside (chord[i1][i3],
+		if (inside(chord[i1][i3],
 								chord[i1][snapshot.next(i3)],
 								chord[snapshot.next(i1)][snapshot.next(i3)],
 					chord[snapshot.next(i1)][i3],
 								chord[i2][i4]))
 						value += 1;
-		if (inside (chord[i1][i3],
+		if (inside(chord[i1][i3],
 								chord[i1][snapshot.next(i3)],
 								chord[snapshot.next(i1)][snapshot.next(i3)],
 					chord[snapshot.next(i1)][i3],
 								chord[i2][snapshot.next(i4)]))
 						value += 1;
-		if (inside (chord[i1][i3],
+		if (inside(chord[i1][i3],
 								chord[i1][snapshot.next(i3)],
 								chord[snapshot.next(i1)][snapshot.next(i3)],
 					chord[snapshot.next(i1)][i3],
 								chord[snapshot.next(i2)][i4]))
 						value += 1;
-		if (inside (chord[i1][i3],
+		if (inside(chord[i1][i3],
 								chord[i1][snapshot.next(i3)],
 								chord[snapshot.next(i1)][snapshot.next(i3)],
 					chord[snapshot.next(i1)][i3],
 								chord[snapshot.next(i2)][snapshot.next(i4)]))
 						value += 1;
-		if (inside (chord[i2][i4],
+		if (inside(chord[i2][i4],
 								chord[i2][snapshot.next(i4)],
 								chord[snapshot.next(i2)][snapshot.next(i4)],
 					chord[snapshot.next(i2)][i4],
 								chord[i1][i3]))
 						value += 1;
-		if (inside (chord[i2][i4],
+		if (inside(chord[i2][i4],
 								chord[i2][snapshot.next(i4)],
 								chord[snapshot.next(i2)][snapshot.next(i4)],
 					chord[snapshot.next(i2)][i4],
 								chord[i1][snapshot.next(i3)]))
 						value += 1;
-		if (inside (chord[i2][i4],
+		if (inside(chord[i2][i4],
 								chord[i2][snapshot.next(i4)],
 								chord[snapshot.next(i2)][snapshot.next(i4)],
 					chord[snapshot.next(i2)][i4],
 								chord[snapshot.next(i1)][i3]))
 						value += 1;
-		if (inside (chord[i2][i4],
+		if (inside(chord[i2][i4],
 								chord[i2][snapshot.next(i4)],
 								chord[snapshot.next(i2)][snapshot.next(i4)],
 					chord[snapshot.next(i2)][i4],

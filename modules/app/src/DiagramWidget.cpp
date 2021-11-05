@@ -311,9 +311,9 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 					fakeVertex->moveTo(event->pos().x(), event->pos().y());
 				} else {
 					this->setFakeVertex(std::make_shared<TwoD::Diagram::Vertex>(
-									event->pos().x(),
-									event->pos().y(),
-									std::numeric_limits<std::size_t>::max()));
+						event->pos().x(),
+						event->pos().y(),
+						std::numeric_limits<std::size_t>::max()));
 				}
 				this->repaint();
 				break;

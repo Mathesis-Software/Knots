@@ -55,7 +55,7 @@ std::size_t indexOf(const T &element, const std::list<T> &collection) {
 }
 
 template<typename T>
-const T& elementAt(std::size_t index, const std::list<T> &collection) {
+const T &elementAt(std::size_t index, const std::list<T> &collection) {
 	for (const auto &elt : collection) {
 		if (index == 0) {
 			return elt;

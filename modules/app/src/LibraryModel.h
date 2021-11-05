@@ -62,7 +62,7 @@ public:
 	const DataItem *dataItem(const QModelIndex &index) const;
 
 	void addItems(QList<QListWidgetItem*> items);
-	void addItem(QListWidgetItem* item);
+	void addItem(QListWidgetItem *item);
 	void removeItem(QListWidgetItem *item);
 	void clear();
 

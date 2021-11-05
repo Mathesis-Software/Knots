@@ -47,7 +47,7 @@ void KnotPreview::paint(QPixmap &pixmap) {
 	for (std::size_t i = 0; i < snapshot.size(); i += 1) {
 		edges.push_back(std::make_pair(snapshot[i], snapshot[snapshot.next(i)]));
 	}
-	std::sort(edges.begin(), edges.end(), [](const Pair &p0, const Pair &p1){ return p0.first.z < p1.first.z; });
+	std::sort(edges.begin(), edges.end(), [](const Pair &p0, const Pair &p1) { return p0.first.z < p1.first.z; });
 	for (const auto &pair : edges) {
 		QPointF start(pair.first.x * scale + deltaX, pixmap.height() - pair.first.y * scale - deltaY);
 		QPointF end(pair.second.x * scale + deltaX, pixmap.height() / pixmap.devicePixelRatio() - pair.second.y * scale - deltaY);

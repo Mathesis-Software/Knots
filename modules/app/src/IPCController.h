@@ -55,7 +55,7 @@ private:
 	MessageReceiver *receiver;
 
 public:
-	Controller(const QString& key, QObject *parent);
+	Controller(const QString &key, QObject *parent);
 	~Controller();
 
 	Role role() const { return this->_role; }
@@ -67,7 +67,7 @@ signals:
 
 private:
 	Controller(const Controller&) = delete;
-	void operator= (const Controller&) = delete;
+	void operator=(const Controller&) = delete;
 };
 
 }

@@ -26,7 +26,7 @@ namespace IPC {
 
 namespace {
 
-QString generateKey(const QString& key, const QString& salt) {
+QString generateKey(const QString &key, const QString &salt) {
 	QByteArray data;
 	data.append(key.toUtf8());
 	data.append(salt.toUtf8());
@@ -66,9 +66,9 @@ void MessageReceiver::run() {
 	}
 }
 
-Controller::Controller(const QString& key, QObject *parent) :
+Controller::Controller(const QString &key, QObject *parent) :
 	QObject(parent),
- 	sharedMemory(generateKey(key, "sharedMemory")),
+	sharedMemory(generateKey(key, "sharedMemory")),
 	memorySemaphore(generateKey(key, "memorySemaphore"), 1),
 	messageSemaphore(generateKey(key, "messageSemaphore"), 0, QSystemSemaphore::Create),
 	_role(Role::unknown),

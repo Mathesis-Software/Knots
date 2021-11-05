@@ -52,7 +52,7 @@ private:
 	void captureCrossing(const std::shared_ptr<TwoD::Diagram::Crossing> &crossing);
 	void capturePoint(const QPoint &point);
 
-	void drawVertex(QPainter&, const TwoD::Diagram::Vertex &vertex, bool highlight);
+	void drawVertex(QPainter &painter, const TwoD::Diagram::Vertex &vertex, bool highlight);
 	enum EdgeMode {
 		normal,
 		highlighted,
@@ -62,11 +62,11 @@ private:
 	void drawEdge(QPainter&, const TwoD::Diagram::Edge &edge, EdgeMode mode);
 	void highlightCrossing(QPainter &painter, const TwoD::Diagram::Crossing &crossing);
 
-	void paintEvent(QPaintEvent*) override;
-	void leaveEvent(QEvent*) override;
-	void mousePressEvent(QMouseEvent*) override;
-	void mouseReleaseEvent(QMouseEvent*) override;
-	void mouseMoveEvent(QMouseEvent*) override;
+	void paintEvent(QPaintEvent *event) override;
+	void leaveEvent(QEvent *event) override;
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
 
 	void selectMouseCursor();
 

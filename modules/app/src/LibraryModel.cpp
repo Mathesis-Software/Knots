@@ -142,7 +142,7 @@ void LibraryModel::addItems(QList<QListWidgetItem*> items) {
 	this->endInsertRows();
 }
 
-void LibraryModel::addItem(QListWidgetItem* item) {
+void LibraryModel::addItem(QListWidgetItem *item) {
 	this->beginInsertRows(QModelIndex(), this->items.count(), this->items.count());
 	this->items.append(item);
 	this->endInsertRows();

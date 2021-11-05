@@ -177,4 +177,4 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 	glScalef(1.0 / scaleFactor, 1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
-}// namespace KE::Qt
+}

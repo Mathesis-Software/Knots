@@ -85,7 +85,7 @@ public:
 	}
 
 private:
-	void leaveEvent(QEvent*) override {
+	void leaveEvent(QEvent *event) override {
 		this->selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
 	}
 

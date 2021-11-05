@@ -43,15 +43,15 @@ void BaseWindow::restoreParameters() {
 }
 
 void BaseWindow::createFileMenu() {
-	Window *window = dynamic_cast<Window *>(this);
+	Window *window = dynamic_cast<Window*>(this);
 
 	QMenu *fileMenu = this->menuBar()->addMenu("File");
 
-	auto library = fileMenu->addAction("Library", [] { dynamic_cast<Application *>(qApp)->openLibrary(); });
+	auto library = fileMenu->addAction("Library", [] { dynamic_cast<Application*>(qApp)->openLibrary(); });
 	library->setShortcut(QKeySequence("Ctrl+L"));
-	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<Application *>(qApp)->newDiagram(); });
+	auto newd = fileMenu->addAction("New diagram", [] { dynamic_cast<Application*>(qApp)->newDiagram(); });
 	newd->setShortcut(QKeySequence("Ctrl+N"));
-	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<Application *>(qApp)->openFile(); });
+	auto open = fileMenu->addAction("Open…", [] { dynamic_cast<Application*>(qApp)->openFile(); });
 	open->setShortcut(QKeySequence("Ctrl+O"));
 	fileMenu->addSeparator();
 	if (window) {
@@ -67,7 +67,7 @@ void BaseWindow::createFileMenu() {
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
 	auto quit = fileMenu->addAction("Quit", [] {
-		dynamic_cast<Application *>(qApp)->exitApplication();
+		dynamic_cast<Application*>(qApp)->exitApplication();
 	});
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }

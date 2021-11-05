@@ -88,7 +88,7 @@ AboutDialog::AboutDialog() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 	QObject::connect(quit, &QAction::triggered, [this] {
 		this->close();
-		dynamic_cast<Application *>(qApp)->exitApplication();
+		dynamic_cast<Application*>(qApp)->exitApplication();
 	});
 	this->addAction(quit);
 }

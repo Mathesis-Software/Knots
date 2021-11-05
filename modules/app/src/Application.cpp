@@ -60,7 +60,7 @@ class ProxyStyle : public QProxyStyle {
 
 QWidget *Application::openLibrary() {
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<LibraryWindow *>(widget)) {
+		if (auto window = dynamic_cast<LibraryWindow*>(widget)) {
 			window->showNormal();
 			window->raise();
 			window->activateWindow();
@@ -134,7 +134,7 @@ QWidget *Application::openFile(const QString &filename) {
 			if (!resource.isValid() || resource.data() == nullptr || resource.size() == 0) {
 				throw std::runtime_error("Cannot read the resource content");
 			}
-			doc.Parse(reinterpret_cast<const char *>(resource.data()), resource.size());
+			doc.Parse(reinterpret_cast<const char*>(resource.data()), resource.size());
 		} else {
 			std::ifstream is(filename.toStdString());
 			if (!is) {
@@ -254,7 +254,7 @@ bool Application::doNotRun() {
 
 bool Application::event(QEvent *event) {
 	if (event->type() == QEvent::FileOpen) {
-		const auto file = static_cast<QFileOpenEvent *>(event)->file();
+		const auto file = static_cast<QFileOpenEvent*>(event)->file();
 		this->openFile(file);
 		return true;
 	} else {
@@ -265,7 +265,7 @@ bool Application::event(QEvent *event) {
 void Application::exitApplication() {
 	QStringList ids;
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<BaseWindow *>(widget)) {
+		if (auto window = dynamic_cast<BaseWindow*>(widget)) {
 			if (window->close()) {
 				const auto id = window->identifier();
 				if (!id.isNull()) {

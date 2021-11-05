@@ -103,7 +103,8 @@ void DiagramWidget::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge,
 		case fake:
 			painter.setPen(::Qt::lightGray);
 			break;
-		case fake2: {
+		case fake2:
+		{
 			QPen pen(0xe0e0e0);
 			pen.setDashPattern({6.0, 10.0});
 			painter.setPen(pen);
@@ -200,7 +201,8 @@ void DiagramWidget::leaveEvent(QEvent *) {
 
 void DiagramWidget::mousePressEvent(QMouseEvent *event) {
 	switch (this->_editorMode) {
-		case QUICK_DRAWING: {
+		case QUICK_DRAWING:
+		{
 			if (this->diagram.isClosed()) {
 				this->setFakeVertex(nullptr);
 				break;
@@ -298,7 +300,8 @@ void DiagramWidget::mouseReleaseEvent(QMouseEvent *event) {
 void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 	if (event->buttons() == 0) {
 		switch (this->_editorMode) {
-			case QUICK_DRAWING: {
+			case QUICK_DRAWING:
+			{
 				if (this->diagram.isClosed()) {
 					this->setFakeVertex(nullptr);
 					break;
@@ -315,7 +318,8 @@ void DiagramWidget::mouseMoveEvent(QMouseEvent *event) {
 				this->repaint();
 				break;
 			}
-			case EDITING: {
+			case EDITING:
+			{
 				auto vertex = this->diagram.findVertex(TwoD::FloatPoint(event->pos().x(), event->pos().y()), 17);
 				if (vertex) {
 					this->captureEdge(nullptr);

@@ -27,7 +27,7 @@ protected:
 	BaseWindow();
 	void restoreParameters();
 	void createFileMenu();
-	void closeEvent(QCloseEvent*) override;
+	void closeEvent(QCloseEvent *event) override;
 
 public:
 	virtual QString identifier() const {

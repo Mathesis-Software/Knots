@@ -72,7 +72,7 @@ void BaseWindow::createFileMenu() {
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }
 
-void BaseWindow::closeEvent(QCloseEvent*) {
+void BaseWindow::closeEvent(QCloseEvent *event) {
 	QSettings settings;
 	const QString id = this->identifier();
 	settings.setValue("LastClosedWindow", id);

@@ -183,7 +183,7 @@ void DiagramWidget::drawIt(QPainter &painter) {
 	}
 }
 
-void DiagramWidget::paintEvent(QPaintEvent *) {
+void DiagramWidget::paintEvent(QPaintEvent*) {
 	QPainter pnt;
 	pnt.begin(this);
 	pnt.setRenderHint(QPainter::Antialiasing);
@@ -192,7 +192,7 @@ void DiagramWidget::paintEvent(QPaintEvent *) {
 	pnt.end();
 }
 
-void DiagramWidget::leaveEvent(QEvent *) {
+void DiagramWidget::leaveEvent(QEvent*) {
 	if (this->fakeVertex) {
 		this->setFakeVertex(nullptr);
 		this->repaint();

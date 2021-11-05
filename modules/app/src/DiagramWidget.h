@@ -62,11 +62,11 @@ private:
 	void drawEdge(QPainter &, const TwoD::Diagram::Edge &edge, EdgeMode mode);
 	void highlightCrossing(QPainter &painter, const TwoD::Diagram::Crossing &crossing);
 
-	void paintEvent(QPaintEvent *) override;
-	void leaveEvent(QEvent *) override;
-	void mousePressEvent(QMouseEvent *) override;
-	void mouseReleaseEvent(QMouseEvent *) override;
-	void mouseMoveEvent(QMouseEvent *) override;
+	void paintEvent(QPaintEvent*) override;
+	void leaveEvent(QEvent*) override;
+	void mousePressEvent(QMouseEvent*) override;
+	void mouseReleaseEvent(QMouseEvent*) override;
+	void mouseMoveEvent(QMouseEvent*) override;
 
 	void selectMouseCursor();
 

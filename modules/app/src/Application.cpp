@@ -116,7 +116,7 @@ QWidget *Application::openFile(const QString &filename) {
 	}
 
 	for (auto widget : QApplication::topLevelWidgets()) {
-		if (auto window = dynamic_cast<Window *>(widget)) {
+		if (auto window = dynamic_cast<Window*>(widget)) {
 			if (window->identifier() == QFileInfo(filename).canonicalFilePath()) {
 				window->showNormal();
 				window->raise();

@@ -138,7 +138,7 @@ void Window::addToolbarSeparator() {
 	this->toolbar->addSeparator();
 }
 
-QAction *Window::registerAction(QAction *action, std::function<void(QAction &)> controller) {
+QAction *Window::registerAction(QAction *action, std::function<void(QAction&)> controller) {
 	QObject::connect(this, &Window::contentChanged, [action, controller] { controller(*action); });
 	return action;
 }

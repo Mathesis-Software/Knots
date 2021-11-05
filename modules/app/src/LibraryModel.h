@@ -61,7 +61,7 @@ public:
 
 	const DataItem *dataItem(const QModelIndex &index) const;
 
-	void addItems(QList<QListWidgetItem *> items);
+	void addItems(QList<QListWidgetItem*> items);
 	void addItem(QListWidgetItem *item);
 	void removeItem(QListWidgetItem *item);
 	void clear();
@@ -84,8 +84,8 @@ public:
 	NetworkLibraryModel(LibraryWindow *window, const QString &pattern);
 
 private:
-	bool canFetchMore(const QModelIndex &) const override;
-	void fetchMore(const QModelIndex &) override;
+	bool canFetchMore(const QModelIndex&) const override;
+	void fetchMore(const QModelIndex&) override;
 };
 
 }

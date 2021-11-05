@@ -49,7 +49,7 @@ protected:
 
 	QAction *addToolbarAction(const QString &iconFilename, const QString &text, const std::function<void()> &functor);
 	void addToolbarSeparator();
-	QAction *registerAction(QAction *action, std::function<void(QAction &)> controller);
+	QAction *registerAction(QAction *action, std::function<void(QAction&)> controller);
 
 	virtual QString fileFilter() const = 0;
 

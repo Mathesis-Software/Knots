@@ -105,7 +105,7 @@ void KnotWindow::rename() {
 }
 
 KnotWidget *KnotWindow::knotWidget() const {
-	return dynamic_cast<KnotWidget *>(this->centralWidget());
+	return dynamic_cast<KnotWidget*>(this->centralWidget());
 }
 
 bool KnotWindow::isSaved() const {

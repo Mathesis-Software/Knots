@@ -37,7 +37,7 @@ namespace {
 class LibraryListView : public QListView {
 
 public:
-	LibraryListView(const QList<QListWidgetItem *> &items = QList<QListWidgetItem *>()) {
+	LibraryListView(const QList<QListWidgetItem*> &items = QList<QListWidgetItem*>()) {
 		this->setModel(new LibraryModel(items));
 		this->setMouseTracking(true);
 		this->setViewMode(QListView::IconMode);
@@ -53,11 +53,11 @@ public:
 			this->selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
 		});
 		QObject::connect(this, &QListWidget::clicked, [this](const QModelIndex &index) {
-			if (auto item = static_cast<const LibraryModel *>(this->model())->dataItem(index)) {
+			if (auto item = static_cast<const LibraryModel*>(this->model())->dataItem(index)) {
 				item->open();
 			}
 		});
-		QObject::connect(this->selectionModel(), &QItemSelectionModel::currentChanged, [this](const QModelIndex &current, const QModelIndex & /*previous*/) {
+		QObject::connect(this->selectionModel(), &QItemSelectionModel::currentChanged, [this](const QModelIndex &current, const QModelIndex& /*previous*/) {
 			if (current.isValid() && !this->selectionModel()->isSelected(current)) {
 				this->selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
 			}
@@ -85,7 +85,7 @@ public:
 	}
 
 private:
-	void leaveEvent(QEvent *) override {
+	void leaveEvent(QEvent*) override {
 		this->selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::ClearAndSelect);
 	}
 
@@ -95,7 +95,7 @@ private:
 			return;
 		}
 
-		if (auto item = static_cast<const LibraryModel *>(this->model())->dataItem(this->currentIndex())) {
+		if (auto item = static_cast<const LibraryModel*>(this->model())->dataItem(this->currentIndex())) {
 			item->open();
 		}
 	}
@@ -257,7 +257,7 @@ LibraryWindow::LibraryWindow() : _networkManager(new NetworkManager(this)) {
 }
 
 QListView *LibraryWindow::createList(const QString &suffix) {
-	QList<QListWidgetItem *> items;
+	QList<QListWidgetItem*> items;
 	for (QDirIterator iter(":data", QDirIterator::Subdirectories); iter.hasNext();) {
 		const auto fileName = iter.next();
 		if (!fileName.endsWith(suffix)) {

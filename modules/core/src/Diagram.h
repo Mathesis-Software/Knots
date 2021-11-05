@@ -101,53 +101,53 @@ public:
 		bool operator < (const Crossing &crs) const { return this->up < crs.up || (this->up == crs.up && this->down < crs.down); }
 	};
 
-	public:
-		std::string caption;
+public:
+	std::string caption;
 
-	private:
-		std::list<std::shared_ptr<Vertex>> _vertices;
-		bool _isClosed;
+private:
+	std::list<std::shared_ptr<Vertex>> _vertices;
+	bool _isClosed;
 
-	public:
-		Diagram();
-		Diagram(const rapidjson::Value &doc);
+public:
+	Diagram();
+	Diagram(const rapidjson::Value &doc);
 
-		rapidjson::Document serialize() const;
+	rapidjson::Document serialize() const;
 
-		void clear();
-		void close();
-		bool isClosed() const { return this->_isClosed; }
+	void clear();
+	void close();
+	bool isClosed() const { return this->_isClosed; }
 
-		const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
-		std::list<Edge> edges() const;
-		const std::list<Crossing> &underCrossings(const Edge &edge) const { return edge.start->crossings; }
-		std::map<Diagram::Edge,std::list<Diagram::Crossing>> allCrossings() const;
-		bool hasCrossings() const;
+	const std::list<std::shared_ptr<Vertex>> &vertices() const { return this->_vertices; }
+	std::list<Edge> edges() const;
+	const std::list<Crossing> &underCrossings(const Edge &edge) const { return edge.start->crossings; }
+	std::map<Diagram::Edge,std::list<Diagram::Crossing>> allCrossings() const;
+	bool hasCrossings() const;
 
-		std::shared_ptr<Vertex> addVertex(int x, int y);
-		std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);
-		void removeVertex(const std::shared_ptr<Vertex> &vertex);
-		// returns true if some crossings were changed
-		bool moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
+	std::shared_ptr<Vertex> addVertex(int x, int y);
+	std::shared_ptr<Vertex> addVertex(const Edge &edge, int x, int y);
+	void removeVertex(const std::shared_ptr<Vertex> &vertex);
+	// returns true if some crossings were changed
+	bool moveVertex(const std::shared_ptr<Vertex> &vertex, int x, int y);
 
-		void removeEdge(const Edge &edge);
+	void removeEdge(const Edge &edge);
 
-		std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
-		std::shared_ptr<Crossing> flipCrossing(Crossing &crossing);
+	std::shared_ptr<Crossing> getCrossing(const Edge &edge1, const Edge &edge2);
+	std::shared_ptr<Crossing> flipCrossing(Crossing &crossing);
 
-		void shift(int dx, int dy);
-		bool simplify(std::size_t depth);
+	void shift(int dx, int dy);
+	bool simplify(std::size_t depth);
 
-		std::shared_ptr<Vertex> findVertex(const FloatPoint &pt, float maxDistance) const;
-		std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
-		std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
+	std::shared_ptr<Vertex> findVertex(const FloatPoint &pt, float maxDistance) const;
+	std::shared_ptr<Edge> findEdge(const FloatPoint &pt, float maxDistance) const;
+	std::shared_ptr<Crossing> findCrossing(const FloatPoint &pt, float maxDistance) const;
 
-	private:
-		std::shared_ptr<Vertex> addVertex(int x, int y, std::size_t index);
-		std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
-		// returns true if the crossing has been removed
-		bool removeCrossing(const Edge &edge1, const Edge &edge2);
-		void order();
+private:
+	std::shared_ptr<Vertex> addVertex(int x, int y, std::size_t index);
+	std::shared_ptr<Crossing> addCrossing(const Edge &up, const Edge &down);
+	// returns true if the crossing has been removed
+	bool removeCrossing(const Edge &edge1, const Edge &edge2);
+	void order();
 
 private:
 	Diagram(const Diagram&) = delete;

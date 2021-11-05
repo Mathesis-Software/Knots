@@ -53,33 +53,33 @@ void DiagramWindow::init(DiagramWidget *widget) {
 
 	QMenu *diagramMenu = this->menuBar()->addMenu("Diagram");
 	this->registerAction(
-					diagramMenu->addAction("Properties…", [this] { this->showPropertiesDialog(); }),
-					[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); });
+		diagramMenu->addAction("Properties…", [this] { this->showPropertiesDialog(); }),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); });
 	diagramMenu->addSeparator();
 	this->registerAction(
-					diagramMenu->addAction("Convert to knot", [this] { this->convert(); }),
-					[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); });
+		diagramMenu->addAction("Convert to knot", [this] { this->convert(); }),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); });
 	this->registerAction(
-					diagramMenu->addAction("Simplify", [this] { this->simplify(); }),
-					[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); });
+		diagramMenu->addAction("Simplify", [this] { this->simplify(); }),
+		[&diagram](QAction &action) { action.setEnabled(diagram.isClosed()); });
 	this->registerAction(
-					diagramMenu->addAction("Clear", [this] { this->clear(); }),
-					[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); });
+		diagramMenu->addAction("Clear", [this] { this->clear(); }),
+		[&diagram](QAction &action) { action.setEnabled(!diagram.vertices().empty()); });
 
 	this->registerAction(
-					this->addToolbarAction("trefoil.png", "Convert to knot", [this] { this->convert(); }),
-					[&diagram](QAction &action) {
-						const bool enabled = diagram.isClosed();
-						action.setEnabled(enabled);
-						action.setToolTip(enabled ? "Converting to 3D knot" : "Converting to knot disabled until the diagram is closed.");
-					});
+		this->addToolbarAction("trefoil.png", "Convert to knot", [this] { this->convert(); }),
+		[&diagram](QAction &action) {
+			const bool enabled = diagram.isClosed();
+			action.setEnabled(enabled);
+			action.setToolTip(enabled ? "Converting to 3D knot" : "Converting to knot disabled until the diagram is closed.");
+		});
 	this->registerAction(
-					addToolbarAction("math.svg", "Show properties", [this] { this->showPropertiesDialog(); }),
-					[&diagram](QAction &action) {
-						const bool enabled = diagram.isClosed();
-						action.setEnabled(enabled);
-						action.setToolTip(enabled ? "Diagram properties" : "The properties are not applicable until the diagram is closed.");
-					});
+		addToolbarAction("math.svg", "Show properties", [this] { this->showPropertiesDialog(); }),
+		[&diagram](QAction &action) {
+			const bool enabled = diagram.isClosed();
+			action.setEnabled(enabled);
+			action.setToolTip(enabled ? "Diagram properties" : "The properties are not applicable until the diagram is closed.");
+		});
 
 	addToolbarSeparator();
 	auto addAction = [this, widget](const QString &icon, const QString &text, const QString &tooltip, const QString &disabledTooltip, DiagramWidget::EditorMode mode) {
@@ -93,44 +93,44 @@ void DiagramWindow::init(DiagramWidget *widget) {
 		});
 	};
 	addAction(
-					"diagram_mode_quick_drawing.svg",
-					"Quick drawing",
-					"Quick drawing: move the mouse and click to set a new point. Right-click to close the diagram.",
-					"Quick drawing disabled for closed diagram.",
-					DiagramWidget::QUICK_DRAWING);
+		"diagram_mode_quick_drawing.svg",
+		"Quick drawing",
+		"Quick drawing: move the mouse and click to set a new point. Right-click to close the diagram.",
+		"Quick drawing disabled for closed diagram.",
+		DiagramWidget::QUICK_DRAWING);
 	addAction(
-					"diagram_mode_editing.svg",
-					"Editing",
-					"Editing: choose point/edge/crossing and click to change it. Read status at the bottom of the window if unsure.",
-					"Editing disabled for empty diagram.",
-					DiagramWidget::EDITING);
+		"diagram_mode_editing.svg",
+		"Editing",
+		"Editing: choose point/edge/crossing and click to change it. Read status at the bottom of the window if unsure.",
+		"Editing disabled for empty diagram.",
+		DiagramWidget::EDITING);
 	addAction(
-					"diagram_mode_moving.svg",
-					"Moving diagram",
-					"Moving: click anywhere and move the diagram.",
-					"Moving disabled for empty diagram.",
-					DiagramWidget::MOVING);
+		"diagram_mode_moving.svg",
+		"Moving diagram",
+		"Moving: click anywhere and move the diagram.",
+		"Moving disabled for empty diagram.",
+		DiagramWidget::MOVING);
 
 	addToolbarSeparator();
 	auto undo = this->registerAction(
-					this->addToolbarAction("undo.svg", "Undo", [this, widget] {
-						widget->diagram.undo();
-						emit widget->diagramChanged();
-						widget->repaint();
-						widget->updateEditorMode();
-						emit this->contentChanged();
-					}),
-					[widget](QAction &action) { action.setEnabled(widget->diagram.canUndo()); });
+		this->addToolbarAction("undo.svg", "Undo", [this, widget] {
+			widget->diagram.undo();
+			emit widget->diagramChanged();
+			widget->repaint();
+			widget->updateEditorMode();
+			emit this->contentChanged();
+		}),
+		[widget](QAction &action) { action.setEnabled(widget->diagram.canUndo()); });
 	undo->setShortcut(QKeySequence("Ctrl+Z"));
 	auto redo = this->registerAction(
-					this->addToolbarAction("redo.svg", "Redo", [this, widget] {
-						widget->diagram.redo();
-						emit widget->diagramChanged();
-						widget->repaint();
-						widget->updateEditorMode();
-						emit this->contentChanged();
-					}),
-					[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); });
+		this->addToolbarAction("redo.svg", "Redo", [this, widget] {
+			widget->diagram.redo();
+			emit widget->diagramChanged();
+			widget->repaint();
+			widget->updateEditorMode();
+			emit this->contentChanged();
+		}),
+		[widget](QAction &action) { action.setEnabled(widget->diagram.canRedo()); });
 	redo->setShortcut(QKeySequence("Ctrl+Shift+Z"));
 
 	QPixmap pixmap(":images/diagram.svg");
@@ -201,7 +201,7 @@ void DiagramWindow::rename() {
 
 	bool ok;
 	const QString text = QInputDialog::getText(
-					this, "Rename diagram", "New diagram name:", QLineEdit::Normal, diagram.caption().c_str(), &ok);
+		this, "Rename diagram", "New diagram name:", QLineEdit::Normal, diagram.caption().c_str(), &ok);
 	if (ok) {
 		diagram.setCaption(text.toStdString());
 		emit this->contentChanged();

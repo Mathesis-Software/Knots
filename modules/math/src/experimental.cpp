@@ -34,7 +34,7 @@ void vector_product(const double *v1, const double *v2, double *m) {
 	m[2] = v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-}// namespace
+}
 
 Experimental::Experimental(const KnotWrapper &knot) : Computable(knot, "Experimental") {
 }

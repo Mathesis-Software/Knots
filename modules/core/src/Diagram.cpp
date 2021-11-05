@@ -146,7 +146,7 @@ bool orientation(const std::shared_ptr<Diagram::Vertex> &v0, const std::shared_p
 	}
 }
 
-}// namespace
+}
 
 bool Diagram::Edge::intersects(const Diagram::Edge &edge) const {
 	if (this->start == edge.start ||

@@ -74,7 +74,7 @@ double distance(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapsh
 	return sqrt(d2);
 }
 
-}// namespace
+}
 
 void seifert::addPoint(const ThreeD::Vector &direction) {
 	// mutable version of direction

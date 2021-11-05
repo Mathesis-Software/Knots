@@ -33,7 +33,7 @@ QString generateKey(const QString &key, const QString &salt) {
 	return QCryptographicHash::hash(data, QCryptographicHash::Sha1).toHex();
 }
 
-}// namespace
+}
 
 MessageReceiver::MessageReceiver(Controller *controller) : QThread(controller) {
 }

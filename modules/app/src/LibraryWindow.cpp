@@ -163,7 +163,7 @@ private:
 	}
 };
 
-}// namespace
+}
 
 LibraryWindow::LibraryWindow() : _networkManager(new NetworkManager(this)) {
 	this->setCentralWidget(new QWidget);

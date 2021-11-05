@@ -32,7 +32,7 @@ struct AddVertexCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 std::shared_ptr<Diagram::Vertex> DiagramEditor::addVertex(int x, int y) {
 	auto command = std::make_shared<AddVertexCommand>(x, y);
@@ -76,7 +76,7 @@ struct AddVertexOnEdgeCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 std::shared_ptr<Diagram::Vertex> DiagramEditor::addVertex(const Diagram::Edge &edge, int x, int y) {
 	this->addCommand(
@@ -97,7 +97,7 @@ struct RemoveVertexCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 bool DiagramEditor::canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &) const {
 	return !this->currentDiagram->isClosed() || this->currentDiagram->vertices().size() > 3;
@@ -122,7 +122,7 @@ struct RemoveEdgeCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 bool DiagramEditor::canRemoveEdge(const std::shared_ptr<Diagram::Edge> &edge) const {
 	if (this->currentDiagram->isClosed()) {
@@ -152,7 +152,7 @@ struct MoveVertexCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 void DiagramEditor::moveVertex(const std::shared_ptr<Diagram::Vertex> &vertex, int x, int y, bool storeCommand) {
 	const bool makesChanges = this->currentDiagram->moveVertex(vertex, x, y);
@@ -178,7 +178,7 @@ struct FlipCrossingCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 std::shared_ptr<Diagram::Crossing> DiagramEditor::flipCrossing(Diagram::Crossing &crossing) {
 	const auto edges = this->currentDiagram->edges();
@@ -202,7 +202,7 @@ struct MoveDiagramCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 
 void DiagramEditor::shift(int dx, int dy, bool storeCommand) {
 	this->currentDiagram->shift(dx, dy);
@@ -221,7 +221,7 @@ struct CloseCommand : public DiagramEditor::Command {
 };
 std::shared_ptr<DiagramEditor::Command> closeCommand(new CloseCommand());
 
-}// namespace
+}
 
 void DiagramEditor::close() {
 	this->addCommand(closeCommand, false);
@@ -237,7 +237,7 @@ struct ClearCommand : public DiagramEditor::Command {
 };
 std::shared_ptr<DiagramEditor::Command> clearCommand(new ClearCommand());
 
-}// namespace
+}
 
 void DiagramEditor::clear() {
 	this->addCommand(clearCommand, false);
@@ -253,7 +253,7 @@ struct SimplifyCommand : public DiagramEditor::Command {
 };
 std::shared_ptr<DiagramEditor::Command> simplifyCommand(new SimplifyCommand());
 
-}// namespace
+}
 
 bool DiagramEditor::simplify() {
 	if (this->currentDiagram->simplify(2)) {
@@ -275,7 +275,7 @@ struct CaptionCommand : public DiagramEditor::Command {
 	}
 };
 
-}// namespace
+}
 void DiagramEditor::setCaption(const std::string &caption) {
 	if (caption != this->currentDiagram->caption) {
 		this->addCommand(std::make_shared<CaptionCommand>(caption), true);

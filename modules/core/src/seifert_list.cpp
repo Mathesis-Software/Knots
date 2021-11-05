@@ -40,7 +40,7 @@ void orthn(const ThreeD::Vector &v0, ThreeD::Vector &v1) {
 	v1.normalize();
 }
 
-}// namespace
+}
 
 void seifert_list::insert_after(seifert *s) {
 	// Процедура добавления нового соседа сразу после первого,

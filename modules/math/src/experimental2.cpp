@@ -32,7 +32,7 @@ double vector_square(const double *v) {
 	return v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
 }
 
-}// namespace
+}
 
 double Experimental2::compute(const Knot::Snapshot &snapshot) {
 	double value = 0.0;

@@ -47,7 +47,7 @@ bool inside(const double *a, const double *b, const double *c, const double *d, 
 	return 1;
 }*/
 
-}// namespace
+}
 
 double Singular::compute(const Knot::Snapshot &snapshot) {
 	double value = 0.0;

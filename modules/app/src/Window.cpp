@@ -97,7 +97,7 @@ QString getSaveFileNameEx(const QString &fileFilter) {
 	return QString();
 }
 
-}// namespace
+}
 
 void Window::save() {
 	const QString filename = getSaveFileNameEx(this->fileFilter());

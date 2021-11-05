@@ -120,7 +120,7 @@ private:
 	}
 };
 
-}// namespace
+}
 
 LibraryModel::LibraryModel(const QList<QListWidgetItem *> &items) : items(items) {
 }

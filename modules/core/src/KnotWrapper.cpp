@@ -40,7 +40,7 @@ void rotateMatrix(double matrix[3][3], int axis0, int axis1, double angleDelta) 
 	}
 }
 
-}// namespace
+}
 
 KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(Knot::pointsFromDiagram(diagram, width, height), diagram.caption) {
 	initUnitaryMatrix(this->rotationMatrix);

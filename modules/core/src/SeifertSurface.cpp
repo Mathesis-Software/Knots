@@ -25,7 +25,7 @@ double det(const ThreeD::Point &pt0, const ThreeD::Point &pt1, const ThreeD::Poi
 	return (pt1.x - pt0.x) * (pt2.y - pt0.y) * orth.z - (pt1.x - pt0.x) * (pt2.z - pt0.z) * orth.y - (pt1.y - pt0.y) * (pt2.x - pt0.x) * orth.z + (pt1.y - pt0.y) * (pt2.z - pt0.z) * orth.x + (pt1.z - pt0.z) * (pt2.x - pt0.x) * orth.y - (pt1.z - pt0.z) * (pt2.y - pt0.y) * orth.x;
 }
 
-}// namespace
+}
 
 ThreeD::Vector SeifertSurface::gradient(const ThreeD::Point &point, const ThreeD::Knot::Snapshot &snapshot) {
 	ThreeD::Vector gradient(0.0, 0.0, 0.0);

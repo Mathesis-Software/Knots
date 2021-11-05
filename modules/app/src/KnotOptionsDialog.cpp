@@ -111,7 +111,7 @@ WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &i
 	return WidgetWithLabel(new ColorButton(title, initialColor, setter), title);
 }
 
-}// namespace
+}
 
 void KnotWindow::showOptionsDialog() {
 	if (this->isSignalConnected(QMetaMethod::fromSignal(&KnotWindow::raiseOptionsDialog))) {

@@ -28,7 +28,7 @@ namespace KE::GL {
 class KnotSurface;
 class SeifertSurface;
 
-}// namespace KE::GL
+}
 
 namespace KE::Qt {
 

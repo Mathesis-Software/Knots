@@ -27,7 +27,7 @@ struct SavePointCommand : public DiagramEditor::Command {
 
 std::shared_ptr<DiagramEditor::Command> savePointCommand(new SavePointCommand());
 
-}// namespace
+}
 
 void DiagramEditor::savePoint() {
 	if (this->indexInLog > 0 && this->log[this->indexInLog - 1] != savePointCommand) {

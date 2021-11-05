@@ -162,7 +162,7 @@ Polynomial poly(const Bridge &bridge) {
 	}
 }
 
-}// namespace
+}
 
 bool AlexanderPolynomial::isApplicable(const Diagram &diagram) const {
 	return diagram.isClosed();

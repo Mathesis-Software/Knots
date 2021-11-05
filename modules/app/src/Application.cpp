@@ -56,7 +56,7 @@ class ProxyStyle : public QProxyStyle {
 	}
 };
 
-}// namespace
+}
 
 QWidget *Application::openLibrary() {
 	for (auto widget : QApplication::topLevelWidgets()) {
@@ -104,7 +104,7 @@ QString getOpenFileNameEx() {
 	return QString();
 }
 
-}// namespace
+}
 
 QWidget *Application::openFile() {
 	return openFile(getOpenFileNameEx());

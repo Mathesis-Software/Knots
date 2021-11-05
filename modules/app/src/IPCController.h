@@ -36,9 +36,9 @@ public:
 
 class Controller : public QObject {
 
-	friend class MessageReceiver;
+friend class MessageReceiver;
 
-	Q_OBJECT
+Q_OBJECT
 
 public:
 	enum Role {
@@ -66,8 +66,8 @@ signals:
 	void messageReceived(const QStringList &message);
 
 private:
-	Controller(const Controller &) = delete;
-	void operator=(const Controller &) = delete;
+	Controller(const Controller&) = delete;
+	void operator=(const Controller&) = delete;
 };
 
 }

@@ -30,7 +30,7 @@ class DiagramWidget;
 
 class KnotWindow : public Window {
 
-	Q_OBJECT
+Q_OBJECT
 
 public:
 	KnotWindow(const rapidjson::Value &doc, const QString &filename);

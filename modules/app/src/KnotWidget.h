@@ -36,7 +36,7 @@ class KnotWidget;
 
 class SmoothingThread : public QThread {
 
-	Q_OBJECT
+Q_OBJECT
 
 private:
 	ThreeD::KnotWrapper &knot;
@@ -53,7 +53,7 @@ private:
 
 class KnotWidget : public GLWidget {
 
-	Q_OBJECT
+Q_OBJECT
 
 public:
 	ThreeD::KnotWrapper knot;

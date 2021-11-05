@@ -25,7 +25,7 @@ namespace KE::Qt {
 
 class DiagramWidget : public QWidget {
 
-	Q_OBJECT
+Q_OBJECT
 
 public:
 	enum EditorMode {

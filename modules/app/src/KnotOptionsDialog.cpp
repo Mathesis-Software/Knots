@@ -39,13 +39,13 @@ private:
 	const int _height = 20;
 	const int _delta = 10;
 
-	const std::function<void(const Color &)> setter;
+	const std::function<void(const Color&)> setter;
 
 public:
 	QColor currentColor;
 
 public:
-	ColorButton(const QString &title, const Color &initialColor, std::function<void(const Color &)> setter) : setter(setter) {
+	ColorButton(const QString &title, const Color &initialColor, std::function<void(const Color&)> setter) : setter(setter) {
 		this->setColor(QColor(initialColor.red(), initialColor.green(), initialColor.blue()));
 		this->setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 		this->setMinimumSize(_width + _delta, _height + _delta);
@@ -107,7 +107,7 @@ struct WidgetWithLabel {
 	}
 };
 
-WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &initialColor, std::function<void(const Color &)> setter) {
+WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &initialColor, std::function<void(const Color&)> setter) {
 	return WidgetWithLabel(new ColorButton(title, initialColor, setter), title);
 }
 

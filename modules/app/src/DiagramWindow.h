@@ -26,7 +26,7 @@ namespace KE::Qt {
 
 class DiagramWindow : public Window {
 
-	Q_OBJECT
+Q_OBJECT
 
 private:
 	void init(DiagramWidget *widget);

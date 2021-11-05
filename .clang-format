@@ -66,3 +66,4 @@ SpacesInParentheses: false
 SpacesInSquareBrackets: false
 TabWidth: 2
 UseTab: Always
+WhitespaceSensitiveMacros: ['Q_OBJECT']

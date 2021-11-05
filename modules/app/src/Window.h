@@ -23,7 +23,7 @@ namespace KE::Qt {
 
 class Window : public BaseWindow {
 
-	Q_OBJECT
+Q_OBJECT
 
 private:
 	QToolBar *toolbar;

@@ -39,7 +39,7 @@ MessageReceiver::MessageReceiver(Controller *controller) : QThread(controller) {
 }
 
 void MessageReceiver::run() {
-	Controller *controller = static_cast<Controller *>(this->parent());
+	Controller *controller = static_cast<Controller*>(this->parent());
 	while (true) {
 		controller->messageSemaphore.acquire();
 		if (this->isInterruptionRequested()) {
@@ -50,7 +50,7 @@ void MessageReceiver::run() {
 		controller->memorySemaphore.acquire();
 		if (controller->sharedMemory.lock()) {
 			const std::size_t maxSize = controller->sharedMemory.size();
-			const char *start = reinterpret_cast<const char *>(controller->sharedMemory.data());
+			const char *start = reinterpret_cast<const char*>(controller->sharedMemory.data());
 			for (const char *ptr = start; ptr < start + maxSize && *ptr != '\0';) {
 				const std::string word(ptr);
 				message.push_back(QString::fromStdString(word));

@@ -49,6 +49,6 @@ private:
 	bool isVisible() const override;
 };
 
-}// namespace KE::GL
+}
 
 #endif /* __SEIFERT_SURFACE_H__ */

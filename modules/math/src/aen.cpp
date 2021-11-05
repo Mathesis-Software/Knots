@@ -52,4 +52,4 @@ double AverageExtremumNumber::compute(const Knot::Snapshot &snapshot) {
 	return value / M_PI + snapshot.size();
 }
 
-}// namespace KE::ThreeD::Math
+}

@@ -134,4 +134,4 @@ rapidjson::Document Diagram::serialize() const {
 	return doc;
 }
 
-}// namespace KE::TwoD
+}

@@ -64,6 +64,6 @@ public:
 	DiagramPropertiesDialog(DiagramWindow &window);
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_DIAGRAM_WINDOW_H__ */

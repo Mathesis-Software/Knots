@@ -84,4 +84,4 @@ void BaseWindow::closeEvent(QCloseEvent *) {
 	settings.sync();
 }
 
-}// namespace KE::Qt
+}

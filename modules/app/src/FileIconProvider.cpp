@@ -41,4 +41,4 @@ QIcon FileIconProvider::icon(const QFileInfo &finfo) const {
 	return QFileIconProvider::icon(finfo);
 }
 
-}// namespace KE::Qt
+}

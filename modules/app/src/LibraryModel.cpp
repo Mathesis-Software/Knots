@@ -235,4 +235,4 @@ void NetworkLibraryModel::fetchMore(const QModelIndex &) {
 	});
 }
 
-}// namespace KE::Qt
+}

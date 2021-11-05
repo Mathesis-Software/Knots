@@ -44,4 +44,4 @@ std::shared_ptr<Color> Color::parse(const std::string &stringValue) {
 	return std::make_shared<Color>((value >> 16) & 0xff, (value >> 8) & 0xff, value & 0xff);
 }
 
-}// namespace KE
+}

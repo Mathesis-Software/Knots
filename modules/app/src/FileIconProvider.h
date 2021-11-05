@@ -40,6 +40,6 @@ private:
 	const QIcon knotIcon;
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_FILE_ICON_PROVIDER_H__ */

@@ -56,4 +56,4 @@ double Knot::Snapshot::knotLength() const {
 	return std::accumulate(edgeLengths.begin(), edgeLengths.end(), 0.0);
 }
 
-}// namespace KE::ThreeD
+}

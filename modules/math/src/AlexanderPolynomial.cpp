@@ -201,4 +201,4 @@ Polynomial AlexanderPolynomial::value(const Diagram &diagram) const {
 	return matrix.determinant().reduced();
 }
 
-}// namespace KE::TwoD::Math
+}

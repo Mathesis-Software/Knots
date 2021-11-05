@@ -82,4 +82,4 @@ rapidjson::Document Knot::serialize() const {
 	return doc;
 }
 
-}// namespace KE::ThreeD
+}

@@ -307,4 +307,4 @@ seifert::~seifert() {
 	counter--;
 }
 
-}// namespace KE::GL
+}

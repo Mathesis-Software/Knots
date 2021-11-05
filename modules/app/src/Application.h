@@ -49,6 +49,6 @@ public:
 	void exitApplication();
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_APPLICATION_H__ */

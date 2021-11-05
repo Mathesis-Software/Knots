@@ -57,4 +57,4 @@ seifert_ord::~seifert_ord() {
 		prev->next = nullptr;
 }
 
-}// namespace KE::GL
+}

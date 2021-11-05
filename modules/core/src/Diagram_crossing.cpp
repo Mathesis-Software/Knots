@@ -115,4 +115,4 @@ void Diagram::Edge::orderCrossings(std::list<Crossing> &crossings) const {
 	crossings.sort(comparator);
 }
 
-}// namespace KE::TwoD
+}

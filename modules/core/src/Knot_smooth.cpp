@@ -165,4 +165,4 @@ void Knot::decreaseEnergy() {
 	this->_points.swap(points);
 }
 
-}// namespace KE::ThreeD
+}

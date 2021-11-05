@@ -93,6 +93,6 @@ inline double Point::distanceTo(const Point &pt) const {
 	return Vector(pt, *this).length();
 }
 
-}// namespace KE::ThreeD
+}
 
 #endif /* __POINT_H__ */

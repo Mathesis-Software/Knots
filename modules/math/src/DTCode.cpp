@@ -91,4 +91,4 @@ std::list<int> DTCode::value(const Diagram &diagram) const {
 	return code;
 }
 
-}// namespace KE::TwoD::Math
+}

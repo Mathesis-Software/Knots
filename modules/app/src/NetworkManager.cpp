@@ -38,4 +38,4 @@ void NetworkManager::searchDiagram(const QString &code, int page, QObject *conte
 	});
 }
 
-}// namespace KE::Qt
+}

@@ -160,6 +160,6 @@ private:
 	Diagram &operator=(const Diagram &) = delete;
 };
 
-}// namespace KE::TwoD
+}
 
 #endif /* __DIAGRAM_H__ */

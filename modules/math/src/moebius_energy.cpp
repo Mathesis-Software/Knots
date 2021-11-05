@@ -78,4 +78,4 @@ double MoebiusEnergy::compute(const Knot::Snapshot &snapshot) {
 	return value;
 }
 
-}// namespace KE::ThreeD::Math
+}

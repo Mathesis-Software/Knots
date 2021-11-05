@@ -44,4 +44,4 @@ void Surface::prepare() const {
 	}
 }
 
-}// namespace KE::GL
+}

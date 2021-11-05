@@ -87,4 +87,4 @@ void DiagramEditor::redo() {
 	}
 }
 
-}// namespace KE::TwoD
+}

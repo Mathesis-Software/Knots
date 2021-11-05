@@ -47,6 +47,6 @@ public:
 	double value();
 };
 
-}// namespace KE::ThreeD::Math
+}
 
 #endif /* __KE_MATH_COMPUTABLE_H__ */

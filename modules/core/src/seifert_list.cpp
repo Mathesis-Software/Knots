@@ -146,4 +146,4 @@ seifert_list::~seifert_list() {
 	}
 }
 
-}// namespace KE::GL
+}

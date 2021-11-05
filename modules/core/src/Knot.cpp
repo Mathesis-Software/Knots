@@ -103,4 +103,4 @@ std::vector<Point> Knot::pointsFromDiagram(const TwoD::Diagram &diagram, std::si
 	return points;
 }
 
-}// namespace KE::ThreeD
+}

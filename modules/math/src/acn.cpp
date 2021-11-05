@@ -54,4 +54,4 @@ double AverageCrossingNumber::compute(const Knot::Snapshot &snapshot) {
 	return value / (2 * M_PI);
 }
 
-}// namespace KE::ThreeD::Math
+}

@@ -67,6 +67,6 @@ private:
 	const double *inverseMatrix() const;
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __GLWIDGET_H__ */

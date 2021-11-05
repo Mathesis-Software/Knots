@@ -133,4 +133,4 @@ bool Controller::sendMessage(const QStringList &message) {
 	return sent;
 }
 
-}// namespace IPC
+}

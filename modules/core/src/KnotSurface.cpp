@@ -131,4 +131,4 @@ void KnotSurface::calculate() const {
 	}
 }
 
-}// namespace KE::GL
+}

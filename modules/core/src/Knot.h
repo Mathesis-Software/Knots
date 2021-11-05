@@ -121,6 +121,6 @@ private:
 	Knot &operator=(const Knot &) = delete;
 };
 
-}// namespace KE::ThreeD
+}
 
 #endif /* __KNOT_H__ */

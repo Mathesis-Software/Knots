@@ -71,6 +71,6 @@ private:
 	Surface &operator=(const Surface &) = delete;
 };
 
-}// namespace KE::GL
+}
 
 #endif /* __SURFACE_H__ */

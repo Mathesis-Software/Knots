@@ -93,4 +93,4 @@ AboutDialog::AboutDialog() {
 	this->addAction(quit);
 }
 
-}// namespace KE::Qt
+}

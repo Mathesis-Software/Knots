@@ -231,4 +231,4 @@ void Diagram::removeEdge(const Edge &edge) {
 	}
 }
 
-}// namespace KE::TwoD
+}

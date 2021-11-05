@@ -88,6 +88,6 @@ private:
 	void fetchMore(const QModelIndex &) override;
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_LIBRARY_MODEL_H__ */

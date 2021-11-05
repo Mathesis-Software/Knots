@@ -150,4 +150,4 @@ QString Window::identifier() const {
 	return QFileInfo(this->_filename).canonicalFilePath();
 }
 
-}// namespace KE::Qt
+}

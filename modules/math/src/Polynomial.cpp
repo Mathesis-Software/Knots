@@ -96,4 +96,4 @@ std::ostream &operator<<(std::ostream &os, const Polynomial &poly) {
 	return os;
 }
 
-}// namespace KE::TwoD::Math
+}

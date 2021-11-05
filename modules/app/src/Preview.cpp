@@ -137,4 +137,4 @@ void DiagramPreview::drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge
 	}
 }
 
-}// namespace KE::Qt
+}

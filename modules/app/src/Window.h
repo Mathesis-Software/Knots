@@ -58,6 +58,6 @@ signals:
 	void contentChanged();
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_WINDOW_H__ */

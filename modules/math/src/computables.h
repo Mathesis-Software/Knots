@@ -69,6 +69,6 @@ public:
 	VassilievInvariant(const KnotWrapper &knot, int order);
 };
 
-}// namespace KE::ThreeD::Math
+}
 
 #endif /* __COMPUTABLES_H__ */

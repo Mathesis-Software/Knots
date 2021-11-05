@@ -61,4 +61,4 @@ void SmoothingThread::run() {
 	}
 }
 
-}// namespace KE::Qt
+}

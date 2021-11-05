@@ -121,4 +121,4 @@ QImage KnotWindow::exportImage() const {
 	return this->knotWidget()->grabFramebuffer();
 }
 
-}// namespace KE::Qt
+}

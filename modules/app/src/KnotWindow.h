@@ -72,6 +72,6 @@ public:
 	KnotOptionsDialog(KnotWindow &window);
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_KNOT_WINDOW_H__ */

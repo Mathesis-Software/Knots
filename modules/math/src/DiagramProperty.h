@@ -51,6 +51,6 @@ public:
 	Polynomial value(const Diagram &diagram) const override;
 };
 
-}// namespace KE::TwoD::Math
+}
 
 #endif /* __KE_MATH_DIAGRAM_PROPERTY_H__ */

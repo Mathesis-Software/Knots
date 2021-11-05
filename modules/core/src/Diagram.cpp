@@ -178,4 +178,4 @@ std::map<Diagram::Edge, std::list<Diagram::Crossing>> Diagram::allCrossings() co
 	return map;
 }
 
-}// namespace KE::TwoD
+}

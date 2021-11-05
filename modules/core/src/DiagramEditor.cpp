@@ -283,4 +283,4 @@ void DiagramEditor::setCaption(const std::string &caption) {
 	}
 }
 
-}// namespace KE::TwoD
+}

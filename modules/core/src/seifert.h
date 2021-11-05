@@ -87,6 +87,6 @@ public:
 	friend class SeifertSurface;
 };
 
-}// namespace KE::GL
+}
 
 #endif /* __SEIFERT_H__ */

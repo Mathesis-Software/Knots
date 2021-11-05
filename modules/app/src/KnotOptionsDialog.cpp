@@ -237,4 +237,4 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	QObject::connect(&window, &KnotWindow::raiseOptionsDialog, this, &QDialog::raise);
 }
 
-}// namespace KE::Qt
+}

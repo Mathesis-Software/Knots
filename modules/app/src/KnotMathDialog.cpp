@@ -93,4 +93,4 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 	QObject::connect(&window, &KnotWindow::raiseMathDialog, this, &QDialog::raise);
 }
 
-}// namespace KE::Qt
+}

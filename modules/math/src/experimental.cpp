@@ -225,4 +225,4 @@ double Experimental::compute(const Knot::Snapshot &snapshot) {
 	return value / (64 * M_PI);
 }
 
-}// namespace KE::ThreeD::Math
+}

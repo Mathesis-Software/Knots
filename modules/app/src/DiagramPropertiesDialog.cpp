@@ -100,4 +100,4 @@ DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow &window) {
 	QObject::connect(&window, &DiagramWindow::raisePropertiesDialog, this, &QDialog::raise);
 }
 
-}// namespace KE::Qt
+}

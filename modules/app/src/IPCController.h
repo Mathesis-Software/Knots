@@ -70,6 +70,6 @@ private:
 	void operator=(const Controller &) = delete;
 };
 
-}// namespace IPC
+}
 
 #endif /* __QT_IPC_CONTROLLER_H__ */

@@ -93,6 +93,6 @@ signals:
 	void actionsUpdated();
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KNOTWIDGET_H__ */

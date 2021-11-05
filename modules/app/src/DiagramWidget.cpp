@@ -453,4 +453,4 @@ void DiagramWidget::selectMouseCursor() {
 	}
 }
 
-}// namespace KE::Qt
+}

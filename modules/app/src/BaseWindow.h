@@ -35,6 +35,6 @@ public:
 	}
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __KE_QT_BASE_WINDOW_H__ */

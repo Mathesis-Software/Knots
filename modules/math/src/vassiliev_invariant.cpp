@@ -82,4 +82,4 @@ double VassilievInvariant::compute(const Knot::Snapshot &snapshot) {
 	return value / (4 * M_PI * M_PI);
 }
 
-}// namespace KE::ThreeD::Math
+}

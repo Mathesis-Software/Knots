@@ -43,6 +43,6 @@ struct Color {
 	bool operator!=(const Color &color) const { return !(*this == color); }
 };
 
-}// namespace KE
+}
 
 #endif /* __KE_COLOR_H__ */

@@ -213,4 +213,4 @@ bool DiagramWindow::isSaved() const {
 	return !widget || widget->diagram.isSaved();
 }
 
-}// namespace KE::Qt
+}

@@ -101,6 +101,6 @@ public:
 	friend std::ostream &operator<<(std::ostream &os, const Polynomial &poly);
 };
 
-}// namespace KE::TwoD::Math
+}
 
 #endif /* __KE_MATH_POLYNOMIAL_H__ */

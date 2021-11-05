@@ -139,4 +139,4 @@ void SeifertSurface::calculate() const {
 	delete s;
 }
 
-}// namespace KE::GL
+}

@@ -89,6 +89,6 @@ signals:
 	void diagramChanged();
 };
 
-}// namespace KE::Qt
+}
 
 #endif /* __DIAGRAMWIDGET_H__ */

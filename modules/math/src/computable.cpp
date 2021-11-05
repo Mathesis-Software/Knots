@@ -29,4 +29,4 @@ double Computable::value() {
 	return this->_value;
 }
 
-}// namespace KE::ThreeD::Math
+}

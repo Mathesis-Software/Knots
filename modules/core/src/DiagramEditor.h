@@ -96,6 +96,6 @@ public:
 	bool simplify();
 };
 
-}// namespace KE::TwoD
+}
 
 #endif /* __DIAGRAM_EDITOR_H__ */

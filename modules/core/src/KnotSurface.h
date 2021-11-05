@@ -50,6 +50,6 @@ private:
 	KnotSurface &operator=(const KnotSurface &) = delete;
 };
 
-}// namespace KE::GL
+}
 
 #endif /* __KNOT_SURFACE_H__ */

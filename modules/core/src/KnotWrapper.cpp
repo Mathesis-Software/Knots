@@ -273,4 +273,4 @@ void KnotWrapper::rotate(double dx, double dy, double dz) {
 	}
 }
 
-}// namespace KE::ThreeD
+}

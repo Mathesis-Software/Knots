@@ -284,4 +284,4 @@ void Application::exitApplication() {
 	this->quit();
 }
 
-}// namespace KE::Qt
+}

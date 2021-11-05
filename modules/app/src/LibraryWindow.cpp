@@ -278,4 +278,4 @@ QListView *LibraryWindow::createList(const QString &suffix) {
 	return new LibraryListView(items);
 }
 
-}// namespace KE::Qt
+}

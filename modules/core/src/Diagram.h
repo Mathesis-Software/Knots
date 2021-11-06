@@ -65,7 +65,7 @@ public:
 
 	private:
 		Vertex(const Vertex&) = delete;
-		Vertex& operator=(const Vertex&) = delete;
+		Vertex &operator=(const Vertex&) = delete;
 	};
 
 	struct Edge {
@@ -151,7 +151,7 @@ private:
 
 private:
 	Diagram(const Diagram&) = delete;
-	Diagram& operator=(const Diagram&) = delete;
+	Diagram &operator=(const Diagram&) = delete;
 };
 
 }

@@ -52,14 +52,14 @@ private:
 	void captureCrossing(const std::shared_ptr<TwoD::Diagram::Crossing> &crossing);
 	void capturePoint(const QPoint &point);
 
-	void drawVertex(QPainter &, const TwoD::Diagram::Vertex &vertex, bool highlight);
+	void drawVertex(QPainter &painter, const TwoD::Diagram::Vertex &vertex, bool highlight);
 	enum EdgeMode {
 		normal,
 		highlighted,
 		fake,
 		fake2
 	};
-	void drawEdge(QPainter&, const TwoD::Diagram::Edge &edge, EdgeMode mode);
+	void drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge, EdgeMode mode);
 	void highlightCrossing(QPainter &painter, const TwoD::Diagram::Crossing &crossing);
 
 	void paintEvent(QPaintEvent *event) override;

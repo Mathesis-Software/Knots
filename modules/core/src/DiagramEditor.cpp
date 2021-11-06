@@ -99,7 +99,7 @@ struct RemoveVertexCommand : public DiagramEditor::Command {
 
 }
 
-bool DiagramEditor::canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &) const {
+bool DiagramEditor::canRemoveVertex(const std::shared_ptr<Diagram::Vertex> &vertex) const {
 	return !this->currentDiagram->isClosed() || this->currentDiagram->vertices().size() > 3;
 }
 

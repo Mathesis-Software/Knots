@@ -51,7 +51,7 @@ public:
 
 	DiagramWidget *diagramWidget() const { return (DiagramWidget*) this->centralWidget(); }
 
-	void saveIt(std::ostream&) override;
+	void saveIt(std::ostream &os) override;
 	bool isSaved() const override;
 
 signals:

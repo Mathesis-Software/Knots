@@ -33,7 +33,7 @@ private:
 	FileIconProvider();
 
 public:
-	QIcon icon(const QFileInfo&) const override;
+	QIcon icon(const QFileInfo &finfo) const override;
 
 private:
 	const QIcon diagramIcon;

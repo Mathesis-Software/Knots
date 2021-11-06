@@ -59,7 +59,7 @@ private:
 		fake,
 		fake2
 	};
-	void drawEdge(QPainter&, const TwoD::Diagram::Edge &edge, EdgeMode mode);
+	void drawEdge(QPainter &painter, const TwoD::Diagram::Edge &edge, EdgeMode mode);
 	void highlightCrossing(QPainter &painter, const TwoD::Diagram::Crossing &crossing);
 
 	void paintEvent(QPaintEvent *event) override;

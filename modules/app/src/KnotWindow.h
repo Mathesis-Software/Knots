@@ -45,7 +45,7 @@ private:
 	QImage exportImage() const override;
 
 	bool isSaved() const override;
-	void saveIt(std::ostream&) override;
+	void saveIt(std::ostream &os) override;
 
 	void closeEvent(QCloseEvent *event) override;
 

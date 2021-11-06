@@ -187,11 +187,11 @@ QVariant LibraryModel::data(const QModelIndex &index, int role) const {
 NetworkLibraryModel::NetworkLibraryModel(LibraryWindow *window, const QString &pattern) : LibraryModel(QList<QListWidgetItem*>()), window(window), pattern(pattern), nextPage(0) {
 }
 
-bool NetworkLibraryModel::canFetchMore(const QModelIndex&) const {
+bool NetworkLibraryModel::canFetchMore(const QModelIndex &index) const {
 	return this->nextPage >= 0;
 }
 
-void NetworkLibraryModel::fetchMore(const QModelIndex&) {
+void NetworkLibraryModel::fetchMore(const QModelIndex &index) {
 	const auto page = this->nextPage;
 	this->nextPage = -1;
 

@@ -84,8 +84,8 @@ public:
 	NetworkLibraryModel(LibraryWindow *window, const QString &pattern);
 
 private:
-	bool canFetchMore(const QModelIndex&) const override;
-	void fetchMore(const QModelIndex&) override;
+	bool canFetchMore(const QModelIndex &index) const override;
+	void fetchMore(const QModelIndex &index) override;
 };
 
 }

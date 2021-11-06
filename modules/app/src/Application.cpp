@@ -42,19 +42,17 @@ namespace KE::Qt {
 namespace {
 
 class ProxyStyle : public QProxyStyle {
-
-QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override {
-	if (iconMode == QIcon::Disabled) {
-		QPixmap copy(pixmap);
-		QPainter painter(&copy);
-		painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
-		painter.fillRect(copy.rect(), 0xc0c0c0);
-		painter.end();
-		return copy;
+	QPixmap generatedIconPixmap(QIcon::Mode iconMode, const QPixmap &pixmap, const QStyleOption *option) const override {
+		if (iconMode == QIcon::Disabled) {
+			QPixmap copy(pixmap);
+			QPainter painter(&copy);
+			painter.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+			painter.fillRect(copy.rect(), 0xc0c0c0);
+			painter.end();
+			return copy;
+		}
+		return QProxyStyle::generatedIconPixmap(iconMode, pixmap, option);
 	}
-	return QProxyStyle::generatedIconPixmap(iconMode, pixmap, option);
-}
-
 };
 
 }

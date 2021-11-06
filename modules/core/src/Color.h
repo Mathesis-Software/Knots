@@ -30,9 +30,9 @@ struct Color {
 
 	std::string stringValue() const;
 
-	int red() const { return (int)round(255 * rgb[0]); }
-	int green() const { return (int)round(255 * rgb[1]); }
-	int blue() const { return (int)round(255 * rgb[2]); }
+	int red() const { return std::lround(255 * rgb[0]); }
+	int green() const { return std::lround(255 * rgb[1]); }
+	int blue() const { return std::lround(255 * rgb[2]); }
 
 	static std::shared_ptr<Color> parse(const std::string &stringValue);
 	static const Color white;

@@ -49,7 +49,7 @@ public:
 	DiagramWindow(const rapidjson::Value &doc, const QString &filename);
 	DiagramWindow();
 
-	DiagramWidget *diagramWidget() const { return (DiagramWidget*)this->centralWidget(); }
+	DiagramWidget *diagramWidget() const { return static_cast<DiagramWidget*>(this->centralWidget()); }
 
 	void saveIt(std::ostream &os) override;
 	bool isSaved() const override;

@@ -118,7 +118,7 @@ public:
 
 private:
 	Knot(const Knot&) = delete;
-	Knot& operator = (const Knot&) = delete;
+	Knot& operator=(const Knot&) = delete;
 };
 
 }

@@ -64,7 +64,7 @@ FileDataItem::FileDataItem(const QString &path, int index) : path(path), index(i
 	this->init(doc);
 }
 
-bool FileDataItem::operator < (const QListWidgetItem &other) const {
+bool FileDataItem::operator<(const QListWidgetItem &other) const {
 	const FileDataItem &data = dynamic_cast<const FileDataItem&>(other);
 	return this->index < data.index || (this->index == data.index && this->path < data.path);
 }

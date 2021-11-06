@@ -68,7 +68,7 @@ public:
 
 private:
 	Surface(const Surface&) = delete;
-	Surface& operator = (const Surface&) = delete;
+	Surface& operator=(const Surface&) = delete;
 };
 
 }

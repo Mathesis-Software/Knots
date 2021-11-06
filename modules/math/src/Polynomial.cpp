@@ -41,7 +41,7 @@ Polynomial Polynomial::reduced() const {
 	return result;
 }
 
-std::ostream &operator << (std::ostream &os, const Polynomial &poly) {
+std::ostream &operator<<(std::ostream &os, const Polynomial &poly) {
 	if (poly.coefficients.empty()) {
 		os << 0;
 		return os;

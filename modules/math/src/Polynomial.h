@@ -50,7 +50,7 @@ private:
 	}
 
 public:
-	const Polynomial &operator += (const Polynomial &poly) {
+	const Polynomial &operator+=(const Polynomial &poly) {
 		while (this->coefficients.size() < poly.coefficients.size()) {
 			this->coefficients.push_back(0);
 		}
@@ -61,7 +61,7 @@ public:
 		return *this;
 	}
 
-	const Polynomial &operator *= (int num) {
+	const Polynomial &operator*=(int num) {
 		if (num == 0) {
 			this->coefficients.clear();
 			return *this;
@@ -70,7 +70,7 @@ public:
 		return *this;
 	}
 
-	Polynomial operator *(const Polynomial &poly) {
+	Polynomial operator*(const Polynomial &poly) {
 		if (this->coefficients.empty() || poly.coefficients.empty()) {
 			return Polynomial::ZERO;
 		}
@@ -83,7 +83,7 @@ public:
 		return Polynomial(product);
 	}
 
-	bool operator == (int num) const {
+	bool operator==(int num) const {
 		if (this->coefficients.empty()) {
 			return num == 0;
 		} else if (this->coefficients.size() == 1) {
@@ -92,13 +92,13 @@ public:
 			return false;
 		}
 	}
-	bool operator != (int num) const {
+	bool operator!=(int num) const {
 		return !(*this == num);
 	}
 
 	Polynomial reduced() const;
 
-	friend std::ostream &operator << (std::ostream &os, const Polynomial &poly);
+	friend std::ostream &operator<<(std::ostream &os, const Polynomial &poly);
 };
 
 }

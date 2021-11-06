@@ -44,7 +44,7 @@ private:
 public:
 	FileDataItem(const QString &path, int index);
 
-	bool operator < (const QListWidgetItem &other) const override;
+	bool operator<(const QListWidgetItem &other) const override;
 
 private:
 	void open() const override;

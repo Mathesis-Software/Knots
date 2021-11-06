@@ -37,10 +37,10 @@ struct Color {
 	static std::shared_ptr<Color> parse(const std::string &stringValue);
 	static const Color white;
 
-	bool operator == (const Color &color) const {
+	bool operator==(const Color &color) const {
 		return this->red() == color.red() && this->green() == color.green() && this->blue() == color.blue();
 	}
-	bool operator != (const Color &color) const { return !(*this == color); }
+	bool operator!=(const Color &color) const { return !(*this == color); }
 };
 
 }

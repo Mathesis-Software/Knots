@@ -40,13 +40,13 @@ struct CrossingEx {
 	CrossingEx inversion() const {
 		return CrossingEx(this->cro, !this->over);
 	}
-	bool operator == (const CrossingEx &ex) const {
+	bool operator==(const CrossingEx &ex) const {
 		return this->cro == ex.cro && this->over == ex.over;
 	}
-	bool operator != (const CrossingEx &ex) const {
+	bool operator!=(const CrossingEx &ex) const {
 		return !(*this == ex);
 	}
-	bool operator < (const CrossingEx &ex) const {
+	bool operator<(const CrossingEx &ex) const {
 		return this->cro < ex.cro || (this->cro == ex.cro && this->over < ex.over);
 	}
 };
@@ -58,10 +58,10 @@ struct Bridge {
 
 	Bridge(const CrossingEx &start, const CrossingEx &end, bool forward) : start(start), end(end), forward(forward) {}
 
-	bool operator == (const Bridge &bridge) const {
+	bool operator==(const Bridge &bridge) const {
 		return this->start == bridge.start && this->end == bridge.end && this->forward == bridge.forward;
 	}
-	bool operator < (const Bridge &bridge) const {
+	bool operator<(const Bridge &bridge) const {
 		if (this->start < bridge.start) {
 			return true;
 		} else if (this->start != bridge.start) {

@@ -81,9 +81,9 @@ public:
 		float dy() const { return this->end->coords().y - this->start->coords().y; }
 		bool intersects(const Edge &edge) const;
 
-		bool operator == (const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
+		bool operator==(const Edge &edge) const { return this->start == edge.start && this->end == edge.end; }
 		// for using in maps
-		bool operator < (const Edge &edge) const { return this->start < edge.start || (this->start == edge.start && this->end < edge.end); }
+		bool operator<(const Edge &edge) const { return this->start < edge.start || (this->start == edge.start && this->end < edge.end); }
 
 	private:
 		void orderCrossings(std::list<Crossing> &crossings) const;
@@ -96,9 +96,9 @@ public:
 
 		std::shared_ptr<FloatPoint> coords() const;
 
-		bool operator == (const Crossing &crs) const { return this->up == crs.up && this->down == crs.down; }
+		bool operator==(const Crossing &crs) const { return this->up == crs.up && this->down == crs.down; }
 		// for using in maps
-		bool operator < (const Crossing &crs) const { return this->up < crs.up || (this->up == crs.up && this->down < crs.down); }
+		bool operator<(const Crossing &crs) const { return this->up < crs.up || (this->up == crs.up && this->down < crs.down); }
 	};
 
 public:

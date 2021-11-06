@@ -47,7 +47,7 @@ private:
 
 private:
 	KnotSurface(const KnotSurface&) = delete;
-	KnotSurface& operator = (const KnotSurface&) = delete;
+	KnotSurface& operator=(const KnotSurface&) = delete;
 };
 
 }

@@ -16,8 +16,8 @@
 
 #include <cmath>
 
-#include "seifert.h"
 #include "SeifertSurface.h"
+#include "seifert.h"
 
 namespace KE::GL {
 

@@ -19,8 +19,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include "Util_rapidjson.h"
 #include "Diagram.h"
+#include "Util_rapidjson.h"
 
 namespace KE::TwoD {
 

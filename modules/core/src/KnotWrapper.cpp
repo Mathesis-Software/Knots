@@ -15,8 +15,8 @@
  */
 
 #include "Diagram.h"
-#include "KnotWrapper.h"
 #include "KnotSurface.h"
+#include "KnotWrapper.h"
 #include "SeifertSurface.h"
 #include "Util_rapidjson.h"
 

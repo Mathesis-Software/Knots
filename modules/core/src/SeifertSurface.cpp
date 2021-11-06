@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include "seifert.h"
 #include "SeifertSurface.h"
+#include "seifert.h"
 
 namespace KE::GL {
 

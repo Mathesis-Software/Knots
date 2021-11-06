@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include <Util_rapidjson.h>
 #include <KnotWrapper.h>
+#include <Util_rapidjson.h>
 #include <computables.h>
 
 int main(int argc, const char **argv) {

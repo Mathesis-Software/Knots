@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <list>
 
 #include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 
-#include <Util_rapidjson.h>
 #include <Diagram.h>
 #include <DiagramProperty.h>
+#include <Util_rapidjson.h>
 
 using namespace KE::TwoD;
 

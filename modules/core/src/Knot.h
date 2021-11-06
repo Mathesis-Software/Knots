@@ -53,7 +53,7 @@ public:
 	public:
 		bool isObsolete() const { return this->generation < this->knot.generation; }
 
-		const Point &operator[](std::size_t	index) const { return (*this->points)[index]; }
+		const Point &operator[](std::size_t index) const { return (*this->points)[index]; }
 		std::size_t size() const { return this->points->size(); }
 
 		std::size_t next(std::size_t index) const {

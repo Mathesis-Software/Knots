@@ -32,7 +32,7 @@ Knot::Knot(const std::vector<Point> &points, const std::string &caption) : capti
 		min = std::min(min, dist);
 		total += dist;
 	}
-	this->normalize(std::max(5 * this->_points.size(), 3 * (std::size_t) std::round(total / min)));
+	this->normalize(std::max(5 * this->_points.size(), 3 * static_cast<std::size_t>(std::lround(total / min))));
 	this->center();
 }
 

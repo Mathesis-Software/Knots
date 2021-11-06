@@ -25,9 +25,9 @@ namespace KE {
 std::string Color::stringValue() const {
 	std::stringstream os;
 	os
-					<< std::hex << std::setfill('0') << std::setw(2) << (int) round(this->rgb[0] * 255)
-					<< std::hex << std::setfill('0') << std::setw(2) << (int) round(this->rgb[1] * 255)
-					<< std::hex << std::setfill('0') << std::setw(2) << (int) round(this->rgb[2] * 255);
+					<< std::hex << std::setfill('0') << std::setw(2) << std::lround(this->rgb[0] * 255)
+					<< std::hex << std::setfill('0') << std::setw(2) << std::lround(this->rgb[1] * 255)
+					<< std::hex << std::setfill('0') << std::setw(2) << std::lround(this->rgb[2] * 255);
 	return os.str();
 }
 

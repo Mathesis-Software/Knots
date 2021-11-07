@@ -67,20 +67,20 @@ bool KnotWidget::isSmoothingInProgress() const {
 	return this->smoothingThread.isRunning();
 }
 
-void KnotWidget::prepareMatrix(double *matrix, bool inverse) const {
+void KnotWidget::prepareMatrix(double *matrix) const {
 	for (int i = 0; i < 3; ++i) {
 		for (int j = 0; j < 3; ++j) {
-			if (inverse) {
-				matrix[4 * i + j] = this->knot.rotationMatrixElement(j, i);
-			} else {
-				matrix[4 * i + j] = this->knot.rotationMatrixElement(i, j);
-			}
+				matrix[4 * i + j] = this->knot.transformationMatrixElement(i, j);
 		}
 	}
 }
 
 void KnotWidget::rotate(double dx, double dy, double dz) {
 	this->knot.rotate(dx, dy, dz);
+}
+
+void KnotWidget::scale(double factor) {
+	this->knot.scale(factor);
 }
 
 void KnotWidget::saveKnot(std::ostream &os) {

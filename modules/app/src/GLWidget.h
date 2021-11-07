@@ -32,11 +32,8 @@ private:
 	std::list<std::shared_ptr<const GL::Surface>> surfaces;
 
 	mutable double _currentMatrix[16];
-	mutable double _inverseMatrix[16];
 
 	QPoint capturedPoint;
-
-	float scaleFactor;
 
 public:
 	GLWidget(QWidget *parent);
@@ -45,8 +42,9 @@ public:
 	void addSurface(std::shared_ptr<const GL::Surface> surface) { this->surfaces.push_back(surface); };
 
 protected:
-	virtual void prepareMatrix(double *matrix, bool inverse) const = 0;
+	virtual void prepareMatrix(double *matrix) const = 0;
 	virtual void rotate(double dx, double dy, double dz) = 0;
+	virtual void scale(double factor) = 0;
 
 private:
 	void initializeGL() override;
@@ -64,7 +62,6 @@ private:
 	void paintSurface(const GL::Surface &surface);
 
 	const double *currentMatrix() const;
-	const double *inverseMatrix() const;
 };
 
 }

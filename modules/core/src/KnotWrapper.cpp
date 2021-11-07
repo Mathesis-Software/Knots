@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+#include "KnotWrapper.h"
 #include "Diagram.h"
 #include "KnotSurface.h"
-#include "KnotWrapper.h"
 #include "SeifertSurface.h"
 #include "Util_rapidjson.h"
 
@@ -43,12 +43,12 @@ void rotateMatrix(double matrix[3][3], int axis0, int axis1, double angleDelta) 
 }
 
 KnotWrapper::KnotWrapper(const TwoD::Diagram &diagram, std::size_t width, std::size_t height) : knot(Knot::pointsFromDiagram(diagram, width, height), diagram.caption) {
-	initUnitaryMatrix(this->rotationMatrix);
+	initUnitaryMatrix(this->transformationMatrix);
 	this->init();
 }
 
 KnotWrapper::KnotWrapper(const rapidjson::Value &doc) : knot(doc) {
-	initUnitaryMatrix(this->rotationMatrix);
+	initUnitaryMatrix(this->transformationMatrix);
 	this->readUiOptions(doc);
 	this->init();
 }
@@ -94,7 +94,7 @@ void KnotWrapper::saveUiOptions(rapidjson::Document &doc) const {
 	for (int i = 0; i < 3; ++i) {
 		rapidjson::Value row(rapidjson::kArrayType);
 		for (int j = 0; j < 3; ++j) {
-			row.PushBack(this->rotationMatrix[i][j], doc.GetAllocator());
+			row.PushBack(this->transformationMatrix[i][j], doc.GetAllocator());
 		}
 		matrix.PushBack(row, doc.GetAllocator());
 	}
@@ -150,7 +150,7 @@ void KnotWrapper::readUiOptions(const rapidjson::Value &doc) {
 				if (row.IsArray() && row.Size() == 3) {
 					for (int j = 0; j < 3; ++j) {
 						if (row[j].IsNumber()) {
-							this->rotationMatrix[i][j] = row[j].GetDouble();
+							this->transformationMatrix[i][j] = row[j].GetDouble();
 						}
 					}
 				}
@@ -187,8 +187,7 @@ Point KnotWrapper::seifertBasePoint() const {
 void KnotWrapper::moveSeifertBasePoint(double distance) {
 	Point basePoint = this->seifertBasePoint();
 	basePoint.move(
-		GL::SeifertSurface::gradient(basePoint, this->snapshot()), distance
-	);
+		GL::SeifertSurface::gradient(basePoint, this->snapshot()), distance);
 	this->_seifertBasePoint = std::make_shared<Point>(basePoint);
 	this->_seifertSurface->destroy();
 }
@@ -264,14 +263,34 @@ void KnotWrapper::setSeifertBackColor(const Color &color) {
 
 void KnotWrapper::rotate(double dx, double dy, double dz) {
 	if (dx != 0) {
-		rotateMatrix(this->rotationMatrix, 2, 0, dx);
+		rotateMatrix(this->transformationMatrix, 2, 0, dx);
 	}
 	if (dy != 0) {
-		rotateMatrix(this->rotationMatrix, 1, 2, dy);
+		rotateMatrix(this->transformationMatrix, 1, 2, dy);
 	}
 	if (dz != 0) {
-		rotateMatrix(this->rotationMatrix, 0, 1, dz);
+		rotateMatrix(this->transformationMatrix, 0, 1, dz);
 	}
+}
+
+void KnotWrapper::scale(double factor) {
+	if (factor != 1.0) {
+		for (int i = 0; i < 3; ++i) {
+			for (int j = 0; j < 3; ++j) {
+				this->transformationMatrix[i][j] *= factor;
+			}
+		}
+	}
+}
+
+double KnotWrapper::transformationScale() const {
+	double res = 0.0;
+
+	for (int i = 0; i < 3; ++i) {
+		res += transformationMatrix[i][0] * transformationMatrix[i][0];
+	}
+
+	return sqrt(res);
 }
 
 }

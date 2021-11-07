@@ -20,10 +20,19 @@
 
 namespace KE::Qt {
 
-GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent), scaleFactor(1.0f) {
+namespace {
+// We don't change view matrix yet.
+void loadViewMatrix() {
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -10.0);
+}
+}
+
+
+GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	for (int i = 0; i < 16; ++i) {
 		this->_currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
-		this->_inverseMatrix[i] = (i % 5) ? 0.0 : 1.0;
 	}
 	auto format = this->format();
 	format.setSamples(4);
@@ -41,8 +50,7 @@ void GLWidget::resizeGL(int w, int h) {
 	glFrustum(-w / 800.0, w / 800.0, -h / 800.0, h / 800.0, 5, 25);
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0.0, 0.0, -10.0);
+	loadViewMatrix();
 	glMultMatrixd(this->currentMatrix());
 }
 
@@ -81,13 +89,18 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event) {
 static const float SCALE_STEP = 1.05f;
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
+	this->makeCurrent();
+	loadViewMatrix();
+
 	auto delta = event->angleDelta();
 
 	if (delta.y() < 0) {
-		scaleFactor /= SCALE_STEP;
+		this->scale(1 / SCALE_STEP);
 	} else if (delta.y() > 0) {
-		scaleFactor *= SCALE_STEP;
+		this->scale(SCALE_STEP);
 	}
+
+	glMultMatrixd(this->currentMatrix());
 
 	this->update();
 }
@@ -109,18 +122,13 @@ void GLWidget::selectMouseCursor() {
 }
 
 const double *GLWidget::currentMatrix() const {
-	this->prepareMatrix(this->_currentMatrix, false);
+	this->prepareMatrix(this->_currentMatrix);
 	return this->_currentMatrix;
-}
-
-const double *GLWidget::inverseMatrix() const {
-	this->prepareMatrix(this->_inverseMatrix, true);
-	return this->_inverseMatrix;
 }
 
 void GLWidget::rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers) {
 	this->makeCurrent();
-	glMultMatrixd(this->inverseMatrix());
+	loadViewMatrix();
 
 	double dx = end.x() - start.x();
 	double dy = end.y() - start.y();
@@ -163,7 +171,6 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 	// Двусторонняя ли поверхность?
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, surface.showBackSide);
 
-	glScalef(scaleFactor, scaleFactor, scaleFactor);
 	// Связаны ли треугольники?
 	glBegin(surface.stripped ? GL_TRIANGLE_STRIP : GL_TRIANGLES);
 
@@ -173,8 +180,6 @@ void GLWidget::paintSurface(const GL::Surface &surface) {
 	}
 
 	glEnd();
-
-	glScalef(1.0 / scaleFactor, 1.0 / scaleFactor, 1.0 / scaleFactor);
 }
 
 }

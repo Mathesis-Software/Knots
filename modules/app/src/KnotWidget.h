@@ -67,8 +67,9 @@ public:
 
 private:
 	void init();
-	void prepareMatrix(double *matrix, bool inverse) const override;
+	void prepareMatrix(double *matrix) const override;
 	void rotate(double dx, double dy, double dz) override;
+	void scale(double factor) override;
 
 public:
 	const Color &backgroundColor() const override;

@@ -1,0 +1,18 @@
+#ifndef __KE_VERSION_H__
+#define __KE_VERSION_H__
+
+#include <string>
+
+namespace KE::Version {
+
+const std::string version = "@PROJECT_VERSION@β1";
+const std::string hash = "@GIT_HASH@";
+const std::string date = "@TODAY@";
+
+inline std::string build() {
+	return hash.substr(0, 14) + " (" + date + ")";
+}
+
+}
+
+#endif /* __KE_VERSION_H__ */

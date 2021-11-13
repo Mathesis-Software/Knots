@@ -1,4 +1,4 @@
-project(Knots)
+project(Knots VERSION 2.0)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -6,10 +6,8 @@ set(CMAKE_AUTOUIC ON)
 
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets Network REQUIRED)
 
-file(STRINGS "../VERSION" PROJECT_VERSION)
-add_definitions(-DVERSION="${PROJECT_VERSION}")
 include(version)
-setup_package_version_variables(PROJECT)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/src/Version.h.in ${CMAKE_CURRENT_LIST_DIR}/src/Version.h)
 
 include_directories(../core/src)
 include_directories(../math/src)

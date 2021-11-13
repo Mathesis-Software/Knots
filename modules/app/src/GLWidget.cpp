@@ -20,16 +20,6 @@
 
 namespace KE::Qt {
 
-namespace {
-// We don't change view matrix yet.
-void loadViewMatrix() {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0.0, 0.0, -10.0);
-}
-}
-
-
 GLWidget::GLWidget(QWidget *parent) : QOpenGLWidget(parent) {
 	for (int i = 0; i < 16; ++i) {
 		this->_currentMatrix[i] = (i % 5) ? 0.0 : 1.0;
@@ -50,7 +40,8 @@ void GLWidget::resizeGL(int w, int h) {
 	glFrustum(-w / 800.0, w / 800.0, -h / 800.0, h / 800.0, 5, 25);
 
 	glMatrixMode(GL_MODELVIEW);
-	loadViewMatrix();
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -10.0);
 	glMultMatrixd(this->currentMatrix());
 }
 
@@ -90,7 +81,10 @@ static const float SCALE_STEP = 1.05f;
 
 void GLWidget::wheelEvent(QWheelEvent *event) {
 	this->makeCurrent();
-	loadViewMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -10.0);
 
 	auto delta = event->angleDelta();
 
@@ -128,7 +122,10 @@ const double *GLWidget::currentMatrix() const {
 
 void GLWidget::rotate(const QPoint &start, const QPoint &end, ::Qt::KeyboardModifiers modifiers) {
 	this->makeCurrent();
-	loadViewMatrix();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -10.0);
 
 	double dx = end.x() - start.x();
 	double dy = end.y() - start.y();

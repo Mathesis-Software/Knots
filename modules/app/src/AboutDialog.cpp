@@ -19,10 +19,10 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QVBoxLayout>
 
 #include "AboutDialog.h"
 #include "Application.h"
+#include "Version.h"
 
 namespace KE::Qt {
 
@@ -60,7 +60,7 @@ AboutDialog::AboutDialog() {
 	vlayout->setSpacing(10);
 	hlayout->addLayout(vlayout);
 
-	auto title = new QLabel(QString("Mathesis Knots<br/>") + VERSION, this);
+	auto title = new QLabel(QString("Mathesis Knots<br/>") + KE::Version::version.c_str(), this);
 	auto font = title->font();
 	font.setPointSize(font.pointSize() * 1.5);
 	title->setFont(font);

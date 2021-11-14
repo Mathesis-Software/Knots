@@ -1,0 +1,37 @@
+name: knots
+base: core20
+version: '2.0beta1'
+summary: A tool for drawing 2d diagrams and 3d knots
+description: |
+  A tool for drawing 2d diagrams, 3d knots, Seifert surfaces.
+  Computes some knot properties and invariants.
+  Provides access to a network database of knots with <= 16 crossings.
+
+grade: devel
+confinement: devmode
+
+parts:
+  knots:
+    source: https://github.com/Mathesis-Software/Knots.git
+    source-branch: snap
+    plugin: cmake
+    cmake-parameters:
+      - -DCMAKE_TOOLCHAIN_FILE=/root/project/Qt/6.2.1/gcc_64/lib/cmake/Qt6/qt.toolchain.cmake
+    build-packages:
+      - libgl-dev
+      - libegl-dev
+      - libfontconfig1-dev
+      - libxkbcommon-dev
+    stage-packages:
+      - libegl1
+      - libfontconfig1
+      - libfreetype6
+      - libgl1
+      - libglvnd0
+      - libglx0
+      - libpng16-16
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxdmcp6
+      - libxkbcommon0

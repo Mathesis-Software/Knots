@@ -37,8 +37,8 @@
 	<file>../../../data/8_21.dgr</file>
 	<file>../../../data/9_1.dgr</file>
 	<file>../../../data/9_2.dgr</file>
-	<file>../../../data/3_1#-3_1.dgr</file>
-	<file>../../../data/3_1#3_1.dgr</file>
+	<file>../../../data/3_1+-3_1.dgr</file>
+	<file>../../../data/3_1+3_1.dgr</file>
 	<file>../../../data/trefoil5.dgr</file>
 	<file>../../../data/trefoil6.dgr</file>
 	<file>../../../data/another_trefoil.dgr</file>
@@ -82,8 +82,8 @@
 	<file>../../../data/9_2.knt</file>
 	<file>../../../data/11_1.knt</file>
 	<file>../../../data/17_1.knt</file>
-	<file>../../../data/3_1#-3_1.knt</file>
-	<file>../../../data/3_1#3_1.knt</file>
+	<file>../../../data/3_1+-3_1.knt</file>
+	<file>../../../data/3_1+3_1.knt</file>
 	<file>../../../data/conway.knt</file>
 </qresource>
 </RCC>

@@ -1,0 +1,24 @@
+[Desktop Entry]
+X-SnapInstanceName=knots
+Version=1.0
+Name=Knots
+Name[ru]=Узлы
+Exec=knots %F
+Terminal=false
+Type=Application
+Icon=${SNAP}/meta/gui/trefoil.png
+MimeType=application/x-knot-3d;application/x-knot-diagram;
+Categories=Math;
+StartupWMClass=mathesisknots
+Keywords=math;knot;diagram;
+Actions=OpenLibrary;NewDiagram;
+
+[Desktop Action OpenLibrary]
+Name=Open the Library
+Name[ru]=Открыть библиотеку
+Exec=knots -L
+
+[Desktop Action NewDiagram]
+Name=New Diagram
+Name[ru]=Создать новую диаграмму
+Exec=knots -N

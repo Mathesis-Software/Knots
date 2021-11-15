@@ -1,27 +1,66 @@
 name: knots
 base: core20
 version: '2.0beta1'
+apps:
+  knots:
+    command: bin/Knots
+    plugs:
+      - desktop
+      - desktop-legacy
 summary: A tool for drawing 2d diagrams and 3d knots
 description: |
   A tool for drawing 2d diagrams, 3d knots, Seifert surfaces.
   Computes some knot properties and invariants.
   Provides access to a network database of knots with <= 16 crossings.
+icon: snap/gui/icon.png
 
 grade: devel
 confinement: devmode
 
 parts:
-  knots:
+  qt6:
+    source-type: local
+    source: /root/project/Qt/6.2.1/gcc_64
+    override-pull:
+      mkdir -p lib/x86_64-linux-gnu;
+      mkdir -p plugins/iconengines;
+      mkdir -p plugins/imageformats;
+      mkdir -p plugins/platforms;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libicudata.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libicui18n.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libicuuc.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6Core.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6DBus.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6Gui.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6Network.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6OpenGL.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6OpenGLWidgets.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6Svg.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6Widgets.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/lib/libQt6XcbQpa.so.* lib/x86_64-linux-gnu;
+      cp /root/project/Qt/6.2.1/gcc_64/plugins/iconengines/libqsvgicon.so plugins/iconengines;
+      cp /root/project/Qt/6.2.1/gcc_64/plugins/imageformats/libqgif.so plugins/imageformats;
+      cp /root/project/Qt/6.2.1/gcc_64/plugins/imageformats/libqsvg.so plugins/imageformats;
+      cp /root/project/Qt/6.2.1/gcc_64/plugins/platforms/libqxcb.so plugins/platforms;
+    organize:
+      '*': usr/
+    plugin: dump
+    stage:
+      - usr/*
+  app:
     source: https://github.com/Mathesis-Software/Knots.git
     source-branch: snap
     plugin: cmake
     cmake-parameters:
       - -DCMAKE_TOOLCHAIN_FILE=/root/project/Qt/6.2.1/gcc_64/lib/cmake/Qt6/qt.toolchain.cmake
+      - -DCMAKE_INSTALL_PREFIX=/
     build-packages:
       - libgl-dev
       - libegl-dev
       - libfontconfig1-dev
       - libxkbcommon-dev
+      - rapidjson-dev
+      - ccache
     stage-packages:
       - libegl1
       - libfontconfig1
@@ -35,3 +74,11 @@ parts:
       - libxcb1
       - libxdmcp6
       - libxkbcommon0
+      - libxkbcommon-x11-0
+      - libxcb-icccm4
+      - libxcb-image0
+      - libxcb-keysyms1
+      - libxcb-randr0
+      - libxcb-render-util0
+      - libxcb-render0
+      - libxcb-shape0

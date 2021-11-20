@@ -9,6 +9,7 @@ apps:
       - desktop-legacy
       - network
       - home
+      - x11
     environment:
       HOME: $SNAP_REAL_HOME
 summary: A tool for drawing 2d diagrams and 3d knots
@@ -19,7 +20,7 @@ description: |
 icon: snap/gui/icon.png
 
 grade: devel
-confinement: devmode
+confinement: strict
 
 parts:
   qt6:

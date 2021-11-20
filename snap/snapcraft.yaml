@@ -10,8 +10,6 @@ apps:
       - network
       - home
       - x11
-    environment:
-      HOME: $SNAP_REAL_HOME
 summary: A tool for drawing 2d diagrams and 3d knots
 description: |
   A tool for drawing 2d diagrams, 3d knots, Seifert surfaces.
@@ -57,6 +55,8 @@ parts:
     stage:
       - usr/*
   app:
+    after:
+      - qt6
     source: https://github.com/Mathesis-Software/Knots.git
     source-branch: snap
     plugin: cmake

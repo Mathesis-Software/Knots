@@ -58,7 +58,7 @@ parts:
     after:
       - qt6
     source: https://github.com/Mathesis-Software/Knots.git
-    source-branch: snap
+    source-branch: dev
     plugin: cmake
     cmake-parameters:
       - -DCMAKE_TOOLCHAIN_FILE=/root/project/Qt/6.2.1/gcc_64/lib/cmake/Qt6/qt.toolchain.cmake

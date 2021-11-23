@@ -5,7 +5,7 @@
 
 namespace KE::Version {
 
-const std::string version = "@PROJECT_VERSION@β1";
+const std::string version = "@APP_VERSION@";
 const std::string hash = "@GIT_HASH@";
 const std::string date = "@TODAY@";
 

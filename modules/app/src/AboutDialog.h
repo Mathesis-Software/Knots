@@ -26,7 +26,7 @@ class AboutDialog : public QDialog {
 public:
 	static void showAboutDialog();
 
-public:
+private:
 	AboutDialog();
 };
 

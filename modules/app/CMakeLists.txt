@@ -7,10 +7,11 @@ set(CMAKE_AUTOUIC ON)
 find_package(Qt6 COMPONENTS Core Gui Widgets OpenGLWidgets Network REQUIRED)
 
 include(version)
-configure_file(${CMAKE_CURRENT_LIST_DIR}/src/Version.h.in ${CMAKE_CURRENT_LIST_DIR}/src/Version.h)
+configure_file(${CMAKE_CURRENT_LIST_DIR}/src/Version.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/Version.h)
 
 include_directories(../core/src)
 include_directories(../math/src)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/src)
 
 file(GLOB CXX_SOURCES src/*.cpp)
 file(GLOB QRC_SOURCES res/*.qrc)

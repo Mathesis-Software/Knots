@@ -1,4 +1,5 @@
-string(TIMESTAMP TODAY "%Y%m%d")
+string(TIMESTAMP APP_VERSION "2.0β1")
+string(TIMESTAMP TODAY "%d %b %Y")
 
 execute_process(
         COMMAND git log -1 --format=%H

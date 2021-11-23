@@ -195,7 +195,9 @@ Application::Application(int &argc, char **argv) : QApplication(argc, argv), win
 			return;
 	}
 
-	this->setFont(QFont("Helvetica", 10));
+	QFile file(":styles/default.css");
+	file.open(QFile::ReadOnly);
+  this->setStyleSheet(file.readAll());
 	this->setStyle(new ProxyStyle);
 
 	QObject::connect(this, &QApplication::aboutToQuit, [this] {
@@ -263,7 +265,7 @@ bool Application::event(QEvent *event) {
 	}
 }
 
-void Application::exitApplication() {
+void Application::quitApplication() {
 	QStringList ids;
 	for (auto widget : QApplication::topLevelWidgets()) {
 		if (auto window = dynamic_cast<BaseWindow*>(widget)) {

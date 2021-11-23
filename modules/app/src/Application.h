@@ -46,7 +46,7 @@ public:
 	QWidget *openFile();
 	QWidget *openFile(const QString &filename);
 	QWidget *openDocument(const rapidjson::Value &doc, const QString &identifier);
-	void exitApplication();
+	void quitApplication();
 };
 
 }

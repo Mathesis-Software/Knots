@@ -67,7 +67,7 @@ void BaseWindow::createFileMenu() {
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));
 	auto quit = fileMenu->addAction("Quit", [] {
-		dynamic_cast<Application*>(qApp)->exitApplication();
+		dynamic_cast<Application*>(qApp)->quitApplication();
 	});
 	quit->setShortcut(QKeySequence("Ctrl+Q"));
 }

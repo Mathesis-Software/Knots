@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-#include <QtGui/QAction>
+#include <QtCore/QFile>
+#include <QtGui/QShortcut>
 #include <QtGui/QScreen>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 
@@ -27,70 +27,48 @@
 namespace KE::Qt {
 
 void AboutDialog::showAboutDialog() {
-	auto about = new AboutDialog();
-	about->show();
-	const QRect screenGeometry = about->screen()->geometry();
-	const int x = (screenGeometry.width() - about->width()) / 2;
-	const int y = (screenGeometry.height() - about->height()) / 2;
-	about->move(x, y);
+	auto dialog = new AboutDialog();
+	dialog->show();
+	auto screen = dialog->screen()->virtualSize();
+	auto current = dialog->size();
+	dialog->move((screen.width() - current.width()) / 2, (screen.height() - current.height()) / 2);
 }
 
 AboutDialog::AboutDialog() {
-	this->setWindowFlags(::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
+	//this->setWindowFlags(::Qt::FramelessWindowHint | ::Qt::WindowStaysOnTopHint);
 	this->setAttribute(::Qt::WA_DeleteOnClose);
-	this->setModal(true);
-	QPalette pal = this->palette();
-	pal.setColor(QPalette::Window, ::Qt::white);
-	this->setAutoFillBackground(true);
-	this->setPalette(pal);
+	//this->setModal(true);
+	this->setObjectName("about");
+	this->setWindowTitle(tr("About Knots"));
 
-	auto main = new QVBoxLayout(this);
-	main->setSpacing(5);
-	auto hlayout = new QHBoxLayout;
-	hlayout->setContentsMargins(10, 5, 30, 0);
-	hlayout->setSpacing(15);
-	main->addLayout(hlayout);
+	new QShortcut(QKeySequence("Ctrl+W"), this, this, &AboutDialog::close);
+	new QShortcut(QKeySequence("Ctrl+Q"), this, static_cast<Application*>(qApp), &Application::quitApplication);
+
+	auto layout = new QHBoxLayout(this);
+	layout->setContentsMargins(0, 0, 0, 0);
+	layout->setSpacing(0);
+
+	auto logo = new QLabel(this);
+	logo->setObjectName("logo");
 	QPixmap pixmap(":images/trefoil.png");
-	const auto dpr = this->devicePixelRatio();
-	pixmap.setDevicePixelRatio(dpr);
-	auto icon = new QLabel;
-	hlayout->addWidget(icon);
-	auto vlayout = new QVBoxLayout;
-	vlayout->setContentsMargins(0, 10, 0, 0);
-	vlayout->setSpacing(10);
-	hlayout->addLayout(vlayout);
+	pixmap.setDevicePixelRatio(this->devicePixelRatio());
+	logo->setPixmap(pixmap.scaled(256, 256, ::Qt::IgnoreAspectRatio, ::Qt::SmoothTransformation));
+	layout->addWidget(logo);
 
-	auto title = new QLabel(QString("Mathesis Knots<br/>") + KE::Version::version.c_str(), this);
-	auto font = title->font();
-	font.setPointSize(font.pointSize() * 1.5);
-	title->setFont(font);
-	title->setAlignment(::Qt::AlignHCenter);
-	vlayout->addWidget(title);
-	auto link = new QLabel("<a href='https://knots.mathesis.fun/'>knots.mathesis.fun</a>", this);
-	link->setAlignment(::Qt::AlignHCenter);
-	link->setOpenExternalLinks(true);
-	vlayout->addWidget(link);
+	auto text = new QLabel(this);
+	text->setObjectName("text");
 
-	const int height = vlayout->sizeHint().height() * 1.2 * dpr;
-	icon->setPixmap(pixmap.scaled(height, height, ::Qt::IgnoreAspectRatio, ::Qt::SmoothTransformation));
+	QFile file(":html/about.html");
+	file.open(QFile::ReadOnly);
+	QString content(file.readAll());
+	content.replace("${version}", QString::fromStdString(Version::version));
+	content.replace("${build}", QString::fromStdString(Version::build()));
+	text->setText(content);
 
-	auto box = new QDialogButtonBox(QDialogButtonBox::Ok, this);
-	QObject::connect(box, &QDialogButtonBox::accepted, this, &QDialog::accept);
-	main->addWidget(box);
-	main->setSizeConstraint(QLayout::SetFixedSize);
-
-	auto close = new QAction();
-	close->setShortcut(QKeySequence("Ctrl+W"));
-	QObject::connect(close, &QAction::triggered, [this] { this->close(); });
-	this->addAction(close);
-
-	auto quit = new QAction();
-	quit->setShortcut(QKeySequence("Ctrl+Q"));
-	QObject::connect(quit, &QAction::triggered, [this] {
-		this->close();
-		dynamic_cast<Application*>(qApp)->exitApplication();
-	});
-	this->addAction(quit);
+	text->setTextFormat(::Qt::RichText);
+	text->setTextInteractionFlags(::Qt::TextBrowserInteraction);
+	text->setOpenExternalLinks(true);
+	layout->addWidget(text);
 }
 
 }

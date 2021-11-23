@@ -1,0 +1,30 @@
+* {
+	font-family: Helvetica;
+	font-size: 10pt;
+}
+
+QDialog#about {
+	background: white;
+	width: 400px;
+	max-width: 400px;
+	min-width: 400px;
+	height: 158px;
+	max-height: 158px;
+	min-height: 158px;
+}
+
+QDialog#about QLabel#logo {
+	margin-top: 15px;
+	margin-left: 20px;
+	margin-bottom: 15px;
+	width: 128px;
+	max-width: 128px;
+	min-width: 128px;
+	height: 128px;
+	max-height: 128px;
+	min-height: 128px;
+}
+
+QDialog#about QLabel#text {
+	margin-bottom: 10px;
+}

@@ -63,6 +63,7 @@ void BaseWindow::createFileMenu() {
 		fileMenu->addSeparator();
 	}
 	fileMenu->addAction("About", [] { AboutDialog::showAboutDialog(); });
+	fileMenu->addAction("About Qt", [] { Application::aboutQt(); });
 	fileMenu->addSeparator();
 	auto close = fileMenu->addAction("Close", [this] { this->close(); });
 	close->setShortcut(QKeySequence("Ctrl+W"));

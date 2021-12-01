@@ -28,6 +28,7 @@ public:
 
 private:
 	AboutDialog();
+	~AboutDialog();
 };
 
 }

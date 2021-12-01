@@ -26,12 +26,24 @@
 
 namespace KE::Qt {
 
+namespace {
+
+AboutDialog *instance = nullptr;
+
+}
+
 void AboutDialog::showAboutDialog() {
-	auto dialog = new AboutDialog();
-	dialog->show();
-	auto screen = dialog->screen()->virtualSize();
-	auto current = dialog->size();
-	dialog->move((screen.width() - current.width()) / 2, (screen.height() - current.height()) / 2);
+	// TODO: add mutex
+	if (instance) {
+		instance->show();
+		instance->raise();
+	} else {
+		instance = new AboutDialog();
+		instance->show();
+		auto screen = instance->screen()->virtualSize();
+		auto current = instance->size();
+		instance->move((screen.width() - current.width()) / 2, (screen.height() - current.height()) / 2);
+	}
 }
 
 AboutDialog::AboutDialog() {
@@ -69,6 +81,10 @@ AboutDialog::AboutDialog() {
 	text->setTextInteractionFlags(::Qt::TextBrowserInteraction);
 	text->setOpenExternalLinks(true);
 	layout->addWidget(text);
+}
+
+AboutDialog::~AboutDialog() {
+	instance = nullptr;
 }
 
 }

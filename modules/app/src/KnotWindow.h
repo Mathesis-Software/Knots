@@ -54,22 +54,18 @@ private:
 
 	void showMathDialog();
 	void showOptionsDialog();
-
-signals:
-	void raiseMathDialog();
-	void raiseOptionsDialog();
 };
 
 class KnotMathDialog : public QDialog {
 
 public:
-	KnotMathDialog(KnotWindow &window);
+	KnotMathDialog(KnotWindow *parent);
 };
 
 class KnotOptionsDialog : public QDialog {
 
 public:
-	KnotOptionsDialog(KnotWindow &window);
+	KnotOptionsDialog(KnotWindow *parent);
 };
 
 }

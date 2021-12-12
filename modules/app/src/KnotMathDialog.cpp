@@ -28,12 +28,14 @@
 namespace KE::Qt {
 
 void KnotWindow::showMathDialog() {
-	if (this->isSignalConnected(QMetaMethod::fromSignal(&KnotWindow::raiseMathDialog))) {
-		emit raiseMathDialog();
+	if (auto dialog = this->findChild<KnotMathDialog*>()) {
+		dialog->show();
+		dialog->raise();
+		dialog->activateWindow();
 		return;
 	}
 
-	auto mth = new KnotMathDialog(*this);
+	auto mth = new KnotMathDialog(this);
 	mth->setWindowTitle("Computables for " + this->windowTitle());
 	mth->show();
 	const QRect geometry = this->geometry();
@@ -43,12 +45,12 @@ void KnotWindow::showMathDialog() {
 	mth->move(x, y);
 }
 
-KnotMathDialog::KnotMathDialog(KnotWindow &window) {
+KnotMathDialog::KnotMathDialog(KnotWindow *parent) : QDialog(parent) {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 
 	auto layout = new QGridLayout(this);
 
-	const auto &knot = window.knotWidget()->knot;
+	const auto &knot = parent->knotWidget()->knot;
 	std::vector<std::shared_ptr<ThreeD::Math::Computable>> computables = {
 		std::make_shared<ThreeD::Math::MoebiusEnergy>(knot),
 		std::make_shared<ThreeD::Math::AverageCrossingNumber>(knot, false),
@@ -83,14 +85,11 @@ KnotMathDialog::KnotMathDialog(KnotWindow &window) {
 				value->setText(QString());
 			}
 		};
-		QObject::connect(&window, &Window::contentChanged, this, callback);
+		QObject::connect(parent, &Window::contentChanged, this, callback);
 		QObject::connect(checkbox, &QCheckBox::clicked, this, callback);
 	}
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);
-
-	QObject::connect(&window, &Window::closing, this, &QDialog::close);
-	QObject::connect(&window, &KnotWindow::raiseMathDialog, this, &QDialog::raise);
 }
 
 }

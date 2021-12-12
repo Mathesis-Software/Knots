@@ -113,12 +113,14 @@ WidgetWithLabel<ColorButton> addColorButton(const QString &title, const Color &i
 }
 
 void KnotWindow::showOptionsDialog() {
-	if (this->isSignalConnected(QMetaMethod::fromSignal(&KnotWindow::raiseOptionsDialog))) {
-		emit raiseOptionsDialog();
+	if (auto dialog = this->findChild<KnotOptionsDialog*>()) {
+		dialog->show();
+		dialog->raise();
+		dialog->activateWindow();
 		return;
 	}
 
-	auto options = new KnotOptionsDialog(*this);
+	auto options = new KnotOptionsDialog(this);
 	options->setWindowTitle("Visual options for " + this->windowTitle());
 	options->show();
 	const QRect geometry = this->geometry();
@@ -128,11 +130,11 @@ void KnotWindow::showOptionsDialog() {
 	options->move(x, y);
 }
 
-KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
+KnotOptionsDialog::KnotOptionsDialog(KnotWindow *parent) : QDialog(parent) {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 	this->setWindowFlags(::Qt::CustomizeWindowHint | ::Qt::WindowTitleHint);
 
-	auto widget = window.knotWidget();
+	auto widget = parent->knotWidget();
 
 	const auto initialThickness = widget->knot.knotThickness();
 	const auto initialBackgroundColor = widget->knot.backgroundColor();
@@ -232,8 +234,6 @@ KnotOptionsDialog::KnotOptionsDialog(KnotWindow &window) {
 	seifertBack.setEnabled(initialSeifertVisibility && !sameColor.widget->isChecked());
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(&window, &Window::closing, this, &QDialog::close);
-	QObject::connect(&window, &KnotWindow::raiseOptionsDialog, this, &QDialog::raise);
 }
 
 }

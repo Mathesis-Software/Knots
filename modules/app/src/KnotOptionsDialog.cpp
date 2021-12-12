@@ -132,7 +132,6 @@ void KnotWindow::showOptionsDialog() {
 
 KnotOptionsDialog::KnotOptionsDialog(KnotWindow *parent) : QDialog(parent) {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
-	this->setWindowFlags(::Qt::CustomizeWindowHint | ::Qt::WindowTitleHint);
 
 	auto widget = parent->knotWidget();
 

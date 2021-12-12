@@ -54,7 +54,6 @@ protected:
 	virtual QString fileFilter() const = 0;
 
 signals:
-	void closing();
 	void contentChanged();
 };
 

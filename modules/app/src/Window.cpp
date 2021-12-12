@@ -73,7 +73,6 @@ void Window::closeEvent(QCloseEvent *event) {
 	}
 
 	BaseWindow::closeEvent(event);
-	emit closing();
 }
 
 namespace {

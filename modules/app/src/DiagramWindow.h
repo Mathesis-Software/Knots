@@ -53,15 +53,12 @@ public:
 
 	void saveIt(std::ostream &os) override;
 	bool isSaved() const override;
-
-signals:
-	void raisePropertiesDialog();
 };
 
 class DiagramPropertiesDialog : public QDialog {
 
 public:
-	DiagramPropertiesDialog(DiagramWindow &window);
+	DiagramPropertiesDialog(DiagramWindow *parent);
 };
 
 }

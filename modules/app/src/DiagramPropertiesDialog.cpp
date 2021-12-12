@@ -28,12 +28,14 @@
 namespace KE::Qt {
 
 void DiagramWindow::showPropertiesDialog() {
-	if (this->isSignalConnected(QMetaMethod::fromSignal(&DiagramWindow::raisePropertiesDialog))) {
-		emit raisePropertiesDialog();
+	if (auto dialog = this->findChild<DiagramPropertiesDialog*>()) {
+		dialog->show();
+		dialog->raise();
+		dialog->activateWindow();
 		return;
 	}
 
-	auto mth = new DiagramPropertiesDialog(*this);
+	auto mth = new DiagramPropertiesDialog(this);
 	mth->setWindowTitle("Properties for " + this->windowTitle());
 	mth->show();
 	const QRect geometry = this->geometry();
@@ -43,7 +45,7 @@ void DiagramWindow::showPropertiesDialog() {
 	mth->move(x, y);
 }
 
-DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow &window) {
+DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow *parent) : QDialog(parent) {
 	this->setAttribute(::Qt::WA_DeleteOnClose);
 
 	auto layout = new QGridLayout(this);
@@ -64,8 +66,8 @@ DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow &window) {
 	layout->addWidget(ap, 1, 1);
 	layout->setRowMinimumHeight(1, 30);
 
-	auto callback = [dtCode, ap, &window] {
-		const auto &diagram = window.diagramWidget()->diagram.diagram();
+	auto callback = [dtCode, ap, parent] {
+		const auto &diagram = parent->diagramWidget()->diagram.diagram();
 		TwoD::Math::DTCode code;
 		if (code.isApplicable(diagram)) {
 			std::stringstream stream;
@@ -91,13 +93,10 @@ DiagramPropertiesDialog::DiagramPropertiesDialog(DiagramWindow &window) {
 			ap->setText(QString());
 		}
 	};
-	QObject::connect(window.diagramWidget(), &DiagramWidget::diagramChanged, this, callback);
+	QObject::connect(parent->diagramWidget(), &DiagramWidget::diagramChanged, this, callback);
 	callback();
 
 	layout->setSizeConstraint(QLayout::SetFixedSize);
-
-	QObject::connect(&window, &Window::closing, this, &QDialog::close);
-	QObject::connect(&window, &DiagramWindow::raisePropertiesDialog, this, &QDialog::raise);
 }
 
 }
